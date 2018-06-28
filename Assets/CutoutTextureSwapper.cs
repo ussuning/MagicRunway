@@ -14,6 +14,10 @@ public class CutoutTextureSwapper : MonoBehaviour {
         */
         Material mat = GetComponent<Renderer>().sharedMaterial;
         Texture2D srcTex = mat.mainTexture as Texture2D;
+        if (srcTex == null) {
+            // Material had no texture, so we will just create one;
+            srcTex = new Texture2D(alphaMap.width, alphaMap.height);
+        }
         Color [] srcPixels = srcTex.GetPixels();
         Color[] alphaPixels = alphaMap.GetPixels();
 
@@ -27,7 +31,7 @@ public class CutoutTextureSwapper : MonoBehaviour {
             srcPixels[i].a = alphaPixels[i].r;
         }
 
-        Texture2D neoTex = new Texture2D(mat.mainTexture.width, mat.mainTexture.height);
+        Texture2D neoTex = new Texture2D(alphaMap.width, alphaMap.height);
         neoTex.SetPixels(srcPixels);
         neoTex.Apply();
 
