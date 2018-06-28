@@ -7,6 +7,11 @@ public class CutoutTextureSwapper : MonoBehaviour {
     public Texture2D alphaMap;
 	// Use this for initialization
 	void Start () {
+        /* Take the original material, copy it, take its texture and make a 
+         * new one that combines it with the alphaMap.
+         * Apply alpha map to new (copied) material.
+         * Swap original material with new material 
+        */
         Material mat = GetComponent<Renderer>().sharedMaterial;
         Texture2D srcTex = mat.mainTexture as Texture2D;
         Color [] srcPixels = srcTex.GetPixels();
@@ -22,12 +27,22 @@ public class CutoutTextureSwapper : MonoBehaviour {
             srcPixels[i].a = alphaPixels[i].r;
         }
 
-        // 
         Texture2D neoTex = new Texture2D(mat.mainTexture.width, mat.mainTexture.height);
         neoTex.SetPixels(srcPixels);
         neoTex.Apply();
 
         Material neoMat = new Material(mat);
+        neoMat.name += "(Copy)";
+
+        // This effectively sets the material to "Cutout" Rendering Mode.
+        neoMat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        neoMat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+        neoMat.SetInt("_ZWrite", 1);
+        neoMat.EnableKeyword("_ALPHATEST_ON");
+        neoMat.DisableKeyword("_ALPHABLEND_ON");
+        neoMat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        neoMat.renderQueue = 2450;
+
         neoMat.mainTexture = neoTex;
         GetComponent<Renderer>().sharedMaterial = neoMat;
 
