@@ -83,10 +83,10 @@ public class UIManager : Singleton<UIManager>
     // Collection
     //----------------------------------------
 
-    public void StartCollection(Collection collection, Collection upNext)
+    public void ShowCollection(Collection collection)
     {
         CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
-        cd.StartWithCollection(collection,upNext);
+        cd.ShowCollection(collection);
     }
 
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {

@@ -1,35 +1,54 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class CollectionDisplay : MonoBehaviour
 {
-    /*
-    private RectTransform m_RectTransform;
-    private Image m_reveal;
-    private byte m_AnimState;
-    private float m_AnimStartTime;
-    private float m_AnimDeltaTime;
-    private float m_AnimationDuration = 1.0f;
+    public GameObject collectionEntry;
 
-    private Vector2 m_CurrentPos;
-    private float m_MaxPosition;
-    private float m_MinPosition;
-    */
-    // Use this for initialization
-    void Start()
+    private GameObject m_shownEntry;
+
+    public void ShowCollection(Collection collection) {
+        if (m_shownEntry != null)
+        {
+            Hide(true);
+        }
+
+        GameObject go = makeCollectionEntry(collection.name);
+
+        CollectionEntry ce = go.GetComponent<CollectionEntry>();
+        ce.Open();
+        m_shownEntry = go;
+    }
+
+    public void Hide(bool animate = false)
     {
+        if (m_shownEntry == null) { return; }
 
+        if (animate == true)
+        {
+            CollectionEntry ce = m_shownEntry.GetComponent<CollectionEntry>();
+            ce.Close();
+        }
+        else
+        {
+            Destroy(m_shownEntry);
+        }
+
+        m_shownEntry = null;
     }
 
-    // Update is called once per frame
-    void Update()
+    private GameObject makeCollectionEntry(string collectionName)
     {
+        GameObject go = Instantiate(collectionEntry, this.gameObject.transform) as GameObject;
+        go.name = collectionName;
+        go.transform.Find("Text").GetComponent<Text>().text = collectionName;
+        go.transform.localScale = Vector3.one;
+        go.SetActive(true);
 
+        return go;
     }
-
-    public void StartWithCollection(Collection collection, Collection upNext) {
-        
-    }
-
-
 }

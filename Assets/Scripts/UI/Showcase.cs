@@ -82,14 +82,14 @@ public class Showcase : MonoBehaviour
     private GameObject makeShowcaseEntry(Wearable wearable) {
         string filePath = "thumbs/" + wearable.img;
 
-        GameObject de = Instantiate(showcaseEntry,this.gameObject.transform) as GameObject;
-        de.name = wearable.id;
-        de.transform.Find("Text").GetComponent<Text>().text = wearable.name;
-        de.transform.Find("Image").GetComponent<Image>().sprite = GetThumb(filePath);
-        de.transform.localScale = Vector3.one;
-        de.SetActive(true);
+        GameObject go = Instantiate(showcaseEntry,this.gameObject.transform) as GameObject;
+        go.name = wearable.id;
+        go.transform.Find("Text").GetComponent<Text>().text = wearable.name;
+        go.transform.Find("Image").GetComponent<Image>().sprite = GetThumb(filePath);
+        go.transform.localScale = Vector3.one;
+        go.SetActive(true);
 
-        return de;
+        return go;
     }
 
     private Sprite GetThumb(string path) {
