@@ -5,15 +5,31 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
+public class Collections : System.Object
+{
+    public List<Collection> collections;
+
+    public Dictionary<string, Collection> to_dict()
+    {
+        Dictionary<string, Collection> dict = new Dictionary<string, Collection>();
+
+        for (int i = 0; i < collections.Count; i++)
+        {
+            dict.Add(collections[i].id, collections[i]);
+        }
+
+        return dict;
+    }
+}
 
 [System.Serializable]
-public class DesignerCollection : System.Object
+public class Collection : System.Object
 {
     public string id;
     public string name;
-    public string type;
-    public string order;
-
+    public List<string> outfitids;
+    public List<Outfit> outfits;
 }
 
 [System.Serializable]

@@ -7,21 +7,27 @@ using UnityEngine.UI;
 
 public class Showcase : MonoBehaviour
 {
-    public GameObject container;
     public GameObject showcaseEntry;
 
-    private const int m_startY = 100;
-    private const int m_spacing = 50;
-    private const int m_entryLimit = 10;
+    private const int m_startY = 200;
+    private const int m_spacing = 75;
+    private const int m_entryLimit = 5;
+    private const float m_interval = 0.2f;
 
     private List<GameObject> m_entries;
 
-    private void Start()
+    private void Awake()
     {
         m_entries = new List<GameObject>();
     }
 
-    public void Show(Outfit outfit) {
+    private void Start()
+    {
+        
+    }
+
+    public void Show(Outfit outfit) 
+    {
         if(m_entries.Count > 0) {
             Hide();
         }
@@ -29,22 +35,46 @@ public class Showcase : MonoBehaviour
         float currentY = -m_startY;
 
         for (int x = 0; x < m_entryLimit; x++) {
-            //Debug.Log(x);
             GameObject go = makeShowcaseEntry(outfit.wearables[0]);
 
             RectTransform rectTransform = go.GetComponent<RectTransform>();
-            rectTransform.localPosition = new Vector3(0, currentY, 0);
+            rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, currentY, 0);
 
-            Debug.Log(rectTransform.rect.height);
             m_entries.Add(go);
+
+            ShowcaseEntry se = go.GetComponent<ShowcaseEntry>();
+            se.Open(x*m_interval);
 
             currentY = currentY - rectTransform.rect.height - m_spacing;
         }
     }
 
-    public void Hide() {
+    public void Hide(bool animate = false) {
+        /*
         foreach(GameObject go in m_entries) {
-            Destroy(go);
+            if (animate == true)
+            {
+                ShowcaseEntry se = go.GetComponent<ShowcaseEntry>();
+                se.Close();
+            }
+            else
+            {
+                Destroy(go);
+            }
+        }
+*/
+        for (int x = 0; x < m_entries.Count; x++)
+        {
+            GameObject go = m_entries[x];
+            if (animate == true)
+            {
+                ShowcaseEntry se = go.GetComponent<ShowcaseEntry>();
+                se.Close(x * m_interval);
+            }
+            else
+            {
+                Destroy(go);
+            }
         }
         m_entries = new List<GameObject>();
     }

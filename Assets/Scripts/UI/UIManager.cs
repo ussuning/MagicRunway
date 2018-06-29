@@ -8,12 +8,14 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiShowcase;
     public GameObject uiDemo;
     public GameObject uiLive;
+    public GameObject uiCollection;
+    public GameObject uiUpNext;
 
     private CanvasFader faderStartMenu;
 
     public void Start()
     {
-        //uiStartMenu.SetActive(false);
+        uiStartMenu.SetActive(false);
         //uiShowcase.SetActive(false);
         uiDemo.SetActive(false);
         uiLive.SetActive(false);
@@ -63,29 +65,34 @@ public class UIManager : Singleton<UIManager>
     // Showcase
     //----------------------------------------
 
-    /*
-     * - icon
-     * - name
-     * - category
-     * 
-     * 
-     * 
-     */
     public void OnClickShowShowcase() {
         ShowOutfit(MRData.Instance.outfits.outfits[0]);    
     }
 
     public void ShowOutfit(Outfit outfit) {
-        /*
-         * If already one open or is opening, hide it first before showing next one
-         * show current outfit list
-         * 
-         *  
-         */
         Showcase showcase = uiShowcase.GetComponent<Showcase>();
         showcase.Show(outfit);
     }
 
+    public void HideOutfit() {
+        Showcase showcase = uiShowcase.GetComponent<Showcase>();
+        showcase.Hide(true);
+    }
+   
+    //----------------------------------------
+    // Collection
+    //----------------------------------------
+
+    public void StartCollection(Collection collection, Collection upNext)
+    {
+        CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
+        cd.StartWithCollection(collection,upNext);
+    }
+
+    public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {
+        UpNext un = uiUpNext.GetComponent<UpNext>();
+        un.StartUpNext(collectionName, totalTimeSeconds, warningTimeSeconds);
+    }
     //----------------------------------------
 
     void UIEvents_CanvasFadeComplete(GameObject go, CanvasFade fade)

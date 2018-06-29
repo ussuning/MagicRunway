@@ -8,9 +8,11 @@ public class MRData : Singleton<MRData>
 {
     public Wearables wearables;
     public Outfits outfits;
+    public Collections collections;
 
     private string wearablesFileName = "wearables.json";
     private string outfitsFileName = "outfits.json";
+    private string collectionsFileName = "collections.json";
 
     // Use this for initialization
     void Start()
@@ -21,7 +23,10 @@ public class MRData : Singleton<MRData>
     public void LoadEverything() {
         GetWearables();
         GetOutfits();
+        GetCollections();
+
         AssignWearablesToOutfits();
+        AssignOutfitsToCollections();
     }
 
     public void GetWearables() {
@@ -35,7 +40,7 @@ public class MRData : Singleton<MRData>
         }
         else
         {
-            Debug.LogError("Cannot load game data!");
+            Debug.LogError("Cannot load data!");
         }
     }
 
@@ -50,7 +55,23 @@ public class MRData : Singleton<MRData>
         }
         else
         {
-            Debug.LogError("Cannot load game data!");
+            Debug.LogError("Cannot load data!");
+        }
+    }
+
+    public void GetCollections()
+    {
+        string filePath = Path.Combine(Application.streamingAssetsPath, collectionsFileName);
+
+        if (File.Exists(filePath))
+        {
+            string dataAsJson = File.ReadAllText(filePath);
+            collections = JsonUtility.FromJson<Collections>(dataAsJson);
+            Debug.Log(collections.collections[0].name);
+        }
+        else
+        {
+            Debug.LogError("Cannot load data!");
         }
     }
 
@@ -65,6 +86,27 @@ public class MRData : Singleton<MRData>
                 {
                     Wearable wearable = dicWearables[wearableid];
                     outfit.wearables.Add(wearable);
+                }
+                catch
+                {
+                    Debug.LogError("Cannot find wearable object!");
+                }
+            }
+        }
+    }
+
+    private void AssignOutfitsToCollections()
+    {
+        Dictionary<string, Outfit> dicOutfits = outfits.to_dict();
+
+        foreach (Collection collection in collections.collections)
+        {
+            foreach (string outfitid in collection.outfitids)
+            {
+                try
+                {
+                    Outfit outfit = dicOutfits[outfitid];
+                    collection.outfits.Add(outfit);
                 }
                 catch
                 {

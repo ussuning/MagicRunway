@@ -13,4 +13,28 @@ public class UIEvents
             OnCanvaseFadeCompleteCallback(go, fade);
         }
     }
+
+    //Event when up next timer is completed
+    public delegate void OnUpNextComplete();
+    public static event OnUpNextComplete OnUpNextCompleteCallback;
+
+    public static void UpNextComplete()
+    {
+        if (OnUpNextCompleteCallback != null)
+        {
+            OnUpNextCompleteCallback();
+        }
+    }
+
+    // Event
+    public delegate void OnNextCollectionExecute(Collection upNext);
+    public static event OnNextCollectionExecute OnNextCollectionExecuteCallback;
+
+    public static void NextCollectionExecute(Collection upNext)
+    {
+        if (OnNextCollectionExecuteCallback != null)
+        {
+            OnNextCollectionExecuteCallback(upNext);
+        }
+    }
 }
