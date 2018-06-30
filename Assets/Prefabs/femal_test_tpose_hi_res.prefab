@@ -623,6 +623,7 @@ GameObject:
   - component: {fileID: 95687081393286238}
   - component: {fileID: 114169788858537730}
   - component: {fileID: 114325201192753482}
+  - component: {fileID: 114135518769448610}
   m_Layer: 0
   m_Name: femal_test_tpose_hi_res
   m_TagString: Untagged
@@ -1370,7 +1371,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1369584288410632}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1379,7 +1380,7 @@ Transform:
   - {fileID: 4956286719263974}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4019392084290936
 Transform:
   m_ObjectHideFlags: 1
@@ -1482,7 +1483,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1953768784471058}
-  m_LocalRotation: {x: 0.03529794, y: -0.0010569566, z: -0.009221672, w: -0.99933374}
+  m_LocalRotation: {x: 0.03529794, y: -0.0010569566, z: -0.009221672, w: -0.9993338}
   m_LocalPosition: {x: -0.002786163, y: 0.11049144, z: -0.016638983}
   m_LocalScale: {x: 0.1100002, y: 0.20000033, z: 0.11000003}
   m_Children: []
@@ -3022,7 +3023,7 @@ Animator:
   m_GameObject: {fileID: 1369584288410632}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 041b3adabc4474f3f82368c06f3c3ac9, type: 3}
-  m_Controller: {fileID: 9100000, guid: ebeeb21c5696a4eaeb41fa944fa12433, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3130,6 +3131,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mirror: {fileID: 0}
+--- !u!114 &114135518769448610
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1369584288410632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b38f8c0e60334143a1b54003b3a0ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  mirroredMovement: 1
+  verticalMovement: 1
+  externalRootMotion: 0
+  externalHeadRotation: 0
+  externalHandRotations: 0
+  fingerOrientations: 1
+  moveRate: 1
+  smoothFactor: 10
+  offsetNode: {fileID: 0}
+  posRelativeToCamera: {fileID: 0}
+  posRelOverlayColor: 0
+  backgroundPlane: {fileID: 0}
+  posRelInvertedZ: 0
+  groundedFeet: 1
+  applyMuscleLimits: 1
+  flipLeftRight: 0
+  verticalOffset: 0
+  forwardOffset: 0
+  HipCenter: {fileID: 4956286719263974}
+  Spine: {fileID: 4947156610825960}
+  ShoulderCenter: {fileID: 4415072462280430}
+  Neck: {fileID: 4629367418764398}
+  Head: {fileID: 4227671666862840}
+  ClavicleLeft: {fileID: 4061111995544380}
+  ShoulderLeft: {fileID: 4326998109696816}
+  ElbowLeft: {fileID: 4123118498638448}
+  HandLeft: {fileID: 4872361969376542}
+  FingersLeft: {fileID: 4176796916203926}
+  ThumbLeft: {fileID: 4662454475900834}
+  ClavicleRight: {fileID: 4334553852513610}
+  ShoulderRight: {fileID: 4263498278396708}
+  ElbowRight: {fileID: 4839356754372130}
+  HandRight: {fileID: 4232364060293972}
+  FingersRight: {fileID: 4472992255747072}
+  ThumbRight: {fileID: 4718445289511750}
+  HipLeft: {fileID: 4014917264267348}
+  KneeLeft: {fileID: 4565430221241006}
+  FootLeft: {fileID: 4129978523751220}
+  ToesLeft: {fileID: 4678260641252962}
+  HipRight: {fileID: 4409170159939086}
+  KneeRight: {fileID: 4793681582033084}
+  FootRight: {fileID: 4030413459645694}
+  ToesRight: {fileID: 4739547838072054}
+  BodyRoot: {fileID: 4018585044767196}
 --- !u!114 &114169788858537730
 MonoBehaviour:
   m_ObjectHideFlags: 1

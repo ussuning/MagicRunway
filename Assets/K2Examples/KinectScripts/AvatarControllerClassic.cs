@@ -19,7 +19,7 @@ public class AvatarControllerClassic : AvatarController
 	public Transform Spine;
 	public Transform ShoulderCenter;
 	public Transform Neck;
-//	public Transform Head;
+	public Transform Head;
 
 	public Transform ClavicleLeft;
 	public Transform ShoulderLeft;
@@ -40,12 +40,12 @@ public class AvatarControllerClassic : AvatarController
 	public Transform HipLeft;
 	public Transform KneeLeft;
 	public Transform FootLeft;
-//	private Transform ToesLeft = null;
+	public Transform ToesLeft = null;
 	
 	public Transform HipRight;
 	public Transform KneeRight;
 	public Transform FootRight;
-//	private Transform ToesRight = null;
+	public Transform ToesRight = null;
 
 	[Tooltip("The body root node (optional).")]
 	public Transform BodyRoot;
@@ -61,31 +61,31 @@ public class AvatarControllerClassic : AvatarController
 		bones[1] = Spine;
 		bones[2] = ShoulderCenter;
 		bones[3] = Neck;
-//		bones[4] = Head;
+		bones[4] = Head;
 	
 		bones[5] = ShoulderLeft;
 		bones[6] = ElbowLeft;
 		bones[7] = HandLeft;
-//		bones[8] = FingersLeft;
+		bones[8] = FingersLeft;
 //		bones[9] = FingerTipsLeft;
-//		bones[10] = ThumbLeft;
+		bones[10] = ThumbLeft;
 	
 		bones[11] = ShoulderRight;
 		bones[12] = ElbowRight;
 		bones[13] = HandRight;
-//		bones[14] = FingersRight;
+		bones[14] = FingersRight;
 //		bones[15] = FingerTipsRight;
-//		bones[16] = ThumbRight;
+		bones[16] = ThumbRight;
 	
 		bones[17] = HipLeft;
 		bones[18] = KneeLeft;
 		bones[19] = FootLeft;
-//		bones[20] = ToesLeft;
+		bones[20] = ToesLeft;
 	
 		bones[21] = HipRight;
 		bones[22] = KneeRight;
 		bones[23] = FootRight;
-//		bones[24] = ToesRight;
+		bones[24] = ToesRight;
 
 		// special bones
 		bones[25] = ClavicleLeft;
