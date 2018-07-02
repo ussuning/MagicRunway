@@ -410,7 +410,7 @@ public class AvatarController : MonoBehaviour
 
 		humanPoseHandler.GetHumanPose(ref humanPose);
 
-		//Debug.Log(playerId + " - Trans: " + transform.position + ", body: " + humanPose.bodyPosition);
+		Debug.Log(playerId + " - Trans: " + transform.position + ", body: " + humanPose.bodyPosition);
 
 		bool isPoseChanged = false;
 
