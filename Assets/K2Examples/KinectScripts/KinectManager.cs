@@ -520,12 +520,24 @@ public class KinectManager : MonoBehaviour
 	{
 		return dictUserIdToIndex.ContainsKey(userId);
 	}
-	
-	/// <summary>
-	/// Gets the number of currently detected users.
-	/// </summary>
-	/// <returns>The users count.</returns>
-	public int GetUsersCount()
+
+    public bool IsUserInKinectView(Int64 userId)
+    {
+        if (dictUserIdToIndex.ContainsKey(userId))
+        {
+            int index = dictUserIdToIndex[userId];
+
+            return (index >= 0 && index < sensorData.bodyCount &&
+                    bodyFrame.bodyData[index].bIsTracked != 0);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Gets the number of currently detected users.
+    /// </summary>
+    /// <returns>The users count.</returns>
+    public int GetUsersCount()
 	{
 		return alUserIds.Count;
 	}
@@ -963,7 +975,7 @@ public class KinectManager : MonoBehaviour
 	/// <param name="joint">Joint index</param>
 	/// <param name="flipX">If set to <c>true</c> flips the X-coordinate</param>
 	/// <param name="flipZ">If set to <c>true</c> flips the Z-coordinate</param>
-	public Vector3 GetJointDirection(Int64 userId, int joint, bool flipX, bool flipZ)
+	public Vector3 GetJointDirection(Int64 userId, int joint, bool flipX=false, bool flipZ= false)
 	{
 		if(dictUserIdToIndex.ContainsKey(userId))
 		{
@@ -1039,7 +1051,7 @@ public class KinectManager : MonoBehaviour
 	/// <param name="userId">User ID</param>
 	/// <param name="joint">Joint index</param>
 	/// <param name="flip">If set to <c>true</c>, this means non-mirrored rotation</param>
-	public Quaternion GetJointOrientation(Int64 userId, int joint, bool flip)
+	public Quaternion GetJointOrientation(Int64 userId, int joint, bool flip=false)
 	{
 		if(dictUserIdToIndex.ContainsKey(userId))
 		{
