@@ -15,4 +15,6 @@ public class SystemConfigs
         KinectInterop.JointType.HipRight, KinectInterop.JointType.KneeRight, KinectInterop.JointType.AnkleRight, KinectInterop.JointType.FootRight,
         KinectInterop.JointType.SpineShoulder, KinectInterop.JointType.HandTipLeft, KinectInterop.JointType.HandTipRight
     };
+
+    public static float PosingTime = 1f;
 }
