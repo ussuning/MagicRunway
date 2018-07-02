@@ -13,7 +13,7 @@ public class PoseRecognizingAgent : Agent {
     private float posingTimeEllapsed = 0f;
     private int prevAnimationIdx = -1;
 
-    void OnEnable()
+    void Start()
     {
         if (manager == null)
             manager = KinectManager.Instance;
@@ -50,6 +50,7 @@ public class PoseRecognizingAgent : Agent {
 
     public override void CollectObservations()
     {
+        KinectUserId = manager.GetPrimaryUserID(); //Delete later
         if (manager.IsUserInKinectView(KinectUserId))
         {
             if (SystemConfigs.CollectUserRotation)
@@ -97,11 +98,12 @@ public class PoseRecognizingAgent : Agent {
 
             posingTimeEllapsed = 0f;    
         }
+        Debug.Log("estPoseIdx = " + estPoseIdx);
     }
 
     public override void AgentOnDone()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
     public override void AgentReset()
