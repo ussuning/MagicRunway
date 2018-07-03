@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PoseRecognizingAgent : Agent {
 
-    public ParticleSystem[] particles ;
+    public GameObject[] particles ;
 
     private KinectManager manager;
     private long KinectUserId;
@@ -35,11 +35,15 @@ public class PoseRecognizingAgent : Agent {
                 do
                 {
                     randAnimIdx = Random.Range(0, particles.Length);
-                } while (randAnimIdx == prevAnimationIdx);
+                } while (randAnimIdx == prevAnimationIdx && particles.Length > 1);
 
-                particles[randAnimIdx].Play();
+                Vector3 ParticlePosistion = Vector3.zero;
+                if (KinectUserId > 0)
+                    ParticlePosistion = manager.GetUserPosition(KinectUserId);
+                GameObject ps = Instantiate(particles[randAnimIdx], ParticlePosistion, Quaternion.identity);
+                //particles[randAnimIdx].Play();
                 prevAnimationIdx = randAnimIdx;
-            }
+            } 
         }
     }
 
@@ -98,7 +102,7 @@ public class PoseRecognizingAgent : Agent {
 
             posingTimeEllapsed = 0f;    
         }
-        Debug.Log("estPoseIdx = " + estPoseIdx);
+        Debug.Log("estPoseIdx: " + estPoseIdx);
     }
 
     public override void AgentOnDone()
