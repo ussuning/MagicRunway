@@ -11,6 +11,9 @@ public class PoseRecognizingAgent : Agent {
 
     private int estPoseIdx;
     private float posingTimeEllapsed = 0f;
+    private int prevPoseIdx;
+    private float timeBetweenPoses = 0f;
+
     private int prevAnimationIdx = -1;
 
     void Start()
@@ -22,6 +25,7 @@ public class PoseRecognizingAgent : Agent {
     void Update ()
     {
         posingTimeEllapsed += Time.deltaTime;
+        timeBetweenPoses += Time.deltaTime;
     }
 
     void LateUpdate()
@@ -37,10 +41,7 @@ public class PoseRecognizingAgent : Agent {
                     randAnimIdx = Random.Range(0, particles.Length);
                 } while (randAnimIdx == prevAnimationIdx && particles.Length > 1);
 
-                Vector3 ParticlePosistion = Vector3.zero;
-                if (KinectUserId > 0)
-                    ParticlePosistion = manager.GetUserPosition(KinectUserId);
-                GameObject ps = Instantiate(particles[randAnimIdx], ParticlePosistion, Quaternion.identity);
+                GameObject ps = Instantiate(particles[randAnimIdx], transform.position, Quaternion.identity);
                 //particles[randAnimIdx].Play();
                 prevAnimationIdx = randAnimIdx;
             } 
@@ -94,13 +95,13 @@ public class PoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         int newPoseIdx = Mathf.RoundToInt(vectorAction[0]);
-        if(estPoseIdx != newPoseIdx)
+        if(estPoseIdx != newPoseIdx) //New Pose (different from previous)
         {
             estPoseIdx = newPoseIdx;
             if (estPoseIdx < 0)
                 estPoseIdx = 0;
 
-            posingTimeEllapsed = 0f;    
+            posingTimeEllapsed = 0f;
         }
         Debug.Log("estPoseIdx: " + estPoseIdx);
     }
