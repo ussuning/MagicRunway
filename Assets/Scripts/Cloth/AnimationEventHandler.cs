@@ -7,6 +7,7 @@ public class AnimationEventHandler : MonoBehaviour {
 
     ObiCloth[] cloths = null;
 
+
     public void ResetCloth() {
         Debug.Log("ResetCloth()");
         if (cloths == null) {
