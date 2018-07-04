@@ -951,7 +951,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4916569071260454}
   - component: {fileID: 137950332720324338}
-  - component: {fileID: 64253090803695966}
   - component: {fileID: 114082472376894542}
   m_Layer: 0
   m_Name: body
@@ -1372,7 +1371,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1369584288410632}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 6.16, y: 0, z: -2.11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4281432837992234}
@@ -3000,20 +2999,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1746565857074192}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &64253090803695966
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1741822969142906}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 0}
 --- !u!95 &95687081393286238
 Animator:
   serializedVersion: 3
@@ -35915,7 +35900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   minBackstop: 0
   maxRadius: 0.2
   rayOriginHeight: 0.01
