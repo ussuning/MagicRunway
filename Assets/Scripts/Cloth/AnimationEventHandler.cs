@@ -31,15 +31,14 @@ public class AnimationEventHandler : MonoBehaviour {
         GetComponent<Animator>().SetTrigger("Start");
         turnRate = -0.5f;
         turnDuration = 2.0f;
+        velocity = baseVelocity;
     }
 
     public void IdleToWalkStart(){
-        velocity = baseVelocity;
     }
 
     public void WalkStart()
     {
-        velocity = baseVelocity;
     }
 
     public void IdleStart() {
