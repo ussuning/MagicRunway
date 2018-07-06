@@ -16,5 +16,7 @@ public class SystemConfigs
         KinectInterop.JointType.SpineShoulder, KinectInterop.JointType.HandTipLeft, KinectInterop.JointType.HandTipRight
     };
 
-    public static float PosingTime = 1f;
+    public static float PoseEstimationTimeFrame = 0.1f; //Time between each pose estimation (to remove outlier estimations)
+    public static float PosingTime = 0.5f;
+    public static float ComboPoseTime = 5f;
 }
