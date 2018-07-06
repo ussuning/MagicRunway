@@ -3909,7 +3909,7 @@ public class KinectManager : MonoBehaviour
 				}
 				
 				Debug.Log("Adding user " + uidIndex + ", ID: " + userId + ", Body: " + bodyIndex + ", Time: " + Time.realtimeSinceStartup);
-
+                UserEvents.NewUserDetected(userId, uidIndex);
 				dictUserIdToIndex[userId] = bodyIndex;
 				dictUserIdToTime[userId] = Time.time;
 				alUserIds.Add(userId);
@@ -3970,7 +3970,7 @@ public class KinectManager : MonoBehaviour
 		//int uidIndex = alUserIds.IndexOf(userId);
 		int uidIndex = Array.IndexOf(aUserIndexIds, userId);
 		Debug.Log("Removing user " + uidIndex + ", ID: " + userId + ", Body: " + dictUserIdToIndex[userId] + ", Time: " + Time.realtimeSinceStartup);
-
+        UserEvents.UserLost(userId, uidIndex);
 //		// reset the respective avatar controllers
 //		for(int i = 0; i < avatarControllers.Count; i++)
 //		{

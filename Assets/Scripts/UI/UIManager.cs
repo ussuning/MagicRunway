@@ -23,6 +23,7 @@ public class UIManager : Singleton<UIManager>
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
+        UserEvents.OnNewUserDetectedCallback += UserEvents_NewUserDetected;
     }
 
     //----------------------------------------
@@ -102,4 +103,12 @@ public class UIManager : Singleton<UIManager>
             if (fade == CanvasFade.OUT) { uiStartMenu.SetActive(false); }
         }
     }
+
+    // New User detected, show option to select male or female icon to register with ML
+    void UserEvents_NewUserDetected(long userId, int userIndex)
+    {
+        Debug.Log("UIManager: New User Event Callback invoked.");
+        // uiGenderOption.setActive(true);
+    }
+
 }
