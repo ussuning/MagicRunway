@@ -99,6 +99,7 @@ public class RunwayCameraController : MonoBehaviour {
             if (newMid)
             {
                 Time.timeScale = 0.5f;
+                timeSinceSlowMo = 0.0f;
                 newMid = false;
             }
             MainCamera.enabled = false;
@@ -119,12 +120,13 @@ public class RunwayCameraController : MonoBehaviour {
             if (Time.timeScale < 1.0f)
             {
                 timeSinceSlowMo += Time.unscaledDeltaTime;
-                float t = Mathf.Sin(timeSinceSlowMo / 4.0f);
+                float t = (Mathf.Cos(timeSinceSlowMo/2.0f) + 1.0f) / 2.0f;
+                //Debug.Log("t=" + t);
 
-                Vector3 max = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.max.y, 0.25f), b.center.z);
-                Vector3 min = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.min.y, 0f), b.center.z);
+                Vector3 max = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.max.y, 0.15f), b.center.z);
+                Vector3 min = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.min.y, 0.1f), b.center.z);
 
-                camLookAt.position = Vector3.Lerp(max, min, t);
+                camLookAt.position = Vector3.Lerp(min, max, t);
             }
             else
             {
