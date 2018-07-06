@@ -28,7 +28,7 @@ public class UITestAppManager : MonoBehaviour
     void RunCollection () {
         m_currentCollection = MRData.Instance.collections.collections[0];
         UIManager.Instance.ShowCollection(m_currentCollection);
-        UIManager.Instance.RunUpNextTimer("Billy Bob Hillbilly", 10.0f,5.0f);
+        UIManager.Instance.RunUpNextTimer("Billy Bob Hillbilly", 300.0f,120.0f);
     }
 
     void UIEvents_OnUpNextComplete()
