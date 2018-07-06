@@ -72,6 +72,9 @@ public class PoseRecognizingAgent : Agent {
         {
             posingTimeEllapsed = 0f;
 
+            int combo = 1;
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, estPoseIdx);
+
             prevPoseIdx = estPoseIdx;
         }
     }
