@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class PoseRecognizingAgent : Agent {
 
-    public GameObject[] particles ;
+    public UnityEngine.UI.Text DebugText;
 
     private KinectManager manager;
     private long KinectUserId;
 
     private int estPoseIdx;
-    private float posingTimeEllapsed = 0f;
+    private int curPoseIdx;
     private int prevPoseIdx;
-    private float timeBetweenPoses = 0f;
 
-    private int prevAnimationIdx = -1;
+    private float estimationTimeEllapsed = 0f;
+    private Dictionary<int, int> PoseCountsWithinTimeFrame = new Dictionary<int, int>();
+
+    private float posingTimeEllapsed = 0f;
+
+    float estPoseConfidence;
 
     void Start()
     {
@@ -24,27 +28,51 @@ public class PoseRecognizingAgent : Agent {
 
     void Update ()
     {
+        estimationTimeEllapsed += Time.deltaTime;
         posingTimeEllapsed += Time.deltaTime;
-        timeBetweenPoses += Time.deltaTime;
+
+        if(estimationTimeEllapsed > SystemConfigs.PoseEstimationTimeFrame)
+        {
+            if(PoseCountsWithinTimeFrame.Count > 0)
+            {
+                int maxCounts = 0;
+                int probablePoseIdx = 0;
+                int totalCounts = 0;
+                foreach(int poseIdx in PoseCountsWithinTimeFrame.Keys)
+                {
+                    if(PoseCountsWithinTimeFrame[poseIdx] > maxCounts)
+                    {
+                        probablePoseIdx = poseIdx;
+                        maxCounts = PoseCountsWithinTimeFrame[poseIdx];
+                    }
+                    totalCounts += PoseCountsWithinTimeFrame[poseIdx];
+                }
+
+                estPoseConfidence = (float)maxCounts / totalCounts;
+                if (probablePoseIdx > 0 && estPoseConfidence > 0.25f)
+                {
+                    //prevPoseIdx = estPoseIdx;
+                    estPoseIdx = probablePoseIdx; 
+                }
+                else
+                {
+                    estPoseIdx = 0;
+                }
+            }
+
+            estimationTimeEllapsed = 0f;
+            PoseCountsWithinTimeFrame.Clear();
+        }
     }
 
     void LateUpdate()
     {
-        if(estPoseIdx > 0 && posingTimeEllapsed > SystemConfigs.PosingTime)
+        DebugText.text = string.Format("Cur Pose: {0}, confidence {1}, Prev Pose: {2}", estPoseIdx, estPoseConfidence, prevPoseIdx);
+        if (estPoseIdx > 0 && /*estPoseIdx != prevPoseIdx &&*/ posingTimeEllapsed > SystemConfigs.PosingTime)
         {
             posingTimeEllapsed = 0f;
-            if (particles.Length > 0)
-            {
-                int randAnimIdx = -1;
-                do
-                {
-                    randAnimIdx = Random.Range(0, particles.Length);
-                } while (randAnimIdx == prevAnimationIdx && particles.Length > 1);
 
-                GameObject ps = Instantiate(particles[randAnimIdx], transform.position, Quaternion.identity);
-                //particles[randAnimIdx].Play();
-                prevAnimationIdx = randAnimIdx;
-            } 
+            prevPoseIdx = estPoseIdx;
         }
     }
 
@@ -95,15 +123,14 @@ public class PoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         int newPoseIdx = Mathf.RoundToInt(vectorAction[0]);
-        if(estPoseIdx != newPoseIdx) //New Pose (different from previous)
-        {
-            estPoseIdx = newPoseIdx;
-            if (estPoseIdx < 0)
-                estPoseIdx = 0;
+        if (newPoseIdx < 0)
+            newPoseIdx = 0;
+        if (PoseCountsWithinTimeFrame.ContainsKey(newPoseIdx))
+            PoseCountsWithinTimeFrame[newPoseIdx]++;
+        else
+            PoseCountsWithinTimeFrame.Add(newPoseIdx, 1);
 
-            posingTimeEllapsed = 0f;
-        }
-        Debug.Log("estPoseIdx: " + estPoseIdx);
+        //DebugText.text = string.Format("est Pose: {0}", newPoseIdx);
     }
 
     public override void AgentOnDone()
