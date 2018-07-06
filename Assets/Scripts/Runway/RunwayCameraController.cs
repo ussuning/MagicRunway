@@ -7,16 +7,22 @@ public class RunwayCameraController : MonoBehaviour {
     
     public ColliderEvents RunwayEnterEvents;
     public ColliderEvents RunwayMidEvents;
+    public ColliderEvents RunwayEndEvents;
     public ColliderEvents RunwayExitEvents;
+
     public Transform camLookAt;
     public Camera MainCamera;
     public Camera SlowMoCamera;
+    public GameObject MidFlashes;
+    public GameObject FrontFlashes;
 
     public float mainCamMinFOV = 20f;
     public float targetHeightPercent = 0.65f;
     public float fovSpeed = 60f; // fov/sec 
 
     protected Camera activeCam;
+
+    protected float timeUntilEndFrontFlashes = 0f;
 
 
     internal ColliderInfoMap mid = new ColliderInfoMap();
@@ -35,6 +41,10 @@ public class RunwayCameraController : MonoBehaviour {
 
         RunwayEnterEvents.OnTriggerEnterEvt += OnRunwayEnter;
         RunwayExitEvents.OnTriggerEnterEvt += OnRunwayExit;
+
+        RunwayEndEvents.OnTriggerEnterEvt += OnRunwayEndEnter;
+        EnableMidFlashes(false);
+        EnableFrontFlashes(false);
 	}
 
     private void OnDestroy()
@@ -44,11 +54,21 @@ public class RunwayCameraController : MonoBehaviour {
 
         RunwayEnterEvents.OnTriggerEnterEvt -= OnRunwayEnter;
         RunwayExitEvents.OnTriggerEnterEvt -= OnRunwayExit;
+
+        RunwayEndEvents.OnTriggerEnterEvt -= OnRunwayEndEnter;
+    }
+
+    private void OnRunwayEndEnter(Collider other)
+    {
+        Debug.Log("OnRunwayEndEnter " + other.name);
+
+        EnableFrontFlashes(true);
+        timeUntilEndFrontFlashes = 2.5f;
     }
 
     private void OnRunwayMidEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnterRunwayMid " + other.name);
+        Debug.Log("OnRunwayMidEnter " + other.name);
 
         if (other.GetComponent<Animator>() == null)
             return;
@@ -60,16 +80,16 @@ public class RunwayCameraController : MonoBehaviour {
 
         mid.active.Add(other);
 
-        CheckActives();
+        CheckMidActives();
     }
 
     private void OnRunwayMidExit(Collider other)
     {
-        Debug.Log("OnTriggerExitRunwayMid " + other.name);
+        Debug.Log("OnRunwayMidExit " + other.name);
         if (mid.active.Contains(other))
             mid.active.Remove(other);
 
-        CheckActives();
+        CheckMidActives();
     }
 
     private void OnRunwayExit(Collider other)
@@ -94,18 +114,26 @@ public class RunwayCameraController : MonoBehaviour {
         onRunway.active.Add(other);
     }
 
-    void CheckActives() {
+    void CheckMidActives() {
         if (mid.active.Count > 0) {
             if (newMid)
             {
+                // Front view of model.
                 Time.timeScale = 0.5f;
-                timeSinceSlowMo = 0.0f;
                 newMid = false;
+                EnableMidFlashes(true);
             }
+            else {
+                // Rear view of model
+                Time.timeScale = 0.95f;
+            }
+            //Random.Range(0, 1) > 0.5f ? EnableMidFlashes(true) : EnableMidFlashes(false);
+            timeSinceSlowMo = 0.0f;
             MainCamera.enabled = false;
             SlowMoCamera.enabled = true;
             activeCam = SlowMoCamera;
         } else {
+            EnableMidFlashes(false);
             Time.timeScale = 1.0f;
             MainCamera.enabled = true;
             SlowMoCamera.enabled = false;
@@ -131,7 +159,14 @@ public class RunwayCameraController : MonoBehaviour {
             else
             {
                 camLookAt.position = b.center;
-                UpdateMainCameraZoom(b);
+            }
+            UpdateMainCameraZoom(b);
+        }
+
+        if (timeUntilEndFrontFlashes > 0) {
+            timeUntilEndFrontFlashes = Mathf.Clamp(timeUntilEndFrontFlashes - Time.deltaTime, 0, float.MaxValue);
+            if (timeUntilEndFrontFlashes == 0) {
+                EnableFrontFlashes(false);
             }
         }
         activeCam.transform.LookAt(camLookAt);
@@ -149,6 +184,16 @@ public class RunwayCameraController : MonoBehaviour {
         MainCamera.fieldOfView += fovDelta;
         MainCamera.fieldOfView = Mathf.Clamp(MainCamera.fieldOfView, mainCamMinFOV, float.MaxValue);
     }
+
+    private void EnableMidFlashes(bool enable) {
+        MidFlashes.gameObject.SetActive(enable);
+    }
+
+    private void EnableFrontFlashes(bool enable)
+    {
+        FrontFlashes.gameObject.SetActive(enable);
+    }
+
 
 }
 
