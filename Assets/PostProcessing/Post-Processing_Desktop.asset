@@ -109,10 +109,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.75
+    value: 0.72
   threshold:
     overrideState: 1
-    value: 1.2
+    value: 1.4
   softKnee:
     overrideState: 0
     value: 0.5
@@ -136,8 +136,8 @@ MonoBehaviour:
     value: {fileID: 2800000, guid: a2960ffde020f27409e070d92fb2e00b, type: 3}
     defaultState: 1
   dirtIntensity:
-    overrideState: 1
-    value: 15
+    overrideState: 0
+    value: 2
 --- !u!114 &114291981966655730
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -155,7 +155,7 @@ MonoBehaviour:
     value: 1
   preset:
     overrideState: 1
-    value: 4
+    value: 6
   maximumIterationCount:
     overrideState: 0
     value: 16
@@ -169,10 +169,10 @@ MonoBehaviour:
     overrideState: 1
     value: 30
   distanceFade:
-    overrideState: 1
+    overrideState: 0
     value: 0
   vignette:
-    overrideState: 1
+    overrideState: 0
     value: 0.5
 --- !u!114 &114566239628393380
 MonoBehaviour:
@@ -212,7 +212,7 @@ MonoBehaviour:
     value: 1
   filtering:
     overrideState: 1
-    value: {x: 74.45257, y: 95}
+    value: {x: 66.73518, y: 88.347824}
   minLuminance:
     overrideState: 1
     value: -1.5
@@ -1567,7 +1567,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.35
+    value: 0.11
   smoothness:
     overrideState: 0
     value: 0.2
