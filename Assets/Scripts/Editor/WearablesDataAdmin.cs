@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-public class OutfitsDataEditor : EditorWindow {
+public class WearablesDataEditor : EditorWindow
+{
+    public Wearables gameData;
+    private string gameDataProjectFilePath = "/StreamingAssets/wearables.json";
 
-    public Outfits gameData;
-    private string gameDataProjectFilePath = "/StreamingAssets/outfits.json";
-
-    [MenuItem("Window/Outfits Data Editor")]
+    [MenuItem("Window/Wearables Data Editor")]
     static void Init()
     {
-        EditorWindow.GetWindow(typeof(OutfitsDataEditor)).Show();
+        EditorWindow.GetWindow(typeof(WearablesDataEditor)).Show();
     }
 
     void OnGUI()
@@ -22,13 +22,12 @@ public class OutfitsDataEditor : EditorWindow {
             SerializedProperty serializedProperty = serializedObject.FindProperty("gameData");
             EditorGUILayout.PropertyField(serializedProperty, true);
             serializedObject.ApplyModifiedProperties();
-
-            if (GUILayout.Button("Save Outfits")) {
+            if (GUILayout.Button("Save Wearables")) {
                 SaveGameData();
             }
         }
 
-        if (GUILayout.Button("Load Outfits")) {
+        if (GUILayout.Button("Load Wearables")) { 
             LoadGameData();
         }
     }
@@ -39,10 +38,10 @@ public class OutfitsDataEditor : EditorWindow {
 
         if (File.Exists(filePath)) {
             string dataAsJson = File.ReadAllText(filePath);
-            gameData = JsonUtility.FromJson<Outfits>(dataAsJson);
+            gameData = JsonUtility.FromJson<Wearables>(dataAsJson);
         }
-        else {
-            gameData = new Outfits();
+        else { 
+            gameData = new Wearables();
         }
     }
 
