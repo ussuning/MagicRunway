@@ -1398,9 +1398,9 @@ public class AvatarController : MonoBehaviour
 	{
 		{0, HumanBodyBones.Hips},
 		{1, HumanBodyBones.Spine},
-//        {2, HumanBodyBones.Chest},
+        {2, HumanBodyBones.Chest},
 		{3, HumanBodyBones.Neck},
-//		{4, HumanBodyBones.Head},
+		{4, HumanBodyBones.Head},
 		
 		{5, HumanBodyBones.LeftUpperArm},
 		{6, HumanBodyBones.LeftLowerArm},
