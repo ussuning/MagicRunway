@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Collections : System.Object
 {
     public List<Collection> collections;
-
+     
     public Dictionary<string, Collection> to_dict()
     {
         Dictionary<string, Collection> dict = new Dictionary<string, Collection>();
@@ -36,7 +36,6 @@ public class Collection : System.Object
 public class Outfits : System.Object
 {
     public List<Outfit> outfits;
-
     public Dictionary<string, Outfit> to_dict()
     {
         Dictionary<string, Outfit> dict = new Dictionary<string, Outfit>();
@@ -56,6 +55,7 @@ public class Outfit : System.Object
     public string id;
     public string name;
     public string sex;
+    public string desc;
     public List<string> wearableids;
     public List<Wearable> wearables;
 }
@@ -64,7 +64,7 @@ public class Outfit : System.Object
 public class Wearables : System.Object
 {
     public List<Wearable> wearables;
-
+  
     public Dictionary<string, Wearable> to_dict()
     {
         Dictionary<string, Wearable> dict = new Dictionary<string, Wearable>();
