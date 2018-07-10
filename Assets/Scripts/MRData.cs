@@ -51,7 +51,10 @@ public class MRData : Singleton<MRData>
         {
             string dataAsJson = File.ReadAllText(filePath);
             outfits = JsonUtility.FromJson<Outfits>(dataAsJson);
+            Debug.Log(outfits.outfits[0].id);
             Debug.Log(outfits.outfits[0].name);
+            Debug.Log(outfits.outfits[0].sex);
+            Debug.Log(outfits.outfits[0].desc);
         }
         else
         {
