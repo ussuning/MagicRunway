@@ -26,7 +26,7 @@ public class UserMeshVisualizer : MonoBehaviour
 	public bool updateMeshCollider = false;
 
 	[Tooltip("Number of pixels per direction in a sample.")]
-	private const int sampleSize = 2;
+	private const int sampleSize = 1;
 
 
     private Mesh mesh;

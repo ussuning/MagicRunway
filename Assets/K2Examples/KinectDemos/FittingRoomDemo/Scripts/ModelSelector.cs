@@ -386,6 +386,7 @@ public class ModelSelector : MonoBehaviour
 	{
 		if (i >= 0 && i < modelNames.Length && prevSelected != i)
 		{
+            Debug.Log("Selected = " + i);
 			prevSelected = selected = i;
 			LoadDressingModel(modelNames[selected]);
 		}
