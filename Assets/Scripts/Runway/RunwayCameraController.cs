@@ -36,6 +36,20 @@ public class RunwayCameraController : MonoBehaviour {
 	void Start () {
         activeCam = MainCamera;
 
+        if (RunwayEnterEvents == null) 
+            RunwayEnterEvents = GameObject.Find("RunwayEnter")?.GetComponent<ColliderEvents>();
+        if (RunwayMidEvents == null)
+            RunwayMidEvents = GameObject.Find("RunwayMid")?.GetComponent<ColliderEvents>();
+        if (RunwayEndEvents == null)
+            RunwayEndEvents = GameObject.Find("RunwayEnd")?.GetComponent<ColliderEvents>();
+        if (RunwayExitEvents == null)
+            RunwayExitEvents = GameObject.Find("RunwayExit")?.GetComponent<ColliderEvents>();
+
+        if (MidFlashes == null)
+            MidFlashes = GameObject.Find("MidFlashes");
+        if (FrontFlashes == null)
+            FrontFlashes = GameObject.Find("FrontFlashes");
+
         RunwayMidEvents.OnTriggerEnterEvt += OnRunwayMidEnter;
         RunwayMidEvents.OnTriggerExitEvt += OnRunwayMidExit;
 
@@ -85,7 +99,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayMidExit(Collider other)
     {
-        Debug.Log("OnRunwayMidExit " + other.name);
+        Debug.Log("RunwayCameraController::OnRunwayMidExit " + other.name);
         if (mid.active.Contains(other))
             mid.active.Remove(other);
 
@@ -94,6 +108,8 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayExit(Collider other)
     {
+        Debug.Log("RunwayCameraController::OnRunwayExit " + other.name); 
+
         if (onRunway.active.Contains(other))
             onRunway.active.Remove(other);
         if (onRunway.history.ContainsKey(other))
@@ -104,8 +120,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayEnter(Collider other)
     {
-        if (other.GetComponent<Animator>() == null)
-            return;
+        Debug.Log("RunwayCameraController::OnRunwayEnter " + other.name);
         
         if (onRunway.history.ContainsKey(other) == false)
         {

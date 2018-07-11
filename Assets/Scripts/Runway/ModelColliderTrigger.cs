@@ -17,9 +17,13 @@ public class ModelColliderTrigger : MonoBehaviour {
     {
         animator = GetComponent<Animator>();
         animEvtHandler = GetComponent<AnimationEventHandler>();
-        runwayEnd = GameObject.Find("RunwayEnd")?.GetComponent<Collider>();
-        runwayExit = GameObject.Find("RunwayExit")?.GetComponent<Collider>();
-        runwayFinish = GameObject.Find("RunwayFinish")?.GetComponent<Collider>();
+
+        if (runwayEnd == null)
+            runwayEnd = GameObject.Find("RunwayEnd")?.GetComponent<Collider>();
+        if (runwayExit == null)
+            runwayExit = GameObject.Find("RunwayExit")?.GetComponent<Collider>();
+        if (runwayFinish == null)
+            runwayFinish = GameObject.Find("RunwayFinish")?.GetComponent<Collider>();
     }
 
     void OnTriggerEnter(Collider other)

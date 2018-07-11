@@ -626,7 +626,7 @@ GameObject:
   - component: {fileID: 114135518769448610}
   - component: {fileID: 136273966925286098}
   - component: {fileID: 114989346883910198}
-  m_Layer: 14
+  m_Layer: 13
   m_Name: femal_test_tpose_hi_res
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1372,8 +1372,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1369584288410632}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.16, y: 0, z: -2.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4281432837992234}
@@ -1417,7 +1417,7 @@ Transform:
   m_GameObject: {fileID: 1889217719655526}
   m_LocalRotation: {x: -0.03529789, y: -0.0010570802, z: -0.009221695, w: 0.99933374}
   m_LocalPosition: {x: 0.002786163, y: 0.11049144, z: -0.016638983}
-  m_LocalScale: {x: 0.11000003, y: 0.1999999, z: 0.11000001}
+  m_LocalScale: {x: 0.11, y: 0.1999999, z: 0.11}
   m_Children: []
   m_Father: {fileID: 4565430221241006}
   m_RootOrder: 1
@@ -1486,7 +1486,7 @@ Transform:
   m_GameObject: {fileID: 1953768784471058}
   m_LocalRotation: {x: 0.03529794, y: -0.0010569566, z: -0.009221672, w: -0.99933374}
   m_LocalPosition: {x: -0.002786163, y: 0.11049144, z: -0.016638983}
-  m_LocalScale: {x: 0.1100002, y: 0.20000033, z: 0.11000003}
+  m_LocalScale: {x: 0.11, y: 0.1999999, z: 0.11}
   m_Children: []
   m_Father: {fileID: 4793681582033084}
   m_RootOrder: 1
@@ -2433,13 +2433,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1741822969142906}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
+  m_LocalPosition: {x: -0.013, y: 1.611, z: 0.05}
+  m_LocalScale: {x: 0.713205, y: 0.713205, z: 0.713205}
   m_Children: []
   m_Father: {fileID: 4790070225350454}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!4 &4937497503843088
 Transform:
   m_ObjectHideFlags: 1
@@ -19620,7 +19620,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 1
   bendingConstraintParameters:
-    evaluationOrder: 1
+    evaluationOrder: 0
     iterations: 3
     SORFactor: 1
     enabled: 1
@@ -19635,7 +19635,7 @@ MonoBehaviour:
     SORFactor: 1
     enabled: 1
   skinConstraintParameters:
-    evaluationOrder: 0
+    evaluationOrder: 1
     iterations: 3
     SORFactor: 1
     enabled: 1
@@ -19698,7 +19698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualize: 0
-  stretchingScale: 1
+  stretchingScale: 1.1
   stiffness: 0
   slack: 1
   batches:
@@ -44220,7 +44220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualize: 0
-  maxBending: 0.001
+  maxBending: 0.02
   stiffness: 1
   batches:
   - maxYoungModulus: 0.02
@@ -81556,7 +81556,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: b51c27b783ae9495eafb5c201a6f690d, type: 2}
+  - {fileID: 2100000, guid: 51810d698a5eb924089dba663b8d3c6e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
