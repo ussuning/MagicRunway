@@ -2429,7 +2429,7 @@ public class KinectManager : MonoBehaviour
 		// GUI Text.
 		if(calibrationText != null)
 		{
-			calibrationText.text = "WAITING FOR USERS";
+			calibrationText.text = "Magic Runway: Waiting for Users..";
 		}
 		
 		Debug.Log("Waiting for users.");
