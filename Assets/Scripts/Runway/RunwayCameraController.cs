@@ -84,9 +84,6 @@ public class RunwayCameraController : MonoBehaviour {
     {
         Debug.Log("OnRunwayMidEnter " + other.name);
 
-        if (other.GetComponent<Animator>() == null)
-            return;
-
         if (mid.history.ContainsKey(other) == false) {
             mid.history.Add(other, Time.unscaledTime);
             newMid = true;
