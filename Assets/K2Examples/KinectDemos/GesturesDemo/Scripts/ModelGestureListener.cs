@@ -115,12 +115,8 @@ public class ModelGestureListener : MonoBehaviour, KinectGestures.GestureListene
 			return;
 		
 		// detect these user specific gestures
-		manager.DetectGesture(userId, KinectGestures.Gestures.ZoomOut);
-		manager.DetectGesture(userId, KinectGestures.Gestures.ZoomIn);
-		manager.DetectGesture(userId, KinectGestures.Gestures.Wheel);
-
-		manager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-		manager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+		manager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);    // user is female
+		manager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);   // user is male
 		
 		if(gestureInfo != null)
 		{
