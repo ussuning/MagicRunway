@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class AppManager : MonoBehaviour
@@ -6,13 +7,13 @@ public class AppManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        MRData.Instance.LoadEverything();
-        UIManager.Instance.ShowOutfit(MRData.Instance.outfits.outfits[0]);
+        StartAutoMode();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void StartAutoMode()
     {
-
+        SceneManager.LoadScene("Warehouse");
     }
 }
+
+
