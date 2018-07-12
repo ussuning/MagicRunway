@@ -2230,16 +2230,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d51edb63c2549ebba9fe407540380c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionLayers:
-    serializedVersion: 2
-    m_Bits: 0
+  collisionLayerName: ClothCalibration
   backstopOffset: 0
   backstopScale: 1
   backstopMax: 0.2
   rayOriginHeight: 0.002
-  inclusionZones: []
-  body: {fileID: 0}
-  originalMesh: {fileID: 0}
+  backstopCollisionMeshes: []
 --- !u!114 &114024575677896164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22620,16 +22616,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d51edb63c2549ebba9fe407540380c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionLayers:
-    serializedVersion: 2
-    m_Bits: 0
+  collisionLayerName: ClothCalibration
   backstopOffset: 0
   backstopScale: 0.5
   backstopMax: 0.2
   rayOriginHeight: 0.002
-  inclusionZones: []
-  body: {fileID: 137537159325896688}
-  originalMesh: {fileID: 4300002, guid: 523c9709f62694c90b2f34c1805b3e44, type: 3}
+  backstopCollisionMeshes: []
 --- !u!114 &114416746684459678
 MonoBehaviour:
   m_ObjectHideFlags: 1

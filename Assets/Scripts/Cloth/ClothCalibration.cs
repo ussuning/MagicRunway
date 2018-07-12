@@ -16,6 +16,7 @@ public class ClothCalibration : MonoBehaviour
     public MeshRenderer[] backstopCollisionMeshes;
 
     ObiCloth obiCloth;
+    ObiCloth destObiCloth; // Only used for copying particle values;
 
     // Use this for initialization
     void Awake()
@@ -100,7 +101,44 @@ public class ClothCalibration : MonoBehaviour
 
     internal void CopyCalibrationValues()
     {
-        throw new NotImplementedException();
+        List<ObiSkinConstraintBatch> batches = obiCloth.SkinConstraints.GetSkinBatches();
+        List<ObiSkinConstraintBatch> destBatches = destObiCloth.SkinConstraints.GetSkinBatches();
+        if (batches.Count != destBatches.Count)
+        {
+            Debug.LogError("Mismatching batches.Count! Aborting!");
+            return;
+        }
+        for (int b = 0; b < batches.Count; b++)
+        {
+            ObiSkinConstraintBatch batch = batches[b];
+            ObiSkinConstraintBatch destBatch = destBatches[b];
+            if (batch.skinIndices.Count != destBatch.skinIndices.Count) {
+                Debug.LogError("Mismatching skinIndices.Count at batch idx="+b+"! Aborting!");
+                return;
+            }
+            for (int i = 0; i < batch.skinIndices.Count; i++)
+            {
+                if (batch.skinIndices[i] != destBatch.skinIndices[i]) {
+                    Debug.LogError("Mismatching skinIndices at skin idx=" + i + "! Aborting!");
+                    return;
+                }
+            }
+        }
+
+        // Ok, do actual copying.
+        for (int b = 0; b < batches.Count; b++)
+        {
+            ObiSkinConstraintBatch batch = batches[b];
+            ObiSkinConstraintBatch destBatch = destBatches[b];
+            for (int i = 0; i < batch.skinIndices.Count; i++)
+            {
+                destBatch.skinNormals = new List<Vector4>(batch.skinNormals);
+                destBatch.skinPoints = new List<Vector4>(batch.skinPoints);
+                destBatch.skinRadiiBackstop = new List<float>(batch.skinRadiiBackstop);
+                destBatch.skinStiffnesses = new List<float>(batch.skinStiffnesses);
+            }
+        }
+
     }
 }
 
