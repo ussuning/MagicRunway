@@ -3,42 +3,69 @@ using System.Collections.Generic;
 using UnityEngine;
 using Obi;
 using UnityEditor;
+using System;
 
 [ExecuteInEditMode]
-public class ClothCalibration : MonoBehaviour {
-    private string bodyLayer = "Body";
-    public LayerMask collisionLayers;
-    public float minBackstop = 0;
-    public float maxRadius = 0.2f;
+public class ClothCalibration : MonoBehaviour
+{
+    public string collisionLayerName = "ClothCalibration";
+    public float backstopOffset = 0;
+    public float backstopScale = 1.0f; // 1 = 100%, scale backstop by 
+    public float backstopMax = 0.2f;
     public float rayOriginHeight = 0.002f;
-    public Collider[] inclusionZones;
-    public SkinnedMeshRenderer body;
-    public Mesh originalMesh;
+    public MeshRenderer[] backstopCollisionMeshes;
 
     ObiCloth obiCloth;
 
-	// Use this for initialization
-	void Awake () {
-        if (obiCloth == null) {
+    // Use this for initialization
+    void Awake()
+    {
+        if (obiCloth == null)
+        {
             obiCloth = GetComponent<ObiCloth>();
-            collisionLayers = LayerMask.GetMask(bodyLayer);
-        }    	
-	}
-	
-    public void CalibrateSkinBackStop() {
-        if (body != null) {
-            body.gameObject.layer = LayerMask.NameToLayer(bodyLayer);
-            if (body.gameObject.GetComponent<MeshCollider>() == null) {
-                MeshCollider neoCollider = body.gameObject.AddComponent<MeshCollider>();
-                if (neoCollider.sharedMesh == null) {
-                    neoCollider.sharedMesh = body.sharedMesh;
+        }
+    }
+
+    public void CalibrateSkinBackStop()
+    {
+        int collisionLayer = LayerMask.NameToLayer(collisionLayerName);
+        if (collisionLayer == 0)
+        {
+            Debug.LogError("collisionLayerName " + collisionLayerName + " doesn't exist! Please define in user layer settings! Aborting!");
+            return;
+        }
+
+        if (backstopCollisionMeshes == null)
+        {
+            Debug.LogError("No backstop collision meshes defined! Aborting!");
+            return;
+        }
+        else
+        {
+            foreach (MeshRenderer mesh in backstopCollisionMeshes)
+            {
+                mesh.gameObject.layer = collisionLayer;
+                if (mesh.gameObject.GetComponent<MeshCollider>() == null)
+                {
+                    MeshCollider neoCollider = mesh.gameObject.AddComponent<MeshCollider>();
+                    if (neoCollider.sharedMesh == null)
+                    {
+                        neoCollider.sharedMesh = mesh.GetComponent<MeshFilter>()?.mesh;
+                        if (neoCollider.sharedMesh == null)
+                        {
+                            Debug.LogError("Could not create MeshCollider for mesh " + mesh.name + " because it lacks a MeshFilter component! Aborting!");
+                            return;
+                        }
+                    }
                 }
             }
         }
         List<ObiSkinConstraintBatch> batches = obiCloth.SkinConstraints.GetSkinBatches();
-        Debug.Log("CalibrateSkinBackstop - batches count = " + batches.Count);
-        foreach (ObiSkinConstraintBatch batch in batches) {
-            for (int i = 0; i < batch.skinIndices.Count; i++) {
+        for (int b = 0; b < batches.Count; b++)
+        {
+            ObiSkinConstraintBatch batch = batches[b];
+            for (int i = 0; i < batch.skinIndices.Count; i++)
+            {
                 int skinRadiusIdx = i * 3;
                 int collisionRadiusIdx = skinRadiusIdx + 1;
                 int backstopIdx = skinRadiusIdx + 2;
@@ -50,93 +77,30 @@ public class ClothCalibration : MonoBehaviour {
                 Vector3 direction = -normal;
 
                 RaycastHit hitInfo;
-                int layerMask = collisionLayers;
-                if (Physics.Raycast(origin, direction, out hitInfo, float.MaxValue, layerMask)) {
+                int layerMask = LayerMask.GetMask(collisionLayerName);
+                if (Physics.Raycast(origin, direction, out hitInfo, float.MaxValue, layerMask))
+                {
                     float dist = (hitInfo.point - pos).magnitude;
-                    float finalDist = dist - minBackstop;
-                    if (finalDist > maxRadius) {
-                        finalDist = maxRadius;
+                    float finalDist = dist * backstopScale + backstopOffset;
+                    if (finalDist > backstopMax)
+                    {
+                        finalDist = backstopMax;
                     }
                     batch.skinRadiiBackstop[backstopIdx] = finalDist;
                     batch.skinRadiiBackstop[skinRadiusIdx] = finalDist;
-                } else {
-                    Debug.LogError("Missed the raycast! This shouldn't happen! index=" + batch.skinIndices[i] + " pos=" + pos + " normal="+normal);
+                }
+                else
+                {
+                    Debug.LogError("[" + b + "," + i + "] Missed the raycast! This shouldn't happen! pos=" + pos + " normal=" + normal);
                 }
 
             }
         }
     }
 
-    public void CullBodyMeshFaces() {
-        RestoreOriginalMesh();
-
-        if (body.sharedMesh.name.Contains("Clone") == false) {
-            originalMesh = body.sharedMesh;
-        }
-        Mesh copy = Instantiate<Mesh>(body.sharedMesh);
-
-        //// Pre-calculate sqr magnitudes for hit-detection.
-        //List<float> zoneSqrMagnitudeByIdx = new List<float>();
-        //for (int z = 0; z < invisibleBodyZones.Length; z++) {
-        //    float radius = invisibleBodyZones[z].transform.lossyScale.x / 2.0f;
-        //    zoneSqrMagnitudeByIdx.Add(radius * radius);
-        //}
-        //List<Bounds> boundsByIdx = new List<Bounds>();
-        //for (int z = 0; z < invisibleBodyZones.Length; z++) {
-        //    float sizeX = invisibleBodyZones[z].transform.lossyScale.x;
-        //    boundsByIdx.Add(new Bounds(invisibleBodyZones[z].transform.position, new Vector3(sizeX, sizeX, sizeX)));
-        //}
-
-        int fastFailCount = 0;
-
-        for (int submeshIdx = 0; submeshIdx < copy.subMeshCount; submeshIdx++)
-        {
-
-            int[] oldTris = copy.GetTriangles(submeshIdx);
-            List<int> newTris = new List<int>();
-            for (int i = 0; i < oldTris.Length; i += 3)
-            {
-                Vector3 v1 = copy.vertices[oldTris[i]];
-                Vector3 v2 = copy.vertices[oldTris[i + 1]];
-                Vector3 v3 = copy.vertices[oldTris[i + 2]];
-                //Vector3 avg = (v1 + v2 + v3) / 3.0f;
-
-                bool hit = false;
-                for (int z = 0; z < inclusionZones.Length; z++)
-                {
-                    if (inclusionZones[z].bounds.Contains(v1) ||
-                        inclusionZones[z].bounds.Contains(v2) ||
-                        inclusionZones[z].bounds.Contains(v3)
-                       ) {
-                        hit = true;
-                        break;
-                    }
-                }
-
-                if (hit)
-                {
-                    newTris.Add(oldTris[i]);
-                    newTris.Add(oldTris[i + 1]);
-                    newTris.Add(oldTris[i + 2]);
-                }
-            }
-
-            copy.SetTriangles(newTris, submeshIdx);
-        }
-        Debug.Log("FastFailCount = " + fastFailCount);
-        body.sharedMesh = copy;
-    }
-
-    public void RestoreOriginalMesh() {
-        if (originalMesh == null) {
-            Debug.LogError("No Original Mesh from which to restore!");
-            return;
-        }
-        if (body.sharedMesh.name.Contains("Clone")) {
-            DestroyImmediate(body.sharedMesh);
-        }
-        body.sharedMesh = null;
-        body.sharedMesh = originalMesh;
+    internal void CopyCalibrationValues()
+    {
+        throw new NotImplementedException();
     }
 }
 
@@ -154,13 +118,13 @@ public class ClothCalibrationEditor : Editor
         {
             myScript.CalibrateSkinBackStop();
         }
-        if (GUILayout.Button("Cull BodyMesh Faces"))
+        if (GUILayout.Button("Copy Particles"))
         {
-            myScript.CullBodyMeshFaces();
-        }
-        if (GUILayout.Button("Restore Mesh"))
-        {
-            myScript.RestoreOriginalMesh();
+            myScript.CopyCalibrationValues();
         }
     }
 }
+
+
+
+
