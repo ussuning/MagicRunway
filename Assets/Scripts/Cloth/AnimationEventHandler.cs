@@ -18,7 +18,7 @@ public class AnimationEventHandler : MonoBehaviour {
     }
 
     public void ResetCloth() {
-        Debug.Log("ResetCloth()");
+        //Debug.Log("ResetCloth()");
         if (cloths == null) {
             cloths = GetComponentsInChildren<ObiCloth>();
         }
@@ -27,7 +27,7 @@ public class AnimationEventHandler : MonoBehaviour {
     }
 
     public void IdleStartWalk() {
-        Debug.Log("StartWalk");
+        //Debug.Log("StartWalk");
         GetComponent<Animator>().SetTrigger("Start");
         turnRate = -0.5f;
         turnDuration = 2.0f;

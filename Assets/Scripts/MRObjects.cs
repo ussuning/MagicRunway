@@ -56,6 +56,7 @@ public class Outfit : System.Object
     public string name;
     public string sex;
     public string desc;
+    public string prefab;
     public List<string> wearableids;
     public List<Wearable> wearables;
 }

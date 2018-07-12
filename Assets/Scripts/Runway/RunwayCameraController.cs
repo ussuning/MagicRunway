@@ -31,6 +31,19 @@ public class RunwayCameraController : MonoBehaviour {
     protected float timeSinceSlowMo;
 
     bool newMid = false;
+    /*
+    AutoRunwayEvents.OnFinaleStartCallback += OnFinaleStart;
+    AutoRunwayEvents.OnFinaleEndCallback += OnFinaleEnd;
+
+    private void OnFinaleStart(Collection collection)
+    {
+        Debug.Log("****************************** FINALE START!!");
+    }
+
+    private void OnFinaleEnd(Collection collection)
+    {
+        Debug.Log("****************************** FINALE END!!");
+    }*/
 
 	// Use this for initialization
 	void Start () {
@@ -74,7 +87,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayEndEnter(Collider other)
     {
-        Debug.Log("OnRunwayEndEnter " + other.name);
+        //Debug.Log("OnRunwayEndEnter " + other.name);
 
         EnableFrontFlashes(true);
         timeUntilEndFrontFlashes = 2.5f;
@@ -82,7 +95,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayMidEnter(Collider other)
     {
-        Debug.Log("OnRunwayMidEnter " + other.name);
+        //Debug.Log("OnRunwayMidEnter " + other.name);
 
         if (mid.history.ContainsKey(other) == false) {
             mid.history.Add(other, Time.unscaledTime);
@@ -96,7 +109,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayMidExit(Collider other)
     {
-        Debug.Log("RunwayCameraController::OnRunwayMidExit " + other.name);
+        //Debug.Log("RunwayCameraController::OnRunwayMidExit " + other.name);
         if (mid.active.Contains(other))
             mid.active.Remove(other);
 
@@ -105,7 +118,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayExit(Collider other)
     {
-        Debug.Log("RunwayCameraController::OnRunwayExit " + other.name); 
+        //Debug.Log("RunwayCameraController::OnRunwayExit " + other.name); 
 
         if (onRunway.active.Contains(other))
             onRunway.active.Remove(other);
@@ -117,7 +130,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayEnter(Collider other)
     {
-        Debug.Log("RunwayCameraController::OnRunwayEnter " + other.name);
+        //Debug.Log("RunwayCameraController::OnRunwayEnter " + other.name);
         
         if (onRunway.history.ContainsKey(other) == false)
         {

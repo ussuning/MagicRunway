@@ -28,7 +28,7 @@ public class ModelColliderTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("RunwayEnd:OnTriggerEnter " + other.name);
+        //Debug.Log("RunwayEnd:OnTriggerEnter " + other.name);
         if (other == runwayEnd)
         {
             if (colliderTriggered.ContainsKey(other.name) == false)

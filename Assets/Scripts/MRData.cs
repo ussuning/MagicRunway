@@ -17,7 +17,7 @@ public class MRData : Singleton<MRData>
     // Use this for initialization
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
     }
 
     public void LoadEverything() {
@@ -36,7 +36,7 @@ public class MRData : Singleton<MRData>
         {
             string dataAsJson = File.ReadAllText(filePath);
             wearables = JsonUtility.FromJson<Wearables>(dataAsJson);
-            Debug.Log(wearables.wearables[0].name);
+            //Debug.Log(wearables.wearables[0].name);
         }
         else
         {
@@ -51,10 +51,10 @@ public class MRData : Singleton<MRData>
         {
             string dataAsJson = File.ReadAllText(filePath);
             outfits = JsonUtility.FromJson<Outfits>(dataAsJson);
-            Debug.Log(outfits.outfits[0].id);
-            Debug.Log(outfits.outfits[0].name);
-            Debug.Log(outfits.outfits[0].sex);
-            Debug.Log(outfits.outfits[0].desc);
+            //Debug.Log(outfits.outfits[0].id);
+            //Debug.Log(outfits.outfits[0].name);
+            //Debug.Log(outfits.outfits[0].sex);
+            //Debug.Log(outfits.outfits[0].desc);
         }
         else
         {
@@ -70,7 +70,7 @@ public class MRData : Singleton<MRData>
         {
             string dataAsJson = File.ReadAllText(filePath);
             collections = JsonUtility.FromJson<Collections>(dataAsJson);
-            Debug.Log(collections.collections[0].name);
+            //Debug.Log(collections.collections[0].name);
         }
         else
         {
