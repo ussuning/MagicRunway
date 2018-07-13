@@ -35,6 +35,8 @@ public class ClothCalibration : MonoBehaviour
             Debug.LogError("collisionLayerName " + collisionLayerName + " doesn't exist! Please define in user layer settings! Aborting!");
             return;
         }
+        int layerMask = LayerMask.GetMask(collisionLayerName);
+        Debug.Log("layerMask = " + layerMask);
 
         if (backstopCollisionMeshes == null)
         {
@@ -78,7 +80,6 @@ public class ClothCalibration : MonoBehaviour
                 Vector3 direction = -normal;
 
                 RaycastHit hitInfo;
-                int layerMask = LayerMask.GetMask(collisionLayerName);
                 if (Physics.Raycast(origin, direction, out hitInfo, float.MaxValue, layerMask))
                 {
                     float dist = (hitInfo.point - pos).magnitude;
