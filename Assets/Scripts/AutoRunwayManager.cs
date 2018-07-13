@@ -7,21 +7,13 @@ public class AutoRunwayManager : MonoBehaviour
     public GameObject runway;
     public ColliderEvents RunwayMidExit;
     public ColliderEvents RunwayFinish;
+    public ColliderEvents RunwayEnd;
 
-    [HideInInspector]
-    public bool loop = false;
-
-    [HideInInspector]
-    public int loopAmount = 1;
-
-    [HideInInspector]
-    public bool showFinale = true;
-
-    [HideInInspector]
-    public float pauseToFinale = 3;
-
-    [HideInInspector]
-    public float pauseToNextCollection = 3;
+    private bool loop = false;
+    private int loopAmount = 1;
+    private bool showFinale = false;
+    private float pauseToFinale = 3;
+    private float pauseToNextCollection = 3;
 
     private int curCollectionIndex = 0;
     private int curOutfit = 0;
@@ -61,9 +53,14 @@ public class AutoRunwayManager : MonoBehaviour
             RunwayMidExit = GameObject.Find("RunwayMidExit")?.GetComponent<ColliderEvents>();
         if (RunwayFinish == null)
             RunwayFinish = GameObject.Find("RunwayFinish")?.GetComponent<ColliderEvents>();
+        if (RunwayEnd == null)
+            RunwayEnd = GameObject.Find("RunwayEnd")?.GetComponent<ColliderEvents>();
 
         RunwayMidExit.OnTriggerEnterEvt += OnRunwayMidExit;
         RunwayFinish.OnTriggerEnterEvt += OnRunwayFinish;
+        RunwayEnd.OnTriggerEnterEvt += OnRunwayEndEnter;
+        RunwayEnd.OnTriggerExitEvt += OnRunwayEndExit;
+
     }
 
     private void PrepareCollectionRunwayModelPrefabs()
@@ -82,6 +79,7 @@ public class AutoRunwayManager : MonoBehaviour
         curCollection = MRData.Instance.collections.collections[curCollectionIndex];
 
         totalOutfits = curCollection.outfits.Count;
+        
 
         foreach (Outfit outfit in curCollection.outfits)
         {
@@ -97,6 +95,8 @@ public class AutoRunwayManager : MonoBehaviour
     private void PrepareNextCollection()
     {
         //Debug.Log("READY FOR NEXT COLLECTION");
+        UIManager.Instance.HideCollection();
+
         curCollectionIndex++;
 
         if (curCollectionIndex == totalCollections)
@@ -129,7 +129,8 @@ public class AutoRunwayManager : MonoBehaviour
     {
         //Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
         AutoRunwayEvents.CollectionStart(curCollection);
-
+        UIManager.Instance.ShowCollection(curCollection);
+        UIManager.Instance.HideUpNext();
         curOutfit = 0;
         RunModel(curOutfit);
     }
@@ -138,25 +139,32 @@ public class AutoRunwayManager : MonoBehaviour
     {
         if(isCollectionEnding == false) { return; }
         //Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
-
         if (showFinale == true && isInFinale == false)
         {
             AutoRunwayEvents.FinaleStart(curCollection);
             BeginFinale();
-        } else
+        }
+        else
         {
-            //Debug.Log("Queue Up Next Collection");
-            ClearModel(model);
+            if (isInFinale == true)
+            {
+                ClearModel(model);
 
-            if(models.Count == 0) {
-                
-                AutoRunwayEvents.CollectionEnd(curCollection);
-
-                if(showFinale == true)
+                if (models.Count == 0)
                 {
-                    AutoRunwayEvents.FinaleEnd(curCollection);
-                }
+                    AutoRunwayEvents.CollectionEnd(curCollection);
 
+                    if (showFinale == true)
+                    {
+                        AutoRunwayEvents.FinaleEnd(curCollection);
+                    }
+
+                    PrepareNextCollection();
+                }
+            } 
+            else
+            {
+                AutoRunwayEvents.CollectionEnd(curCollection);
                 PrepareNextCollection();
             }
         }
@@ -202,6 +210,12 @@ public class AutoRunwayManager : MonoBehaviour
         if(queueEnd == true)
         {
             isCollectionEnding = true;
+
+            int nextCollectionIndex = curCollectionIndex+1;
+            if (nextCollectionIndex == totalCollections) { nextCollectionIndex = 0; }
+            Collection nextCollection = MRData.Instance.collections.collections[nextCollectionIndex];
+
+            UIManager.Instance.ShowUpNext(nextCollection);
             //AutoRunwayEvents.LoopEnd(curCollection, curLoop);
         } else
         {
@@ -275,9 +289,25 @@ public class AutoRunwayManager : MonoBehaviour
         QueueUp();
     }
 
+    private void OnRunwayEndEnter(Collider other)
+    {
+        if(isInFinale == true) { return; }
+
+        Outfit outfit = curCollection.outfits[curOutfit];
+        UIManager.Instance.ShowOutfit(outfit);
+    }
+
+    private void OnRunwayEndExit(Collider other)
+    {
+        if (isInFinale == true) { return; }
+        UIManager.Instance.HideOutfit();
+    }
+
     private void OnDestroy()
     {
         RunwayMidExit.OnTriggerEnterEvt -= OnRunwayMidExit;
         RunwayFinish.OnTriggerEnterEvt -= OnRunwayFinish;
+        RunwayEnd.OnTriggerEnterEvt -= OnRunwayEndEnter;
+        RunwayEnd.OnTriggerExitEvt -= OnRunwayEndExit;
     }
 }

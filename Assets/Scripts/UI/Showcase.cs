@@ -34,8 +34,10 @@ public class Showcase : MonoBehaviour
 
         float currentY = -m_startY;
 
-        for (int x = 0; x < m_entryLimit; x++) {
-            GameObject go = makeShowcaseEntry(outfit.wearables[0]);
+        int count = (outfit.wearables.Count < m_entryLimit) ? outfit.wearables.Count : m_entryLimit;
+
+        for (int x = 0; x < count; x++) {
+            GameObject go = makeShowcaseEntry(outfit.wearables[x]);
 
             RectTransform rectTransform = go.GetComponent<RectTransform>();
             rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, currentY, 0);

@@ -28,6 +28,16 @@ public class UpNext : MonoBehaviour
     {
     }
 
+    public void StartUpNext(string collectionName)
+    {
+        m_canvasGroup.alpha = 0;
+        
+        m_circleImage.gameObject.SetActive(false);
+        m_title.text = "Up Next... " + collectionName + " Collection";
+
+        m_AnimState = 1;
+    }
+
     public void StartUpNext(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f)
     {
         if(totalTimeSeconds <= 1.0f) {
@@ -65,7 +75,7 @@ public class UpNext : MonoBehaviour
         m_AnimState = 1;
     }
 
-    private void Hide() {
+    public void Hide() {
         m_AnimStartTime = Time.realtimeSinceStartup;
         m_AnimState = 2;
     }

@@ -43,7 +43,7 @@ public class UIManager : Singleton<UIManager>
     //----------------------------------------
 
     public void ShowStartMenu(bool animate) {
-        if(animate == true) {
+        if (animate == true) {
             uiStartMenu.SetActive(true);
             faderStartMenu.StartFading(CanvasFade.IN);
         } else {
@@ -67,7 +67,7 @@ public class UIManager : Singleton<UIManager>
     //----------------------------------------
 
     public void OnClickShowShowcase() {
-        ShowOutfit(MRData.Instance.outfits.outfits[0]);    
+        ShowOutfit(MRData.Instance.outfits.outfits[0]);
     }
 
     public void ShowOutfit(Outfit outfit) {
@@ -79,7 +79,7 @@ public class UIManager : Singleton<UIManager>
         Showcase showcase = uiShowcase.GetComponent<Showcase>();
         showcase.Hide(true);
     }
-   
+
     //----------------------------------------
     // Collection
     //----------------------------------------
@@ -90,9 +90,27 @@ public class UIManager : Singleton<UIManager>
         cd.ShowCollection(collection);
     }
 
+    public void HideCollection()
+    {
+        CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
+        cd.Hide(true);
+    }
+
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {
         UpNext un = uiUpNext.GetComponent<UpNext>();
         un.StartUpNext(collectionName, totalTimeSeconds, warningTimeSeconds);
+    }
+
+    public void ShowUpNext(Collection collection)
+    {
+        uiUpNext.SetActive(true);
+        UpNext un = uiUpNext.GetComponent<UpNext>();
+        un.StartUpNext(collection.name);
+    }
+
+    public void HideUpNext()
+    {
+        uiUpNext.SetActive(false);
     }
     //----------------------------------------
 
