@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ModelAnimationManager : MonoBehaviour {
-    public static List<string> femalePoses = new List<string>(new string[] { "basic" });
+    public static List<string> femalePoses = new List<string>(new string[] { "double_spin" });
     public static List<string> malePoses = new List<string>(new string[] { "basic" });
    
     public static string GetPoseAnimation(string sex, bool random = true)

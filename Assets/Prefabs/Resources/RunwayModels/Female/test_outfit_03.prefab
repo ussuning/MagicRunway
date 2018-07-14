@@ -19605,7 +19605,7 @@ MonoBehaviour:
   worldAngularVelocityScale: 0
   worldLinearInertiaScale: 0
   worldAngularInertiaScale: 0
-  simulationOrder: 0
+  simulationOrder: 2
   parameters:
     mode: 0
     interpolation: 0
@@ -35900,19 +35900,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d51edb63c2549ebba9fe407540380c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  minBackstop: 0
-  maxRadius: 0.2
+  collisionLayerName: ClothCalibration
+  backstopOffset: 0
+  backstopScale: 1
+  backstopMax: 0.2
   rayOriginHeight: 0.01
-  inclusionZones:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  body: {fileID: 137950332720324338}
-  originalMesh: {fileID: 4300000, guid: 041b3adabc4474f3f82368c06f3c3ac9, type: 3}
+  backstopCollisionMeshes: []
 --- !u!114 &114710298954331142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81549,14 +81542,14 @@ SkinnedMeshRenderer:
   m_GameObject: {fileID: 1741822969142906}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 51810d698a5eb924089dba663b8d3c6e, type: 2}
+  - {fileID: 2100000, guid: 3a509eecf21f7954abaee90e1b1bd914, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
