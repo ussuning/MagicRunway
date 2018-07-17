@@ -9,21 +9,30 @@ public class PoseRecognizingAgent : Agent {
     private KinectManager manager;
     private long KinectUserId;
 
-    private int estPoseIdx;
-    private int curPoseIdx;
-    private int prevPoseIdx;
+    private Dictionary<int, int> PoseCountsWithinTimeFrame = new Dictionary<int, int>();
+    //Change to private later
+    public int estPoseIdx;
+    public int curPoseIdx;
+    public int prevPoseIdx;
+  
+    public int combo = 1;
 
     private float estimationTimeEllapsed = 0f;
-    private Dictionary<int, int> PoseCountsWithinTimeFrame = new Dictionary<int, int>();
-
     private float posingTimeEllapsed = 0f;
+    private float prevPoseTime = 0f;
 
-    float estPoseConfidence;
+    private float estPoseConfidence;
 
-    void Start()
+    //void Start()
+    //{
+    //    if (manager == null)
+    //        manager = KinectManager.Instance;
+    //}
+
+    public void Init(long userID)
     {
-        if (manager == null)
-            manager = KinectManager.Instance;
+        manager = KinectManager.Instance;
+        KinectUserId = userID;
     }
 
     void Update ()
@@ -51,7 +60,6 @@ public class PoseRecognizingAgent : Agent {
                 estPoseConfidence = (float)maxCounts / totalCounts;
                 if (probablePoseIdx > 0 && estPoseConfidence > 0.25f)
                 {
-                    //prevPoseIdx = estPoseIdx;
                     estPoseIdx = probablePoseIdx; 
                 }
                 else
@@ -67,21 +75,45 @@ public class PoseRecognizingAgent : Agent {
 
     void LateUpdate()
     {
-        DebugText.text = string.Format("Cur Pose: {0}, confidence {1}, Prev Pose: {2}", estPoseIdx, estPoseConfidence, prevPoseIdx);
-        if (estPoseIdx > 0 && /*estPoseIdx != prevPoseIdx &&*/ posingTimeEllapsed > SystemConfigs.PosingTime)
+        if(DebugText)
+            DebugText.text = string.Format("Cur Pose: {0}, confidence {1}, Prev Pose: {2}", estPoseIdx, estPoseConfidence, prevPoseIdx);
+
+        if(estPoseIdx > 0)
         {
+            if(curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
+            {
+                if (Time.time - prevPoseTime <= SystemConfigs.ComboPoseTime)
+                {
+                    combo++;
+                }
+                else
+                {
+                    combo = 1;
+                }
+
+                prevPoseIdx = curPoseIdx;
+                curPoseIdx = estPoseIdx;
+
+                prevPoseTime = Time.time;
+                posingTimeEllapsed = 0f;
+
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, curPoseIdx);
+            }
+        }
+        else
+        {
+            prevPoseIdx = curPoseIdx;
+            curPoseIdx = estPoseIdx;
             posingTimeEllapsed = 0f;
-
-            int combo = 1;
-            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, estPoseIdx);
-
-            prevPoseIdx = estPoseIdx;
+            combo = 0;
         }
     }
 
     public override void InitializeAgent()
     {
         manager = KinectManager.Instance;
+        if(KinectUserId == 0)
+            KinectUserId = manager.GetPrimaryUserID();
     }
 
     public override void CollectObservations()
@@ -132,8 +164,6 @@ public class PoseRecognizingAgent : Agent {
             PoseCountsWithinTimeFrame[newPoseIdx]++;
         else
             PoseCountsWithinTimeFrame.Add(newPoseIdx, 1);
-
-        //DebugText.text = string.Format("est Pose: {0}", newPoseIdx);
     }
 
     public override void AgentOnDone()
@@ -144,6 +174,7 @@ public class PoseRecognizingAgent : Agent {
     public override void AgentReset()
     {
         estPoseIdx = 0;
+        prevPoseIdx = 0;
         posingTimeEllapsed = 0f;
     }
 
