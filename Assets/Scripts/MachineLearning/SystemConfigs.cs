@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SystemConfigs
 {
-    public static bool CollectUserRotation = true;
+    public static bool CollectUserRotation = false;
     public static bool CollectJointDirectionData = false;
     public static bool CollectJointOrientationData = true;
     public static KinectInterop.JointType[] DetectedJoints = {
@@ -16,7 +16,7 @@ public class SystemConfigs
         KinectInterop.JointType.SpineShoulder, KinectInterop.JointType.HandTipLeft, KinectInterop.JointType.HandTipRight
     };
 
-    public static float PoseEstimationTimeFrame = 0.1f; //Time between each pose estimation (to remove outlier estimations)
+    public static float PoseEstimationTimeFrame = 0.25f; //Time between each pose estimation (to remove outlier estimations)
     public static float PosingTime = 0.5f;
     public static float ComboPoseTime = 5f;
 }
