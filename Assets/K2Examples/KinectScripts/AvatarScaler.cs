@@ -277,8 +277,8 @@ public class AvatarScaler : MonoBehaviour
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.ShoulderRight, KinectInterop.JointType.ElbowRight, armScaleFactor, ref rightUpperArmLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.ElbowRight, KinectInterop.JointType.WristRight, armScaleFactor, ref rightLowerArmLength);
 
-			EqualizeBoneLength(ref leftUpperArmLength, ref rightUpperArmLength);
-			EqualizeBoneLength(ref leftLowerArmLength, ref rightLowerArmLength);
+			//EqualizeBoneLength(ref leftUpperArmLength, ref rightUpperArmLength);
+			//EqualizeBoneLength(ref leftLowerArmLength, ref rightLowerArmLength);
 		}
 		
 		if(bLegs)
@@ -288,8 +288,8 @@ public class AvatarScaler : MonoBehaviour
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.HipRight, KinectInterop.JointType.KneeRight, legScaleFactor, ref rightUpperLegLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.KneeRight, KinectInterop.JointType.AnkleRight, legScaleFactor, ref rightLowerLegLength);
 			
-			EqualizeBoneLength(ref leftUpperLegLength, ref rightUpperLegLength);
-			EqualizeBoneLength(ref leftLowerLegLength, ref rightLowerLegLength);
+			//EqualizeBoneLength(ref leftUpperLegLength, ref rightUpperLegLength);
+			//EqualizeBoneLength(ref leftLowerLegLength, ref rightLowerLegLength);
 		}
 	}
 	
@@ -512,8 +512,9 @@ public class AvatarScaler : MonoBehaviour
 
 			height = (posShoulderCenter - posHipCenter).magnitude * scaleFactor;
 			width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
-			
-			return true;
+            Debug.Log("h=" + height + " w=" + width);
+
+            return true;
 		}
 
 		return false;
