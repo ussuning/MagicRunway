@@ -13,7 +13,7 @@ public class UserEvents : MonoBehaviour {
         if (OnNewUserDetectedCallback != null)
         {
             Debug.Log("UserEvents: New User, invoking callbacks");
-            OnNewUserDetectedCallback(userId, userIndex);
+            OnNewUserDetectedCallback(userId, userIndex);            
         }
     }
 
@@ -27,6 +27,19 @@ public class UserEvents : MonoBehaviour {
         {
             Debug.Log("UserEvents: UserLost, invoking callbacks");
             OnUserLostCallback(userId, userIndex);
+        }
+    }
+
+    // User Gender Registration Complete
+    public delegate void OnUserGenderComplete(long userId, int userIndex);
+    public static event OnUserGenderComplete OnUserGenderCompleteCallback;
+
+    public static void UserGenderComplete(long userId, int userIndex)
+    {
+        if (OnUserLostCallback != null)
+        {
+            Debug.Log("UserEvents: UserGenderComplete, invoking callbacks");
+            OnUserGenderCompleteCallback(userId, userIndex);
         }
     }
 }
