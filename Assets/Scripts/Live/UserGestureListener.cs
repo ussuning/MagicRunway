@@ -4,83 +4,36 @@ using System;
 
 public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListenerInterface
 {
-    [Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
     public int playerIndex = 0;
-
-    [Tooltip("UI-Text to display gesture-listener messages and gesture information.")]
+    public long uid;
     public UnityEngine.UI.Text gestureInfo;
-
-    // singleton instance of the class
-    private static UserGestureListener instance = null;
-
-    // internal variables to track if progress message has been displayed
     private bool progressDisplayed;
     private float progressGestureTime;
 
-    // whether the needed gesture has been detected or not
-    private bool swipeLeft;
-    private bool swipeRight;
-    private bool swipeUp;
-
-    public static UserGestureListener Instance
+    public void initialize(long userId, int userIndex)
     {
-        get
-        {
-            return instance;
-        }
-    }
+        playerIndex = userIndex;
+        uid = userId;
 
-    public bool IsSwipeLeft()
-    {
-        if (swipeLeft)
-        {
-            swipeLeft = false;
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool IsSwipeRight()
-    {
-        if (swipeRight)
-        {
-            swipeRight = false;
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool IsSwipeUp()
-    {
-        if (swipeUp)
-        {
-            swipeUp = false;
-            return true;
-        }
-
-        return false;
+        // listening for these gestures for this user
+        KinectManager manager = KinectManager.Instance;
+        manager.DetectGesture(uid, KinectGestures.Gestures.RaiseLeftHand);
+        manager.DetectGesture(uid, KinectGestures.Gestures.RaiseRightHand);
     }
 
     public void UserDetected(long userId, int userIndex)
     {
-        KinectManager manager = KinectManager.Instance;
-
-        if (!manager || (userIndex != playerIndex))
+        if (userIndex != playerIndex)
+        {
+            Debug.Log("UserGestureListener User Detected, Player Index = " + playerIndex);
             return;
-
-        // detect these user specific gestures
-        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
-        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
-        manager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);
-        manager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-        manager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+        }
 
         if (gestureInfo != null)
         {
             gestureInfo.text = "Female: Raise Left Hand, Male: Raise Right Hand.";
         }
+
     }
 
     public void UserLost(long userId, int userIndex)
@@ -94,6 +47,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             gestureInfo.text = string.Empty;
         }
     }
+    
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture,
                                   float progress, KinectInterop.JointType joint, Vector3 screenPos)
@@ -142,7 +96,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                                   KinectInterop.JointType joint, Vector3 screenPos)
     {
 
-        Debug.Log("Gesture Completed: " + gesture);
+        Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
 
         // the gestures are allowed for the primary user only
         if (userIndex != playerIndex)
@@ -153,13 +107,6 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             string sGestureText = gesture + " detected";
             gestureInfo.text = sGestureText;
         }
-
-        if (gesture == KinectGestures.Gestures.SwipeLeft)
-            swipeLeft = true;
-        else if (gesture == KinectGestures.Gestures.SwipeRight)
-            swipeRight = true;
-        else if (gesture == KinectGestures.Gestures.SwipeUp)
-            swipeUp = true;
 
         return true;
     }
@@ -184,22 +131,15 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         return true;
     }
 
-
-    void Awake()
-    {
-        instance = this;
-    }
-
     void Update()
     {
-     /*   if (progressDisplayed && ((Time.realtimeSinceStartup - progressGestureTime) > 2f))
+        if (progressDisplayed && ((Time.realtimeSinceStartup - progressGestureTime) > 2f))
         {
             progressDisplayed = false;
             gestureInfo.text = String.Empty;
 
             Debug.Log("Forced progress to end.");
         }
-        */
     }
 
 }
