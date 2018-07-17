@@ -35,6 +35,12 @@ public class UserManager : Singleton<UserManager>
         // get listener and assign for user
         UserGestureListener userGestureListener = userSkeletonPrefab.GetComponent<UserGestureListener>();
         userGestureListener.initialize(userId, userIndex);
+
+        // get pose agent and attach the brain
+        PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
+        GameObject brainGO = GameObject.Find("Brain");
+        Brain brain = brainGO.GetComponent<Brain>();
+        poseAgent.GiveBrain(brain);
     }
 
     // User Lost detected, remove game object
