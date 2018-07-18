@@ -8,10 +8,12 @@ public class PoseFX : MonoBehaviour {
     public Sprite[] poseThumbnails;
 
     SpriteRenderer poseImage;
+    TextMesh confidenceText;
 
     void Awake ()
     {
         poseImage = GetComponentInChildren<SpriteRenderer>();
+        confidenceText = GetComponentInChildren<TextMesh>();
     }
 
     void OnEnable()
@@ -26,11 +28,12 @@ public class PoseFX : MonoBehaviour {
 
     public void OnPoseDetected(object param, object paramEx)
     {
-        int combo = (int)param;
+        //int combo = (int)param;
         int poseIdx = (int)paramEx;
+        float poseConfidence = (float)param;
 
-        UpdateComboParticles(combo);
-        UpdateDetectedPoseImage(poseIdx);
+        //UpdateComboParticles(combo);
+        UpdateDetectedPoseImage(poseIdx, poseConfidence);
     }
 
     void UpdateComboParticles(int combo)
@@ -42,12 +45,14 @@ public class PoseFX : MonoBehaviour {
             particleGO = (GameObject)Instantiate(partileFX[partileFX.Length - 1], transform.parent.position, Quaternion.identity);
     }
 
-    void UpdateDetectedPoseImage(int poseIdx)
+    void UpdateDetectedPoseImage(int poseIdx, float confidence = 0f)
     {
         CancelInvoke("ClearDetection");
 
         poseImage.sprite = poseThumbnails[poseIdx];
         poseImage.enabled = true;
+
+        confidenceText.text = (Mathf.Round(confidence * 100)).ToString();
 
         Invoke("ClearDetection", 2f);
     }
@@ -55,5 +60,6 @@ public class PoseFX : MonoBehaviour {
     void ClearDetection()
     {
         poseImage.enabled = false;
+        confidenceText.text = "";
     }
 }
