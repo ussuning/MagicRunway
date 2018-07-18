@@ -18,6 +18,9 @@ public class AppManager : MonoBehaviour
     {
         blackoutAnimator.SetBool("FadeIn", false);
         blackoutAnimator.SetBool("FadeOut", false);
+
+        MRData.Instance.LoadEverything();
+
         autoRunwayManager.HideAllLevels();
 
         if(curMode == Mode.LIVE)
@@ -59,6 +62,7 @@ public class AppManager : MonoBehaviour
 
     public void LiveToAuto()
     {
+        Debug.Log("AppManager: Live to Auto");
         if(curMode == Mode.AUTO) { return; }
 
         curMode = Mode.AUTO;
@@ -108,9 +112,11 @@ public class AppManager : MonoBehaviour
     IEnumerator FadeOutLLevelToLive()
     {
         blackoutAnimator.SetBool("FadeOut", true);
+        UIManager.Instance.HideStartMenu(true);
         yield return new WaitUntil(() => blackout.color.a == 1);
         blackoutAnimator.SetBool("FadeOut", false);
         PlayLiveRunway();
+        UIManager.Instance.ShowGestureGender(30.0f);
     }
 
     IEnumerator FadeOutLLevelToLevel()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PoseRecognizingAgent : Agent {
 
-    public UnityEngine.UI.Text DebugText;
+    public float minConfidence = 0.5f;
 
     private KinectManager manager;
     private long KinectUserId;
@@ -58,14 +58,14 @@ public class PoseRecognizingAgent : Agent {
                 }
 
                 estPoseConfidence = (float)maxCounts / totalCounts;
-                if (probablePoseIdx > 0 && estPoseConfidence > 0.25f)
+                if (probablePoseIdx > 0 && estPoseConfidence > minConfidence)
                 {
                     estPoseIdx = probablePoseIdx; 
                 }
                 else
                 {
                     estPoseIdx = 0;
-                }
+                }    
             }
 
             estimationTimeEllapsed = 0f;
@@ -75,10 +75,7 @@ public class PoseRecognizingAgent : Agent {
 
     void LateUpdate()
     {
-        if(DebugText)
-            DebugText.text = string.Format("Cur Pose: {0}, confidence {1}, Prev Pose: {2}", estPoseIdx, estPoseConfidence, prevPoseIdx);
-
-        if(estPoseIdx > 0)
+        if(estPoseIdx != 0 && estPoseIdx != 20)
         {
             if(curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
             {
@@ -97,7 +94,11 @@ public class PoseRecognizingAgent : Agent {
                 prevPoseTime = Time.time;
                 posingTimeEllapsed = 0f;
 
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, curPoseIdx);
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, estPoseConfidence, curPoseIdx);
+            }
+            else
+            {
+                Debug.Log(string.Format("  {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
             }
         }
         else

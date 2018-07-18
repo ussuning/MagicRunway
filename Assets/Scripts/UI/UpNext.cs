@@ -70,6 +70,7 @@ public class UpNext : MonoBehaviour
     }
 
     private void showWarning() {
+        m_circleImage.gameObject.SetActive(true);
         m_canvasGroup.alpha = 0;
         m_AnimStartTime = Time.realtimeSinceStartup;
         m_AnimState = 1;

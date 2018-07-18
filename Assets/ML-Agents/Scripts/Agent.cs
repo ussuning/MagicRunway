@@ -515,13 +515,13 @@ public abstract class Agent : MonoBehaviour
         {
             if (info.vectorObservation.Count != param.vectorObservationSize)
             {
-                throw new UnityAgentsException(string.Format(
+                /*throw new UnityAgentsException(string.Format(
                     "Vector Observation size mismatch between continuous " +
                     "agent {0} and brain {1}. " +
                     "Was Expecting {2} but received {3}. ",
                     gameObject.name, brain.gameObject.name,
                     brain.brainParameters.vectorObservationSize,
-                    info.vectorObservation.Count));
+                    info.vectorObservation.Count));*/
             }
             info.stackedVectorObservation.RemoveRange(
                 0, param.vectorObservationSize);
