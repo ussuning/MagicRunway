@@ -61,7 +61,13 @@ public class UIManager : Singleton<UIManager>
             uiStartMenu.SetActive(false);
         }
     }
-
+    
+    public void HideAll()
+    {
+        HideOutfit(false);
+        HideCollection(false);
+        HideUpNext();
+    }
     //----------------------------------------
     // Showcase
     //----------------------------------------
@@ -75,9 +81,9 @@ public class UIManager : Singleton<UIManager>
         showcase.Show(outfit);
     }
 
-    public void HideOutfit() {
+    public void HideOutfit(bool animate = true) {
         Showcase showcase = uiShowcase.GetComponent<Showcase>();
-        showcase.Hide(true);
+        showcase.Hide(animate);
     }
 
     //----------------------------------------
@@ -90,10 +96,10 @@ public class UIManager : Singleton<UIManager>
         cd.ShowCollection(collection);
     }
 
-    public void HideCollection()
+    public void HideCollection(bool animate = true)
     {
         CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
-        cd.Hide(true);
+        cd.Hide(animate);
     }
 
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {

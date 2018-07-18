@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class AutoRunwayManager : MonoBehaviour
 {
     public GameObject runway;
+    public GameObject cameraGroup;
     public ColliderEvents RunwayMidExit;
     public ColliderEvents RunwayFinish;
     public ColliderEvents RunwayEnd;
+    public List<GameObject> levels;
+    public GameObject curLevel;
 
     private bool loop = false;
     private int loopAmount = 1;
@@ -31,9 +36,52 @@ public class AutoRunwayManager : MonoBehaviour
 
     void Start()
     {
+        cameraGroup.SetActive(false);
+    }
+    public void HideAllLevels()
+    {
+        foreach (GameObject level in levels)
+        {
+            level.SetActive(false);
+        }
+    }
+
+    public void ReadyAutoRunway(GameObject level = null)
+    {
+        HideAllLevels();
+
+        if (level == null) {
+            curLevel = levels[0];
+        } else
+        {
+            curLevel = level;
+        }
+
+        curLevel.SetActive(true);
+
+        if (curLevel == null)
+        {
+            Debug.Log("ERROR - LEVEL NOT FOUND");
+        }
+        cameraGroup.SetActive(true);
         Setup();
+    }
+
+    public void PlayAutoRunway()
+    {
+        if (curLevel == null)
+        {
+            curLevel = levels[0];
+        }
+        
         BeginRunwayShow();
-        //GameObject go = RunwayModelsPrefabManager.InstantiateGameObject("RunwayModels/Female/test_outfit_01", runway.transform);
+    }
+
+    public void StopAutoRunway()
+    {
+        cameraGroup.SetActive(false);
+        ClearModels();
+        UIManager.Instance.HideAll();
     }
 
     private void Setup()

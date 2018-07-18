@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65059565114412684}
   - component: {fileID: 54251121203103896}
   - component: {fileID: 114223053823012148}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwayEnter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,13 +40,13 @@ GameObject:
   - component: {fileID: 4631028466628972}
   - component: {fileID: 198579298627246688}
   - component: {fileID: 199285168067438174}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Flash Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1182739714283532
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 65605696330066910}
   - component: {fileID: 54643203779224406}
   - component: {fileID: 114498379341650520}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwayFinish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 65951908953844826}
   - component: {fileID: 54052189358427272}
   - component: {fileID: 114572433580575126}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwayEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4673953418377302}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: FrontFlashes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4325624259492144}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwaySpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,13 +125,13 @@ GameObject:
   - component: {fileID: 4670425824008474}
   - component: {fileID: 198276020148503724}
   - component: {fileID: 199375155546805182}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Flash Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1450935169559228
 GameObject:
   m_ObjectHideFlags: 1
@@ -140,7 +140,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4998925956176576}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwaySpawnLookAt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 65477910337885630}
   - component: {fileID: 54836244035123188}
   - component: {fileID: 114981279071811420}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwayMidExit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,13 +176,13 @@ GameObject:
   - component: {fileID: 4575880448792864}
   - component: {fileID: 198331754672625860}
   - component: {fileID: 199162583345846436}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Flash Particle System (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1542861421355680
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 65457943500219084}
   - component: {fileID: 54063130750731538}
   - component: {fileID: 114458525296147528}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwayMid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4810068397858686}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: MidFlashes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 65834459760551920}
   - component: {fileID: 54965093630584306}
   - component: {fileID: 114884087817986782}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: RunwayExit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4798889406913494}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Runway
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1802397453879732}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4033106123909578}

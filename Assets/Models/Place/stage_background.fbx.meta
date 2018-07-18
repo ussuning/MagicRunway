@@ -1,36 +1,64 @@
 fileFormatVersion: 2
-guid: 058be67f3d15da047aba558148d78d49
+guid: 30a5cf916047839458c8e31ebc9ec058
+timeCreated: 1531332891
+licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: beam
     100002: ceiling
     100004: metal
-    100006: side_wall
-    100008: //RootNode
-    100010: wall
+    100006: mirror
+    100008: pillar
+    100010: shadow_win
+    100012: side_wall
+    100014: //RootNode
+    100016: wall
+    100018: window
     400000: beam
     400002: ceiling
     400004: metal
-    400006: side_wall
-    400008: //RootNode
-    400010: wall
+    400006: mirror
+    400008: pillar
+    400010: shadow_win
+    400012: side_wall
+    400014: //RootNode
+    400016: wall
+    400018: window
     2100000: phong1
+    2100002: white
+    2100004: brick
+    2100006: metal1
+    2100008: 14 - Default1
+    2100010: 01 - Default
     2300000: beam
     2300002: ceiling
     2300004: metal
-    2300006: side_wall
-    2300008: wall
+    2300006: mirror
+    2300008: pillar
+    2300010: shadow_win
+    2300012: side_wall
+    2300014: wall
+    2300016: window
     3300000: beam
     3300002: ceiling
     3300004: metal
-    3300006: side_wall
-    3300008: wall
+    3300006: mirror
+    3300008: pillar
+    3300010: shadow_win
+    3300012: side_wall
+    3300014: wall
+    3300016: window
     4300000: ceiling
     4300002: wall
-    4300004: beam
-    4300006: side_wall
-    4300008: metal
+    4300004: pillar
+    4300006: metal
+    4300008: beam
+    4300010: side_wall
+    4300012: shadow_win
+    4300014: mirror
+    4300016: window
+    9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -50,7 +78,6 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -106,7 +133,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
