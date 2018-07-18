@@ -512,7 +512,7 @@ public class AvatarScaler : MonoBehaviour
 
 			height = (posShoulderCenter - posHipCenter).magnitude * scaleFactor;
 			width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
-            Debug.Log("h=" + height + " w=" + width);
+            //Debug.Log("h=" + height + " w=" + width);
 
             return true;
 		}

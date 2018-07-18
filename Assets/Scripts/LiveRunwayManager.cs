@@ -36,7 +36,8 @@ public class LiveRunwayManager : MonoBehaviour {
     //play live mode after fading in
     public void PlayLiveRunway()
     {
-       // AutoRunwayEvents.CollectionStart(curCollection);
+        // AutoRunwayEvents.CollectionStart(curCollection);
+        UIManager.Instance.HideStartMenu(false);
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.ShowUpNext(curCollection);
         UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);
@@ -44,6 +45,7 @@ public class LiveRunwayManager : MonoBehaviour {
 
     public void StopLiveRunway()
     {
+        ClearModels();
         cameraGroup.SetActive(false);
         UIManager.Instance.HideAll();
     }
