@@ -12,12 +12,15 @@ public class AppManager : MonoBehaviour
     public Image blackout;
     public Animator blackoutAnimator;
 
-    private Mode curMode = Mode.AUTO;
+    private Mode curMode = Mode.LIVE;
 
     void Start()
     {
         blackoutAnimator.SetBool("FadeIn", false);
         blackoutAnimator.SetBool("FadeOut", false);
+
+        MRData.Instance.LoadEverything();
+
         autoRunwayManager.HideAllLevels();
 
         if(curMode == Mode.LIVE)

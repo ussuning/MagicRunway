@@ -34,10 +34,12 @@ public class AutoRunwayManager : MonoBehaviour
     private List<GameObject> models = new List<GameObject>();
     private Vector3 startingPoint = new Vector3(6, 0, -2.4f);
 
-    void Start()
+    void Awake()
     {
         cameraGroup.SetActive(false);
+        SetupEvents();
     }
+
     public void HideAllLevels()
     {
         foreach (GameObject level in levels)
@@ -88,11 +90,10 @@ public class AutoRunwayManager : MonoBehaviour
     {
         curCollectionIndex = 0;
         
-        MRData.Instance.LoadEverything();
         totalCollections = MRData.Instance.collections.collections.Count;
 
         PrepareCollectionRunwayModelPrefabs();
-        SetupEvents();
+        
     }
 
     private void SetupEvents()

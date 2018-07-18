@@ -19,12 +19,6 @@ public class UITestAppManager : MonoBehaviour
         RunCollection();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void RunCollection () {
         m_currentCollection = MRData.Instance.collections.collections[0];
         UIManager.Instance.ShowCollection(m_currentCollection);

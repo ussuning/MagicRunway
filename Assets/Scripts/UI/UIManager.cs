@@ -6,19 +6,18 @@ public class UIManager : Singleton<UIManager>
 {
     public GameObject uiStartMenu;
     public GameObject uiShowcase;
-    public GameObject uiDemo;
-    public GameObject uiLive;
     public GameObject uiCollection;
     public GameObject uiUpNext;
+    public GameObject uiGestureGender;
 
     private CanvasFader faderStartMenu;
+    private IEnumerator gestureGenderCoroutine;
 
     public void Start()
     {
         uiStartMenu.SetActive(false);
         //uiShowcase.SetActive(false);
-        uiDemo.SetActive(false);
-        uiLive.SetActive(false);
+        uiGestureGender.SetActive(false);
 
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
 
@@ -103,6 +102,7 @@ public class UIManager : Singleton<UIManager>
     }
 
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {
+        uiUpNext.SetActive(true);
         UpNext un = uiUpNext.GetComponent<UpNext>();
         un.StartUpNext(collectionName, totalTimeSeconds, warningTimeSeconds);
     }
@@ -118,6 +118,41 @@ public class UIManager : Singleton<UIManager>
     {
         uiUpNext.SetActive(false);
     }
+
+    //----------------------------------------
+    // Gestures
+    //----------------------------------------
+
+    public void ShowGestureGender(float time = 30.0f)
+    {
+        if(gestureGenderCoroutine != null)
+        {
+            StopCoroutine(gestureGenderCoroutine); 
+        }
+
+        CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
+
+        uiGestureGender.SetActive(true);
+        
+        cf.StartFading(CanvasFade.IN);
+
+        gestureGenderCoroutine = WaitToCloseGender(time);
+        StartCoroutine(gestureGenderCoroutine);
+    }
+
+    IEnumerator WaitToCloseGender(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HideGestureGender();
+    }
+
+    public void HideGestureGender(bool animate = true)
+    {
+        CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
+        cf.StartFading(CanvasFade.OUT);
+        gestureGenderCoroutine = null;
+    }
+
     //----------------------------------------
 
     void UIEvents_CanvasFadeComplete(GameObject go, CanvasFade fade)
@@ -126,13 +161,19 @@ public class UIManager : Singleton<UIManager>
         {
             if (fade == CanvasFade.OUT) { uiStartMenu.SetActive(false); }
         }
+
+        if (go == uiGestureGender)
+        {
+            if (fade == CanvasFade.OUT) { uiGestureGender.SetActive(false); }
+        }
     }
 
     // New User detected, show option to select male or female icon to register with ML
     void UserEvents_NewUserDetected(long userId, int userIndex)
     {
         Debug.Log("UIManager: New User Event Callback invoked.");
-        // uiGenderOption.setActive(true);
+
+        ShowGestureGender(30.0f);
     }
 
 }
