@@ -17,6 +17,6 @@ public class SystemConfigs
     };
 
     public static float PoseEstimationTimeFrame = 0.25f; //Time between each pose estimation (to remove outlier estimations)
-    public static float PosingTime = 0.5f;
-    public static float ComboPoseTime = 5f;
+    public static float PosingTime = 1f;
+    public static float ComboPoseTime = 3f;
 }
