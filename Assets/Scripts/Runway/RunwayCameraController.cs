@@ -45,8 +45,12 @@ public class RunwayCameraController : MonoBehaviour {
         Debug.Log("****************************** FINALE END!!");
     }*/
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
+       // Init();
+    }
+
+    void Init() { 
         activeCam = MainCamera;
 
         if (RunwayEnterEvents == null) 
@@ -63,6 +67,19 @@ public class RunwayCameraController : MonoBehaviour {
         if (FrontFlashes == null)
             FrontFlashes = GameObject.Find("FrontFlashes");
 
+        AddListeners();
+
+        EnableMidFlashes(false);
+        EnableFrontFlashes(false);
+	}
+
+    private void OnDestroy()
+    {
+        RemoveListeners();
+    }
+
+    private void AddListeners()
+    {
         RunwayMidEvents.OnTriggerEnterEvt += OnRunwayMidEnter;
         RunwayMidEvents.OnTriggerExitEvt += OnRunwayMidExit;
 
@@ -70,12 +87,9 @@ public class RunwayCameraController : MonoBehaviour {
         RunwayExitEvents.OnTriggerEnterEvt += OnRunwayExit;
 
         RunwayEndEvents.OnTriggerEnterEvt += OnRunwayEndEnter;
-        EnableMidFlashes(false);
-        EnableFrontFlashes(false);
-	}
+    }
 
-    private void OnDestroy()
-    {
+    private void RemoveListeners() { 
         RunwayMidEvents.OnTriggerEnterEvt -= OnRunwayMidEnter;
         RunwayMidEvents.OnTriggerExitEvt -= OnRunwayMidExit;
 
@@ -83,6 +97,23 @@ public class RunwayCameraController : MonoBehaviour {
         RunwayExitEvents.OnTriggerEnterEvt -= OnRunwayExit;
 
         RunwayEndEvents.OnTriggerEnterEvt -= OnRunwayEndEnter;
+    }
+
+    private void OnEnable()
+    {
+        // Debug.LogError("OnDisable");
+        Init();
+    }
+
+    private void OnDisable()
+    {
+        //Debug.LogError("OnDisable");
+        mid.active.Clear();
+        mid.history.Clear();
+        onRunway.active.Clear();
+        onRunway.history.Clear();
+
+        RemoveListeners();
     }
 
     private void OnRunwayEndEnter(Collider other)

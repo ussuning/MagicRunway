@@ -325,11 +325,14 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void OnRunwayFinish(Collider other)
     {
-        other.gameObject.SetActive(false);
         Animator animator = other.gameObject.GetComponent<Animator>();
+        if (animator == null)
+            animator = other.gameObject.GetComponentInParent<Animator>();
+        animator.gameObject.SetActive(false);
+        
         animator.runtimeAnimatorController = null;
 
-        CheckCompletion(other.gameObject);
+        CheckCompletion(animator.gameObject);
     }
 
     private void OnRunwayMidExit(Collider other)
