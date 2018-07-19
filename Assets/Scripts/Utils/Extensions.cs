@@ -398,4 +398,37 @@ namespace MR
         //    return null;
         //}
     }
+
+
+    // From https://answers.unity.com/questions/799429/transformfindstring-no-longer-finds-grandchild.html
+    public static class TransformDeepChildExtension
+    {
+        //Breadth-first search
+        public static Transform FindDeepChild(this Transform aParent, string aName)
+        {
+            var result = aParent.Find(aName);
+            if (result != null)
+                return result;
+            foreach (Transform child in aParent)
+            {
+                result = child.FindDeepChild(aName);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+    }
+
+    public static class GameObjectFindAnyExtension
+    {
+        public static T FindAny<T>(this GameObject gameObj,  string name) where T : Component
+        {
+            T[] objs = Resources.FindObjectsOfTypeAll<T>();
+            foreach (T obj in objs)
+                if (obj.name == name)
+                    return obj;
+
+            return null;
+        }
+    }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using MR;
 
 // This should be used on clothing prefabs, in editor mod. 
 // Be sure to click "Initialize" BEFORE to starting the app. Buggy things happen if you try to run Init() after the app starts.
@@ -9,6 +10,9 @@ using UnityEditor;
 
 public class AvatarControllerBootstrap : MonoBehaviour {
     public bool disableOnStart = false;
+    
+    protected string BackgroundCamera1 = "BackgroundCamera1";
+    protected string MainCamera = "Main Camera";
 
     void Start()
     {
@@ -16,6 +20,10 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         {
             DisableAvatarControllers();
         }
+
+        // There's a bug where camera unset themselves on play after being set with the "Initialize" button.
+        GetComponent<AvatarControllerClassic>().posRelativeToCamera = gameObject.FindAny<Camera>(BackgroundCamera1);// Find(BackgroundCamera1)?.GetComponent<Camera>();
+        GetComponent<AvatarScaler>().foregroundCamera = gameObject.FindAny<Camera>(MainCamera);
     }
 
     public void DisableAvatarControllers()
@@ -30,7 +38,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
                 Destroy(script);
     }
 
-
     [ExecuteInEditMode]
     public void Init() { 
 
@@ -39,9 +46,9 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         if (avatarController == null)
             avatarController = this.gameObject.AddComponent<AvatarControllerClassic>();
 
-        avatarController.posRelativeToCamera = GameObject.Find("BackgroundCamera1")?.GetComponent<Camera>();
+        avatarController.posRelativeToCamera = GameObject.Find(BackgroundCamera1)?.GetComponent<Camera>();
         if (avatarController.posRelativeToCamera == null)
-            Debug.LogError("Failed to find BackgroundCamera1");
+            Debug.LogError("Failed to find " + BackgroundCamera1);
         avatarController.posRelOverlayColor = true;
         avatarController.HipCenter =        transform.FindDeepChild("mixamorig:Hips");
         avatarController.Spine =            transform.FindDeepChild("mixamorig:Spine");
@@ -79,9 +86,9 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
         if (avatarScalar == null)
             avatarScalar = this.gameObject.AddComponent<AvatarScaler>();
-        avatarScalar.foregroundCamera = GameObject.Find("Main Camera")?.GetComponent<Camera>();
+        avatarScalar.foregroundCamera = GameObject.Find(MainCamera)?.GetComponent<Camera>();
         if (avatarScalar.foregroundCamera == null)
-            Debug.LogError("Failed to find Main Camera");
+            Debug.LogError("Failed to find " + MainCamera);
         avatarScalar.mirroredAvatar = true;
         avatarScalar.continuousScaling = true;
         avatarScalar.smoothFactor = 10;
@@ -90,7 +97,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         FacetrackingManager faceTrackingMgr = GetComponent<FacetrackingManager>();
         if (faceTrackingMgr == null)
             faceTrackingMgr = this.gameObject.AddComponent<FacetrackingManager>();
-
 	}
 }
 
