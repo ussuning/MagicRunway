@@ -890,7 +890,7 @@ public class InteractionManager : MonoBehaviour
 			return;
 		
 		// display debug information
-	//	if(debugText)
+		if(debugText)
 		{
 			string sGuiText = string.Empty;
 
