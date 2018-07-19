@@ -12,7 +12,7 @@ public class AppManager : MonoBehaviour
     public Image blackout;
     public Animator blackoutAnimator;
 
-    private Mode curMode = Mode.LIVE;
+    private Mode curMode = Mode.AUTO;
 
     void Start()
     {

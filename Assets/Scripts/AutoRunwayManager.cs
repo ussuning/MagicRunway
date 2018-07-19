@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Obi;
 
 public class AutoRunwayManager : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     private bool loop = false;
     private int loopAmount = 1;
-    private bool showFinale = false;
+    private bool showFinale = true;
     private float pauseToFinale = 3;
     private float pauseToNextCollection = 3;
 
@@ -135,7 +136,18 @@ public class AutoRunwayManager : MonoBehaviour
             string sex = (outfit.sex == "f") ? "Female" : "Male";
             string path = "RunwayModels/"+sex+"/"+outfit.prefab;
             GameObject go = RunwayModelsPrefabManager.InstantiateGameObject(path, runway.transform);
-            go.SetActive(false);
+            
+            go.SetActive(true);
+
+            ObiSolver[] oss = go.GetComponentsInChildren<ObiSolver>();
+
+            foreach (ObiSolver os in oss)
+            {
+                os.enabled = false;
+            }
+
+            //ObiSolver os = go.transform.Find("ObiSolver").GetComponent<ObiSolver>();
+            
             go.transform.localPosition = startingPoint;
             models.Add(go);
         }
@@ -174,13 +186,30 @@ public class AutoRunwayManager : MonoBehaviour
         models = new List<GameObject>();
     }
 
+    private void HideAllModels()
+    {
+        foreach (GameObject go in models)
+        {
+            go.SetActive(false);
+        }
+    }
+
     private void BeginRunwayShow()
     {
+        
         //Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
         AutoRunwayEvents.CollectionStart(curCollection);
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.HideUpNext();
         curOutfit = 0;
+        RunModel(curOutfit);
+        //StartCoroutine(BeginShow());
+    }
+
+    IEnumerator BeginShow()
+    {
+        yield return new WaitForSeconds(3);
+        HideAllModels();
         RunModel(curOutfit);
     }
 
@@ -285,6 +314,13 @@ public class AutoRunwayManager : MonoBehaviour
         animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(Resources.Load(animation), model.transform);
   
         model.SetActive(true);
+
+        ObiSolver[] oss = model.GetComponentsInChildren<ObiSolver>();
+
+        foreach (ObiSolver os in oss)
+        {
+            os.enabled = true;
+        }
     }
 
     private void BeginFinale()
