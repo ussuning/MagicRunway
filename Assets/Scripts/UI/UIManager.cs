@@ -71,7 +71,9 @@ public class UIManager : Singleton<UIManager>
         HideOutfit(false);
         HideCollection(false);
         HideUpNext();
+        HideGestureGender(false);
     }
+
     //----------------------------------------
     // Showcase
     //----------------------------------------
@@ -167,8 +169,19 @@ public class UIManager : Singleton<UIManager>
 
     public void HideGestureGender(bool animate = true)
     {
-        CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
-        cf.StartFading(CanvasFade.OUT);
+        if (gestureGenderCoroutine != null)
+        {
+            StopCoroutine(gestureGenderCoroutine);
+        }
+
+        if (animate == true)
+        {
+            CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
+            cf.StartFading(CanvasFade.OUT);
+        } else
+        {
+            uiGestureGender.SetActive(false);
+        }
         gestureGenderCoroutine = null;
     }
 
