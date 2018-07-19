@@ -201,6 +201,8 @@ public class AutoRunwayManager : MonoBehaviour
         AutoRunwayEvents.CollectionStart(curCollection);
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.HideUpNext();
+        UIManager.Instance.HideStartMenu(false);
+        UIManager.Instance.HideGestureGender(false);
         curOutfit = 0;
         RunModel(curOutfit);
         //StartCoroutine(BeginShow());

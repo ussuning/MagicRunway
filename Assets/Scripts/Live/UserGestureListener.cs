@@ -108,6 +108,20 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             gestureInfo.text = sGestureText;
         }
 
+        // store gender
+        UIManager.Instance.HideGestureGender(true);
+
+        if(gesture == KinectGestures.Gestures.RaiseLeftHand)
+        {
+            Debug.Log("User " + userId + " is female");
+            UIManager.Instance.ShowFemaleGender();
+        }
+        else
+        {
+            Debug.Log("User " + userId + " is male");
+            UIManager.Instance.ShowMaleGender();
+        }
+
         return true;
     }
 

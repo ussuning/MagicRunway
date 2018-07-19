@@ -5,9 +5,10 @@ using UnityEngine;
 public class UserManager : Singleton<UserManager>
 {
     public GameObject userSkeletonPrefab;
+    public AppManager appManager;
     private GameObject userContainer;
     private string userContainerName;
-
+   
     public void Start()
     {
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
@@ -19,13 +20,13 @@ public class UserManager : Singleton<UserManager>
     {
         Debug.Log("UserManager: New User Event Callback invoked.");
 
-        // find "Live" GameObject
+        // find "Users" GameObject
         int playerNumber = userIndex + 1;
-        GameObject liveSection = GameObject.Find("Users");
+        GameObject Users = GameObject.Find("Users");
         userContainer = new GameObject();
         userContainerName = "User" + playerNumber;
         userContainer.name = userContainerName;
-        userContainer.transform.SetParent(liveSection.transform);
+        userContainer.transform.SetParent(Users.transform);
 
         // instantiate prefab for new user
         userSkeletonPrefab = (GameObject)Instantiate(Resources.Load("UserSkeleton"));
@@ -38,9 +39,12 @@ public class UserManager : Singleton<UserManager>
 
         // get pose agent and attach the brain
         PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
-        GameObject brainGO = GameObject.Find("Brain");
-        Brain brain = brainGO.GetComponent<Brain>();
-        poseAgent.GiveBrain(brain);
+      //  GameObject brainGO = GameObject.Find("Brain");
+      //  Brain brain = brainGO.GetComponent<Brain>();
+      //  poseAgent.GiveBrain(brain);
+
+        // show start menu button to transition into Live mode
+        UIManager.Instance.ShowStartMenu(true);
     }
 
     // User Lost detected, remove game object
@@ -49,7 +53,21 @@ public class UserManager : Singleton<UserManager>
         Debug.Log("UserManager: User Lost Detected.");
 
         // destroy user data
+        int playerNumber = userIndex + 1;
+        userContainerName = "User" + playerNumber;
+        userContainer = GameObject.Find(userContainerName);
         Destroy(userContainer);
+
+        int count = KinectManager.Instance.GetUsersCount();
+
+        Debug.Log("count = " + count);
+
+        // hide start menu button if no users detected
+        if (KinectManager.Instance.GetUsersCount() <= 1)
+        {
+            Debug.Log("Where everyone go!? User count = 0 cries.");
+            appManager.LiveToAuto();
+        }
     }
 
     // set gender for ML pose s in Live

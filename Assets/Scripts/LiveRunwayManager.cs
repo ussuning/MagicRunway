@@ -10,8 +10,8 @@ public class LiveRunwayManager : MonoBehaviour {
     private Collection nextCollection;
     private List<GameObject> models = new List<GameObject>();
 
-    private float collectionShowTime = 300.0f;
-    private float collectionWarningTime = 120.0f;
+    private float collectionShowTime = 20.0f;
+    private float collectionWarningTime = 10.0f;
     private int curCollectionIndex = 0;
     private int totalCollections = 0;
     private int totalOutfits = 0;
@@ -36,7 +36,8 @@ public class LiveRunwayManager : MonoBehaviour {
     //play live mode after fading in
     public void PlayLiveRunway()
     {
-       // AutoRunwayEvents.CollectionStart(curCollection);
+        // AutoRunwayEvents.CollectionStart(curCollection);
+        UIManager.Instance.HideStartMenu(false);
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.ShowUpNext(curCollection);
         UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);
@@ -44,6 +45,7 @@ public class LiveRunwayManager : MonoBehaviour {
 
     public void StopLiveRunway()
     {
+        ClearModels();
         cameraGroup.SetActive(false);
         UIManager.Instance.HideAll();
     }

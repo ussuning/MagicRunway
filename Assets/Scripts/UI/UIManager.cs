@@ -10,6 +10,9 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiUpNext;
     public GameObject uiGestureGender;
 
+    protected GameObject uiMaleGender;
+    protected GameObject uiFemaleGender;
+
     private CanvasFader faderStartMenu;
     private IEnumerator gestureGenderCoroutine;
 
@@ -19,10 +22,12 @@ public class UIManager : Singleton<UIManager>
         //uiShowcase.SetActive(false);
         uiGestureGender.SetActive(false);
 
+        uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
+        uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
+
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
-        UserEvents.OnNewUserDetectedCallback += UserEvents_NewUserDetected;
     }
 
     //----------------------------------------
@@ -133,11 +138,25 @@ public class UIManager : Singleton<UIManager>
         CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
 
         uiGestureGender.SetActive(true);
-        
+        uiMaleGender.SetActive(true);
+        uiFemaleGender.SetActive(true);
+
         cf.StartFading(CanvasFade.IN);
 
         gestureGenderCoroutine = WaitToCloseGender(time);
         StartCoroutine(gestureGenderCoroutine);
+    }
+
+    public void ShowMaleGender(float time = 30.0f)
+    {
+        uiMaleGender.SetActive(true);
+        uiFemaleGender.SetActive(false);
+    }
+
+    public void ShowFemaleGender(float time = 30.0f)
+    {
+        uiMaleGender.SetActive(false);
+        uiFemaleGender.SetActive(true);
     }
 
     IEnumerator WaitToCloseGender(float delay)
@@ -167,13 +186,4 @@ public class UIManager : Singleton<UIManager>
             if (fade == CanvasFade.OUT) { uiGestureGender.SetActive(false); }
         }
     }
-
-    // New User detected, show option to select male or female icon to register with ML
-    void UserEvents_NewUserDetected(long userId, int userIndex)
-    {
-        Debug.Log("UIManager: New User Event Callback invoked.");
-
-        ShowGestureGender(30.0f);
-    }
-
 }
