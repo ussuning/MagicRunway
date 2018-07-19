@@ -92,6 +92,8 @@ public class InteractionManager : MonoBehaviour
 	[Tooltip("Whether the hand grips and releases control mouse dragging or not.")]
 	public bool controlMouseDrag = false;
 
+    public AppManager appManager;
+
 	// Bool to specify whether to convert Unity screen coordinates to full screen mouse coordinates
 	//public bool convertMouseToFullScreen = false;
 	
@@ -872,7 +874,11 @@ public class InteractionManager : MonoBehaviour
 
 			// update cursor texture and position
 			UpdateGUI();
-		}
+            if (rightHandClickProgress > .98 || leftHandClickProgress > .98)
+            {
+                UIManager.Instance.ClickStartMenu();
+            }
+        }
 		
 	}
 
@@ -888,7 +894,7 @@ public class InteractionManager : MonoBehaviour
 		{
 			string sGuiText = string.Empty;
 
-			//if(isLeftHandPrimary)
+			if(isLeftHandPrimary)
 			{
 				sGuiText += "L.Hand" + (isLeftHandInteracting ? "*: " : " : ") + leftHandScreenPos.ToString();
 				
@@ -905,20 +911,23 @@ public class InteractionManager : MonoBehaviour
 				{
 					sGuiText += "  LeftClick";
 				}
-//				else if(leftHandClickProgress > 0.5f)
-//				{
-//					sGuiText += String.Format("  {0:F0}%", leftHandClickProgress * 100);
-//				}
+				else if(leftHandClickProgress > 0.5f)
+				{
+                    //sGuiText += String.Format("  {0:F0}%", leftHandClickProgress * 100);
+                    Debug.Log("Left hand click > 0.5 ");
+                }
 				
 				if(isLeftHandPress)
 				{
 					sGuiText += "  LeftPress";
 				}
 
-				//sGuiText += " " + leftHandClickProgress;
-			}
+                //sGuiText += " " + leftHandClickProgress;
+                Debug.Log("Left Hand Click Progress = " + leftHandClickProgress);
+               
+            }
 			
-			//if(isRightHandPrimary)
+			if(isRightHandPrimary)
 			{
 				sGuiText += "\nR.Hand" + (isRightHandInteracting ? "*: " : " : ") + rightHandScreenPos.ToString();
 				
@@ -935,20 +944,23 @@ public class InteractionManager : MonoBehaviour
 				{
 					sGuiText += "  RightClick";
 				}
-//				else if(rightHandClickProgress > 0.5f)
-//				{
-//					sGuiText += String.Format("  {0:F0}%", rightHandClickProgress * 100);
-//				}
+				else if(rightHandClickProgress > 0.5f)
+				{
+                    //sGuiText += String.Format("  {0:F0}%", rightHandClickProgress * 100);
+                    Debug.Log("Right hand click > 0.5 ");
+				}
 
 				if(isRightHandPress)
 				{
 					sGuiText += "  RightPress";
 				}
 
-				//sGuiText += " " + rightHandClickProgress;
-			}
+                //sGuiText += " " + rightHandClickProgress;
+               // Debug.Log("Right Hand Click Progress = " + rightHandClickProgress);
+            }
 			
-			debugText.text = sGuiText;
+			//debugText.text = sGuiText;
+            //Debug.Log("sGUIText = " + sGuiText);
 		}
 		
 		// display the cursor status and position

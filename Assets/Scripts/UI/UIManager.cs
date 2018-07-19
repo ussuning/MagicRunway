@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -9,6 +10,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiCollection;
     public GameObject uiUpNext;
     public GameObject uiGestureGender;
+    public GameObject uiHandCursor;
 
     protected GameObject uiMaleGender;
     protected GameObject uiFemaleGender;
@@ -65,7 +67,24 @@ public class UIManager : Singleton<UIManager>
             uiStartMenu.SetActive(false);
         }
     }
-    
+
+    public void ClickStartMenu()
+    {
+        GameObject JoinInButton = uiStartMenu.transform.Find("JoinInButton").gameObject;
+        Button StartMenuButton = JoinInButton.GetComponent<Button>();
+        StartMenuButton.onClick.Invoke();
+    }
+
+    public void ShowHandCursor()
+    {
+        uiHandCursor.SetActive(true);
+    }
+
+    public void HideHandCursor()
+    {
+        uiHandCursor.SetActive(false);
+    }
+
     public void HideAll()
     {
         HideOutfit(false);
