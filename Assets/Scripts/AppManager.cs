@@ -116,6 +116,7 @@ public class AppManager : MonoBehaviour
         yield return new WaitUntil(() => blackout.color.a == 1);
         blackoutAnimator.SetBool("FadeOut", false);
         PlayLiveRunway();
+        UIManager.Instance.HideHandCursor();
         UIManager.Instance.ShowGestureGender(30.0f);
     }
 

@@ -45,6 +45,7 @@ public class UserManager : Singleton<UserManager>
 
         // show start menu button to transition into Live mode
         UIManager.Instance.ShowStartMenu(true);
+        UIManager.Instance.ShowHandCursor();
     }
 
     // User Lost detected, remove game object
