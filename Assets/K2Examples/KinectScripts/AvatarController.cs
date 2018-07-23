@@ -122,6 +122,7 @@ public class AvatarController : MonoBehaviour
 	
 	// private instance of the KinectManager
 	protected KinectManager kinectManager;
+    protected AvatarScaler avatarScaler;
 
 	// last hand events
 	private InteractionManager.HandEventType lastLeftHandEvent = InteractionManager.HandEventType.Release;
@@ -399,6 +400,8 @@ public class AvatarController : MonoBehaviour
 			initialHipsPosition = (humanPose.bodyPosition - rootTransform.position);  // hipsTransform.position
 			initialHipsRotation = humanPose.bodyRotation;
 		}
+
+        avatarScaler = GetComponent<AvatarScaler>();
 	}
 
 
@@ -685,24 +688,35 @@ public class AvatarController : MonoBehaviour
 		Quaternion jointRotation = kinectManager.GetJointOrientation(userId, iJoint, flip);
 		if(jointRotation == Quaternion.identity)
 			return;
+        
+        // calculate the new orientation
+        Quaternion newRotation = Kinect2AvatarRot(jointRotation, boneIndex);
 
-		// calculate the new orientation
-		Quaternion newRotation = Kinect2AvatarRot(jointRotation, boneIndex);
-
-		if(externalRootMotion)
+        if (externalRootMotion)
 		{
 			newRotation = transform.rotation * newRotation;
 		}
 
-		// Smoothly transition to the new rotation
-		if(smoothFactor != 0f)
-        	boneTransform.rotation = Quaternion.Slerp(boneTransform.rotation, newRotation, smoothFactor * Time.deltaTime);
-		else
-			boneTransform.rotation = newRotation;
-	}
-	
-	// Apply the rotations tracked by kinect to a special joint
-	protected void TransformSpecialBone(Int64 userId, KinectInterop.JointType joint, KinectInterop.JointType jointParent, int boneIndex, Vector3 baseDir, bool flip)
+        Quaternion q1 = new Quaternion(boneTransform.rotation.x, boneTransform.rotation.y, boneTransform.rotation.z, boneTransform.rotation.w);
+
+        // Smoothly transition to the new rotation
+        if (smoothFactor != 0f)
+            boneTransform.rotation = Quaternion.Slerp(boneTransform.rotation, newRotation, smoothFactor * Time.deltaTime);
+        else
+            boneTransform.rotation = newRotation;
+
+        if (joint == KinectInterop.JointType.ShoulderLeft || joint == KinectInterop.JointType.ShoulderRight)
+        {
+            ShoulderGuesser sg = avatarScaler.shoulderGuesser;
+            float shouldersDotCamera = Vector3.Dot((sg.origShoulderLeft - sg.origShoulderRight).normalized, avatarScaler.foregroundCamera.transform.forward);
+            float sideFactor = sg.origShoulderLeft.z > sg.origShoulderRight.z ? 1.0f : -1.0f;
+            //boneTransform.Rotate(Vector3.up, sideFactor * 45.0f * Mathf.Abs(shouldersDotCamera) * (joint == KinectInterop.JointType.ShoulderLeft ? 1.0f : -1.0f));
+            //boneTransform.rotation = q1;
+        }
+    }
+
+    // Apply the rotations tracked by kinect to a special joint
+    protected void TransformSpecialBone(Int64 userId, KinectInterop.JointType joint, KinectInterop.JointType jointParent, int boneIndex, Vector3 baseDir, bool flip)
 	{
 		Transform boneTransform = bones[boneIndex];
 		if(boneTransform == null || kinectManager == null)
