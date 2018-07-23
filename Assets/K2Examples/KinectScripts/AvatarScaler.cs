@@ -780,9 +780,9 @@ public class AvatarScalerEditor : Editor
         if (t.useWeightedShoulders && t.shoulderFixer != null)
         {
             Handles.color = Color.blue;
-            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderForward);
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTForward);
             Handles.color = Color.green;
-            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderUp);
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTUp);
             Handles.color = Color.red;
             Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
             Handles.color = Color.white;

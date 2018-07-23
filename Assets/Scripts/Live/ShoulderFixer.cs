@@ -18,8 +18,9 @@ public class ShoulderFixer {
     public Vector3 origShoulderRight;
     public Vector3 origSpineShoulder;
     public Vector3 origNeck;
-    public Vector3 shoulderForward;
-    public Vector3 shoulderUp;
+    public Vector3 shoulderTForward;
+    public Vector3 shoulderTUp;
+    public Vector3 shoulderTRight;
 
     public ShoulderFixer(AvatarScaler avScaler)
     {
@@ -32,11 +33,12 @@ public class ShoulderFixer {
         origShoulderRight = shoulderRight;
         origSpineShoulder = spineShoulder;
         origNeck = neck;
-        shoulderUp = (neck - spineShoulder).normalized;
-        shoulderForward = Vector3.Cross(shoulderLeft - shoulderRight, shoulderUp).normalized;
+        shoulderTUp = (neck - spineShoulder).normalized;
+        shoulderTForward = Vector3.Cross(shoulderLeft - shoulderRight, shoulderTUp).normalized;
+        shoulderTRight = Vector3.Cross(shoulderTUp, shoulderTForward).normalized;
 
-        Debug.Log("shoulderUp = " + shoulderUp);
-        Debug.Log("shoulderForward = " + shoulderForward);
+        Debug.Log("shoulderUp = " + shoulderTUp);
+        Debug.Log("shoulderForward = " + shoulderTForward);
 
         Vector3 shoulderDelta = (shoulderLeft - shoulderRight);
         // The more horizontal with the camera, the more confident we are.
@@ -57,8 +59,8 @@ public class ShoulderFixer {
         // Correct shoulders based on shouldersDotCamera, current implementation seems to overrotate the spine -HH
         Vector3 relativeShoulderLeft = shoulderLeft - spineShoulder;
         Vector3 relativeShoulderRight = shoulderRight - spineShoulder;
-        relativeShoulderLeft.RotatePointAroundPivot(shoulderUp, new Vector3(0, 30.0f * shouldersDotCamera, 0));
-        relativeShoulderRight.RotatePointAroundPivot(shoulderUp, new Vector3(0, -30.0f * shouldersDotCamera, 0));
+        relativeShoulderLeft.RotatePointAroundPivot(shoulderTUp, new Vector3(0, 30.0f * shouldersDotCamera, 0));
+        relativeShoulderRight.RotatePointAroundPivot(shoulderTUp, new Vector3(0, -30.0f * shouldersDotCamera, 0));
         correctedShoulderLeft = shoulderLeft;// spineShoulder + relativeShoulderLeft;
         correctedShoulderRight = shoulderRight; // spineShoulder + relativeShoulderRight;
     }
