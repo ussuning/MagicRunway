@@ -125,12 +125,12 @@ public class AvatarScaler : MonoBehaviour
 	private Rect planeRect = new Rect();
 	private bool planeRectSet = false;
 
-    internal ShoulderGuesser shoulderGuesser;
+    internal ShoulderFixer shoulderFixer;
 
 
 	public void Start () 
 	{
-        shoulderGuesser  = new ShoulderGuesser(this);
+        shoulderFixer  = new ShoulderFixer(this);
         // get references to other components
         kinectManager = KinectManager.Instance;
 		avtController = gameObject.GetComponent<AvatarController>();
@@ -527,7 +527,7 @@ public class AvatarScaler : MonoBehaviour
         if (posHipLeft != Vector3.zero && posHipRight != Vector3.zero &&
 		   posShoulderLeft != Vector3.zero && posShoulderRight != Vector3.zero)
         {
-            shoulderGuesser.UpdateJointPositions(posShoulderLeft, posShoulderRight, posSpineShoulder, posNeck);
+            shoulderFixer.UpdateJointPositions(posShoulderLeft, posShoulderRight, posSpineShoulder, posNeck);
 
             Vector3 posHipCenter = (posHipLeft + posHipRight) / 2f;
 			Vector3 posShoulderCenter = (posShoulderLeft + posShoulderRight) / 2f;
@@ -537,7 +537,7 @@ public class AvatarScaler : MonoBehaviour
             if (!useWeightedShoulders)
                 width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
             else
-                width = shoulderGuesser.GetWeightedWidth() * widthFactor;
+                width = shoulderFixer.GetWeightedWidth() * widthFactor;
             Debug.Log("posShoulderRight =" + posShoulderRight);
             Debug.Log("posShoulderLeft  =" + posShoulderLeft);
             Debug.Log("posShoulderSpine =" + posSpineShoulder);
@@ -777,16 +777,16 @@ public class AvatarScalerEditor : Editor
     {
         AvatarScaler t = target as AvatarScaler;
 
-        if (t.useWeightedShoulders && t.shoulderGuesser != null)
+        if (t.useWeightedShoulders && t.shoulderFixer != null)
         {
             Handles.color = Color.blue;
-            Handles.DrawLine(t.shoulderGuesser.origSpineShoulder, t.shoulderGuesser.origSpineShoulder + t.shoulderGuesser.shoulderForward);
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderForward);
             Handles.color = Color.green;
-            Handles.DrawLine(t.shoulderGuesser.origSpineShoulder, t.shoulderGuesser.origSpineShoulder + t.shoulderGuesser.shoulderUp);
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderUp);
             Handles.color = Color.red;
-            Handles.DrawLine(t.shoulderGuesser.origSpineShoulder, t.shoulderGuesser.correctedShoulderLeft);
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
             Handles.color = Color.white;
-            Handles.DrawLine(t.shoulderGuesser.origSpineShoulder, t.shoulderGuesser.correctedShoulderRight);
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderRight);
         }
     }
 }

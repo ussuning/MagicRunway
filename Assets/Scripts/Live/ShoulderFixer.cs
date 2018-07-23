@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MR;
 
-public class ShoulderGuesser {
+public class ShoulderFixer {
     protected AvatarScaler avatarScaler;
 
     float maxConfidence = 0.0f;
@@ -21,7 +21,7 @@ public class ShoulderGuesser {
     public Vector3 shoulderForward;
     public Vector3 shoulderUp;
 
-    public ShoulderGuesser(AvatarScaler avScaler)
+    public ShoulderFixer(AvatarScaler avScaler)
     {
         avatarScaler = avScaler;
     }
