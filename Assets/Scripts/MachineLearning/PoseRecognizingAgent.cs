@@ -75,7 +75,7 @@ public class PoseRecognizingAgent : Agent {
 
     void LateUpdate()
     {
-        if(estPoseIdx != 0 && estPoseIdx != 10)
+        if(estPoseIdx != 0 && estPoseIdx != 20)
         {
             if(curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
             {
