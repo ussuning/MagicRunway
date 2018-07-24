@@ -75,30 +75,37 @@ public class PoseRecognizingAgent : Agent {
 
     void LateUpdate()
     {
-        if(estPoseIdx != 0 && estPoseIdx != 20)
+        if(estPoseIdx != 0 && estPoseIdx != 10)
         {
-            if(curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
+            if (curPoseIdx != estPoseIdx)
             {
-                if (Time.time - prevPoseTime <= SystemConfigs.ComboPoseTime)
+                if (posingTimeEllapsed > SystemConfigs.PosingTime)
                 {
-                    combo++;
+                    if (Time.time - prevPoseTime <= SystemConfigs.ComboPoseTime)
+                    {
+                        combo++;
+                    }
+                    else
+                    {
+                        combo = 1;
+                    }
+
+                    prevPoseIdx = curPoseIdx;
+                    curPoseIdx = estPoseIdx;
+
+                    prevPoseTime = Time.time;
+                    posingTimeEllapsed = 0f;
+
+                    EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, estPoseConfidence, curPoseIdx);
                 }
                 else
                 {
-                    combo = 1;
+                    Debug.Log(string.Format(" {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
                 }
-
-                prevPoseIdx = curPoseIdx;
-                curPoseIdx = estPoseIdx;
-
-                prevPoseTime = Time.time;
-                posingTimeEllapsed = 0f;
-
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, estPoseConfidence, curPoseIdx);
             }
             else
             {
-                Debug.Log(string.Format("  {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
+                Debug.Log(string.Format(" curPose: {0}, estNewPose: {1}", curPoseIdx, estPoseIdx));
             }
         }
         else

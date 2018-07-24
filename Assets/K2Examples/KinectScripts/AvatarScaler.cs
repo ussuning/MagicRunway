@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 
 /// <summary>
@@ -54,6 +55,8 @@ public class AvatarScaler : MonoBehaviour
 	// used by category selector
 	[System.NonSerialized]
 	public bool scalerInited = false;
+
+    public bool useWeightedShoulders = true;
 
 	// class references
 	private KinectManager kinectManager = null;
@@ -122,11 +125,14 @@ public class AvatarScaler : MonoBehaviour
 	private Rect planeRect = new Rect();
 	private bool planeRectSet = false;
 
+    internal ShoulderFixer shoulderFixer;
+
 
 	public void Start () 
 	{
-		// get references to other components
-		kinectManager = KinectManager.Instance;
+        shoulderFixer  = new ShoulderFixer(this);
+        // get references to other components
+        kinectManager = KinectManager.Instance;
 		avtController = gameObject.GetComponent<AvatarController>();
 
 		// get model transforms
@@ -277,8 +283,18 @@ public class AvatarScaler : MonoBehaviour
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.ShoulderRight, KinectInterop.JointType.ElbowRight, armScaleFactor, ref rightUpperArmLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.ElbowRight, KinectInterop.JointType.WristRight, armScaleFactor, ref rightLowerArmLength);
 
-			//EqualizeBoneLength(ref leftUpperArmLength, ref rightUpperArmLength);
-			//EqualizeBoneLength(ref leftLowerArmLength, ref rightLowerArmLength);
+            Vector3 ShoulderLeftPos = GetJointPosition(kinectManager, (int)KinectInterop.JointType.ShoulderLeft);
+            Vector3 ElbowLeftPos = GetJointPosition(kinectManager, (int)KinectInterop.JointType.ElbowLeft);
+            Vector3 WristLeftPos = GetJointPosition(kinectManager, (int)KinectInterop.JointType.WristLeft);
+            Vector3 ShoulderRightPos = GetJointPosition(kinectManager, (int)KinectInterop.JointType.ShoulderRight);
+            Vector3 ElbowRightPos = GetJointPosition(kinectManager, (int)KinectInterop.JointType.ElbowRight);
+            Vector3 WristRightPos = GetJointPosition(kinectManager, (int)KinectInterop.JointType.WristRight);
+            EqualizeBoneLengthByZDistance(
+                (ShoulderLeftPos.z + ElbowLeftPos.z)/2.0f, ref leftUpperArmLength,
+                (ShoulderRightPos.z + ElbowRightPos.z) / 2.0f, ref rightUpperArmLength);
+            EqualizeBoneLengthByZDistance(
+                (ElbowLeftPos.z + WristLeftPos.z) / 2.0f, ref leftLowerArmLength,
+                (ElbowRightPos.z + WristRightPos.z) / 2.0f, ref rightLowerArmLength);
 		}
 		
 		if(bLegs)
@@ -287,9 +303,9 @@ public class AvatarScaler : MonoBehaviour
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.KneeLeft, KinectInterop.JointType.AnkleLeft, legScaleFactor, ref leftLowerLegLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.HipRight, KinectInterop.JointType.KneeRight, legScaleFactor, ref rightUpperLegLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.KneeRight, KinectInterop.JointType.AnkleRight, legScaleFactor, ref rightLowerLegLength);
-			
-			//EqualizeBoneLength(ref leftUpperLegLength, ref rightUpperLegLength);
-			//EqualizeBoneLength(ref leftLowerLegLength, ref rightLowerLegLength);
+
+            EqualizeBoneLength(ref leftUpperLegLength, ref rightUpperLegLength);
+            EqualizeBoneLength(ref leftLowerLegLength, ref rightLowerLegLength);
 		}
 	}
 	
@@ -502,16 +518,32 @@ public class AvatarScaler : MonoBehaviour
 		Vector3 posHipRight = GetJointPosition(manager, (int)KinectInterop.JointType.HipRight);
 		Vector3 posShoulderLeft = GetJointPosition(manager, (int)KinectInterop.JointType.ShoulderLeft);
 		Vector3 posShoulderRight = GetJointPosition(manager, (int)KinectInterop.JointType.ShoulderRight);
+        Vector3 posNeck = GetJointPosition(manager, (int)KinectInterop.JointType.Neck);
+        Vector3 posSpineShoulder = GetJointPosition(manager, (int)KinectInterop.JointType.SpineShoulder);
 
-		if(posHipLeft != Vector3.zero && posHipRight != Vector3.zero &&
+        //posShoulderLeft = shoulderGuesser.GetCorrectedShoulderLeftPos();
+        //posShoulderRight = shoulderGuesser.GetCorrectedShoulderRightPos();
+
+        if (posHipLeft != Vector3.zero && posHipRight != Vector3.zero &&
 		   posShoulderLeft != Vector3.zero && posShoulderRight != Vector3.zero)
-		{
-			Vector3 posHipCenter = (posHipLeft + posHipRight) / 2f;
+        {
+            shoulderFixer.UpdateJointPositions(posShoulderLeft, posShoulderRight, posSpineShoulder, posNeck);
+
+            Vector3 posHipCenter = (posHipLeft + posHipRight) / 2f;
 			Vector3 posShoulderCenter = (posShoulderLeft + posShoulderRight) / 2f;
 			//height = (posShoulderCenter.y - posHipCenter.y) * scaleFactor;
 
 			height = (posShoulderCenter - posHipCenter).magnitude * scaleFactor;
-			width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
+            if (!useWeightedShoulders)
+                width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
+            else
+                width = shoulderFixer.GetWeightedWidth() * widthFactor;
+            Debug.Log("posShoulderRight =" + posShoulderRight);
+            Debug.Log("posShoulderLeft  =" + posShoulderLeft);
+            Debug.Log("posShoulderSpine =" + posSpineShoulder);
+            Debug.Log("posNeck =" + posNeck);
+            Debug.Log("width=" + width);
+
             //Debug.Log("h=" + height + " w=" + width);
 
             return true;
@@ -547,8 +579,20 @@ public class AvatarScaler : MonoBehaviour
 			boneLen2 = boneLen1;
 		}
 	}
-	
-	private bool SetupBodyScale(Transform scaleTrans, Vector3 modelBodyScale, float modelHeight, float modelWidth, float userHeight, float userWidth, 
+    private void EqualizeBoneLengthByZDistance(float boneZ1, ref float boneLen1, float boneZ2, ref float boneLen2)
+    {
+        // Closer bone must be more accurate.
+        if (boneZ1 < boneZ2)
+        {
+            boneLen2 = boneLen1;
+        }
+        else
+        {
+            boneLen1 = boneLen2;
+        }
+    }
+
+    private bool SetupBodyScale(Transform scaleTrans, Vector3 modelBodyScale, float modelHeight, float modelWidth, float userHeight, float userWidth, 
 		float fSmooth, ref float heightScale, ref float widthScale)
 	{
 		if(modelHeight > 0f && userHeight > 0f)
@@ -724,4 +768,25 @@ public class AvatarScaler : MonoBehaviour
 
 
 
+}
+
+[CustomEditor(typeof(AvatarScaler))]
+public class AvatarScalerEditor : Editor
+{
+    void OnSceneGUI()
+    {
+        AvatarScaler t = target as AvatarScaler;
+
+        if (t.useWeightedShoulders && t.shoulderFixer != null)
+        {
+            Handles.color = Color.blue;
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTForward);
+            Handles.color = Color.green;
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTUp);
+            Handles.color = Color.red;
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
+            Handles.color = Color.white;
+            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderRight);
+        }
+    }
 }

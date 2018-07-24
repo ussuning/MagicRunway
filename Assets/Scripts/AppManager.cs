@@ -111,12 +111,12 @@ public class AppManager : MonoBehaviour
 
     IEnumerator FadeOutLLevelToLive()
     {
+        UIManager.Instance.HideHandCursor();
         blackoutAnimator.SetBool("FadeOut", true);
         UIManager.Instance.HideStartMenu(true);
         yield return new WaitUntil(() => blackout.color.a == 1);
         blackoutAnimator.SetBool("FadeOut", false);
         PlayLiveRunway();
-        UIManager.Instance.HideHandCursor();
         UIManager.Instance.ShowGestureGender(30.0f);
     }
 
