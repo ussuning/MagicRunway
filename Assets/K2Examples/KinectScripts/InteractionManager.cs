@@ -1038,7 +1038,7 @@ public class InteractionManager : MonoBehaviour
 
         foreach (RaycastResult result in results)
         {
-            if (result.gameObject.name == "JoinInButton" || result.gameObject.name == "Text")
+            if (result.gameObject.name == "JoinInButton")
             {
                 if (handClickProgress > 0.9)
                 {
