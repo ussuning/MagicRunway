@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     public GameObject uiStartMenu;
+    public GameObject uiJoinIn;
     public GameObject uiShowcase;
     public GameObject uiCollection;
     public GameObject uiUpNext;
@@ -14,9 +15,17 @@ public class UIManager : Singleton<UIManager>
 
     protected GameObject uiMaleGender;
     protected GameObject uiFemaleGender;
+    protected Button uiJoinInButton;
 
     private CanvasFader faderStartMenu;
     private IEnumerator gestureGenderCoroutine;
+
+    void OnEnable()
+    {
+        uiJoinInButton = uiJoinIn.GetComponent<Button>(); 
+        uiJoinInButton.onClick.AddListener(() => UI_JoinInButtonCallBack(uiJoinInButton));
+
+    }
 
     public void Start()
     {
@@ -203,6 +212,14 @@ public class UIManager : Singleton<UIManager>
         if (go == uiGestureGender)
         {
             if (fade == CanvasFade.OUT) { uiGestureGender.SetActive(false); }
+        }
+    }
+
+    protected void UI_JoinInButtonCallBack(Button buttonPressed)
+    {
+        if (buttonPressed == uiJoinInButton)
+        {
+            Debug.Log("Join Button Callback" + uiJoinInButton.name);
         }
     }
 }

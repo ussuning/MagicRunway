@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System;
 using System.IO;
+using UnityEngine.EventSystems;
 
 
 /// <summary>
@@ -61,7 +62,12 @@ public class InteractionManager : MonoBehaviour
         Release = 2
     }
 
-	[Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
+    public GameObject uiStart;
+    protected Vector3 screenPos;
+    protected Vector3 HandScreenPos;
+    protected bool hitJoin = false;
+
+    [Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
 	public int playerIndex = 0;
 	
 	[Tooltip("The image that may be used to show the hand-moved cursor on the screen or not. The sprite textures below need to be set too.")]
@@ -123,8 +129,9 @@ public class InteractionManager : MonoBehaviour
 	// cursor properties
 	private Vector3 cursorScreenPos = Vector3.zero;
 	private bool dragInProgress = false;
-	
-	private Image cursorProgressBar;
+    private bool joinInProgress = false;
+
+    private Image cursorProgressBar;
 	private float cursorClickProgress = 0f;
 
 	// hand states
@@ -481,6 +488,7 @@ public class InteractionManager : MonoBehaviour
 						{
 							if(!isLeftHandClick)
 							{
+                                //Debug.Log("Setting Cursor click progress to 1");
 								isLeftHandClick = true;
 								cursorClickProgress = leftHandClickProgress = 1f;
 
@@ -497,7 +505,7 @@ public class InteractionManager : MonoBehaviour
 									}
 								}
 
-								if(controlMouseCursor)
+								/*if(controlMouseCursor)
 								{
 									MouseControl.MouseClick();
 
@@ -508,14 +516,17 @@ public class InteractionManager : MonoBehaviour
 									lastLeftHandClickTime = Time.realtimeSinceStartup;
 									lastLeftHandPressTime = Time.realtimeSinceStartup;
 								}
+                                */
 							}
 						}
 						else
 						{
 							// show progress after the 1st half of the needed duration
-							float leftHandTimeProgress = allowHandClicks && (Time.realtimeSinceStartup - lastLeftHandClickTime) >= (KinectInterop.Constants.ClickStayDuration / 2f) ? 
+						/*	float leftHandTimeProgress = allowHandClicks && (Time.realtimeSinceStartup - lastLeftHandClickTime) >= (KinectInterop.Constants.ClickStayDuration / 2f) ? 
 								((Time.realtimeSinceStartup - lastLeftHandClickTime - (KinectInterop.Constants.ClickStayDuration / 2f)) * 2f / KinectInterop.Constants.ClickStayDuration) : 0f;
 							cursorClickProgress = leftHandClickProgress = allowPushToClick && leftHandScreenPos.z >= 0.7f ? leftHandPressProgress : leftHandTimeProgress;
+
+                         */
 						}
 					}
 					else
@@ -586,8 +597,9 @@ public class InteractionManager : MonoBehaviour
 						{
 							if(!isRightHandClick)
 							{
+                            //    Debug.Log("Right Hand, set cusor click progress to 1");
 								isRightHandClick = true;
-								cursorClickProgress = rightHandClickProgress = 1f;
+							//	cursorClickProgress = rightHandClickProgress = 1f;
 								
 								foreach(InteractionListenerInterface listener in interactionListeners)
 								{
@@ -602,7 +614,7 @@ public class InteractionManager : MonoBehaviour
 									}
 								}
 
-								if(controlMouseCursor)
+								/*if(controlMouseCursor)
 								{
 									MouseControl.MouseClick();
 
@@ -613,6 +625,7 @@ public class InteractionManager : MonoBehaviour
 									lastRightHandClickTime = Time.realtimeSinceStartup;
 									lastRightHandPressTime = Time.realtimeSinceStartup;
 								}
+                                */
 							}
 						}
 						else
@@ -654,7 +667,7 @@ public class InteractionManager : MonoBehaviour
 				}
 
 				// if left hand just stopped interacting, send extra non-interaction event
-				if (wasLeftHandInteracting && !isLeftHandInteracting) 
+			/*	if (wasLeftHandInteracting && !isLeftHandInteracting) 
 				{
 					foreach(InteractionListenerInterface listener in interactionListeners)
 					{
@@ -677,7 +690,7 @@ public class InteractionManager : MonoBehaviour
 
 					lastRightHandEvent = HandEventType.Release;
 				}
-
+            */
 
 				// process left hand
 				handEvent = HandStateToEvent(leftHandState, lastLeftHandEvent);
@@ -780,13 +793,13 @@ public class InteractionManager : MonoBehaviour
 				if(handEvent != HandEventType.None)
 				{
 					// no clicks, while hand grip is detected
-					if (rightHandEvent == HandEventType.Grip && rightHandClickProgress > 0f) 
+				/*	if (rightHandEvent == HandEventType.Grip && rightHandClickProgress > 0f) 
 					{
 						cursorClickProgress = rightHandClickProgress = 0f;
 						lastRightHandClickTime = Time.realtimeSinceStartup;
 					}
-
-					if (rightHandEvent != lastRightHandEvent) 
+                */
+				/*	if (rightHandEvent != lastRightHandEvent) 
 					{
 						// invoke interaction listeners
 						foreach(InteractionListenerInterface listener in interactionListeners)
@@ -797,7 +810,7 @@ public class InteractionManager : MonoBehaviour
 								listener.HandReleaseDetected (playerUserID, playerIndex, true, isRightHandInteracting, rightHandScreenPos);
 						}
 					}
-
+                */
 					lastRightHandEvent = handEvent;
 				}	
 				
@@ -810,17 +823,28 @@ public class InteractionManager : MonoBehaviour
 					{
 						float smooth = smoothFactor * Time.deltaTime;
 						if(smooth == 0f) smooth = 1f;
-						
-						cursorScreenPos = Vector3.Lerp(cursorScreenPos, rightHandScreenPos, smooth);
-					}
+                        cursorScreenPos = Vector3.Lerp(cursorScreenPos, rightHandScreenPos, smooth);
+                    }
 
-					// move mouse-only if there is no cursor texture
-					if(controlMouseCursor && 
-						(!guiHandCursor || (!gripHandTexture && !releaseHandTexture && !normalHandTexture)))
-					{
-						MouseControl.MouseMove(cursorScreenPos, debugText);
-					}
-				}
+                    if (! joinInProgress)
+                    {
+                        if (Camera.current != null)
+                        {
+                            screenPos = Camera.current.ViewportToScreenPoint(rightHandScreenPos);    // convert viewport to screen space position
+                            joinInProgress = true;
+                            StartCoroutine(UpdateJoinLiveProgress(screenPos, rightHandClickProgress));
+                        }
+
+                    }
+                    
+                    // move mouse-only if there is no cursor texture
+                    /*	if(controlMouseCursor && 
+                            (!guiHandCursor || (!gripHandTexture && !releaseHandTexture && !normalHandTexture)))
+                        {
+                            MouseControl.MouseMove(cursorScreenPos, debugText);
+                        }
+                    */
+                }
 				else
 				{
 					isRightHandPrimary = false;
@@ -830,7 +854,7 @@ public class InteractionManager : MonoBehaviour
 			else
 			{
 				// send release events
-				if (lastLeftHandEvent == HandEventType.Grip || lastRightHandEvent == HandEventType.Grip) 
+				/*if (lastLeftHandEvent == HandEventType.Grip || lastRightHandEvent == HandEventType.Grip) 
 				{
 					foreach(InteractionListenerInterface listener in interactionListeners)
 					{
@@ -839,7 +863,7 @@ public class InteractionManager : MonoBehaviour
 						if(lastRightHandEvent == HandEventType.Grip)
 							listener.HandReleaseDetected (lastUserID, playerIndex, true, true, leftHandScreenPos);
 					}
-				}
+				}*/
 
 				leftHandState = KinectInterop.HandState.NotTracked;
 				rightHandState = KinectInterop.HandState.NotTracked;
@@ -874,13 +898,8 @@ public class InteractionManager : MonoBehaviour
 
 			// update cursor texture and position
 			UpdateGUI();
-            if (rightHandClickProgress > .98 || leftHandClickProgress > .98)
-            {
-                UIManager.Instance.ClickStartMenu();
-            }
         }
-		
-	}
+    }
 
 
 	// updates cursor texture and position
@@ -888,80 +907,6 @@ public class InteractionManager : MonoBehaviour
 	{
 		if(!interactionInited)
 			return;
-		
-		// display debug information
-		if(debugText)
-		{
-			string sGuiText = string.Empty;
-
-			if(isLeftHandPrimary)
-			{
-				sGuiText += "L.Hand" + (isLeftHandInteracting ? "*: " : " : ") + leftHandScreenPos.ToString();
-				
-				if(lastLeftHandEvent == HandEventType.Grip)
-				{
-					sGuiText += "  LeftGrip";
-				}
-				else if(lastLeftHandEvent == HandEventType.Release)
-				{
-					sGuiText += "  LeftRelease";
-				}
-				
-				if(isLeftHandClick)
-				{
-					sGuiText += "  LeftClick";
-				}
-				else if(leftHandClickProgress > 0.5f)
-				{
-                    //sGuiText += String.Format("  {0:F0}%", leftHandClickProgress * 100);
-                    Debug.Log("Left hand click > 0.5 ");
-                }
-				
-				if(isLeftHandPress)
-				{
-					sGuiText += "  LeftPress";
-				}
-
-                //sGuiText += " " + leftHandClickProgress;
-                Debug.Log("Left Hand Click Progress = " + leftHandClickProgress);
-               
-            }
-			
-			if(isRightHandPrimary)
-			{
-				sGuiText += "\nR.Hand" + (isRightHandInteracting ? "*: " : " : ") + rightHandScreenPos.ToString();
-				
-				if(lastRightHandEvent == HandEventType.Grip)
-				{
-					sGuiText += "  RightGrip";
-				}
-				else if(lastRightHandEvent == HandEventType.Release)
-				{
-					sGuiText += "  RightRelease";
-				}
-				
-				if(isRightHandClick)
-				{
-					sGuiText += "  RightClick";
-				}
-				else if(rightHandClickProgress > 0.5f)
-				{
-                    //sGuiText += String.Format("  {0:F0}%", rightHandClickProgress * 100);
-                    Debug.Log("Right hand click > 0.5 ");
-				}
-
-				if(isRightHandPress)
-				{
-					sGuiText += "  RightPress";
-				}
-
-                //sGuiText += " " + rightHandClickProgress;
-               // Debug.Log("Right Hand Click Progress = " + rightHandClickProgress);
-            }
-			
-			//debugText.text = sGuiText;
-            //Debug.Log("sGUIText = " + sGuiText);
-		}
 		
 		// display the cursor status and position
 		if(guiHandCursor)
@@ -1006,7 +951,7 @@ public class InteractionManager : MonoBehaviour
 				guiHandCursor.sprite = cursorTexture;
 				guiHandCursor.rectTransform.position = posSprite;
 
-				if (cursorProgressBar) 
+				if (cursorProgressBar && hitJoin) 
 				{
 					cursorProgressBar.fillAmount = cursorClickProgress;
 				}
@@ -1077,5 +1022,41 @@ public class InteractionManager : MonoBehaviour
 		return HandEventType.None;
 	}
 
+    IEnumerator UpdateJoinLiveProgress(Vector3 screenPos, float handClickProgress)
+    {
+        GraphicRaycaster m_Raycaster;
+        PointerEventData m_PointerEventData;
+        EventSystem m_EventSystem;
 
+        m_Raycaster = uiStart.GetComponent<GraphicRaycaster>();
+        m_EventSystem = uiStart.GetComponent<EventSystem>();
+        m_PointerEventData = new PointerEventData(m_EventSystem);
+        m_PointerEventData.position = screenPos;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        m_Raycaster.Raycast(m_PointerEventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.name == "JoinInButton" || result.gameObject.name == "Text")
+            {
+                if (handClickProgress > 0.9)
+                {
+                    hitJoin = false;
+                    guiHandCursor.rectTransform.position = new Vector3(-1, -1, 0);
+                    cursorProgressBar.fillAmount = 0f;
+                    UIManager.Instance.ClickStartMenu();
+                }
+                else
+                {
+                    hitJoin = true;
+                }
+            }
+        }
+        joinInProgress = false;
+        yield return null;
+    }
 }
+
+
+
