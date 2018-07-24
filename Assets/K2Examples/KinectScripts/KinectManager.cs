@@ -1181,8 +1181,9 @@ public class KinectManager : MonoBehaviour
 						// 3d position to depth
 						Vector2 posDepth = MapSpacePointToDepthCoords(posJointRaw);
 						ushort depthValue = GetDepthForPixel((int)posDepth.x, (int)posDepth.y);
-						
-						if(posDepth != Vector2.zero && depthValue > 0 && sensorData != null)
+
+
+                        if (posDepth != Vector2.zero && depthValue > 0 && sensorData != null)
 						{
 							// depth pos to color pos
 							Vector2 posColor = MapDepthPointToColorCoords(posDepth, depthValue);
@@ -1203,7 +1204,7 @@ public class KinectManager : MonoBehaviour
 								//Vector3 vPosJoint = camera.ViewportToWorldPoint(new Vector3(xNorm, yNorm, zDistance));
 								Vector3 vPosJoint = camera.ScreenToWorldPoint(new Vector3(xScreen, yScreen, zDistance));
 
-								return vPosJoint;
+                                return vPosJoint;
 							}
 						}
 					}

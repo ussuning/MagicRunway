@@ -626,6 +626,9 @@ GameObject:
   - component: {fileID: 114135518769448610}
   - component: {fileID: 136273966925286098}
   - component: {fileID: 114989346883910198}
+  - component: {fileID: 114757061385956234}
+  - component: {fileID: 114242750076789166}
+  - component: {fileID: 114221987624554882}
   m_Layer: 13
   m_Name: test_outfit_01
   m_TagString: Untagged
@@ -1372,8 +1375,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1369584288410632}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.252, y: 0, z: -0.177}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4281432837992234}
@@ -2474,7 +2477,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1284966541145224}
   m_LocalRotation: {x: 0.00000002078865, y: -0.0000002637596, z: 0.00000963783, w: 1}
-  m_LocalPosition: {x: -0.0000012019949, y: 1.0396174, z: 0.00058710214}
+  m_LocalPosition: {x: -0.0000012019949, y: 0, z: 0.00058710214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4014917264267348}
@@ -3140,16 +3143,16 @@ MonoBehaviour:
   smoothFactor: 10
   offsetNode: {fileID: 0}
   posRelativeToCamera: {fileID: 0}
-  posRelOverlayColor: 0
+  posRelOverlayColor: 1
   backgroundPlane: {fileID: 0}
   posRelInvertedZ: 0
-  groundedFeet: 1
-  applyMuscleLimits: 1
+  groundedFeet: 0
+  applyMuscleLimits: 0
   flipLeftRight: 0
   verticalOffset: 0
   forwardOffset: 0
   HipCenter: {fileID: 4956286719263974}
-  Spine: {fileID: 4947156610825960}
+  Spine: {fileID: 4879559463581078}
   ShoulderCenter: {fileID: 4415072462280430}
   Neck: {fileID: 4629367418764398}
   Head: {fileID: 4227671666862840}
@@ -3185,6 +3188,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d48b2ded8e5495cac0e7bf6eb1fa42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114221987624554882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1369584288410632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5448bc5d34be848819fa3382954b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableOnStart: 0
+--- !u!114 &114242750076789166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1369584288410632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12df0c9d1a69101409c3a8a60c98f0c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  mirroredAvatar: 1
+  bodyScaleFactor: 1.2
+  bodyWidthFactor: 1
+  armScaleFactor: 1
+  legScaleFactor: 1
+  continuousScaling: 1
+  smoothFactor: 10
+  foregroundCamera: {fileID: 0}
+  backgroundPlane: {fileID: 0}
+  debugText: {fileID: 0}
+  useWeightedShoulders: 1
 --- !u!114 &114246607136423466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -35976,6 +36014,29 @@ MonoBehaviour:
   sourceCollider: {fileID: 136541709822029900}
   useDistanceFields: 0
   distanceField: {fileID: 0}
+--- !u!114 &114757061385956234
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1369584288410632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eedf84d761a4dc4ba2ed284ddf51aa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  getFaceModelData: 0
+  displayFaceRect: 0
+  faceTrackingTolerance: 0.5
+  faceModelMesh: {fileID: 0}
+  pauseModelMeshUpdates: 0
+  texturedModelMesh: 1
+  moveModelMesh: 0
+  foregroundCamera: {fileID: 0}
+  modelMeshScale: 1
+  verticalMeshOffset: 0
+  debugText: {fileID: 0}
 --- !u!114 &114776645937255718
 MonoBehaviour:
   m_ObjectHideFlags: 1
