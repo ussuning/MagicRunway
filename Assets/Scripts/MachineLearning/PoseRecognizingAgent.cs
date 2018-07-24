@@ -126,7 +126,8 @@ public class PoseRecognizingAgent : Agent {
 
     public override void CollectObservations()
     {
-        KinectUserId = manager.GetPrimaryUserID(); //Delete later
+        if(KinectUserId == 0)
+            KinectUserId = manager.GetPrimaryUserID(); //Delete later
         if (manager.IsUserInKinectView(KinectUserId))
         {
             if (SystemConfigs.CollectUserRotation)
