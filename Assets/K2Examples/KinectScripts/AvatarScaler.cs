@@ -8,6 +8,7 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class AvatarScaler : MonoBehaviour 
 {
+
 	[Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
 	public int playerIndex = 0;
 
@@ -26,11 +27,31 @@ public class AvatarScaler : MonoBehaviour
 	[Range(0.0f, 2.0f)]
 	public float armScaleFactor = 1.0f;
 
-	[Tooltip("Additional scale factor for legs that may be used for fine tuning of model leg-scale.")]
+    [Tooltip("Additional scale factor for arms that may be used for fine tuning of model arm-scale.")]
+    [Range(0.0f, 2.0f)]
+    public float armGirthFactor = 1.0f;
+
+    public enum LimbAxis { X, Y, Z }
+    [Tooltip("Additional scale factor for arms that may be used for fine tuning of model arm-scale.")]
+    public LimbAxis armLengthAxis = LimbAxis.X;
+
+
+    [Tooltip("Additional scale factor for legs that may be used for fine tuning of model leg-scale.")]
 	[Range(0.0f, 2.0f)]
 	public float legScaleFactor = 1.0f;
-	
-	[Tooltip("Whether the scale is updated continuously or just after the calibration pose.")]
+
+    [Tooltip("Additional scale factor for legs that may be used for fine tuning of model leg-scale.")]
+    [Range(0.0f, 2.0f)]
+    public float legGirthFactor = 1.0f;
+
+    [Tooltip("Additional scale factor for legs that may be used for fine tuning of model leg-scale.")]
+    [Range(0.0f, 2.0f)]
+    public float lowerLegGirthFactor = 1.0f;
+    
+    [Tooltip("Additional scale factor for legs that may be used for fine tuning of model leg-scale.")]
+    public LimbAxis legLengthAxis = LimbAxis.X;
+
+    [Tooltip("Whether the scale is updated continuously or just after the calibration pose.")]
 	public bool continuousScaling = true;
 	
 	[Tooltip("Scale smoothing factor used in case of continuous scaling.")]
@@ -126,6 +147,7 @@ public class AvatarScaler : MonoBehaviour
 	private bool planeRectSet = false;
 
     internal ShoulderFixer shoulderFixer;
+    private float userBodyHeightOffset = 0f;
 
 
 	public void Start () 
@@ -273,7 +295,9 @@ public class AvatarScaler : MonoBehaviour
 		
 		if(bBody)
 		{
-			GetUserBodyHeight(kinectManager, bodyScaleFactor, bodyWidthFactor, ref userBodyHeight, ref userBodyWidth);
+			GetUserBodyHeight(kinectManager, bodyScaleFactor, bodyWidthFactor, ref userBodyHeight, ref userBodyWidth, ref userBodyHeightOffset);
+            avtController.verticalOffset = userBodyHeightOffset;
+            //Debug.Log("userBodyHeightOffset = " + userBodyHeightOffset);
 		}
 		
 		if(bArms)
@@ -303,6 +327,13 @@ public class AvatarScaler : MonoBehaviour
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.KneeLeft, KinectInterop.JointType.AnkleLeft, legScaleFactor, ref leftLowerLegLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.HipRight, KinectInterop.JointType.KneeRight, legScaleFactor, ref rightUpperLegLength);
 			GetUserBoneLength(kinectManager, KinectInterop.JointType.KneeRight, KinectInterop.JointType.AnkleRight, legScaleFactor, ref rightLowerLegLength);
+            //Debug.Log("leftUpperLegLength=" + leftUpperLegLength);
+            //Debug.Log("leftLowerLegLength=" + leftLowerLegLength);
+            float totalLegLength = leftUpperLegLength + leftLowerLegLength + userBodyHeightOffset;
+            leftUpperLegLength = 0.55f * totalLegLength;
+            leftLowerLegLength = 0.45f * totalLegLength;
+            rightUpperLegLength = 0.55f * totalLegLength;
+            rightLowerLegLength = 0.45f * totalLegLength;
 
             EqualizeBoneLength(ref leftUpperLegLength, ref rightUpperLegLength);
             EqualizeBoneLength(ref leftLowerLegLength, ref rightLowerLegLength);
@@ -345,19 +376,19 @@ public class AvatarScaler : MonoBehaviour
 		{
 			float fLeftUpperArmLength = !mirroredAvatar ? leftUpperArmLength : rightUpperArmLength;
 			SetupBoneScale(leftShoulderScaleTransform, modelLeftShoulderScale, modelLeftUpperArmLength, 
-				fLeftUpperArmLength, fScaleBodyHeight, fSmooth, ref fScaleLeftUpperArm);
+				fLeftUpperArmLength, armGirthFactor, fScaleBodyHeight, fSmooth, ref fScaleLeftUpperArm, armLengthAxis);
 
 			float fLeftLowerArmLength = !mirroredAvatar ? leftLowerArmLength : rightLowerArmLength;
 			SetupBoneScale(leftElbowScaleTransform, modelLeftElbowScale, modelLeftLowerArmLength, 
-				fLeftLowerArmLength, fScaleLeftUpperArm, fSmooth, ref fScaleLeftLowerArm);
+				fLeftLowerArmLength, armGirthFactor, fScaleLeftUpperArm, fSmooth, ref fScaleLeftLowerArm, armLengthAxis);
 
 			float fRightUpperArmLength = !mirroredAvatar ? rightUpperArmLength : leftUpperArmLength;
 			SetupBoneScale(rightShoulderScaleTransform, modelRightShoulderScale, modelRightUpperArmLength, 
-				fRightUpperArmLength, fScaleBodyHeight, fSmooth, ref fScaleRightUpperArm);
+				fRightUpperArmLength, armGirthFactor, fScaleBodyHeight, fSmooth, ref fScaleRightUpperArm, armLengthAxis);
 
 			float fRightLowerArmLength = !mirroredAvatar ? rightLowerArmLength : leftLowerArmLength;
 			SetupBoneScale(rightElbowScaleTransform, modelRightElbowScale, modelLeftLowerArmLength, 
-				fRightLowerArmLength, fScaleRightUpperArm, fSmooth, ref fScaleRightLowerArm);
+				fRightLowerArmLength, armGirthFactor, fScaleRightUpperArm, fSmooth, ref fScaleRightLowerArm, armLengthAxis);
 		}
 
 		// scale legs
@@ -365,19 +396,20 @@ public class AvatarScaler : MonoBehaviour
 		{
 			float fLeftUpperLegLength = !mirroredAvatar ? leftUpperLegLength : rightUpperLegLength;
 			SetupBoneScale(leftHipScaleTransform, modelLeftHipScale, modelLeftUpperLegLength, 
-				fLeftUpperLegLength, fScaleBodyHeight, fSmooth, ref fScaleLeftUpperLeg);
-
-			float fLeftLowerLegLength = !mirroredAvatar ? leftLowerLegLength : rightLowerLegLength;
-			SetupBoneScale(leftKneeScaleTransform, modelLeftKneeScale, modelLeftLowerLegLength, 
-				fLeftLowerLegLength, fScaleLeftUpperLeg, fSmooth, ref fScaleLeftLowerLeg);
+				fLeftUpperLegLength, legGirthFactor, fScaleBodyHeight, fSmooth, ref fScaleLeftUpperLeg, legLengthAxis);
 
 			float fRightUpperLegLength = !mirroredAvatar ? rightUpperLegLength : leftUpperLegLength;
 			SetupBoneScale(rightHipScaleTransform, modelRightHipScale, modelRightUpperLegLength, 
-				fRightUpperLegLength, fScaleBodyHeight, fSmooth, ref fScaleRightUpperLeg);
+				fRightUpperLegLength, legGirthFactor, fScaleBodyHeight, fSmooth, ref fScaleRightUpperLeg, legLengthAxis);
 
-			float fRightLowerLegLength = !mirroredAvatar ? rightLowerLegLength : leftLowerLegLength;
+            
+            float fLeftLowerLegLength = !mirroredAvatar ? leftLowerLegLength : rightLowerLegLength;
+            SetupBoneScale(leftKneeScaleTransform, modelLeftKneeScale, modelLeftLowerLegLength,
+                fLeftLowerLegLength, lowerLegGirthFactor, fScaleLeftUpperLeg, fSmooth, ref fScaleLeftLowerLeg , legLengthAxis);
+
+            float fRightLowerLegLength = !mirroredAvatar ? rightLowerLegLength : leftLowerLegLength;
 			SetupBoneScale(rightKneeScaleTransform, modelRightKneeScale, modelRightLowerLegLength, 
-				fRightLowerLegLength, fScaleRightUpperLeg, fSmooth, ref fScaleRightLowerLeg);
+				fRightLowerLegLength, lowerLegGirthFactor, fScaleRightUpperLeg, fSmooth, ref fScaleRightLowerLeg, legLengthAxis);
 		}
 
 		if(debugText != null)
@@ -509,7 +541,7 @@ public class AvatarScaler : MonoBehaviour
 		return false;
 	}
 
-	private bool GetUserBodyHeight(KinectManager manager, float scaleFactor, float widthFactor, ref float height, ref float width)
+	private bool GetUserBodyHeight(KinectManager manager, float scaleFactor, float widthFactor, ref float height, ref float width, ref float heightOffset)
 	{
 		height = 0f;
 		width = 0f;
@@ -533,16 +565,17 @@ public class AvatarScaler : MonoBehaviour
 			Vector3 posShoulderCenter = (posShoulderLeft + posShoulderRight) / 2f;
 			//height = (posShoulderCenter.y - posHipCenter.y) * scaleFactor;
 
-			height = (posShoulderCenter - posHipCenter).magnitude * scaleFactor;
+			height = ((posShoulderCenter - posHipCenter).magnitude  /*+  (posNeck - posShoulderCenter).magnitude*/) * scaleFactor;
+            heightOffset = (posNeck - posShoulderCenter).magnitude * 0.75f * scaleFactor;
             if (!useWeightedShoulders)
                 width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
             else
                 width = shoulderFixer.GetWeightedWidth() * widthFactor;
-            Debug.Log("posShoulderRight =" + posShoulderRight);
-            Debug.Log("posShoulderLeft  =" + posShoulderLeft);
-            Debug.Log("posShoulderSpine =" + posSpineShoulder);
-            Debug.Log("posNeck =" + posNeck);
-            Debug.Log("width=" + width);
+            //Debug.Log("posShoulderRight =" + posShoulderRight);
+            //Debug.Log("posShoulderLeft  =" + posShoulderLeft);
+            //Debug.Log("posShoulderSpine =" + posSpineShoulder);
+            //Debug.Log("posNeck =" + posNeck);
+            //Debug.Log("width=" + width);
 
             //Debug.Log("h=" + height + " w=" + width);
 
@@ -609,9 +642,10 @@ public class AvatarScaler : MonoBehaviour
 			widthScale = heightScale;
 		}
 
-		if(scaleTrans && heightScale > 0f && widthScale > 0f)
-		{
-			float depthScale = heightScale; // (heightScale + widthScale) / 2f;
+
+        if (scaleTrans && heightScale > 0f && widthScale > 0f)
+        {
+            float depthScale = heightScale; // (heightScale + widthScale) / 2f;
 			Vector3 newLocalScale = new Vector3 (modelBodyScale.x * widthScale, modelBodyScale.y * heightScale, modelBodyScale.z * depthScale);
 
 			if(fSmooth != 0f)
@@ -626,25 +660,47 @@ public class AvatarScaler : MonoBehaviour
 	}
 
 
-	private bool SetupBoneScale(Transform scaleTrans, Vector3 modelBoneScale, float modelBoneLen, float userBoneLen, float parentScale, float fSmooth, ref float boneScale)
+	private bool SetupBoneScale(Transform scaleTrans, Vector3 modelBoneScale, float modelBoneLen, float userBoneLen, float userBoneWidthFactor, float parentScale, float fSmooth, ref float boneScale, LimbAxis limbLengthAxis)
 	{
 		if(modelBoneLen > 0f && userBoneLen > 0f)
 		{
 			boneScale = userBoneLen / modelBoneLen;
 		}
 
-		float localScale = boneScale;
+		float localLength = boneScale;
 		if(boneScale > 0f && parentScale > 0f)
 		{
-			localScale = boneScale / parentScale;
+			localLength = boneScale / parentScale;
 		}
 		
-		if(scaleTrans && localScale > 0f)
+		if(scaleTrans && localLength > 0f)
 		{
-			if(fSmooth != 0f)
-				scaleTrans.localScale = Vector3.Lerp(scaleTrans.localScale, modelBoneScale * localScale, fSmooth * Time.deltaTime);
+            Vector3 finaleScale = modelBoneScale * localLength;
+
+            // Scale the width based on limbAxis.
+            switch (limbLengthAxis)
+            {
+                case LimbAxis.X:
+                    //finaleScale.x *= userBoneWidthFactor;
+                    finaleScale.y *= userBoneWidthFactor;
+                    finaleScale.z *= userBoneWidthFactor;
+                    break;
+                case LimbAxis.Y:
+                    finaleScale.x *= userBoneWidthFactor;
+                    //finaleScale.y *= userBoneWidthFactor;
+                    finaleScale.z *= userBoneWidthFactor;
+                    break;
+                case LimbAxis.Z:
+                    finaleScale.x *= userBoneWidthFactor;
+                    finaleScale.y *= userBoneWidthFactor;
+                    //finaleScale.z *= userBoneWidthFactor;
+                    break;
+            }
+
+            if (fSmooth != 0f)
+				scaleTrans.localScale = Vector3.Lerp(scaleTrans.localScale, finaleScale, fSmooth * Time.deltaTime);
 			else
-				scaleTrans.localScale = modelBoneScale * localScale;
+				scaleTrans.localScale = finaleScale;
 
 			return true;
 		}
