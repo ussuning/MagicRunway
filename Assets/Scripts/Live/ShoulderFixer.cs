@@ -37,8 +37,8 @@ public class ShoulderFixer {
         shoulderTForward = Vector3.Cross(shoulderLeft - shoulderRight, shoulderTUp).normalized;
         shoulderTRight = Vector3.Cross(shoulderTUp, shoulderTForward).normalized;
 
-        Debug.Log("shoulderUp = " + shoulderTUp);
-        Debug.Log("shoulderForward = " + shoulderTForward);
+        //Debug.Log("shoulderUp = " + shoulderTUp);
+        //Debug.Log("shoulderForward = " + shoulderTForward);
 
         Vector3 shoulderDelta = (shoulderLeft - shoulderRight);
         // The more horizontal with the camera, the more confident we are.
