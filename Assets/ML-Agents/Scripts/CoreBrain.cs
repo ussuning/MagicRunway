@@ -10,6 +10,10 @@ public interface CoreBrain
 
     /// Implement setBrain so let the coreBrain know what brain is using it
     void SetBrain(Brain b);
+
+    //Tai
+    void SetBrainData(TextAsset bd);
+
     /// Implement this method to initialize CoreBrain
     void InitializeCoreBrain(Communicator communicator);
     /// Implement this method to define the logic for deciding actions

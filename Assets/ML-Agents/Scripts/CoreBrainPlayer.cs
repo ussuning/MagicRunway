@@ -50,6 +50,10 @@ public class CoreBrainPlayer : ScriptableObject, CoreBrain
         brain = b;
     }
 
+    public void SetBrainData(TextAsset bd)
+    {
+    }
+
     /// Nothing to implement
     public void InitializeCoreBrain(Communicator communicator)
     {

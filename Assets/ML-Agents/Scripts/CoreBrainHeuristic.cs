@@ -26,6 +26,10 @@ public class CoreBrainHeuristic : ScriptableObject, CoreBrain
         brain = b;
     }
 
+    public void SetBrainData(TextAsset bd)
+    {
+    }
+
     /// Create the reference to decision
     public void InitializeCoreBrain(Communicator communicator)
     {

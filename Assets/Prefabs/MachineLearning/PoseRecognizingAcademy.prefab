@@ -20,13 +20,14 @@ GameObject:
   m_Component:
   - component: {fileID: 4960047522785154}
   - component: {fileID: 114508523507266558}
+  - component: {fileID: 114215106971808518}
   m_Layer: 0
   m_Name: PoseRecognizingAcademy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1586271984296024
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,6 +71,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114215106971808518
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1092431475659024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fbaf4570eb63ff41804692ff0dbb259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114508523507266558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -122,4 +134,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  instanceID: -178728
+  instanceID: -226510

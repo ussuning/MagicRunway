@@ -16,6 +16,10 @@ public class CoreBrainExternal : ScriptableObject, CoreBrain
         brain = b;
     }
 
+    public void SetBrainData(TextAsset bd)
+    {
+    }
+
     /// Generates the communicator for the Academy if none was present and
     ///  subscribe to ExternalCommunicator if it was present.
     public void InitializeCoreBrain(Communicator communicator)
