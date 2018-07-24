@@ -711,13 +711,13 @@ public class AvatarController : MonoBehaviour
             {
                 ShoulderFixer sg = avatarScaler.shoulderFixer;
 
-                float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp) * 1.25f;
+                float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp);
                 Debug.Log("ShoulderAngle = " + shoulderAngle);
 
                 //float shouldersDotCamera = Vector3.Dot((sg.origShoulderLeft - sg.origShoulderRight).normalized, avatarScaler.foregroundCamera.transform.forward);
-                float sideFactor = joint == KinectInterop.JointType.ShoulderLeft ? 1.0f : -1.0f;
-                float frontFactor = sg.correctedShoulderRight.z > sg.correctedShoulderLeft.z ? 1.0f : -1.0f;
-                boneTransform.Rotate(boneTransform.up, sideFactor * frontFactor * shoulderAngle);
+                float sideFactor = 1.0f; // joint == KinectInterop.JointType.ShoulderLeft ? 1.0f : -1.0f;
+                float frontFactor = 1.0f;// sg.correctedShoulderRight.z > sg.correctedShoulderLeft.z ? 1.0f : -1.0f;
+                boneTransform.Rotate(sg.shoulderTUp, sideFactor * frontFactor * shoulderAngle, Space.World);
                 //boneTransform.rotation = q1;
             }
         }
