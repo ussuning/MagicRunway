@@ -81,6 +81,7 @@ public class PoseRecognizingAgent : Agent {
             {
                 if (posingTimeEllapsed > SystemConfigs.PosingTime)
                 {
+                    float timeFromPrevPose = Time.time - prevPoseTime;
                     if (Time.time - prevPoseTime <= SystemConfigs.ComboPoseTime)
                     {
                         combo++;
@@ -97,24 +98,25 @@ public class PoseRecognizingAgent : Agent {
                     posingTimeEllapsed = 0f;
 
                     EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, curPoseIdx);
-                    Debug.Log(string.Format("Pose Strike: x{0} Combo, Pose {1} ({2})", combo, curPoseIdx, estPoseConfidence));
+                    //Debug.Log(string.Format("Pose Strike: x{0} Combo, Pose {1} ({2}: {3})", combo, curPoseIdx, estPoseConfidence, timeFromPrevPose));
                 }
-                else
-                {
-                    Debug.Log(string.Format("Short: {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
-                }
+                //else
+                //{
+                //    Debug.Log(string.Format("Short: {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
+                //}
             }
-            else
-            {
-                Debug.Log(string.Format("Same Pose: curPose: {0}, estNewPose: {1}", curPoseIdx, estPoseIdx));
-            }
+            //else
+            //{
+            //    Debug.Log(string.Format("Same Pose: curPose: {0}, estNewPose: {1}", curPoseIdx, estPoseIdx));
+            //}
         }
         else
         {
             prevPoseIdx = curPoseIdx;
             curPoseIdx = estPoseIdx;
             posingTimeEllapsed = 0f;
-            combo = 0;
+            if(Time.time - prevPoseTime > SystemConfigs.ComboPoseTime)
+                combo = 0;
         }
     }
 

@@ -52,7 +52,7 @@ public class PoseFX : MonoBehaviour {
         poseImage.enabled = true;
 
         if (combo > 1)
-            comboText.text = combo.ToString();
+            comboText.text = string.Format("x{0} COMBO", combo.ToString());
 
         Invoke("ClearDetection", 2f);
     }
