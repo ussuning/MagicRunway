@@ -90,6 +90,11 @@ public class CoreBrainInternal : ScriptableObject, CoreBrain
         brain = b;
     }
 
+    public void SetBrainData(TextAsset bd)
+    {
+        graphModel = bd;
+    }
+
     /// Loads the tensorflow graph model to generate a TFGraph object
     public void InitializeCoreBrain(Communicator communicator)
     {

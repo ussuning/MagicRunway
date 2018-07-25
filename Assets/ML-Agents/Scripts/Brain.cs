@@ -106,7 +106,7 @@ public class Brain : MonoBehaviour
     // public Dictionary<int, Agent> agents = new Dictionary<int, Agent>();
 
     [SerializeField]
-    ScriptableObject[] CoreBrains;
+    public ScriptableObject[] CoreBrains;
 
     /**<  \brief Reference to the current CoreBrain used by the brain*/
     public CoreBrain coreBrain;

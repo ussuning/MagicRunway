@@ -39,6 +39,7 @@ public class UserManager : Singleton<UserManager>
 
         // get pose agent and attach the brain
         PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
+        poseAgent.Init(userId);
       //  GameObject brainGO = GameObject.Find("Brain");
       //  Brain brain = brainGO.GetComponent<Brain>();
       //  poseAgent.GiveBrain(brain);
