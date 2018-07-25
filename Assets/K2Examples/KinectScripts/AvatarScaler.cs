@@ -330,10 +330,10 @@ public class AvatarScaler : MonoBehaviour
             //Debug.Log("leftUpperLegLength=" + leftUpperLegLength);
             //Debug.Log("leftLowerLegLength=" + leftLowerLegLength);
             float totalLegLength = leftUpperLegLength + leftLowerLegLength + userBodyHeightOffset;
-            leftUpperLegLength = 0.55f * totalLegLength;
-            leftLowerLegLength = 0.45f * totalLegLength;
-            rightUpperLegLength = 0.55f * totalLegLength;
-            rightLowerLegLength = 0.45f * totalLegLength;
+            leftUpperLegLength = 0.5f * totalLegLength;
+            leftLowerLegLength = 0.5f * totalLegLength;
+            rightUpperLegLength = 0.5f * totalLegLength;
+            rightLowerLegLength = 0.5f * totalLegLength;
 
             EqualizeBoneLength(ref leftUpperLegLength, ref rightUpperLegLength);
             EqualizeBoneLength(ref leftLowerLegLength, ref rightLowerLegLength);
@@ -552,6 +552,13 @@ public class AvatarScaler : MonoBehaviour
 		Vector3 posShoulderRight = GetJointPosition(manager, (int)KinectInterop.JointType.ShoulderRight);
         Vector3 posNeck = GetJointPosition(manager, (int)KinectInterop.JointType.Neck);
         Vector3 posSpineShoulder = GetJointPosition(manager, (int)KinectInterop.JointType.SpineShoulder);
+        Vector3 posSpineBase = GetJointPosition(manager, (int)KinectInterop.JointType.SpineBase);
+        Vector3 posElbowLeft = GetJointPosition(manager, (int)KinectInterop.JointType.ElbowLeft);
+        Vector3 posElbowRight = GetJointPosition(manager, (int)KinectInterop.JointType.ElbowRight);
+        Vector3 posKneeLeft = GetJointPosition(manager, (int)KinectInterop.JointType.KneeLeft);
+        Vector3 posKneeRight = GetJointPosition(manager, (int)KinectInterop.JointType.KneeRight);
+        Vector3 posAnkleLeft = GetJointPosition(manager, (int)KinectInterop.JointType.AnkleLeft);
+        Vector3 posAnkleRight = GetJointPosition(manager, (int)KinectInterop.JointType.AnkleRight);
 
         //posShoulderLeft = shoulderGuesser.GetCorrectedShoulderLeftPos();
         //posShoulderRight = shoulderGuesser.GetCorrectedShoulderRightPos();
@@ -559,18 +566,30 @@ public class AvatarScaler : MonoBehaviour
         if (posHipLeft != Vector3.zero && posHipRight != Vector3.zero &&
 		   posShoulderLeft != Vector3.zero && posShoulderRight != Vector3.zero)
         {
-            shoulderFixer.UpdateJointPositions(posShoulderLeft, posShoulderRight, posSpineShoulder, posNeck);
+            shoulderFixer.UpdateJointPositions(posHipLeft, posHipRight, 
+                posKneeLeft, posKneeRight,
+                posAnkleLeft, posAnkleRight, 
+                posShoulderLeft, posShoulderRight, 
+                posElbowLeft, posElbowRight, 
+                posSpineShoulder, posSpineBase, posNeck);
 
             Vector3 posHipCenter = (posHipLeft + posHipRight) / 2f;
 			Vector3 posShoulderCenter = (posShoulderLeft + posShoulderRight) / 2f;
 			//height = (posShoulderCenter.y - posHipCenter.y) * scaleFactor;
 
-			height = ((posShoulderCenter - posHipCenter).magnitude  /*+  (posNeck - posShoulderCenter).magnitude*/) * scaleFactor;
-            heightOffset = (posNeck - posShoulderCenter).magnitude * 0.75f * scaleFactor;
             if (!useWeightedShoulders)
+            {
+                height = (posShoulderCenter - posHipCenter).magnitude * scaleFactor;
                 width = (posShoulderRight - posShoulderLeft).magnitude * widthFactor;
+                heightOffset = 0;// (posNeck - posShoulderCenter).magnitude * 0.75f * scaleFactor;
+            }
             else
+            {
+                height = shoulderFixer.GetMaxConfidenceBodyHeight() * scaleFactor;
                 width = shoulderFixer.GetWeightedWidth() * widthFactor;
+                heightOffset = 0;// shoulderFixer.GetMaxLegsHeightOffset();
+                //Debug.Log("heightOffset =" + heightOffset);
+            }
             //Debug.Log("posShoulderRight =" + posShoulderRight);
             //Debug.Log("posShoulderLeft  =" + posShoulderLeft);
             //Debug.Log("posShoulderSpine =" + posSpineShoulder);
@@ -843,6 +862,10 @@ public class AvatarScalerEditor : Editor
             Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
             Handles.color = Color.white;
             Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderRight);
+            Handles.color = Color.yellow;
+            Handles.DrawLine(t.shoulderFixer.origShoulderLeft, t.shoulderFixer.elbowOnPlane);
+            Handles.color = Color.magenta;
+            Handles.DrawLine(t.shoulderFixer.origShoulderLeft, t.shoulderFixer.origElbowLeft);
         }
     }
 }
