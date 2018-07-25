@@ -96,16 +96,17 @@ public class PoseRecognizingAgent : Agent {
                     prevPoseTime = Time.time;
                     posingTimeEllapsed = 0f;
 
-                    EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, estPoseConfidence, curPoseIdx);
+                    EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, curPoseIdx);
+                    Debug.Log(string.Format("Pose Strike: x{0} Combo, Pose {1} ({2})", combo, curPoseIdx, estPoseConfidence));
                 }
                 else
                 {
-                    Debug.Log(string.Format(" {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
+                    Debug.Log(string.Format("Short: {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
                 }
             }
             else
             {
-                Debug.Log(string.Format(" curPose: {0}, estNewPose: {1}", curPoseIdx, estPoseIdx));
+                Debug.Log(string.Format("Same Pose: curPose: {0}, estNewPose: {1}", curPoseIdx, estPoseIdx));
             }
         }
         else
