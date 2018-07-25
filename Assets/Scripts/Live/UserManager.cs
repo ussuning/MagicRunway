@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UserManager : Singleton<UserManager>
 {
-    public GameObject userSkeletonPrefab;
     public AppManager appManager;
     private GameObject userContainer;
     private string userContainerName;
@@ -29,17 +28,17 @@ public class UserManager : Singleton<UserManager>
         userContainer.transform.SetParent(Users.transform);
 
         // instantiate prefab for new user
-        userSkeletonPrefab = (GameObject)Instantiate(Resources.Load("UserSkeleton"));
-        userSkeletonPrefab.name = "User Skeleton " + playerNumber;
-        userSkeletonPrefab.transform.SetParent(userContainer.transform);
+     //   userSkeletonPrefab = (GameObject)Instantiate(Resources.Load("UserSkeleton"));
+     //   userSkeletonPrefab.name = "User Skeleton " + playerNumber;
+     //   userSkeletonPrefab.transform.SetParent(userContainer.transform);
 
         // get listener and assign for user
-        UserGestureListener userGestureListener = userSkeletonPrefab.GetComponent<UserGestureListener>();
-        userGestureListener.initialize(userId, userIndex);
+    //    UserGestureListener userGestureListener = userSkeletonPrefab.GetComponent<UserGestureListener>();
+    //    userGestureListener.initialize(userId, userIndex);
 
         // get pose agent and attach the brain
-        PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
-        poseAgent.Init(userId);
+     //   PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
+      //  poseAgent.Init(userId);
       //  GameObject brainGO = GameObject.Find("Brain");
       //  Brain brain = brainGO.GetComponent<Brain>();
       //  poseAgent.GiveBrain(brain);

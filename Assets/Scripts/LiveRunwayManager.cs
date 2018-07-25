@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LiveRunwayManager : MonoBehaviour {
-    public GameObject cameraGroup;
+  //  public GameObject cameraGroup;
     public GameObject outfits;
+  //  public GameObject kinectControllerLive;
+    public GameObject fittingRoom;
+  //  public GameObject userModel;
 
     private Collection curCollection;
     private Collection nextCollection;
@@ -23,13 +26,15 @@ public class LiveRunwayManager : MonoBehaviour {
     void Awake()
     {
         UIEvents.OnUpNextCompleteCallback += UIEvents_OnUpNextComplete;
-        cameraGroup.SetActive(false);
+     //   cameraGroup.SetActive(false);
     }
 
     //Setup before starting live mode -- happens before fading in
     public void ReadyLiveRunway()
     {
-        cameraGroup.SetActive(true);
+        AttachFittingRoom();
+      //  AttachKinectController();
+      //  AttachUserModel();
         Setup();
     }
 
@@ -46,15 +51,49 @@ public class LiveRunwayManager : MonoBehaviour {
     public void StopLiveRunway()
     {
         ClearModels();
-        cameraGroup.SetActive(false);
+        
+      //  cameraGroup.SetActive(false);
         UIManager.Instance.HideAll();
+      //  DetachKinectController();
+        DetachFittingRoom();
+      //  DetachUserModel();
     }
 
     public void ShowGestureGender()
     {
         UIManager.Instance.ShowGestureGender(gestureGenderShowLength);
     }
+/*
+    public void AttachKinectController()
+    {
+        kinectControllerLive.SetActive(true);
+    }
 
+    public void DetachKinectController()
+    {
+        kinectControllerLive.SetActive(false);
+    }
+*/
+    public void AttachFittingRoom()
+    {
+        fittingRoom.SetActive(true);
+    }
+
+    public void DetachFittingRoom()
+    {
+        fittingRoom.SetActive(false);
+    }
+/*
+    public void AttachUserModel()
+    {
+        userModel.SetActive(true);
+    }
+
+    public void DetachUserModel()
+    {
+        userModel.SetActive(false);
+    }
+*/
     private void Setup()
     {
         curCollectionIndex = 0;

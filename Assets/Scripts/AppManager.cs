@@ -22,8 +22,9 @@ public class AppManager : MonoBehaviour
         MRData.Instance.LoadEverything();
 
         autoRunwayManager.HideAllLevels();
+        UIManager.Instance.HideHandCursor();
 
-        if(curMode == Mode.LIVE)
+        if (curMode == Mode.LIVE)
         {
             PlayLiveRunway();
         } else
@@ -49,7 +50,7 @@ public class AppManager : MonoBehaviour
 
     public void PlayAutoRunway()
     {
-        liveRunwayManager.StopLiveRunway();
+    //    liveRunwayManager.StopLiveRunway();
         autoRunwayManager.ReadyAutoRunway(PickRandomLevel());
         StartCoroutine(FadeInLevel());
     }
