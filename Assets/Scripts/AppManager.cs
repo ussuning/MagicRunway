@@ -115,8 +115,11 @@ public class AppManager : MonoBehaviour
         UIManager.Instance.HideHandCursor();
         blackoutAnimator.SetBool("FadeOut", true);
         UIManager.Instance.HideStartMenu(true);
+        Debug.Log("Fade OUT start");
         yield return new WaitUntil(() => blackout.color.a == 1);
+        Debug.Log("Fade out return start");
         blackoutAnimator.SetBool("FadeOut", false);
+        Debug.Log("Fade OUT RETURNED!!");
         PlayLiveRunway();
         UIManager.Instance.ShowGestureGender(30.0f);
     }

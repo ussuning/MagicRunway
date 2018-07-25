@@ -9,7 +9,7 @@ public class AutoRunwayManager : MonoBehaviour
 {
     public GameObject runway;
     public GameObject cameraGroup;
-  //  public GameObject kinectControllerAuto;
+    public GameObject outfits;
     public ColliderEvents RunwayMidExit;
     public ColliderEvents RunwayFinish;
     public ColliderEvents RunwayEnd;
@@ -78,7 +78,7 @@ public class AutoRunwayManager : MonoBehaviour
             curLevel = levels[0];
         }
 
-     //   AttachKinectController();
+        AttachOutfits();
         BeginRunwayShow();
     }
 
@@ -86,20 +86,20 @@ public class AutoRunwayManager : MonoBehaviour
     {
         cameraGroup.SetActive(false);
         ClearModels();
-     //   DetachKinectController();
+        DetachOutfits();
         UIManager.Instance.HideAll();
     }
-/*
-    public void AttachKinectController()
+
+    public void AttachOutfits()
     {
-        kinectControllerAuto.SetActive(true);
+        outfits.SetActive(true);
     }
 
-    public void DetachKinectController()
+    public void DetachOutfits()
     {
-        kinectControllerAuto.SetActive(false);
+        outfits.SetActive(false);
     }
-*/
+
     private void Setup()
     {
         curCollectionIndex = 0;
@@ -209,7 +209,6 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void BeginRunwayShow()
     {
-        
         //Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
         AutoRunwayEvents.CollectionStart(curCollection);
         UIManager.Instance.ShowCollection(curCollection);

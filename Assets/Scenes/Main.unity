@@ -1264,6 +1264,7 @@ Transform:
   - {fileID: 1700228264}
   - {fileID: 1828891567}
   - {fileID: 1135347861}
+  - {fileID: 1132182472}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1371,6 +1372,32 @@ Prefab:
     - target: {fileID: 1397753557676928, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4019385311799562, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 224672984980265910, guid: 88b77abc855415b4e821200dd0bc69e0,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4589410788279866, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4921052145887266, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 224495291407609534, guid: 88b77abc855415b4e821200dd0bc69e0,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4576565277415782, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
@@ -2820,6 +2847,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runway: {fileID: 1828891565}
   cameraGroup: {fileID: 1793980282}
+  outfits: {fileID: 1132182471}
   RunwayMidExit: {fileID: 1828891568}
   RunwayFinish: {fileID: 1828891566}
   RunwayEnd: {fileID: 1828891569}
@@ -2878,7 +2906,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outfits: {fileID: 1132182471}
+  canvas: {fileID: 1257487909}
   fittingRoom: {fileID: 86555557}
+  userModel: {fileID: 1648873011}
 --- !u!1 &1066975413
 GameObject:
   m_ObjectHideFlags: 0
@@ -3034,8 +3064,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 279447204}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1135347860 stripped
 GameObject:
@@ -3247,7 +3277,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1257487909}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
@@ -3361,7 +3391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981d8b4b42176494bb7f5d513fc35469, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foregroundCamera: {fileID: 0}
+  foregroundCamera: {fileID: 332944801}
   playerIndex: 0
   jointPrefab: {fileID: 117786, guid: c17b901a469cc934f88f499251bed1bc, type: 2}
   linePrefab: {fileID: 12015332, guid: 1bffce44dbf8bc640b2bab2cc2338a46, type: 2}
@@ -3376,9 +3406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f592d25590649d41a97ee9caae5fd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundCamera: {fileID: 0}
-  backgroundCamera2: {fileID: 0}
-  foregroundCamera: {fileID: 0}
+  backgroundCamera: {fileID: 1999457807}
+  backgroundCamera2: {fileID: 1516950169}
+  foregroundCamera: {fileID: 332944801}
 --- !u!114 &1314250650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4009,7 +4039,7 @@ MonoBehaviour:
   legLengthAxis: 0
   continuousScaling: 1
   smoothFactor: 5
-  foregroundCamera: {fileID: 0}
+  foregroundCamera: {fileID: 332944801}
   backgroundPlane: {fileID: 0}
   debugText: {fileID: 0}
   useWeightedShoulders: 1
@@ -4034,7 +4064,7 @@ MonoBehaviour:
   moveRate: 1
   smoothFactor: 0
   offsetNode: {fileID: 0}
-  posRelativeToCamera: {fileID: 0}
+  posRelativeToCamera: {fileID: 332944801}
   posRelOverlayColor: 1
   backgroundPlane: {fileID: 0}
   posRelInvertedZ: 0

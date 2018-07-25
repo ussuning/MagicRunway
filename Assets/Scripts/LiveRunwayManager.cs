@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LiveRunwayManager : MonoBehaviour {
-  //  public GameObject cameraGroup;
     public GameObject outfits;
-  //  public GameObject kinectControllerLive;
+    public GameObject canvas;
     public GameObject fittingRoom;
-  //  public GameObject userModel;
+    public GameObject userModel;
 
     private Collection curCollection;
     private Collection nextCollection;
@@ -26,15 +25,14 @@ public class LiveRunwayManager : MonoBehaviour {
     void Awake()
     {
         UIEvents.OnUpNextCompleteCallback += UIEvents_OnUpNextComplete;
-     //   cameraGroup.SetActive(false);
     }
 
     //Setup before starting live mode -- happens before fading in
     public void ReadyLiveRunway()
     {
         AttachFittingRoom();
-      //  AttachKinectController();
-      //  AttachUserModel();
+        AttachCanvas();
+        AttachUserModel();
         Setup();
     }
 
@@ -52,28 +50,27 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         ClearModels();
         
-      //  cameraGroup.SetActive(false);
         UIManager.Instance.HideAll();
-      //  DetachKinectController();
+        DetachCanvas();
         DetachFittingRoom();
-      //  DetachUserModel();
+        DetachUserModel();
     }
 
     public void ShowGestureGender()
     {
         UIManager.Instance.ShowGestureGender(gestureGenderShowLength);
     }
-/*
-    public void AttachKinectController()
+
+    public void AttachCanvas()
     {
-        kinectControllerLive.SetActive(true);
+        canvas.SetActive(true);
     }
 
-    public void DetachKinectController()
+    public void DetachCanvas()
     {
-        kinectControllerLive.SetActive(false);
+        canvas.SetActive(false);
     }
-*/
+
     public void AttachFittingRoom()
     {
         fittingRoom.SetActive(true);
@@ -83,7 +80,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         fittingRoom.SetActive(false);
     }
-/*
+
     public void AttachUserModel()
     {
         userModel.SetActive(true);
@@ -93,7 +90,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         userModel.SetActive(false);
     }
-*/
+
     private void Setup()
     {
         curCollectionIndex = 0;
