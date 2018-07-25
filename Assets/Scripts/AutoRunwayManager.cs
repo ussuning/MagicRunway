@@ -9,11 +9,14 @@ public class AutoRunwayManager : MonoBehaviour
 {
     public GameObject runway;
     public GameObject cameraGroup;
+    public GameObject autoRunwayContainer;
     public ColliderEvents RunwayMidExit;
     public ColliderEvents RunwayFinish;
     public ColliderEvents RunwayEnd;
     public List<GameObject> levels;
     public GameObject curLevel;
+
+    private GameObject agents;
 
     private bool loop = false;
     private int loopAmount = 1;
@@ -33,10 +36,20 @@ public class AutoRunwayManager : MonoBehaviour
     private Collection curCollection;
 
     private List<GameObject> models = new List<GameObject>();
-    private Vector3 startingPoint = new Vector3(6, 0, -2.4f);
+    private Vector3 startingPoint = new Vector3(9.0f, 0, -5.0f);
+    //private Vector3 startingPoint = new Vector3(6, 0, -2.4f);
 
     void Awake()
     {
+        if (autoRunwayContainer == null)
+        {
+            autoRunwayContainer = GameObject.Find("Auto Runway");
+            
+        }
+
+        agents = new GameObject("Agents");
+        agents.transform.parent = autoRunwayContainer.transform;
+
         cameraGroup.SetActive(false);
         SetupEvents();
     }
@@ -135,7 +148,7 @@ public class AutoRunwayManager : MonoBehaviour
         {
             string sex = (outfit.sex == "f") ? "Female" : "Male";
             string path = "RunwayModels/"+sex+"/"+outfit.prefab;
-            GameObject go = RunwayModelsPrefabManager.InstantiateGameObject(path, runway.transform);
+            GameObject go = RunwayModelsPrefabManager.InstantiateGameObject(path, agents.transform);
             
             go.SetActive(true);
 
@@ -173,6 +186,21 @@ public class AutoRunwayManager : MonoBehaviour
         } else
         {
             StartCoroutine(WaitToNextCollection(pauseToNextCollection));
+        }
+    }
+
+    private void ClearModel(GameObject model)
+    {
+        Debug.Log("DELETE MODEL " + model.name);
+        GameObject parent = model.transform.parent.gameObject;
+        Destroy(parent);
+        for (int x = 0; x < models.Count; x++)
+        {
+            if (models[x] == parent)
+            {
+                models.RemoveAt(x);
+                return;
+            }
         }
     }
 
@@ -217,10 +245,12 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void CheckCompletion(GameObject model)
     {
+        //Debug.Log("MODEL IS AT END");
         if(isCollectionEnding == false) { return; }
         //Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
         if (showFinale == true && isInFinale == false)
         {
+            //Debug.Log("WALK ENDED AND BEGINNING FINALE");
             AutoRunwayEvents.FinaleStart(curCollection);
             BeginFinale();
         }
@@ -228,6 +258,7 @@ public class AutoRunwayManager : MonoBehaviour
         {
             if (isInFinale == true)
             {
+                //Debug.Log("MODEL FINISHED WALKING IN FINALE");
                 ClearModel(model);
 
                 if (models.Count == 0)
@@ -244,24 +275,14 @@ public class AutoRunwayManager : MonoBehaviour
             } 
             else
             {
+                //Debug.Log("ALL MODELS FINISHED WALKING");
                 AutoRunwayEvents.CollectionEnd(curCollection);
                 PrepareNextCollection();
             }
         }
     }
 
-    private void ClearModel(GameObject model)
-    {
-        Destroy(model);
-        for (int x=0; x<models.Count; x++)
-        {
-            if (models[x] == model)
-            {
-                models.RemoveAt(x);
-                return;
-            }
-        }
-    }
+    
 
     private void QueueUp()
     {
@@ -314,7 +335,8 @@ public class AutoRunwayManager : MonoBehaviour
         string animation = ModelAnimationManager.GetPoseAnimation(outfit.sex);
 
         animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(Resources.Load(animation), model.transform);
-  
+        animator.enabled = true;
+
         model.SetActive(true);
 
         ObiSolver[] oss = model.GetComponentsInChildren<ObiSolver>();
@@ -367,11 +389,13 @@ public class AutoRunwayManager : MonoBehaviour
         Animator animator = other.gameObject.GetComponent<Animator>();
         if (animator == null)
             animator = other.gameObject.GetComponentInParent<Animator>();
-        animator.gameObject.SetActive(false);
-        
-        animator.runtimeAnimatorController = null;
 
-        CheckCompletion(animator.gameObject);
+        animator.enabled = false;
+        animator.runtimeAnimatorController = null;
+ 
+        animator.gameObject.SetActive(false);
+
+        CheckCompletion(other.gameObject);
     }
 
     private void OnRunwayMidExit(Collider other)

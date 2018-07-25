@@ -227,18 +227,19 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayEnter(Collider model)
     {
-        Debug.Log("HERE COMES A NEW CHALLENGER!");
+        Debug.Log("HERE COMES A NEW CHALLENGER!" + model.ToString());
         if (modelsOnRunway.history.ContainsKey(model) == false)
         {
             modelsOnRunway.history.Add(model, Time.unscaledTime);
         }
 
         modelsOnRunway.active.Add(model);
-        curCamFollowState = AutoRunwayCameraFollowState.FOLLOW;
+        //curCamFollowState = AutoRunwayCameraFollowState.FOLLOW;
     }
 
     private void OnRunwayMidEnter(Collider model)
     {
+        Debug.Log("SLOW MO TIME!  " + model.ToString());
         if (modelsInMidZone.history.ContainsKey(model) == false)
         {
             modelsInMidZone.history.Add(model, Time.unscaledTime);
@@ -252,7 +253,6 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayMidExit(Collider model)
     {
-        Debug.Log("EXIT");
         CamerasReset();
 
         //Model Exiting Mid Zone 2nd time
@@ -313,8 +313,8 @@ public class RunwayCameraController : MonoBehaviour {
         if (RunwayExitEvents == null)
             RunwayExitEvents = GameObject.Find("RunwayExit")?.GetComponent<ColliderEvents>();
 
-        RunwayMidEvents.OnTriggerEnterEvt += OnRunwayMidEnter;
-        RunwayMidEvents.OnTriggerExitEvt += OnRunwayMidExit;
+        //RunwayMidEvents.OnTriggerEnterEvt += OnRunwayMidEnter;
+        //RunwayMidEvents.OnTriggerExitEvt += OnRunwayMidExit;
 
         RunwayEnterEvents.OnTriggerEnterEvt += OnRunwayEnter;
         RunwayExitEvents.OnTriggerEnterEvt += OnRunwayExit;
