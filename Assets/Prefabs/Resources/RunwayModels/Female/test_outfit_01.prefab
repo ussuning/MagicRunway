@@ -3151,6 +3151,7 @@ MonoBehaviour:
   flipLeftRight: 0
   verticalOffset: 0
   forwardOffset: 0
+  shoulderUnrotateFactor: 1
   HipCenter: {fileID: 4956286719263974}
   Spine: {fileID: 4879559463581078}
   ShoulderCenter: {fileID: 4415072462280430}
@@ -3219,7 +3220,7 @@ MonoBehaviour:
   armGirthFactor: 1
   armLengthAxis: 0
   legScaleFactor: 1
-  legGirthFactor: 0.8
+  legGirthFactor: 1
   lowerLegGirthFactor: 1
   legLengthAxis: 1
   continuousScaling: 1

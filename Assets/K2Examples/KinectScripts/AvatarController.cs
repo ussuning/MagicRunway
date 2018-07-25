@@ -75,8 +75,12 @@ public class AvatarController : MonoBehaviour
 	[Range(-0.5f, 0.5f)]
 	public float forwardOffset = 0f;
 
-	// userId of the player
-	[NonSerialized]
+    [Tooltip("Forward offset of the avatar with respect to the position of user's spine-base.")]
+    [Range(-2.0f, 2.0f)]
+    public float shoulderUnrotateFactor = 1.0f;
+
+    // userId of the player
+    [NonSerialized]
 	public Int64 playerId = 0;
 
 
@@ -696,8 +700,7 @@ public class AvatarController : MonoBehaviour
 		{
 			newRotation = transform.rotation * newRotation;
 		}
-
-        Quaternion q1 = new Quaternion(boneTransform.rotation.x, boneTransform.rotation.y, boneTransform.rotation.z, boneTransform.rotation.w);
+        
 
         // Smoothly transition to the new rotation
         if (smoothFactor != 0f)
@@ -706,19 +709,15 @@ public class AvatarController : MonoBehaviour
             boneTransform.rotation = newRotation;
 
         if (joint == KinectInterop.JointType.ShoulderLeft || joint == KinectInterop.JointType.ShoulderRight)
-        {
+        {   
             if (avatarScaler != null)
             {
                 ShoulderFixer sg = avatarScaler.shoulderFixer;
 
                 float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp);
-                //Debug.Log("ShoulderAngle = " + shoulderAngle);
+                float elbowDotShoulderUpPlane = joint == KinectInterop.JointType.ShoulderLeft ? sg.elbowLeftDotShoulderUpPlane : sg.elbowRightDotShoulderUpPlane;
+                boneTransform.Rotate(sg.shoulderTUp, elbowDotShoulderUpPlane * shoulderAngle * shoulderUnrotateFactor, Space.World);
 
-                //float shouldersDotCamera = Vector3.Dot((sg.origShoulderLeft - sg.origShoulderRight).normalized, avatarScaler.foregroundCamera.transform.forward);
-                float sideFactor = 1.0f; // joint == KinectInterop.JointType.ShoulderLeft ? 1.0f : -1.0f;
-                float frontFactor = 1.0f;// sg.correctedShoulderRight.z > sg.correctedShoulderLeft.z ? 1.0f : -1.0f;
-                boneTransform.Rotate(sg.shoulderTUp, sideFactor * frontFactor * shoulderAngle, Space.World);
-                //boneTransform.rotation = q1;
             }
         }
     }
