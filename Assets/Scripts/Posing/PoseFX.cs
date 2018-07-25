@@ -39,9 +39,9 @@ public class PoseFX : MonoBehaviour {
     {
         GameObject particleGO;
         if (combo <= partileFX.Length)
-            particleGO = (GameObject)Instantiate(partileFX[combo - 1], transform.parent.position, Quaternion.identity);
+            particleGO = (GameObject)Instantiate(partileFX[combo - 1], transform.parent.position + new Vector3(0, 1, 0), Quaternion.identity);
         else
-            particleGO = (GameObject)Instantiate(partileFX[partileFX.Length - 1], transform.parent.position, Quaternion.identity);
+            particleGO = (GameObject)Instantiate(partileFX[partileFX.Length - 1], transform.parent.position + new Vector3(0, 1, 0), Quaternion.identity);
     }
 
     void UpdateDetectedPoseImage(int poseIdx, float combo = 0f)

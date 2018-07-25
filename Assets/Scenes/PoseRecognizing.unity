@@ -273,6 +273,7 @@ MonoBehaviour:
   flipLeftRight: 0
   verticalOffset: 0
   forwardOffset: 0
+  shoulderUnrotateFactor: 1
 --- !u!1001 &209499065
 Prefab:
   m_ObjectHideFlags: 0
@@ -1096,6 +1097,7 @@ MonoBehaviour:
   flipLeftRight: 0
   verticalOffset: 0
   forwardOffset: 0
+  shoulderUnrotateFactor: 1
 --- !u!114 &1203305701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1291,7 +1293,7 @@ GameObject:
   - component: {fileID: 1614295839}
   - component: {fileID: 1614295838}
   m_Layer: 0
-  m_Name: DetectionConfidence
+  m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1317,14 +1319,14 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1614295836}
-  m_Text: Confidence
+  m_Text: 
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
   m_Anchor: 4
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 12
+  m_FontSize: 6
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}

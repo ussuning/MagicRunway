@@ -23,12 +23,6 @@ public class PoseRecognizingAgent : Agent {
 
     private float estPoseConfidence;
 
-    //void Start()
-    //{
-    //    if (manager == null)
-    //        manager = KinectManager.Instance;
-    //}
-
     public void Init(long userID)
     {
         manager = KinectManager.Instance;
@@ -40,84 +34,8 @@ public class PoseRecognizingAgent : Agent {
         estimationTimeEllapsed += Time.deltaTime;
         posingTimeEllapsed += Time.deltaTime;
 
-        if(estimationTimeEllapsed > SystemConfigs.PoseEstimationTimeFrame)
-        {
-            if(PoseCountsWithinTimeFrame.Count > 0)
-            {
-                int maxCounts = 0;
-                int probablePoseIdx = 0;
-                int totalCounts = 0;
-                foreach(int poseIdx in PoseCountsWithinTimeFrame.Keys)
-                {
-                    if(PoseCountsWithinTimeFrame[poseIdx] > maxCounts)
-                    {
-                        probablePoseIdx = poseIdx;
-                        maxCounts = PoseCountsWithinTimeFrame[poseIdx];
-                    }
-                    totalCounts += PoseCountsWithinTimeFrame[poseIdx];
-                }
-
-                estPoseConfidence = (float)maxCounts / totalCounts;
-                if (probablePoseIdx > 0 && estPoseConfidence > minConfidence)
-                {
-                    estPoseIdx = probablePoseIdx; 
-                }
-                else
-                {
-                    estPoseIdx = 0;
-                }    
-            }
-
-            estimationTimeEllapsed = 0f;
-            PoseCountsWithinTimeFrame.Clear();
-        }
-    }
-
-    void LateUpdate()
-    {
-        if(estPoseIdx != 0 && estPoseIdx != 10)
-        {
-            if (curPoseIdx != estPoseIdx)
-            {
-                if (posingTimeEllapsed > SystemConfigs.PosingTime)
-                {
-                    float timeFromPrevPose = Time.time - prevPoseTime;
-                    if (Time.time - prevPoseTime <= SystemConfigs.ComboPoseTime)
-                    {
-                        combo++;
-                    }
-                    else
-                    {
-                        combo = 1;
-                    }
-
-                    prevPoseIdx = curPoseIdx;
-                    curPoseIdx = estPoseIdx;
-
-                    prevPoseTime = Time.time;
-                    posingTimeEllapsed = 0f;
-
-                    EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, curPoseIdx);
-                    //Debug.Log(string.Format("Pose Strike: x{0} Combo, Pose {1} ({2}: {3})", combo, curPoseIdx, estPoseConfidence, timeFromPrevPose));
-                }
-                //else
-                //{
-                //    Debug.Log(string.Format("Short: {0} posingTimeEllapsed = {1}", estPoseIdx, posingTimeEllapsed));
-                //}
-            }
-            //else
-            //{
-            //    Debug.Log(string.Format("Same Pose: curPose: {0}, estNewPose: {1}", curPoseIdx, estPoseIdx));
-            //}
-        }
-        else
-        {
-            prevPoseIdx = curPoseIdx;
-            curPoseIdx = estPoseIdx;
-            posingTimeEllapsed = 0f;
-            if(Time.time - prevPoseTime > SystemConfigs.ComboPoseTime)
-                combo = 0;
-        }
+        EstimatePose();
+        UpdatePose();
     }
 
     public override void InitializeAgent()
@@ -188,6 +106,76 @@ public class PoseRecognizingAgent : Agent {
         estPoseIdx = 0;
         prevPoseIdx = 0;
         posingTimeEllapsed = 0f;
+    }
+
+    void EstimatePose()
+    {
+        if (estimationTimeEllapsed > SystemConfigs.PoseEstimationTimeFrame)
+        {
+            if (PoseCountsWithinTimeFrame.Count > 0)
+            {
+                int maxCounts = 0;
+                int probablePoseIdx = 0;
+                int totalCounts = 0;
+                foreach (int poseIdx in PoseCountsWithinTimeFrame.Keys)
+                {
+                    if (PoseCountsWithinTimeFrame[poseIdx] > maxCounts)
+                    {
+                        probablePoseIdx = poseIdx;
+                        maxCounts = PoseCountsWithinTimeFrame[poseIdx];
+                    }
+                    totalCounts += PoseCountsWithinTimeFrame[poseIdx];
+                }
+
+                estPoseConfidence = (float)maxCounts / totalCounts;
+                if (probablePoseIdx > 0 && estPoseConfidence > minConfidence)
+                {
+                    estPoseIdx = probablePoseIdx;
+                }
+                else
+                {
+                    estPoseIdx = 0;
+                }
+            }
+
+            estimationTimeEllapsed = 0f;
+            PoseCountsWithinTimeFrame.Clear();
+        }
+    }
+
+    void UpdatePose()
+    {
+        if (estPoseIdx != 0 && estPoseIdx != 10) 
+        {
+            if (curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
+            {
+                float timeFromPrevPose = Time.time - prevPoseTime;
+                if (timeFromPrevPose <= SystemConfigs.ComboPoseTime)
+                {
+                    combo++;
+                }
+                else
+                {
+                    combo = 1;
+                }
+
+                prevPoseIdx = curPoseIdx;
+                curPoseIdx = estPoseIdx;
+
+                prevPoseTime = Time.time;
+                posingTimeEllapsed = 0f;
+
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, combo, curPoseIdx);
+            }
+        }
+        else
+        {
+            prevPoseIdx = curPoseIdx;
+            curPoseIdx = estPoseIdx;
+            posingTimeEllapsed = 0f;
+            if (Time.time - prevPoseTime > SystemConfigs.ComboPoseTime)
+                combo = 0;
+        }
     }
 
     //Normalizing to [-1, 1]

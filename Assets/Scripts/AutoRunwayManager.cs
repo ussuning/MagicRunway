@@ -10,6 +10,8 @@ public class AutoRunwayManager : MonoBehaviour
     public GameObject runway;
     public GameObject cameraGroup;
     public GameObject autoRunwayContainer;
+  //  public GameObject kinectControllerAuto;
+
     public ColliderEvents RunwayMidExit;
     public ColliderEvents RunwayFinish;
     public ColliderEvents RunwayEnd;
@@ -89,7 +91,8 @@ public class AutoRunwayManager : MonoBehaviour
         {
             curLevel = levels[0];
         }
-        
+
+     //   AttachKinectController();
         BeginRunwayShow();
     }
 
@@ -97,9 +100,20 @@ public class AutoRunwayManager : MonoBehaviour
     {
         cameraGroup.SetActive(false);
         ClearModels();
+     //   DetachKinectController();
         UIManager.Instance.HideAll();
     }
+/*
+    public void AttachKinectController()
+    {
+        kinectControllerAuto.SetActive(true);
+    }
 
+    public void DetachKinectController()
+    {
+        kinectControllerAuto.SetActive(false);
+    }
+*/
     private void Setup()
     {
         curCollectionIndex = 0;
