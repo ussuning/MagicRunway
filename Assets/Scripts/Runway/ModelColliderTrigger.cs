@@ -111,7 +111,10 @@ public class ModelColliderTrigger : MonoBehaviour {
             return;
 
         //Debug.Log("ModelColliderTrigger::OnRunwayEndTriggerEnter " + other.name);
-        colliderTriggered.Add(runwayEnd.name, true);
+        if (colliderTriggered.ContainsKey(runwayEnd.name) == false)
+        {
+            colliderTriggered.Add(runwayEnd.name, true);
+        }
         animator.SetTrigger("RunwayEndReached");
     }
 

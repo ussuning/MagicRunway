@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: c78e23db6c4b06a43b70861fa9b6515e
+guid: 3c93acac1e5da0e4a98ee98f5b5861cf
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Cube
-    100002: Cube.001
-    100004: Cube.002
-    100006: Cube.004
+    100000: Back Wall
+    100002: Left Wall
+    100004: Right Wall
+    100006: Runway
     100008: //RootNode
-    400000: Cube
-    400002: Cube.001
-    400004: Cube.002
-    400006: Cube.004
+    400000: Back Wall
+    400002: Left Wall
+    400004: Right Wall
+    400006: Runway
     400008: //RootNode
     2100000: No Name
-    2300000: Cube
-    2300002: Cube.001
-    2300004: Cube.002
-    2300006: Cube.004
-    3300000: Cube
-    3300002: Cube.001
-    3300004: Cube.002
-    3300006: Cube.004
-    4300000: Cube.004
-    4300002: Cube.002
-    4300004: Cube.001
-    4300006: Cube
+    2300000: Back Wall
+    2300002: Left Wall
+    2300004: Right Wall
+    2300006: Runway
+    3300000: Back Wall
+    3300002: Left Wall
+    3300004: Right Wall
+    3300006: Runway
+    4300000: Left Wall
+    4300002: Right Wall
+    4300004: Runway
+    4300006: Back Wall
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -65,7 +65,7 @@ ModelImporter:
     importCameras: 1
     importLights: 1
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
