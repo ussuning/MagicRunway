@@ -313,8 +313,8 @@ public class RunwayCameraController : MonoBehaviour {
         if (RunwayExitEvents == null)
             RunwayExitEvents = GameObject.Find("RunwayExit")?.GetComponent<ColliderEvents>();
 
-        //RunwayMidEvents.OnTriggerEnterEvt += OnRunwayMidEnter;
-        //RunwayMidEvents.OnTriggerExitEvt += OnRunwayMidExit;
+        RunwayMidEvents.OnTriggerEnterEvt += OnRunwayMidEnter;
+        RunwayMidEvents.OnTriggerExitEvt += OnRunwayMidExit;
 
         RunwayEnterEvents.OnTriggerEnterEvt += OnRunwayEnter;
         RunwayExitEvents.OnTriggerEnterEvt += OnRunwayExit;

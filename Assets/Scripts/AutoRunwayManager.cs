@@ -37,7 +37,7 @@ public class AutoRunwayManager : MonoBehaviour
     private Collection curCollection;
 
     private List<GameObject> models = new List<GameObject>();
-    private Vector3 startingPoint = new Vector3(9.0f, 0, -5.0f);
+    private Vector3 startingPoint = new Vector3(5.5f, 0.04f, -5.0f);
     //private Vector3 startingPoint = new Vector3(6, 0, -2.4f);
 
     void Awake()
