@@ -47,9 +47,15 @@ public class ModelColliderTrigger : MonoBehaviour {
 
     private void RemoveListeners()
     {
-        runwayEnd.OnTriggerEnterEvt -= OnRunwayEndTriggerEnter;
-        runwayExit.OnTriggerEnterEvt -= OnRunwayExitTriggerEnter;
-        runwayFinish.OnTriggerEnterEvt -= OnRunwayFinishTriggerEnter;
+        if (!listenersAdded)
+            return;
+
+        if (runwayEnd != null)
+            runwayEnd.OnTriggerEnterEvt -= OnRunwayEndTriggerEnter;
+        if (runwayExit != null)
+            runwayExit.OnTriggerEnterEvt -= OnRunwayExitTriggerEnter;
+        if (runwayFinish != null)
+            runwayFinish.OnTriggerEnterEvt -= OnRunwayFinishTriggerEnter;
         listenersAdded = false;
     }
 

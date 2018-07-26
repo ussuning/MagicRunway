@@ -406,6 +406,9 @@ namespace MR
         //Breadth-first search
         public static Transform FindDeepChild(this Transform aParent, string aName)
         {
+            if (aParent.name == aName)
+                return aParent;
+
             var result = aParent.Find(aName);
             if (result != null)
                 return result;
@@ -416,6 +419,25 @@ namespace MR
                     return result;
             }
             return null;
+        }
+    }
+
+    public static class TransformToTransformValuesExtension
+    {
+        public static TransformDeepCopy.TransformValues ToTransformValues(this Transform t)
+        {
+            TransformDeepCopy.TransformValues transformValues;
+            transformValues.localPosition = t.localPosition;
+            transformValues.localRotation = t.localRotation;
+            transformValues.localScale = t.localScale;
+            return transformValues;
+        }
+
+        public static void ApplyTransformValues(this Transform t, TransformDeepCopy.TransformValues transformValues)
+        {
+            t.localPosition = transformValues.localPosition;
+            t.localRotation = transformValues.localRotation;
+            t.localScale = transformValues.localScale;
         }
     }
 
