@@ -145,7 +145,7 @@ public class PoseRecognizingAgent : Agent {
 
     void UpdatePose()
     {
-        if (estPoseIdx != 0 && estPoseIdx != 10) 
+        if (estPoseIdx != 0 /*&& estPoseIdx != 10*/) 
         {
             if (curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
             {
