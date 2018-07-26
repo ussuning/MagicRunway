@@ -15,6 +15,12 @@ public class RunwayCameraController : MonoBehaviour {
     public ColliderEvents RunwayExitEvents;
 
     public Transform camLookAt;
+    public Transform camLookAtFinal;
+
+    [Tooltip("Higher value increase camera responsiveness, but may have more jitter. Lower values increase smoothness, but lower lookAt responsiveness.")]
+    [Range(0.1f, 10.0f)]
+    public float camLerpFactor = 2.0f;
+
     public Camera MainCamera;
     public Camera SlowMoCamera;
     //public GameObject MidFlashes;
@@ -142,14 +148,17 @@ public class RunwayCameraController : MonoBehaviour {
             Vector3 max = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.max.y, 0.15f), b.center.z);
             Vector3 min = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.min.y, 0.1f), b.center.z);
 
-            camLookAt.position = Vector3.Lerp(min, max, t);
+            camLookAtFinal.position = Vector3.Lerp(min, max, t);
         }
         else
         {
-            camLookAt.position = b.center;
+            camLookAtFinal.position = b.center;
         }
 
         UpdateMainCameraZoom(b);
+
+        // Lerp camLookAt towards camLookAtFinal
+        camLookAt.transform.position = Vector3.Lerp(camLookAt.transform.position, camLookAtFinal.transform.position, Time.deltaTime * camLerpFactor);
         activeCam.transform.LookAt(camLookAt);
     }
    
@@ -193,7 +202,7 @@ public class RunwayCameraController : MonoBehaviour {
 
         SlowMoCamera.transform.eulerAngles = new Vector3(slowMoCamOriginRot.x, slowMoCamOriginRot.y, slowMoCamOriginRot.z);
 
-        curCamFollowState = AutoRunwayCameraFollowState.NONE;
+        //curCamFollowState = AutoRunwayCameraFollowState.NONE;
     }
 
     private void SelectCamera(AutoRunwayCamera arc)
