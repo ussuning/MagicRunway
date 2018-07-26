@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using MR;
 
 public class LimbObjectTransferer : MonoBehaviour {
@@ -40,17 +42,23 @@ public class LimbObjectTransferer : MonoBehaviour {
 
     public void SelectInSource() {
         LimbObject [] limbObjs = source.GetComponentsInChildren<LimbObject>();
+#if UNITY_EDITOR
         Selection.objects = limbObjs;
+#endif
     }
 
     public void SelectInDest()
     {
         LimbObject[] limbObjs = destination.GetComponentsInChildren<LimbObject>();
+
+#if UNITY_EDITOR
         Selection.objects = limbObjs;
+#endif
     }
 }
 
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(LimbObjectTransferer))]
 public class LimbObjectTransfererEditor : Editor
 {
@@ -79,3 +87,4 @@ public class LimbObjectTransfererEditor : Editor
         }
     }
 }
+#endif

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class SphereColliderGenerator : MonoBehaviour {
 
@@ -59,6 +61,7 @@ public class SphereColliderGenerator : MonoBehaviour {
 }
 
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(SphereColliderGenerator))]
 public class SphereColliderGeneratorEditor : Editor
 {
@@ -78,3 +81,4 @@ public class SphereColliderGeneratorEditor : Editor
         }
     }
 }
+#endif

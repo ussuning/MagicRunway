@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Obi;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 [ExecuteInEditMode]
 public class ClothCalibrationMeshCull : MonoBehaviour
@@ -98,6 +100,7 @@ public class ClothCalibrationMeshCull : MonoBehaviour
 
 
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(ClothCalibrationMeshCull))]
 public class ClothCalibrationMeshCullEditor : Editor
 {
@@ -116,3 +119,4 @@ public class ClothCalibrationMeshCullEditor : Editor
         }
     }
 }
+#endif

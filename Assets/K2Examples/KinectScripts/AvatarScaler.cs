@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Avatar scaler is the component that scales avatar's body, according to body measures of the user.
@@ -848,6 +851,7 @@ public class AvatarScaler : MonoBehaviour
 
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(AvatarScaler))]
 public class AvatarScalerEditor : Editor
 {
@@ -872,3 +876,4 @@ public class AvatarScalerEditor : Editor
         }
     }
 }
+#endif

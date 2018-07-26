@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Obi;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System;
 
 [ExecuteInEditMode]
@@ -144,7 +146,7 @@ public class ClothCalibration : MonoBehaviour
 }
 
 
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(ClothCalibration))]
 public class ClothCalibrationEditor : Editor
 {
@@ -163,6 +165,7 @@ public class ClothCalibrationEditor : Editor
         }
     }
 }
+#endif
 
 
 

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using MR;
 
 // This should be used on clothing prefabs, in editor mod. 
@@ -102,6 +104,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
 
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(AvatarControllerBootstrap))]
 public class AvatarControllerBootstrapEditor : Editor
 {
@@ -116,3 +119,4 @@ public class AvatarControllerBootstrapEditor : Editor
         }
     }
 }
+#endif
