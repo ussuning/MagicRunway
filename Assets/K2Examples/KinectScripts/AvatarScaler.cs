@@ -412,6 +412,9 @@ public class AvatarScaler : MonoBehaviour
 				fRightLowerLegLength, lowerLegGirthFactor, fScaleRightUpperLeg, fSmooth, ref fScaleRightLowerLeg, legLengthAxis);
 		}
 
+        // scale neck
+        
+
 		if(debugText != null)
 		{
 			string sDebug = string.Format("BW: {0:F2}/{1:F3}, BH: {2:F2}/{3:F3}\nLUA: {4:F3}, LLA: {5:F3}; RUA: {6:F3}, RLA: {7:F3}\nLUL: {8:F3}, LLL: {9:F3}; RUL: {10:F3}, RLL: {11:F3}",
@@ -585,9 +588,9 @@ public class AvatarScaler : MonoBehaviour
             }
             else
             {
-                height = shoulderFixer.GetMaxConfidenceBodyHeight() * scaleFactor;
-                width = shoulderFixer.GetWeightedWidth() * widthFactor;
-                heightOffset = 0;// shoulderFixer.GetMaxLegsHeightOffset();
+                height = shoulderFixer.BodyHeight.currConfidenceValue * scaleFactor;
+                width = shoulderFixer.BodyWidth.GetWeightedValue() * widthFactor;
+                heightOffset = shoulderFixer.GetMaxLegsHeightOffset();
                 //Debug.Log("heightOffset =" + heightOffset);
             }
             //Debug.Log("posShoulderRight =" + posShoulderRight);
@@ -858,8 +861,8 @@ public class AvatarScalerEditor : Editor
             Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTForward);
             Handles.color = Color.green;
             Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTUp);
-            Handles.color = Color.red;
-            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
+            //Handles.color = Color.red;
+            //Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
             Handles.color = Color.white;
             Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderRight);
             Handles.color = Color.yellow;

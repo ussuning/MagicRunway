@@ -440,6 +440,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4956286719263974}
+  - component: {fileID: 114909032556286582}
   m_Layer: 0
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -963,7 +964,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1744933275795296
 GameObject:
   m_ObjectHideFlags: 1
@@ -81260,6 +81261,18 @@ MonoBehaviour:
   - 0.0012510386
   - 0.0012664706
   - 0.0006352382
+--- !u!114 &114909032556286582
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1284966541145224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06f0e20381b3f5d479f8455fcf5d8112, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {fileID: 0}
 --- !u!114 &114947283734361060
 MonoBehaviour:
   m_ObjectHideFlags: 1

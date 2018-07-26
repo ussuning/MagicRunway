@@ -7,7 +7,7 @@ using MR;
 public class ShoulderFixer {
     protected AvatarScaler avatarScaler;
 
-    struct ConfidenceValue
+    public struct ConfidenceValue
     {
         public float maxConfidence;
         public float maxConfidenceValue;
@@ -36,9 +36,9 @@ public class ShoulderFixer {
         }
     }
 
-    ConfidenceValue BodyWidth;
-    ConfidenceValue BodyHeight;
-    ConfidenceValue LegsHeight;
+    public ConfidenceValue BodyWidth;
+    public ConfidenceValue BodyHeight;
+    public ConfidenceValue LegsHeight;
 
     public Vector3 correctedShoulderLeft;
     public Vector3 correctedShoulderRight;
@@ -81,24 +81,31 @@ public class ShoulderFixer {
         Vector3 shoulderDelta = (shoulderLeft - shoulderRight);
         // The more horizontal with the camera, the more confident about the width we are.
         float shouldersDotCamera = Vector3.Dot(shoulderDelta.normalized, avatarScaler.foregroundCamera.transform.forward);
-        float confidence = 1.0f - Mathf.Abs(shouldersDotCamera);
+        float shoulderConfidence = 1.0f - Mathf.Abs(shouldersDotCamera);
+        float confidence = shoulderConfidence;
         float value = shoulderDelta.magnitude;
         BodyWidth.Update(confidence, value);
 
         // The higher that the user lifts their arms above her head while facing camera directly, the more confidence about the height we are.
         float spineDotCameraUp = Vector3.Dot((spineShoulder - spineBase).normalized, avatarScaler.foregroundCamera.transform.up);
+        float spineConfidence = (spineDotCameraUp);
+        float leftElbowConfidence = ((elbowLeft - shoulderLeft).normalized.y + 1f) / 2f; // normalized.y will be between -1 and 1, so add 1, div 2
+        float rightElbowConfidence = ((elbowRight - shoulderRight).normalized.y + 1f) / 2f; // normalized.y will be between -1 and 1, so add 1, div 2
+        //Debug.Log("shoulderConfidence" + shoulderConfidence);
+        //Debug.Log("spineConfidence=" + spineConfidence);
+        //Debug.Log("elbowConfidence=" + Mathf.Lerp(leftElbowConfidence, rightElbowConfidence, 0.5f));
         spineDotCameraUp = Mathf.Clamp(spineDotCameraUp, 0, float.MaxValue); // Clamp at zero (no negative values);
         confidence =
-            (1.0f - Mathf.Abs(shouldersDotCamera)) * // shoulders squared with camera forward?
-            (1.0f - spineDotCameraUp) * // spine aligned with CameraUp?
-            Mathf.Clamp((elbowLeft - shoulderLeft).normalized.y, 0, float.MaxValue) * // Left elbow above shoulder
-            Mathf.Clamp((elbowRight - shoulderRight).normalized.y, 0, float.MaxValue) // Right elbow above shoulder
+            shoulderConfidence * // shoulders squared with camera forward?
+            spineConfidence * // spine aligned with CameraUp?
+            Mathf.Lerp(leftElbowConfidence, rightElbowConfidence, 0.5f) // average confidence of left and right elbow
             ;
         Vector3 posHipCenter = (hipLeft + hipRight) / 2f;
         Vector3 posShoulderCenter = (shoulderLeft + shoulderRight) / 2f;
         Vector3 posAnkleCenter = (ankleLeft + ankleRight) / 2f;
         value = (posShoulderCenter - posHipCenter).magnitude;
         BodyHeight.Update(confidence, value);
+        //Debug.Log("BodyHeight confidence=" + confidence + "val=" + value);
 
         //Debug.Log("spineBase=" + spineBase);
         //Debug.Log("posHipCenter=" + posHipCenter);
@@ -116,18 +123,19 @@ public class ShoulderFixer {
         //Debug.Log("maxConfidenceWidth = " + maxConfidenceWidth);
 
         // Correct shoulders based on shouldersDotCamera, current implementation seems to overrotate the spine -HH
-        Vector3 relativeShoulderLeft = shoulderLeft - spineShoulder;
-        Vector3 relativeShoulderRight = shoulderRight - spineShoulder;
-        relativeShoulderLeft.RotatePointAroundPivot(shoulderTUp, new Vector3(0, 30.0f * shouldersDotCamera, 0));
-        relativeShoulderRight.RotatePointAroundPivot(shoulderTUp, new Vector3(0, -30.0f * shouldersDotCamera, 0));
-        correctedShoulderLeft = shoulderLeft;// spineShoulder + relativeShoulderLeft;
-        correctedShoulderRight = shoulderRight; // spineShoulder + relativeShoulderRight;
+        //Vector3 relativeShoulderLeft = shoulderLeft - spineShoulder;
+        //Vector3 relativeShoulderRight = shoulderRight - spineShoulder;
+        //relativeShoulderLeft.RotatePointAroundPivot(shoulderTUp, new Vector3(0, 30.0f * shouldersDotCamera, 0));
+        //relativeShoulderRight.RotatePointAroundPivot(shoulderTUp, new Vector3(0, -30.0f * shouldersDotCamera, 0));
+        //correctedShoulderLeft = shoulderLeft;// spineShoulder + relativeShoulderLeft;
+        //correctedShoulderRight = shoulderRight; // spineShoulder + relativeShoulderRight;
 
+        // These are used for joint orientation correction in AvatarController::TransfromBone
         Vector3 shoulderToElbowLeft = elbowLeft - shoulderLeft;
         elbowOnPlane = Vector3.ProjectOnPlane(shoulderToElbowLeft, shoulderTUp) + shoulderLeft;
         elbowLeftDotShoulderUpPlane = Vector3.Dot(shoulderToElbowLeft.normalized, (elbowOnPlane - shoulderLeft).normalized);
         //Debug.Log("elbowLeftDotShoulderUpPlane " + elbowLeftDotShoulderUpPlane);
-        Vector3 shoulderToElbowRight = elbowLeft - shoulderLeft;
+        Vector3 shoulderToElbowRight = elbowRight - shoulderRight;
         elbowOnPlane = Vector3.ProjectOnPlane(shoulderToElbowRight, shoulderTUp) + shoulderRight;
         elbowRightDotShoulderUpPlane = Vector3.Dot(shoulderToElbowRight.normalized, (elbowOnPlane - shoulderRight).normalized);
     }
@@ -137,14 +145,13 @@ public class ShoulderFixer {
         return BodyWidth.GetWeightedValue();
     }
 
+    public float GetWeightedHeight()
+    {
+        return BodyHeight.GetWeightedValue();
+    }
+
     public float GetMaxConfidenceBodyHeight()
     {
-        // Get weighted width;
-        //float totalConfidence = currHeightConfidence + maxHeightConfidence;
-        //float weightedHeight =
-        //    maxHeightConfidence / totalConfidence * maxConfidenceHeight +
-        //    currHeightConfidence / totalConfidence * currConfidenceHeight;
-
         return BodyHeight.maxConfidenceValue;
     }
 
@@ -155,16 +162,6 @@ public class ShoulderFixer {
 
     public float GetMaxLegsHeightOffset()
     {
-        return (LegsHeight.maxConfidenceValue - LegsHeight.currConfidenceValue) * 1.0f;
-    }
-
-    internal Vector3 GetCorrectedShoulderLeftPos()
-    {
-        throw new NotImplementedException();
-    }
-
-    internal Vector3 GetCorrectedShoulderRightPos()
-    {
-        throw new NotImplementedException();
+        return (LegsHeight.maxConfidenceValue - LegsHeight.currConfidenceValue) * 0.33f;
     }
 }

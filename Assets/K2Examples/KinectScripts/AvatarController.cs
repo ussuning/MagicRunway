@@ -716,6 +716,7 @@ public class AvatarController : MonoBehaviour
 
                 float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp);
                 float elbowDotShoulderUpPlane = joint == KinectInterop.JointType.ShoulderLeft ? sg.elbowLeftDotShoulderUpPlane : sg.elbowRightDotShoulderUpPlane;
+                Debug.Log(joint + " elbowDotShoulderUpPlane=" + elbowDotShoulderUpPlane);
                 boneTransform.Rotate(sg.shoulderTUp, elbowDotShoulderUpPlane * shoulderAngle * shoulderUnrotateFactor, Space.World);
 
             }
