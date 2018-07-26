@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using MR;
 
 [ExecuteInEditMode]
@@ -58,6 +60,7 @@ public class TransformDeepCopy : MonoBehaviour {
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(TransformDeepCopy))]
 public class TransformDeepCopyEditor : Editor
 {
@@ -72,3 +75,4 @@ public class TransformDeepCopyEditor : Editor
         }
     }
 }
+#endif

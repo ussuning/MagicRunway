@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using MR;
 
 [ExecuteInEditMode]
@@ -226,6 +228,7 @@ public class LimbSphereSet : MonoBehaviour {
 
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(LimbSphereSet))]
 public class LimbSphereSetEditor : Editor
 {
@@ -255,3 +258,4 @@ public class LimbSphereSetEditor : Editor
         }
     }
 }
+#endif
