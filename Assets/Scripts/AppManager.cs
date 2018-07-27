@@ -34,6 +34,11 @@ public class AppManager : MonoBehaviour
         
     }
 
+    public Mode getMode()
+    {
+        return curMode;
+    }
+
     public void PlayLiveRunway()
     {
         autoRunwayManager.StopAutoRunway();

@@ -6,11 +6,13 @@ public class UserManager : Singleton<UserManager>
 {
     public AppManager appManager;
     public GameObject userSkeletonPrefab;
+    public bool isUserReady = false;
     private GameObject userContainer;
     private string userContainerName;
    
     public void Start()
     {
+        Debug.Log("Wait Ten Seconds entered");
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;
     }
@@ -38,15 +40,14 @@ public class UserManager : Singleton<UserManager>
         userGestureListener.initialize(userId, userIndex);
 
         // get pose agent and attach the brain
-     //   PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
-      //  poseAgent.Init(userId);
-      //  GameObject brainGO = GameObject.Find("Brain");
-      //  Brain brain = brainGO.GetComponent<Brain>();
-      //  poseAgent.GiveBrain(brain);
-
+        /*   PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
+           poseAgent.Init(userId);
+           GameObject brainGO = GameObject.Find("Brain");
+           Brain brain = brainGO.GetComponent<Brain>();
+           poseAgent.GiveBrain(brain);
+       */
         // show start menu button to transition into Live mode
-        UIManager.Instance.ShowStartMenu(true);
-        UIManager.Instance.ShowHandCursor();
+        StartCoroutine(joinLivePrompt());
     }
 
     // User Lost detected, remove game object
@@ -65,10 +66,16 @@ public class UserManager : Singleton<UserManager>
         Debug.Log("count = " + count);
 
         // hide start menu button if no users detected
-        if (KinectManager.Instance.GetUsersCount() <= 1)
+        Mode mode = appManager.getMode();
+        if (KinectManager.Instance.GetUsersCount() <= 1 && mode == Mode.LIVE)
         {
             Debug.Log("Where everyone go!? User count = 0 cries.");
             appManager.LiveToAuto();
+        }
+        if (KinectManager.Instance.GetUsersCount() <= 0 && mode == Mode.AUTO)
+        {
+            Debug.Log("UM: Hide Start Menu");
+            UIManager.Instance.HideStartMenu(true);
         }
     }
 
@@ -77,6 +84,14 @@ public class UserManager : Singleton<UserManager>
     {
 
 
+    }
+
+    IEnumerator joinLivePrompt()
+    {
+        yield return new WaitForSeconds(10);
+        Debug.Log("Ten Seconds Over!");
+        UIManager.Instance.ShowStartMenu(true);
+        isUserReady = true;
     }
 
 
