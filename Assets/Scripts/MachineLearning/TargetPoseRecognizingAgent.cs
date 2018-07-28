@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TargetPoseRecognizingAgent : Agent {
 
-    public float minConfidence = 0.75f;
-
     private KinectManager manager;
     private long KinectUserId;
 
@@ -27,6 +25,8 @@ public class TargetPoseRecognizingAgent : Agent {
 
     void Update()
     {
+        estimationTimeEllapsed += Time.deltaTime;
+
         EstimatePose();
         if (isPoseMatched)
         {
@@ -64,7 +64,7 @@ public class TargetPoseRecognizingAgent : Agent {
         int isMatched = Mathf.RoundToInt(vectorAction[0]);
         if (isMatched >= 1)
             PoseMatchCount++;
-        Debug.Log(string.Format("Agent {0}: action = {1}, isMatched = {2}", poseID, vectorAction[0], isMatched));
+        //Debug.Log(string.Format("Agent {0}: action = {1}, isMatched = {2}", poseID, vectorAction[0], isMatched));
     }
 
     public override void AgentOnDone()
@@ -86,7 +86,7 @@ public class TargetPoseRecognizingAgent : Agent {
             if (PoseMatchCount > 0)
             {
                 poseScore = PoseMatchCount / estimationTimeEllapsed;
-                isPoseMatched = poseScore >= minConfidence;
+                isPoseMatched = poseScore >= SystemConfigs.MinPoseConfidence;
             }
 
             estimationTimeEllapsed = 0f;
