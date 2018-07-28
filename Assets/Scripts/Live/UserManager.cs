@@ -46,6 +46,9 @@ public class UserManager : Singleton<UserManager>
            Brain brain = brainGO.GetComponent<Brain>();
            poseAgent.GiveBrain(brain);
        */
+        PoseDetector poseDetector = userSkeletonPrefab.GetComponent<PoseDetector>();
+        poseDetector.Init(userId);
+
         // show start menu button to transition into Live mode
         StartCoroutine(joinLivePrompt());
     }

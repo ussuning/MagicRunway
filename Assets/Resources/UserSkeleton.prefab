@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4678946383520288}
   - component: {fileID: 114721307823362904}
-  - component: {fileID: 114685368328846976}
+  - component: {fileID: 114755928013226634}
   m_Layer: 0
   m_Name: UserSkeleton
   m_TagString: Untagged
@@ -41,29 +41,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114685368328846976
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1640589798265450}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836ef874df617484bbd6549d640f328b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brain: {fileID: 0}
-  agentParameters:
-    agentCameras: []
-    maxStep: 0
-    resetOnDone: 1
-    onDemandDecision: 0
-    numberOfActionsBetweenDecisions: 1
-  minConfidence: 0.5
-  estPoseIdx: 0
-  curPoseIdx: 0
-  prevPoseIdx: 0
-  combo: 1
 --- !u!114 &114721307823362904
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -78,3 +55,14 @@ MonoBehaviour:
   playerIndex: 0
   uid: 0
   gestureInfo: {fileID: 0}
+--- !u!114 &114755928013226634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1640589798265450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c5ca8032356305488fd781260941de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

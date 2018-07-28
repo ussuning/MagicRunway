@@ -577,6 +577,24 @@ MonoBehaviour:
   discretePlayerActions: []
   defaultAction: 0
   brain: {fileID: 211158788}
+--- !u!1 &586716831 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1092431475659024, guid: 052f4c09e2574654a930df511157ed8d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1239823957}
+--- !u!114 &586716832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 586716831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c796d2e83840dc4dae64471fae69fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  poseDataFilePath: /StreamingAssets/pose_data.json
+  trainedDataFolderPath: MachineLearningModels/TargetPosing/TargetPoseTraining_training_
 --- !u!1 &606286476
 GameObject:
   m_ObjectHideFlags: 0
@@ -1067,6 +1085,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1203305699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1203305696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c5ca8032356305488fd781260941de4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1203305700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1098,41 +1127,6 @@ MonoBehaviour:
   verticalOffset: 0
   forwardOffset: 0
   shoulderUnrotateFactor: 1
---- !u!114 &1203305701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1203305696}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 836ef874df617484bbd6549d640f328b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  brain: {fileID: 211158788}
-  agentParameters:
-    agentCameras: []
-    maxStep: 0
-    resetOnDone: 1
-    onDemandDecision: 0
-    numberOfActionsBetweenDecisions: 1
-  minConfidence: 0.8
-  estPoseIdx: 0
-  curPoseIdx: 0
-  prevPoseIdx: 0
-  combo: 1
---- !u!114 &1203305702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1203305696}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ff53b82fb135cd49b8f68cd775ba7c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 1203305701}
 --- !u!114 &1207193954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1214,7 +1208,18 @@ Prefab:
       propertyPath: instanceID
       value: -2128
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114215106971808518, guid: 052f4c09e2574654a930df511157ed8d,
+        type: 2}
+      propertyPath: poseDataFilePath
+      value: /StreamingAssets/pose_data.json
+      objectReference: {fileID: 0}
+    - target: {fileID: 114215106971808518, guid: 052f4c09e2574654a930df511157ed8d,
+        type: 2}
+      propertyPath: trainedDataFolderPath
+      value: MachineLearningModels/TargetPoseRecognizing/TargetPoseTraining_training_
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114215106971808518, guid: 052f4c09e2574654a930df511157ed8d, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 052f4c09e2574654a930df511157ed8d, type: 2}
   m_IsPrefabParent: 0
 --- !u!114 &1259123190
