@@ -48,9 +48,9 @@ public class TargetPoseRecognizingAgent : Agent {
             PoseParameter pose = BrainDataManager.Instance.GetPoseInfo(poseID);
             for (int i = 0; i < pose.num_joint_detections; i++)
             {
-                if (manager.IsJointTracked(KinectUserId, pose.joint_ids[i]))
+                int JointIdx = pose.joint_ids[i];
+                if (manager.IsJointTracked(KinectUserId, JointIdx))
                 {
-                    int JointIdx = (int)SystemConfigs.DetectedJoints[i];
                     Vector3 JointOrientation = manager.GetJointOrientation(KinectUserId, JointIdx).eulerAngles;
                     JointOrientation = NormalizeAngles(JointOrientation);
                     AddVectorObs(JointOrientation);
