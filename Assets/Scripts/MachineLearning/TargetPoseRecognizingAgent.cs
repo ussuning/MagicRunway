@@ -11,16 +11,10 @@ public class TargetPoseRecognizingAgent : Agent {
 
     private int poseID;
 
-    private Dictionary<int, int> PoseCountsWithinTimeFrame = new Dictionary<int, int>();
-    //Change to private later
-    public int estPoseIdx;
-    public int curPoseIdx;
-    public int prevPoseIdx;
-
-    private float estimationTimeEllapsed = 0f;
-    private float posingTimeEllapsed = 0f;
-
-    private float estPoseConfidence;
+    public bool isPoseMatched = false;
+    public int PoseMatchCount;
+    private float estimationTimeEllapsed;
+    public float poseScore;
 
     public void Init(long userID, int PoseID)
     {
@@ -33,11 +27,12 @@ public class TargetPoseRecognizingAgent : Agent {
 
     void Update()
     {
-        estimationTimeEllapsed += Time.deltaTime;
-        posingTimeEllapsed += Time.deltaTime;
-
         EstimatePose();
-        UpdatePose();
+        if (isPoseMatched)
+        {
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, poseID);
+            isPoseMatched = false;
+        }
     }
 
     public override void InitializeAgent()
@@ -66,14 +61,10 @@ public class TargetPoseRecognizingAgent : Agent {
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
-        //Debug.Log(string.Format("Pose {0}: {1}", poseID, vectorAction[0]));
-        int newPoseIdx = Mathf.RoundToInt(vectorAction[0]);
-        if (newPoseIdx < 0)
-            newPoseIdx = 0;
-        if (PoseCountsWithinTimeFrame.ContainsKey(newPoseIdx))
-            PoseCountsWithinTimeFrame[newPoseIdx]++;
-        else
-            PoseCountsWithinTimeFrame.Add(newPoseIdx, 1);
+        int isMatched = Mathf.RoundToInt(vectorAction[0]);
+        if (isMatched >= 1)
+            PoseMatchCount++;
+        Debug.Log(string.Format("Agent {0}: action = {1}, isMatched = {2}", poseID, vectorAction[0], isMatched));
     }
 
     public override void AgentOnDone()
@@ -83,65 +74,23 @@ public class TargetPoseRecognizingAgent : Agent {
 
     public override void AgentReset()
     {
-        estPoseIdx = 0;
-        prevPoseIdx = 0;
-        posingTimeEllapsed = 0f;
+        isPoseMatched = false;
+        PoseMatchCount = 0;
+        estimationTimeEllapsed = 0f;
     }
 
     void EstimatePose()
     {
         if (estimationTimeEllapsed > SystemConfigs.PoseEstimationTimeFrame)
         {
-            if (PoseCountsWithinTimeFrame.Count > 0)
+            if (PoseMatchCount > 0)
             {
-                int maxCounts = 0;
-                int probablePoseIdx = 0;
-                int totalCounts = 0;
-                foreach (int poseIdx in PoseCountsWithinTimeFrame.Keys)
-                {
-                    if (PoseCountsWithinTimeFrame[poseIdx] > maxCounts)
-                    {
-                        probablePoseIdx = poseIdx;
-                        maxCounts = PoseCountsWithinTimeFrame[poseIdx];
-                    }
-                    totalCounts += PoseCountsWithinTimeFrame[poseIdx];
-                }
-
-                estPoseConfidence = (float)maxCounts / totalCounts;
-                if (probablePoseIdx > 0 && estPoseConfidence > minConfidence)
-                {
-                    estPoseIdx = probablePoseIdx;
-                }
-                else
-                {
-                    estPoseIdx = 0;
-                }
+                poseScore = PoseMatchCount / estimationTimeEllapsed;
+                isPoseMatched = poseScore >= minConfidence;
             }
 
             estimationTimeEllapsed = 0f;
-            PoseCountsWithinTimeFrame.Clear();
-        }
-    }
-
-    void UpdatePose()
-    {
-        if (estPoseIdx != 0 /*&& estPoseIdx != 10*/)
-        {
-            if (curPoseIdx != estPoseIdx && posingTimeEllapsed > SystemConfigs.PosingTime)
-            {
-                prevPoseIdx = curPoseIdx;
-                curPoseIdx = estPoseIdx;
-
-                posingTimeEllapsed = 0f;
-
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, curPoseIdx, curPoseIdx);
-            }
-        }
-        else
-        {
-            prevPoseIdx = curPoseIdx;
-            curPoseIdx = estPoseIdx;
-            posingTimeEllapsed = 0f;
+            PoseMatchCount = 0;
         }
     }
 
