@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class TargetPoseRecognizingAgent : Agent {
 
-    private KinectManager manager;
+    private KinectManager kinectMgr;
     private long KinectUserId;
 
+    private BrainDataManager brainMgr;
     private int poseID;
 
-    public bool isPoseMatched = false;
-    public int PoseMatchCount;
+    private bool isPoseMatched = false;
+    private int PoseMatchCount;
     private float estimationTimeEllapsed;
-    public float poseScore;
+    private float poseScore;
+
+    PoseParameter pose;
 
     public void Init(long userID, int PoseID)
     {
-        manager = KinectManager.Instance;
+        kinectMgr = KinectManager.Instance;
+        brainMgr = BrainDataManager.Instance;
         KinectUserId = userID;
         poseID = PoseID;
+
+        pose = brainMgr.GetPoseInfo(poseID);
+
         if (agentParameters == null)
             agentParameters = new AgentParameters();
     }
@@ -42,16 +49,15 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void CollectObservations()
     {
         if (KinectUserId == 0)
-            KinectUserId = manager.GetPrimaryUserID(); //Delete later
-        if (manager.IsUserInKinectView(KinectUserId))
+            KinectUserId = kinectMgr.GetPrimaryUserID(); //Delete later
+        if (kinectMgr.IsUserInKinectView(KinectUserId))
         {
-            PoseParameter pose = BrainDataManager.Instance.GetPoseInfo(poseID);
             for (int i = 0; i < pose.num_joint_detections; i++)
             {
                 int JointIdx = pose.joint_ids[i];
-                if (manager.IsJointTracked(KinectUserId, JointIdx))
+                if (kinectMgr.IsJointTracked(KinectUserId, JointIdx))
                 {
-                    Vector3 JointOrientation = manager.GetJointOrientation(KinectUserId, JointIdx).eulerAngles;
+                    Vector3 JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx).eulerAngles;
                     JointOrientation = NormalizeAngles(JointOrientation);
                     AddVectorObs(JointOrientation);
                 }
@@ -81,12 +87,12 @@ public class TargetPoseRecognizingAgent : Agent {
 
     void EstimatePose()
     {
-        if (estimationTimeEllapsed > SystemConfigs.PoseEstimationTimeFrame)
+        if (estimationTimeEllapsed > pose.estimate_time)
         {
             if (PoseMatchCount > 0)
             {
                 poseScore = PoseMatchCount / estimationTimeEllapsed;
-                isPoseMatched = poseScore >= SystemConfigs.MinPoseConfidence;
+                isPoseMatched = poseScore >= pose.min_confidence;
             }
 
             estimationTimeEllapsed = 0f;

@@ -39,15 +39,24 @@ public class PoseDetector : MonoBehaviour
 
     public void OnNewPoseGenerated(object param, object paramEx)
     {
-        if (userID == 0L || !KinectManager.Instance.IsUserTracked(userID) || !KinectManager.Instance.IsUserInKinectView(userID))
+        if (!isUserTracked())
         {
-            for (int i = 0; i < poseAgents.Length; i++)
-                poseAgents[i].enabled = false;
+            activatePoseAgent(-1);
             return;
         }
+
         int poseID = (int)param;
-        
-        for(int i=0; i< poseAgents.Length; i++)
+        activatePoseAgent(poseID);
+    }
+
+    bool isUserTracked()
+    {
+        return userID > 0L && KinectManager.Instance.IsUserTracked(userID) && KinectManager.Instance.IsUserInKinectView(userID);
+    }
+
+    void activatePoseAgent(int poseID)
+    {
+        for (int i = 0; i < poseAgents.Length; i++)
         {
             if (poseID > 0 && i == poseID - 1 /*&& poseAgents[i].agentParameters != null*/)
                 poseAgents[i].enabled = true;

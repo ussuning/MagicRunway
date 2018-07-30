@@ -10,6 +10,8 @@ public class PoseParameter
     public int id;
     public int num_joint_detections;
     public List<int> joint_ids;
+    public float estimate_time;
+    public float min_confidence;
 }
 
 [Serializable]
