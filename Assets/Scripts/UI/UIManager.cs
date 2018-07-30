@@ -12,12 +12,14 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiUpNext;
     public GameObject uiGestureGender;
     public GameObject uiHandCursor;
+    public GameObject uiStickMan;
 
     protected GameObject uiMaleGender;
     protected GameObject uiFemaleGender;
     protected Button uiJoinInButton;
 
     private CanvasFader faderStartMenu;
+    private CanvasFader faderStickMan;
     private IEnumerator gestureGenderCoroutine;
 
     void OnEnable()
@@ -37,6 +39,7 @@ public class UIManager : Singleton<UIManager>
         uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
 
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
+        faderStickMan = uiStickMan.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
     }
@@ -84,6 +87,32 @@ public class UIManager : Singleton<UIManager>
         StartMenuButton.onClick.Invoke();
     }
 
+    public void ShowStickMan(bool animate)
+    {
+        if (animate == true)
+        {
+            uiStickMan.SetActive(true);
+            faderStickMan.StartFading(CanvasFade.IN);
+        }
+        else
+        {
+            uiStickMan.SetActive(true);
+        }
+    }
+
+    public void HideStickMan(bool animate)
+    {
+        if (animate == true)
+        {
+            faderStickMan.StartFading(CanvasFade.OUT);
+        }
+        else
+        {
+            uiStartMenu.SetActive(false);
+        }
+    }
+
+
     public void ShowHandCursor()
     {
         uiHandCursor.SetActive(true);
@@ -100,6 +129,8 @@ public class UIManager : Singleton<UIManager>
         HideCollection(false);
         HideUpNext();
         HideGestureGender(false);
+        HideHandCursor();
+        HideStartMenu(true);
     }
 
     //----------------------------------------

@@ -91,7 +91,7 @@ public class UserManager : Singleton<UserManager>
 
     IEnumerator joinLivePrompt()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(5);
         Debug.Log("Ten Seconds Over!");
         UIManager.Instance.ShowStartMenu(true);
         isUserReady = true;

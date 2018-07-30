@@ -98,6 +98,10 @@ public class LiveRunwayManager : MonoBehaviour {
         totalCollections = MRData.Instance.collections.collections.Count;
 
         PrepareCollectionLiveModelPrefabs();
+
+        UIManager.Instance.ShowGestureGender(30.0f);
+
+        UIManager.Instance.ShowStickMan(true);
     }
 
     private void PrepareCollectionLiveModelPrefabs()
