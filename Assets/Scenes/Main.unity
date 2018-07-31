@@ -336,11 +336,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: f2a194f21ae48481a86f9c6d7165a282, type: 3}
-    m_FontSize: 100
+    m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
-    m_MaxSize: 100
+    m_MaxSize: 120
     m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -4247,7 +4247,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1295224656}
   - component: {fileID: 1295224662}
-  - component: {fileID: 1295224661}
   - component: {fileID: 1295224660}
   - component: {fileID: 1295224658}
   - component: {fileID: 1295224663}
@@ -4293,7 +4292,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboDataFilePath: /StreamingAssets/combo_data.json
-  curPose: 0
 --- !u!225 &1295224658
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -4318,8 +4316,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ComboText: {fileID: 17569600}
-  combo: 0
-  poseTimeEllapsed: 0
 --- !u!114 &1295224660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4337,28 +4333,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1295224661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114074515589069542, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1295224655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
-  m_ReferencePixelsPerUnit: 100
-  m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
-  m_PhysicalUnit: 3
-  m_FallbackScreenDPI: 96
-  m_DefaultSpriteDPI: 96
-  m_DynamicPixelsPerUnit: 1
 --- !u!223 &1295224662
 Canvas:
   m_ObjectHideFlags: 0
