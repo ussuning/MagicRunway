@@ -23,6 +23,9 @@ public class UserManager : Singleton<UserManager>
     {
         Debug.Log("UserManager: New User Event Callback invoked.");
 
+        int count = KinectManager.Instance.GetUsersCount();
+        Debug.Log("count = " + count);
+
         // find "Users" GameObject
         int playerNumber = userIndex + 1;
         GameObject Users = GameObject.Find("Users");
