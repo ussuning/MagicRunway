@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TargetPoseRecognizingAgent : Agent {
 
+    public float PoseCD = 0.1f;
+    //public float PoseTime = 0.25f;
+
     private KinectManager kinectMgr;
     private long KinectUserId;
 
@@ -13,6 +16,10 @@ public class TargetPoseRecognizingAgent : Agent {
     private bool isPoseMatched = false;
     private int PoseMatchCount;
     private float estimationTimeEllapsed;
+
+    private float poseCDTimeEllapsed;
+    //private float poseTimeEllapsed;
+
     private float poseScore;
 
     PoseParameter pose;
@@ -33,12 +40,26 @@ public class TargetPoseRecognizingAgent : Agent {
     void Update()
     {
         estimationTimeEllapsed += Time.deltaTime;
+        poseCDTimeEllapsed += Time.deltaTime;
 
         EstimatePose();
-        if (isPoseMatched)
+
+        //if (isPoseMatched)
+        //    poseTimeEllapsed += Time.deltaTime;
+        //else
+        //    poseTimeEllapsed = 0f;
+
+        //if(poseTimeEllapsed >= PoseTime)
+        //{
+        //    EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId);
+        //    poseTimeEllapsed = 0f;
+        //}
+
+        if (isPoseMatched && poseCDTimeEllapsed >= PoseCD)
         {
             EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId);
             isPoseMatched = false;
+            poseCDTimeEllapsed = 0f;
         }
     }
 
@@ -94,6 +115,10 @@ public class TargetPoseRecognizingAgent : Agent {
                 poseScore = PoseMatchCount / estimationTimeEllapsed;
                 isPoseMatched = poseScore >= pose.min_confidence;
             }
+            //else
+            //{
+            //    isPoseMatched = false;
+            //}
 
             estimationTimeEllapsed = 0f;
             PoseMatchCount = 0;

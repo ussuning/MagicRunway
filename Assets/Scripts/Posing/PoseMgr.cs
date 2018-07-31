@@ -30,22 +30,22 @@ public class PoseMgr : MonoBehaviour {
 
     public int curPose = 0;
     public int prevPose = 0;
-    public int comboNum = 0;
+    public int combo = 0;
     public int ComboNum
     {
         get
         {
-            if (combos == null)
+            if (ComboInfo == null)
                 return 0;
-            if (comboNum > combos.combos.Count - 1)
-                return combos.combos.Count - 1;
-            return comboNum;
+            if (combo > ComboInfo.combos.Count - 1)
+                return ComboInfo.combos.Count - 1;
+            return combo;
         }
     }
 
     public float poseTimeEllapsed = 0f;
 
-    Combos combos;
+    Combos ComboInfo;
 
     void OnEnable()
     {
@@ -66,7 +66,7 @@ public class PoseMgr : MonoBehaviour {
     {
         curPose = 0;
         prevPose = 0;
-        comboNum = 0;
+        combo = 0;
 
         poseTimeEllapsed = 0f;
     }
@@ -75,11 +75,10 @@ public class PoseMgr : MonoBehaviour {
     {
         poseTimeEllapsed += Time.deltaTime;
 
-        if (poseTimeEllapsed > combos.combos[ComboNum].pose_time)
+        if (poseTimeEllapsed > ComboInfo.combos[ComboNum].pose_time)
         {
             GenerateNewPose();
-            poseTimeEllapsed = 0f;
-            comboNum = 0;
+            combo = 0;
         }
     }
 
@@ -87,11 +86,10 @@ public class PoseMgr : MonoBehaviour {
     {
         long userID = (long)param;
 
-        if(poseTimeEllapsed <= combos.combos[ComboNum].pose_time)
+        if(poseTimeEllapsed <= ComboInfo.combos[ComboNum].pose_time)
         {
-            comboNum++;
             GenerateNewPose();
-            poseTimeEllapsed = 0;
+            combo++;
         }
     }
 
@@ -101,14 +99,12 @@ public class PoseMgr : MonoBehaviour {
 
         if (File.Exists(filePath))
         {
-            combos = Combos.CreateFromJSON(filePath);
+            ComboInfo = Combos.CreateFromJSON(filePath);
         }
         else
         {
-            Debug.Log("Brain Data doesn't exist!");
+            Debug.Log("Combo Data doesn't exist!");
         }
-
-        Debug.Log(combos);
     }
 
     private void GenerateNewPose()
@@ -118,8 +114,10 @@ public class PoseMgr : MonoBehaviour {
         {
             newPose = UnityEngine.Random.Range(1, 1 + BrainDataManager.Instance.NumPoses);
         } while (newPose == curPose || newPose == prevPose);
+
         prevPose = curPose;
         curPose = newPose;
+        poseTimeEllapsed = 0f;
 
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, curPose);
     }
