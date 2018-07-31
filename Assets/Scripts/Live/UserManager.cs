@@ -54,7 +54,7 @@ public class UserManager : Singleton<UserManager>
         Debug.Log("UserManager: User Lost Detected.");
 
         // remove listener
-        foreach (var component in GetComponents<UserGestureListener>())
+        foreach (var component in kinectController.GetComponents<UserGestureListener>())
         {
             Debug.Log("component player index = " + component.playerIndex);
             Debug.Log("user index = " + userIndex);
