@@ -37,7 +37,7 @@ public class TargetPoseRecognizingAgent : Agent {
         EstimatePose();
         if (isPoseMatched)
         {
-            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, poseID);
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId);
             isPoseMatched = false;
         }
     }
