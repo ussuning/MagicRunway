@@ -254,48 +254,7 @@ public class AutoRunwayManager : MonoBehaviour
         HideAllModels();
         RunModel(curOutfit);
     }
-
-    private void CheckCompletion(GameObject model)
-    {
-        //Debug.Log("MODEL IS AT END");
-        if(isCollectionEnding == false) { return; }
-        //Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
-        if (showFinale == true && isInFinale == false)
-        {
-            //Debug.Log("WALK ENDED AND BEGINNING FINALE");
-            AutoRunwayEvents.FinaleStart(curCollection);
-            BeginFinale();
-        }
-        else
-        {
-            if (isInFinale == true)
-            {
-                //Debug.Log("MODEL FINISHED WALKING IN FINALE");
-                ClearModel(model);
-
-                if (models.Count == 0)
-                {
-                    AutoRunwayEvents.CollectionEnd(curCollection);
-
-                    if (showFinale == true)
-                    {
-                        AutoRunwayEvents.FinaleEnd(curCollection);
-                    }
-
-                    PrepareNextCollection();
-                }
-            } 
-            else
-            {
-                //Debug.Log("ALL MODELS FINISHED WALKING");
-                AutoRunwayEvents.CollectionEnd(curCollection);
-                PrepareNextCollection();
-            }
-        }
-    }
-
     
-
     private void QueueUp()
     {
         if(isInFinale == true) { return; }
@@ -336,7 +295,7 @@ public class AutoRunwayManager : MonoBehaviour
         }
     }
 
-    private void RunModel(int index)
+    private void RunModel(int index, bool secondTime = false)
     {
         Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
         GameObject model = models[index];
@@ -348,15 +307,23 @@ public class AutoRunwayManager : MonoBehaviour
 
         animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(Resources.Load(animation), model.transform);
         animator.enabled = true;
-
-        model.SetActive(true);
-
+        
         ObiSolver[] oss = model.GetComponentsInChildren<ObiSolver>();
 
         foreach (ObiSolver os in oss)
         {
-            os.enabled = true;
+            if(secondTime)
+            {
+                
+                os.enabled = true;
+            } else
+            {
+                os.enabled = true;
+            }
+            
         }
+
+        model.SetActive(true);
     }
 
     private void BeginFinale()
@@ -377,7 +344,7 @@ public class AutoRunwayManager : MonoBehaviour
         int count = 0;
         while (count < totalOutfits)
         {
-            RunModel(count);
+            RunModel(count,true);
             count++;
             
             yield return new WaitForSeconds(1);
@@ -398,16 +365,63 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void OnRunwayFinish(Collider other)
     {
-        Animator animator = other.gameObject.GetComponent<Animator>();
+        //animation on the same layer of collider
+        //Animator animator = other.gameObject.GetComponent<Animator>();
+
+        //animation is on the parent layer of collider
+
+        GameObject parentModel = other.gameObject.transform.parent.gameObject;
+        Animator animator = parentModel.GetComponent<Animator>();
+        ObiSolver[] oss = parentModel.GetComponentsInChildren<ObiSolver>();
+
+        foreach (ObiSolver os in oss)
+        {
+            os.enabled = false;
+        }
+
         if (animator == null)
             animator = other.gameObject.GetComponentInParent<Animator>();
 
         animator.enabled = false;
         animator.runtimeAnimatorController = null;
- 
-        animator.gameObject.SetActive(false);
 
-        CheckCompletion(other.gameObject);
+        parentModel.SetActive(false);
+        
+
+        if (isCollectionEnding == false) { return; }
+
+        if (showFinale == true && isInFinale == false)
+        {
+            //Debug.Log("WALK ENDED AND BEGINNING FINALE");
+            AutoRunwayEvents.FinaleStart(curCollection);
+            BeginFinale();
+        }
+        else
+        {
+            if (isInFinale == true)
+            {
+                //Debug.Log("MODEL FINISHED WALKING IN FINALE");
+                ClearModel(other.gameObject);
+
+                if (models.Count == 0)
+                {
+                    AutoRunwayEvents.CollectionEnd(curCollection);
+
+                    if (showFinale == true)
+                    {
+                        AutoRunwayEvents.FinaleEnd(curCollection);
+                    }
+
+                    PrepareNextCollection();
+                }
+            }
+            else
+            {
+                //Debug.Log("ALL MODELS FINISHED WALKING");
+                AutoRunwayEvents.CollectionEnd(curCollection);
+                PrepareNextCollection();
+            }
+        }
     }
 
     private void OnRunwayMidExit(Collider other)
