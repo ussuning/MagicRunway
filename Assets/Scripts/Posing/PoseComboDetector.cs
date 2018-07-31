@@ -39,6 +39,7 @@ public class PoseComboDetector : MonoBehaviour {
             combo++;
             UpdateComboText(userID);
             PoseMgr.Instance.GenerateNewPose();
+            poseTimeEllapsed = 0f;
         }
     }
 
@@ -57,6 +58,7 @@ public class PoseComboDetector : MonoBehaviour {
         {
             combo = 0;
             PoseMgr.Instance.GenerateNewPose();
+            poseTimeEllapsed = 0f;
         }
     }
 

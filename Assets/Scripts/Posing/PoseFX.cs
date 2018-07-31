@@ -18,9 +18,6 @@ public class PoseFX : MonoBehaviour {
 
     public void OnPoseDetected(object param, object paramEx)
     {
-        int combo = (int)param;
-        int poseIdx = (int)paramEx;
-
         UpdateComboParticles();
     }
 
