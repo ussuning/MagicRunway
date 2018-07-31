@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4678946383520288}
   - component: {fileID: 114755928013226634}
+  - component: {fileID: 114471537913965598}
   m_Layer: 0
   m_Name: UserSkeleton
   m_TagString: Untagged
@@ -40,6 +41,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114471537913965598
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1640589798265450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30eeedbfae32c34dbf7d6f71b5daee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  partileFX: {fileID: 1740871836209042, guid: ad37123f2961cf94ca4dd07fa131f0a5, type: 2}
 --- !u!114 &114755928013226634
 MonoBehaviour:
   m_ObjectHideFlags: 1
