@@ -69,7 +69,7 @@ public class UpNext : MonoBehaviour
         StopCoroutine(m_coroutine);
     }
 
-    private void showWarning() {
+    private void ShowWarning() {
         m_circleImage.gameObject.SetActive(true);
         m_canvasGroup.alpha = 0;
         m_AnimStartTime = Time.realtimeSinceStartup;
@@ -84,7 +84,7 @@ public class UpNext : MonoBehaviour
     IEnumerator RadialProgress(float waitTimeSeconds, float warningTimeSeconds)
     {
         yield return new WaitForSeconds(waitTimeSeconds);
-        showWarning();
+        ShowWarning();
         float rate = 1 / warningTimeSeconds;
         float i = 0;
         while (i < 1)
