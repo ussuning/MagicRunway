@@ -67,6 +67,8 @@ public class RunwayCameraController : MonoBehaviour {
 
     void OnDisable()
     {
+        Time.timeScale = 1.0f;
+
         modelsInMidZone.active.Clear();
         modelsInMidZone.history.Clear();
         modelsOnRunway.active.Clear();
