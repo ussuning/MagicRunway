@@ -56,14 +56,12 @@ public class UserManager : Singleton<UserManager>
         // remove listener
         foreach (var component in kinectController.GetComponents<UserGestureListener>())
         {
-            Debug.Log("component player index = " + component.playerIndex);
-            Debug.Log("user index = " + userIndex);
-
             if (component.playerIndex == userIndex)
             {
                 Debug.Log("HIT");
                 Debug.Log("component player index = " + component.playerIndex);
                 Debug.Log("user index = " + userIndex);
+                Destroy(component);
             }
         }
 
