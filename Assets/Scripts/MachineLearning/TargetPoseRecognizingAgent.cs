@@ -69,8 +69,6 @@ public class TargetPoseRecognizingAgent : Agent {
 
     public override void CollectObservations()
     {
-        if (KinectUserId == 0)
-            KinectUserId = kinectMgr.GetPrimaryUserID(); //Delete later
         if (kinectMgr.IsUserInKinectView(KinectUserId))
         {
             for (int i = 0; i < pose.num_joint_detections; i++)

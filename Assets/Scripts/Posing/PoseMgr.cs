@@ -26,71 +26,54 @@ public class Combos
 
 public class PoseMgr : MonoBehaviour {
 
+    public static PoseMgr Instance;
+
     public string comboDataFilePath = "/StreamingAssets/combo_data.json";
 
-    public int curPose = 0;
-    public int prevPose = 0;
-    public int combo = 0;
-    public int ComboNum
+    private int curPose = 0;
+    private int prevPose = 0;
+
+    Combos ComboInfo;
+
+    public int ComboCount
     {
         get
         {
             if (ComboInfo == null)
                 return 0;
-            if (combo > ComboInfo.combos.Count - 1)
-                return ComboInfo.combos.Count - 1;
-            return combo;
+            return ComboInfo.combos.Count;
         }
     }
 
-    public float poseTimeEllapsed = 0f;
-
-    Combos ComboInfo;
-
-    void OnEnable()
+    public ComboData GetComboInfo(int comboNum)
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
+        return ComboInfo.combos[comboNum];
     }
 
-    void OnDisable()
+    public void GenerateNewPose()
     {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
+        int newPose = 0;
+        do
+        {
+            newPose = UnityEngine.Random.Range(1, 1 + BrainDataManager.Instance.NumPoses);
+        } while (newPose == curPose || newPose == prevPose);
+
+        prevPose = curPose;
+        curPose = newPose;
+
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, curPose);
     }
 
     void Awake ()
     {
+        Instance = this;
         LoadComboData();
     }
 
-    void Start ()
+    void Start()
     {
         curPose = 0;
         prevPose = 0;
-        combo = 0;
-
-        poseTimeEllapsed = 0f;
-    }
-
-    void Update ()
-    {
-        poseTimeEllapsed += Time.deltaTime;
-
-        if (poseTimeEllapsed > ComboInfo.combos[ComboNum].pose_time)
-        {
-            GenerateNewPose();
-            combo = 0;
-        }
-    }
-
-    public void OnUserPoseMatched(object param, object paramEx)
-    {
-        long userID = (long)param;
-
-        if(poseTimeEllapsed <= ComboInfo.combos[ComboNum].pose_time)
-        {
-            GenerateNewPose();
-            combo++;
-        }
     }
 
     private void LoadComboData()
@@ -105,20 +88,5 @@ public class PoseMgr : MonoBehaviour {
         {
             Debug.Log("Combo Data doesn't exist!");
         }
-    }
-
-    private void GenerateNewPose()
-    {
-        int newPose = 0;
-        do
-        {
-            newPose = UnityEngine.Random.Range(1, 1 + BrainDataManager.Instance.NumPoses);
-        } while (newPose == curPose || newPose == prevPose);
-
-        prevPose = curPose;
-        curPose = newPose;
-        poseTimeEllapsed = 0f;
-
-        EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, curPose);
     }
 }

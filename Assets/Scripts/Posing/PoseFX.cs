@@ -28,18 +28,6 @@ public class PoseFX : MonoBehaviour {
     {
         GameObject particleGO;
         if (partileFX)
-            particleGO = (GameObject)Instantiate(partileFX, transform.parent.position, Quaternion.identity);
-    }
-
-    void UpdateDetectedPoseImage(int poseIdx)
-    {
-        CancelInvoke("ClearDetection");
-
-
-        Invoke("ClearDetection", 2f);
-    }
-
-    void ClearDetection()
-    {
-    }
+            particleGO = (GameObject)Instantiate(partileFX, transform.position, Quaternion.identity);
+    } 
 }

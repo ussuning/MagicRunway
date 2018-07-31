@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoseDetector : MonoBehaviour
+public class PoseAgentSelector : MonoBehaviour
 {
     long userID;
 

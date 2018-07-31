@@ -167,8 +167,8 @@ public class UserManager : Singleton<UserManager>
 
     protected void addPoseDetection(long uid)
     {
-        PoseDetector poseDetector = userSkeletonPrefab.GetComponent<PoseDetector>();
-        poseDetector.Init(uid);
+        PoseAgentSelector agentSelector = userSkeletonPrefab.GetComponent<PoseAgentSelector>();
+        agentSelector.Init(uid);
     }
 
     IEnumerator joinLivePrompt()
