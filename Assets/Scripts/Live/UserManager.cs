@@ -6,6 +6,7 @@ public class UserManager : Singleton<UserManager>
 {
     public AppManager appManager;
     public GameObject userSkeletonPrefab;
+    public GameObject kinectController;
     public bool isUserReady = false;
     private GameObject userContainer;
     private string userContainerName;
@@ -35,8 +36,8 @@ public class UserManager : Singleton<UserManager>
         userSkeletonPrefab.name = "User Skeleton " + playerNumber;
         userSkeletonPrefab.transform.SetParent(userContainer.transform);
 
-        // get listener and assign for user
-        UserGestureListener userGestureListener = userSkeletonPrefab.GetComponent<UserGestureListener>();
+        // add listener and assign for user
+        UserGestureListener userGestureListener = kinectController.AddComponent<UserGestureListener>();
         userGestureListener.initialize(userId, userIndex);
 
         // get pose agent and attach the brain
@@ -46,6 +47,7 @@ public class UserManager : Singleton<UserManager>
            Brain brain = brainGO.GetComponent<Brain>();
            poseAgent.GiveBrain(brain);
        */
+
         PoseDetector poseDetector = userSkeletonPrefab.GetComponent<PoseDetector>();
         poseDetector.Init(userId);
 
@@ -58,8 +60,22 @@ public class UserManager : Singleton<UserManager>
     {
         Debug.Log("UserManager: User Lost Detected.");
 
-        // destroy user data
-        int playerNumber = userIndex + 1;
+        // remove listener
+        foreach (var component in GetComponents<UserGestureListener>())
+        {
+            Debug.Log("component player index = " + component.playerIndex);
+            Debug.Log("user index = " + userIndex);
+
+            if (component.playerIndex == userIndex)
+            {
+                Debug.Log("HIT");
+                Debug.Log("component player index = " + component.playerIndex);
+                Debug.Log("user index = " + userIndex);
+            }
+        }
+
+            // destroy user data
+            int playerNumber = userIndex + 1;
         userContainerName = "User" + playerNumber;
         userContainer = GameObject.Find(userContainerName);
         Destroy(userContainer);
