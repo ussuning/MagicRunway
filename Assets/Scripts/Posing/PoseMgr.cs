@@ -31,6 +31,17 @@ public class PoseMgr : MonoBehaviour {
     public int curPose = 0;
     public int prevPose = 0;
     public int comboNum = 0;
+    public int ComboNum
+    {
+        get
+        {
+            if (combos == null)
+                return 0;
+            if (comboNum > combos.combos.Count - 1)
+                return combos.combos.Count - 1;
+            return comboNum;
+        }
+    }
 
     public float poseTimeEllapsed = 0f;
 
@@ -64,7 +75,7 @@ public class PoseMgr : MonoBehaviour {
     {
         poseTimeEllapsed += Time.deltaTime;
 
-        if (poseTimeEllapsed > combos.combos[comboNum].pose_time)
+        if (poseTimeEllapsed > combos.combos[ComboNum].pose_time)
         {
             GenerateNewPose();
             poseTimeEllapsed = 0f;
@@ -76,7 +87,7 @@ public class PoseMgr : MonoBehaviour {
     {
         long userID = (long)param;
 
-        if(poseTimeEllapsed <= combos.combos[comboNum].pose_time)
+        if(poseTimeEllapsed <= combos.combos[ComboNum].pose_time)
         {
             comboNum++;
             GenerateNewPose();
