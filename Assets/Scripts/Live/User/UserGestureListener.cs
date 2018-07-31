@@ -9,20 +9,23 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
     public UnityEngine.UI.Text gestureInfo;
     private bool progressDisplayed;
     private float progressGestureTime;
+   
+    void Start()
+    {
+        Debug.Log("User Gesture Listener Start");
+    }
 
     public void initialize(long userId, int userIndex)
     {
+        Debug.Log("User Gesture Listener initialized");
         playerIndex = userIndex;
         uid = userId;
-
-        // listening for these gestures for this user
-        KinectManager manager = KinectManager.Instance;
-        manager.DetectGesture(uid, KinectGestures.Gestures.RaiseLeftHand);
-        manager.DetectGesture(uid, KinectGestures.Gestures.RaiseRightHand);
     }
 
     public void UserDetected(long userId, int userIndex)
     {
+        Debug.Log("User Gesture Listener, User Detected");
+
         if (userIndex != playerIndex)
         {
             Debug.Log("UserGestureListener User Detected, Player Index = " + playerIndex);
@@ -114,11 +117,13 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         if(gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
             Debug.Log("User " + userId + " is female");
+            UserManager.Instance.setGender(userIndex, "female");
             UIManager.Instance.ShowFemaleGender();
         }
         else
         {
             Debug.Log("User " + userId + " is male");
+            UserManager.Instance.setGender(userIndex, "male");
             UIManager.Instance.ShowMaleGender();
         }
 
