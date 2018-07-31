@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4678946383520288}
-  - component: {fileID: 114721307823362904}
   - component: {fileID: 114755928013226634}
   m_Layer: 0
   m_Name: UserSkeleton
@@ -41,20 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114721307823362904
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1640589798265450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3eebfec6f5736c446b49eff4da236013, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerIndex: 0
-  uid: 0
-  gestureInfo: {fileID: 0}
 --- !u!114 &114755928013226634
 MonoBehaviour:
   m_ObjectHideFlags: 1

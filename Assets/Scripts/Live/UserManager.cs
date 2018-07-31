@@ -40,14 +40,7 @@ public class UserManager : Singleton<UserManager>
         UserGestureListener userGestureListener = kinectController.AddComponent<UserGestureListener>();
         userGestureListener.initialize(userId, userIndex);
 
-        // get pose agent and attach the brain
-        /*   PoseRecognizingAgent poseAgent = userSkeletonPrefab.GetComponent<PoseRecognizingAgent>();
-           poseAgent.Init(userId);
-           GameObject brainGO = GameObject.Find("Brain");
-           Brain brain = brainGO.GetComponent<Brain>();
-           poseAgent.GiveBrain(brain);
-       */
-
+        // pose detection setup
         PoseDetector poseDetector = userSkeletonPrefab.GetComponent<PoseDetector>();
         poseDetector.Init(userId);
 
