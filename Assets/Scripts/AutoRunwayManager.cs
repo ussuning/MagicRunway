@@ -17,6 +17,7 @@ public class AutoRunwayManager : MonoBehaviour
     public List<GameObject> levels;
     public GameObject curLevel;
 
+    private RunwayCameraController runwayCamera;
     private GameObject agents;
 
     private bool loop = false;
@@ -51,7 +52,10 @@ public class AutoRunwayManager : MonoBehaviour
         agents = new GameObject("Agents");
         agents.transform.parent = autoRunwayContainer.transform;
 
-        cameraGroup.SetActive(false);
+        runwayCamera = cameraGroup.GetComponent<RunwayCameraController>();
+
+        SetCameraActive(false);
+
         SetupEvents();
     }
 
@@ -80,7 +84,9 @@ public class AutoRunwayManager : MonoBehaviour
         {
             Debug.Log("ERROR - LEVEL NOT FOUND");
         }
-        cameraGroup.SetActive(true);
+
+        SetCameraActive(true);
+   
         Setup();
     }
 
@@ -97,7 +103,8 @@ public class AutoRunwayManager : MonoBehaviour
 
     public void StopAutoRunway()
     {
-        cameraGroup.SetActive(false);
+        SetCameraActive(false);
+
         ClearModels();
         DetachOutfits();
         UIManager.Instance.HideAll();
@@ -361,6 +368,12 @@ public class AutoRunwayManager : MonoBehaviour
     {
         yield return new WaitForSeconds(seconds);
         BeginRunwayShow();
+    }
+
+    private void SetCameraActive(bool active)
+    {
+        runwayCamera.enabled = active;
+        cameraGroup.SetActive(active);
     }
 
     private void OnRunwayFinish(Collider other)
