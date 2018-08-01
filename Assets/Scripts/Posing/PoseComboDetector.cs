@@ -37,7 +37,8 @@ public class PoseComboDetector : MonoBehaviour {
         if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).pose_time)
         {
             combo++;
-            UpdateComboText(userID);
+            if(combo > 1)
+                UpdateComboText(userID);
             PoseMgr.Instance.GenerateNewPose();
             poseTimeEllapsed = 0f;
         }

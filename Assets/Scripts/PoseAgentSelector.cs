@@ -12,6 +12,9 @@ public class PoseAgentSelector : MonoBehaviour
     {
         userID = kinectUserID;
         generatePoseAgents(kinectUserID);
+        PoseFX fx = GetComponent<PoseFX>();
+        if (fx)
+            fx.Init(kinectUserID);
     }
 
     void generatePoseAgents(long userID)

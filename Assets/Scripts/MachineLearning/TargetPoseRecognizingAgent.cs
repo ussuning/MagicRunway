@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetPoseRecognizingAgent : Agent {
-
-    public float PoseCD = 0.1f;
+    
     //public float PoseTime = 0.25f;
 
     private KinectManager kinectMgr;
@@ -21,6 +20,8 @@ public class TargetPoseRecognizingAgent : Agent {
     //private float poseTimeEllapsed;
 
     private float poseScore;
+
+    float PoseCD = 0.2f;
 
     PoseParameter pose;
 
@@ -89,7 +90,7 @@ public class TargetPoseRecognizingAgent : Agent {
         int isMatched = Mathf.RoundToInt(vectorAction[0]);
         if (isMatched >= 1)
             PoseMatchCount++;
-        //Debug.Log(string.Format("Agent {0}: action = {1}, isMatched = {2}", poseID, vectorAction[0], isMatched));
+        Debug.Log(string.Format("Agent {0}: action = {1}, isMatched = {2}", poseID, vectorAction[0], isMatched));
     }
 
     public override void AgentOnDone()
@@ -113,10 +114,10 @@ public class TargetPoseRecognizingAgent : Agent {
                 poseScore = PoseMatchCount / estimationTimeEllapsed;
                 isPoseMatched = poseScore >= pose.min_confidence;
             }
-            //else
-            //{
-            //    isPoseMatched = false;
-            //}
+            else
+            {
+                isPoseMatched = false;
+            }
 
             estimationTimeEllapsed = 0f;
             PoseMatchCount = 0;
