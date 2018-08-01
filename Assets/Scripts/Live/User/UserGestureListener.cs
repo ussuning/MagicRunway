@@ -9,12 +9,17 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
     public UnityEngine.UI.Text gestureInfo;
     private bool progressDisplayed;
     private float progressGestureTime;
-   
-    void Start()
-    {
-        Debug.Log("User Gesture Listener Start");
-    }
+    // singleton instance of the class
+    private static UserGestureListener instance = null;
 
+    public static UserGestureListener Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+  
     public void initialize(long userId, int userIndex)
     {
         Debug.Log("User Gesture Listener initialized");
@@ -150,6 +155,11 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         }
 
         return true;
+    }
+
+    void Awake()
+    {
+        instance = this;
     }
 
     void Update()
