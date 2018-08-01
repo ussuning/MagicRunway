@@ -48,6 +48,9 @@ public class PoseComboDetector : MonoBehaviour {
         combo = 0;
         poseTimeEllapsed = 0f;
         ClearComboText();
+
+        PoseMgr.Instance.GenerateNewPose();
+        poseTimeEllapsed = 0f;
     }
 
     void Update()

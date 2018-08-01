@@ -10,10 +10,11 @@ public class UserManager : Singleton<UserManager>
     private Dictionary<int, User> userLookup = new Dictionary<int, User>();
     private GameObject userContainer;
     private string userContainerName;
-   
+    private KinectManager kinectManager;
+
     public void Start()
     {
-        Debug.Log("Wait Ten Seconds entered");
+        kinectManager = KinectManager.Instance;
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;
     }
@@ -31,6 +32,10 @@ public class UserManager : Singleton<UserManager>
                 return;
             }
         }
+
+        // listening for these gestures for this user  
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
 
         addUser(userId, userIndex);
 
@@ -151,12 +156,6 @@ public class UserManager : Singleton<UserManager>
     {
         UserGestureListener userGestureListener = kinectController.AddComponent<UserGestureListener>();
         userGestureListener.initialize(userId, userIndex);
-
-        KinectManager kinectManager = kinectController.GetComponent<KinectManager>();
-
-        // listening for these gestures for this user  
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
     }
 
     protected bool removeGestureListener(int userIndex)
