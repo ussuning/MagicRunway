@@ -25,7 +25,9 @@ public class PoseFX : MonoBehaviour {
 
     public void OnPoseDetected(object param, object paramEx)
     {
-        UpdateComboParticles();
+        long matched_userID = (long)param;
+        if(matched_userID == userID)
+            UpdateComboParticles();
     }
 
     void UpdateComboParticles()
