@@ -152,10 +152,18 @@ public class UserManager : Singleton<UserManager>
         Destroy(userContainer);
     }
 
-    protected void addGestureListener(long userId, int userIndex )
+    protected bool addGestureListener(long userId, int userIndex )
     {
-        UserGestureListener userGestureListener = kinectController.AddComponent<UserGestureListener>();
-        userGestureListener.initialize(userId, userIndex);
+        foreach (var component in kinectController.GetComponents<UserGestureListener>())
+        {
+            if (component.playerIndex == userIndex)
+            {
+                component.initialize(userId, userIndex);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected bool removeGestureListener(int userIndex)
@@ -164,7 +172,7 @@ public class UserManager : Singleton<UserManager>
         {
             if (component.playerIndex == userIndex)
             {
-                Destroy(component);
+                component.uid = 0;
                 return true;
             }
         }
