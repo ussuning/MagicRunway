@@ -39,10 +39,10 @@ public class UserManager : Singleton<UserManager>
         if (mode == Mode.LIVE)
         {
             UIManager.Instance.HideStickMan(true);
-            UIManager.Instance.ShowGestureGender(25.0f);
+            UIManager.Instance.ShowGestureGender(10.0f);
 
             //wait 25 seconds, show stickman again to continue posing
-            UIManager.Instance.ShowStickManDelay(26.0f);
+            UIManager.Instance.ShowStickManDelay(11.0f);
         }
     }
 

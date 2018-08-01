@@ -119,14 +119,14 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             Debug.Log("User " + userId + " is female");
             UserManager.Instance.setGender(userIndex, "female");
             UIManager.Instance.ShowFemaleGender();
-            UIManager.Instance.ShowStickManDelay(5.0f);
+            UIManager.Instance.ShowStickManDelay(2.0f);
         }
         else
         {
             Debug.Log("User " + userId + " is male");
             UserManager.Instance.setGender(userIndex, "male");
             UIManager.Instance.ShowMaleGender();
-            UIManager.Instance.ShowStickManDelay(5.0f);
+            UIManager.Instance.ShowStickManDelay(2.0f);
         }
 
         return true;
