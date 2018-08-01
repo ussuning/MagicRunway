@@ -21,6 +21,7 @@ public class UIManager : Singleton<UIManager>
     private CanvasFader faderStartMenu;
     private CanvasFader faderStickMan;
     private IEnumerator gestureGenderCoroutine;
+    private IEnumerator stickManCoroutine;
 
     void OnEnable()
     {
@@ -85,6 +86,12 @@ public class UIManager : Singleton<UIManager>
         GameObject JoinInButton = uiStartMenu.transform.Find("JoinInButton").gameObject;
         Button StartMenuButton = JoinInButton.GetComponent<Button>();
         StartMenuButton.onClick.Invoke();
+    }
+
+    public void ShowStickManDelay(float time = 30.0f)
+    {
+        stickManCoroutine = WaitToShowStickMan(time);
+        StartCoroutine(stickManCoroutine);
     }
 
     public void ShowStickMan(bool animate)
@@ -224,6 +231,12 @@ public class UIManager : Singleton<UIManager>
     {
         yield return new WaitForSeconds(delay);
         HideGestureGender();
+    }
+
+    IEnumerator WaitToShowStickMan(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ShowStickMan(true);
     }
 
     public void HideGestureGender(bool animate = true)

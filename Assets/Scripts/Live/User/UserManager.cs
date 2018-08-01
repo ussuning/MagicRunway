@@ -33,6 +33,17 @@ public class UserManager : Singleton<UserManager>
         }
 
         addUser(userId, userIndex);
+
+        // show gender icons 
+        Mode mode = appManager.getMode();
+        if (mode == Mode.LIVE)
+        {
+            UIManager.Instance.HideStickMan(true);
+            UIManager.Instance.ShowGestureGender(25.0f);
+
+            //wait 25 seconds, show stickman again to continue posing
+            UIManager.Instance.ShowStickManDelay(26.0f);
+        }
     }
 
     // User Lost detected, remove game object
@@ -154,14 +165,10 @@ public class UserManager : Singleton<UserManager>
         {
             if (component.playerIndex == userIndex)
             {
-                Debug.Log("HIT");
-                Debug.Log("component player index = " + component.playerIndex);
-                Debug.Log("user index = " + userIndex);
                 Destroy(component);
                 return true;
             }
         }
-        Debug.Log("Unable to remove gesture listener, does not exist");
         return false;
     }
 
@@ -176,5 +183,4 @@ public class UserManager : Singleton<UserManager>
         yield return new WaitForSeconds(5);
         UIManager.Instance.ShowStartMenu(true);
     }
-
 }
