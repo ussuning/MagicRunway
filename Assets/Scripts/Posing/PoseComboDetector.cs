@@ -71,7 +71,7 @@ public class PoseComboDetector : MonoBehaviour {
         CancelInvoke("ClearComboText");
 
         if (ComboText)
-            ComboText.text = string.Format("{0} x COMBO by {1}", combo, user);
+            ComboText.text = string.Format("{0} x COMBO\nby {1}", combo, user);
 
         Invoke("ClearComboText", 2f);
     }
