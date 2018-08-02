@@ -6,10 +6,10 @@ public class UserManager : Singleton<UserManager>
 {
     public AppManager appManager;
     public GameObject userSkeletonPrefab;
+    public GameObject malePrefab;
+    public GameObject femalePrefab;
     public GameObject kinectController;
     private Dictionary<int, User> userLookup = new Dictionary<int, User>();
-    private GameObject userContainer;
-    private string userContainerName;
     private KinectManager kinectManager;
 
     public void Start()
@@ -17,6 +17,17 @@ public class UserManager : Singleton<UserManager>
         kinectManager = KinectManager.Instance;
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;
+    }
+
+    public User getUserByIndex(int userIndex)
+    {
+        return userLookup[userIndex];
+    }
+
+    // stub - program later
+    public bool userExists(long uid)
+    {
+        return false;
     }
 
     // New User detected, instantiate user skeleton and attach gesture listener
@@ -54,8 +65,6 @@ public class UserManager : Singleton<UserManager>
     // User Lost detected, remove game object
     void UserManager_UserLostDetected(long userId, int userIndex)
     {
-        Debug.Log("UserManager: User Lost Detected.");
-
         // remove listener
         removeUser(userId, userIndex);
 
@@ -76,19 +85,35 @@ public class UserManager : Singleton<UserManager>
         }
     }
 
-    public bool userExists(long uid)
-    {
-        return false;
-    }
-
-    public User getUserByIndex(int userIndex)
-    {
-        return userLookup[userIndex];
-    }
-
     public void setGender(int userIndex, string gender)
     {
         userLookup[userIndex].setGender(gender);
+    }
+
+    public Dictionary<int, User> getCurrentUsers()
+    {
+        return userLookup;
+    }
+
+    public void addGenderIcon(int userIndex, string gender)
+    {
+        int playerNumber = userIndex + 1;
+        string userContainerName = "User" + playerNumber;
+        GameObject userContainer = GameObject.Find(userContainerName);
+        GameObject genderGO = userContainer.transform.Find("Gender").gameObject;
+
+        if (gender == "female")
+        {
+            femalePrefab = (GameObject)Instantiate(Resources.Load("User/gender_female"));
+            femalePrefab.name = "Female";
+            femalePrefab.transform.SetParent(genderGO.transform);
+        }
+        else
+        {
+            malePrefab = (GameObject)Instantiate(Resources.Load("User/gender_male"));
+            malePrefab.name = "Male";
+            malePrefab.transform.SetParent(genderGO.transform);
+        }
     }
 
     protected void addUser(long userId, int userIndex)
@@ -106,7 +131,12 @@ public class UserManager : Singleton<UserManager>
         addPoseDetection(userId);
 
         // instantiate user instance and add to user lookup
-        userLookup[userIndex] = new User(userId, userIndex);
+        int playerNumber = userIndex + 1;
+        string userContainerName = "User" + playerNumber;
+        GameObject userContainer = GameObject.Find(userContainerName);
+        User user = userContainer.AddComponent<User>();
+        user.Initialize(userId, userIndex);
+        userLookup[userIndex] = user;
 
         // show start menu button to transition into Live mode
         StartCoroutine(joinLivePrompt());
@@ -128,15 +158,24 @@ public class UserManager : Singleton<UserManager>
     {
         int playerNumber = userIndex + 1;
         GameObject Users = GameObject.Find("Users");
-        userContainer = new GameObject();
-        userContainerName = "User" + playerNumber;
+        string userContainerName = "User" + playerNumber;
+
+        // create gameobject for this user
+        GameObject userContainer = new GameObject();
         userContainer.name = userContainerName;
         userContainer.transform.SetParent(Users.transform);
+
+        // add gender gameobject for this user
+        GameObject genderContainer = new GameObject();
+        genderContainer.name = "Gender";
+        genderContainer.transform.SetParent(userContainer.transform);
     }
 
     protected void renderUserModel(int userIndex)
     {
         int playerNumber = userIndex + 1;
+        string userContainerName = "User" + playerNumber;
+        GameObject userContainer = GameObject.Find(userContainerName);
 
         // instantiate prefab for new user - move to user
         userSkeletonPrefab = (GameObject)Instantiate(Resources.Load("UserSkeleton"));
@@ -147,8 +186,8 @@ public class UserManager : Singleton<UserManager>
     protected void removeUserModel(int userIndex)
     {
         int playerNumber = userIndex + 1;
-        userContainerName = "User" + playerNumber;
-        userContainer = GameObject.Find(userContainerName);
+        string userContainerName = "User" + playerNumber;
+        GameObject userContainer = GameObject.Find(userContainerName);
         Destroy(userContainer);
     }
 
@@ -185,9 +224,32 @@ public class UserManager : Singleton<UserManager>
         agentSelector.Init(uid);
     }
 
+    protected void updateGenderIconPos(int userIndex, Vector3 pos)
+    {
+        // move icon to pos
+        int playerNumber = userIndex + 1;
+        string userContainerName = "User" + playerNumber;
+        GameObject userContainer = GameObject.Find(userContainerName);
+        GameObject gender = userContainer.transform.Find("Gender").gameObject;
+        gender.transform.position = pos;
+    }
+
     IEnumerator joinLivePrompt()
     {
         yield return new WaitForSeconds(5);
         UIManager.Instance.ShowStartMenu(true);
+    }
+
+    private void Update()
+    {
+        Camera cam = Camera.main;
+
+        // display gender icon next to each user on every tick
+        foreach (KeyValuePair<int, User> user in userLookup)
+        {
+            // render gender icon
+            Vector3 screenPos = cam.WorldToScreenPoint(user.Value.getPosition());
+            updateGenderIconPos(user.Value.getUserIndex(), screenPos);
+        }
     }
 }

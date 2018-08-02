@@ -58,6 +58,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         if(gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
             Debug.Log("User " + userId + " is female");
+            UserManager.Instance.addGenderIcon(userIndex, "female");
             UserManager.Instance.setGender(userIndex, "female");
             UIManager.Instance.ShowFemaleGender();
             UIManager.Instance.ShowStickManDelay(2.0f);
@@ -65,6 +66,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         else
         {
             Debug.Log("User " + userId + " is male");
+            UserManager.Instance.addGenderIcon(userIndex, "male");
             UserManager.Instance.setGender(userIndex, "male");
             UIManager.Instance.ShowMaleGender();
             UIManager.Instance.ShowStickManDelay(2.0f);
