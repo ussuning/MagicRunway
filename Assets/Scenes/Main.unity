@@ -2037,8 +2037,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2124420534}
-  - {fileID: 1497210621}
+  - {fileID: 1966842075}
+  - {fileID: 1378210419}
   m_Father: {fileID: 1066975418}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3881,6 +3881,10 @@ Prefab:
       propertyPath: m_Name
       value: Male
       objectReference: {fileID: 0}
+    - target: {fileID: 4100395658151190, guid: 0314efb665d1ed64ca76b461d144fa36, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0314efb665d1ed64ca76b461d144fa36, type: 2}
   m_IsPrefabParent: 0
@@ -4641,6 +4645,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f6f8471db4f7a048aa4bff5ab5c9719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ComboText: {fileID: 0}
 --- !u!1 &1314250646
 GameObject:
   m_ObjectHideFlags: 0
@@ -4967,6 +4972,11 @@ Transform:
   m_PrefabParentObject: {fileID: 4213867205078686, guid: 44cd027c45fb6ba4586a2e437f60399a,
     type: 2}
   m_PrefabInternal: {fileID: 1337242969}
+--- !u!4 &1378210419 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4100395658151190, guid: 0314efb665d1ed64ca76b461d144fa36,
+    type: 2}
+  m_PrefabInternal: {fileID: 1053800423}
 --- !u!1001 &1430691210
 Prefab:
   m_ObjectHideFlags: 0
@@ -5190,11 +5200,6 @@ MonoBehaviour:
   ActionPlaceholderName: action
   PreviousActionPlaceholderName: prev_action
   brain: {fileID: 602337367}
---- !u!224 &1497210621 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 224173532035672876, guid: 0314efb665d1ed64ca76b461d144fa36,
-    type: 2}
-  m_PrefabInternal: {fileID: 1053800423}
 --- !u!20 &1516950169 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20166323031998498, guid: 88b77abc855415b4e821200dd0bc69e0,
@@ -6432,6 +6437,11 @@ MonoBehaviour:
   m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
   m_EditorClassIdentifier: 
   brain: {fileID: 0}
+--- !u!4 &1966842075 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4674751118932738, guid: 865915783ab6bc7478b8a69e7795d61a,
+    type: 2}
+  m_PrefabInternal: {fileID: 1191751058}
 --- !u!114 &1969381968 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114946702897875792, guid: 052f4c09e2574654a930df511157ed8d,
@@ -6572,7 +6582,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2017443957}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 574.3235, y: 116.28613, z: -13.559837}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6595,11 +6605,6 @@ MonoBehaviour:
   m_Name: (Clone)(Clone)(Clone)
   m_EditorClassIdentifier: 
   brain: {fileID: 0}
---- !u!224 &2124420534 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 224946830072847998, guid: 865915783ab6bc7478b8a69e7795d61a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1191751058}
 --- !u!1 &2131648482
 GameObject:
   m_ObjectHideFlags: 0
