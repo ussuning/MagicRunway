@@ -7,8 +7,9 @@ public class User : MonoBehaviour {
     public int uindex;
     public long uid;
     public string ugender;    // switch to enum later
-    public Vector3 position; 
-  
+    public Vector3 uposition;
+    public Vector3 genderIconPosition;
+
     // Use this for initialization
     public User(long id, int index)
     {
@@ -39,7 +40,12 @@ public class User : MonoBehaviour {
 
     public Vector3 getPosition()
     {
-        return position;
+        return uposition;
+    }
+
+    public Vector3 getGenderIconPosition()
+    {
+        return genderIconPosition;
     }
 
     public void setGender(string gender)
@@ -47,7 +53,7 @@ public class User : MonoBehaviour {
         ugender = gender;
     }
 
-    public Vector3 getCurrentPosition()
+    protected Vector3 getCurrentPosition(int iJointIndex)
     {
         KinectManager manager = KinectManager.Instance;
 
@@ -63,7 +69,7 @@ public class User : MonoBehaviour {
                 backgroundRect = portraitBack.GetBackgroundRect();
             }
 
-            int iJointIndex = (int)KinectInterop.JointType.SpineMid;
+            //int iJointIndex = (int)KinectInterop.JointType.SpineMid;
             if (manager.IsJointTracked(uid, iJointIndex))
             {
                 return manager.GetJointPosColorOverlay(uid, iJointIndex, foregroundCamera, backgroundRect);
@@ -76,7 +82,8 @@ public class User : MonoBehaviour {
     void Update()
     {
         // get this user's pos on every tick
-        position = getCurrentPosition();
+        uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
+        genderIconPosition = getCurrentPosition((int)KinectInterop.JointType.ShoulderLeft);
     }
 
 }

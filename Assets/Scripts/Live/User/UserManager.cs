@@ -230,8 +230,18 @@ public class UserManager : Singleton<UserManager>
         int playerNumber = userIndex + 1;
         string userContainerName = "User" + playerNumber;
         GameObject userContainer = GameObject.Find(userContainerName);
-        GameObject gender = userContainer.transform.Find("Gender").gameObject;
-        gender.transform.position = pos;
+
+        if(userLookup[userIndex].getGender() == "female")
+        {
+
+            GameObject gender = userContainer.transform.Find("Gender/Female").gameObject;
+            gender.transform.position = pos;
+        }
+        else if(userLookup[userIndex].getGender() == "male")
+        {
+            GameObject gender = userContainer.transform.Find("Gender/Male").gameObject;
+            gender.transform.position = pos;
+        }
     }
 
     IEnumerator joinLivePrompt()
@@ -242,14 +252,14 @@ public class UserManager : Singleton<UserManager>
 
     private void Update()
     {
-        Camera cam = Camera.main;
-
         // display gender icon next to each user on every tick
-        foreach (KeyValuePair<int, User> user in userLookup)
+        if (appManager.getMode() == Mode.LIVE)
         {
-            // render gender icon
-            Vector3 screenPos = cam.WorldToScreenPoint(user.Value.getPosition());
-            updateGenderIconPos(user.Value.getUserIndex(), screenPos);
+            foreach (KeyValuePair<int, User> user in userLookup)
+            {
+                // render gender icon
+                updateGenderIconPos(user.Value.getUserIndex(), user.Value.getGenderIconPosition());
+            }
         }
     }
 }

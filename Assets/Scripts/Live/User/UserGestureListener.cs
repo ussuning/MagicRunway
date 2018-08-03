@@ -4,6 +4,7 @@ using System;
 
 public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListenerInterface
 {
+    public AppManager appManager;
     public int playerIndex = 0;
     public long uid;
    
@@ -46,14 +47,26 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                                   KinectInterop.JointType joint, Vector3 screenPos)
     {
 
+        if(appManager.getMode() != Mode.LIVE)
+        {
+            return false;
+        }
+
         Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
 
         // the gestures are allowed for the primary user only
         if (userIndex != playerIndex)
             return false;
 
-        // store gender
-        UIManager.Instance.HideGestureGender(true);
+        // return if gender already set
+        if(UserManager.Instance.getUserByIndex(userIndex).getGender() != null)
+        {
+            Debug.Log("Gender already set");
+            return false;
+        }
+
+            // store gender
+            UIManager.Instance.HideGestureGender(true);
 
         if(gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
