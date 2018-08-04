@@ -6,6 +6,7 @@ public class UserManager : Singleton<UserManager>
 {
     public AppManager appManager;
     public GameObject userSkeletonPrefab;
+    public GameObject userScorePrefab;
     public GameObject malePrefab;
     public GameObject femalePrefab;
     public GameObject kinectController;
@@ -124,6 +125,8 @@ public class UserManager : Singleton<UserManager>
         // instantiate prefab for new user 
         renderUserModel(userIndex);
 
+        addUserScoreUI(userId);
+
         // add listener and assign for user 
         addGestureListener(userId, userIndex);
 
@@ -222,6 +225,15 @@ public class UserManager : Singleton<UserManager>
     {
         PoseAgentSelector agentSelector = userSkeletonPrefab.GetComponent<PoseAgentSelector>();
         agentSelector.Init(uid);
+    }
+
+    protected void addUserScoreUI(long uid)
+    {
+        GameObject scoreContainer = GameObject.Find("PoseScoreContainer");
+
+        // instantiate prefab for new user - move to user
+        GameObject userScoreGO = (GameObject)Instantiate(userScorePrefab, scoreContainer.transform);
+        userScoreGO.GetComponent<UserScore>().Init(uid);
     }
 
     protected void updateGenderIconPos(int userIndex, Vector3 pos)

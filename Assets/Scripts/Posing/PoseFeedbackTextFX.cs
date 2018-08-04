@@ -34,6 +34,8 @@ public class PoseFeedbackTextFX : MonoBehaviour {
 
         string[] feedbackStrings = { "FANTASTIC", "BEAUTIFUL", "AWESOME", "GOOD JOB" };
         SetText(feedbackStrings[Random.Range(0, feedbackStrings.Length)]);
+
+        Destroy(this.gameObject, TweenToControl.GetAnimationDuration() + 0.5f);
     }
 
     public void SetText(string txt)
