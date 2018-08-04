@@ -11,6 +11,7 @@ public class UserManager : Singleton<UserManager>
     public GameObject femalePrefab;
     public GameObject kinectController;
     private Dictionary<int, User> userLookup = new Dictionary<int, User>();
+    private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();
     private KinectManager kinectManager;
 
     public void Start()
@@ -125,6 +126,7 @@ public class UserManager : Singleton<UserManager>
         // instantiate prefab for new user 
         renderUserModel(userIndex);
 
+        // instantiate user score box (UI)
         addUserScoreUI(userId);
 
         // add listener and assign for user 
@@ -152,6 +154,9 @@ public class UserManager : Singleton<UserManager>
 
         // remove user data from scene
         removeUserModel(userIndex);
+
+        // remove user score box (UI)
+        removeUserScoreUI(userId);
 
         // destory user data
         userLookup.Remove(userIndex);
@@ -194,6 +199,26 @@ public class UserManager : Singleton<UserManager>
         Destroy(userContainer);
     }
 
+    protected void addUserScoreUI(long uid)
+    {
+        GameObject scoreContainer = GameObject.Find("PoseScoreContainer");
+
+        // instantiate prefab for new user - move to user
+        GameObject userScoreGO = (GameObject)Instantiate(userScorePrefab, scoreContainer.transform);
+        userScoreGO.GetComponent<UserScore>().Init(uid);
+        userScoreBoxes.Add(uid, userScoreGO);
+    }
+
+    protected void removeUserScoreUI(long uid)
+    {
+        if(userScoreBoxes.ContainsKey(uid))
+        {
+            GameObject userScoreGO = userScoreBoxes[uid];
+            userScoreBoxes.Remove(uid);
+            Destroy(userScoreGO);
+        }
+    }
+
     protected bool addGestureListener(long userId, int userIndex )
     {
         foreach (var component in kinectController.GetComponents<UserGestureListener>())
@@ -225,15 +250,6 @@ public class UserManager : Singleton<UserManager>
     {
         PoseAgentSelector agentSelector = userSkeletonPrefab.GetComponent<PoseAgentSelector>();
         agentSelector.Init(uid);
-    }
-
-    protected void addUserScoreUI(long uid)
-    {
-        GameObject scoreContainer = GameObject.Find("PoseScoreContainer");
-
-        // instantiate prefab for new user - move to user
-        GameObject userScoreGO = (GameObject)Instantiate(userScorePrefab, scoreContainer.transform);
-        userScoreGO.GetComponent<UserScore>().Init(uid);
     }
 
     protected void updateGenderIconPos(int userIndex, Vector3 pos)
