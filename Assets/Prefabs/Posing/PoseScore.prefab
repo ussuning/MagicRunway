@@ -27,7 +27,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1292279890683590
 GameObject:
   m_ObjectHideFlags: 0
@@ -73,14 +73,13 @@ GameObject:
   - component: {fileID: 222810394136427034}
   - component: {fileID: 114044985720239634}
   - component: {fileID: 114538508987799874}
-  - component: {fileID: 114114404392477826}
   m_Layer: 0
   m_Name: PoseMatchText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &114044985720239634
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -147,20 +146,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: PINEAPPLE
---- !u!114 &114114404392477826
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1315599423560300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36ebb5dc158a8da47b313d379dfa0469, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  txt: {fileID: 114044985720239634}
-  ShakeSpeed: 20
-  targetShrinkSize: 0.8
 --- !u!114 &114151622203242232
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -279,10 +264,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1920, y: -269.7908}
-  m_SizeDelta: {x: 512, y: 519.5816}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224419676754269696
 RectTransform:
