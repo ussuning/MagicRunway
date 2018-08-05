@@ -197,7 +197,7 @@ public class AvatarController : MonoBehaviour
         Quaternion posRotation = mirroredMovement ? Quaternion.Euler (0f, 180f, 0f) * initialRotation : initialRotation;
         worldPosition = posRotation * worldPosition;
 
-        return bodyRootPosition + worldPosition;
+        return jointPosition; // bodyRootPosition + worldPosition;
     }
 
 	/// <summary>
@@ -676,31 +676,31 @@ public class AvatarController : MonoBehaviour
         
         offsetCalibrated = false;       // this cause also calibrating kinect offset in moveAvatar function 
     }
-	
-	// Apply the rotations tracked by kinect to the joints.
-	protected void TransformBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
+
+    // Apply the rotations tracked by kinect to the joints.
+    protected void TransformBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
-		Transform boneTransform = bones[boneIndex];
-		if(boneTransform == null || kinectManager == null)
-			return;
-		
-		int iJoint = (int)joint;
-		if(iJoint < 0 || !kinectManager.IsJointTracked(userId, iJoint))
-			return;
-		
-		// Get Kinect joint orientation
-		Quaternion jointRotation = kinectManager.GetJointOrientation(userId, iJoint, flip);
-		if(jointRotation == Quaternion.identity)
-			return;
-        
+        Transform boneTransform = bones[boneIndex];
+        if (boneTransform == null || kinectManager == null)
+            return;
+
+        int iJoint = (int)joint;
+        if (iJoint < 0 || !kinectManager.IsJointTracked(userId, iJoint))
+            return;
+
+        // Get Kinect joint orientation
+        Quaternion jointRotation = kinectManager.GetJointOrientation(userId, iJoint, flip);
+        if (jointRotation == Quaternion.identity)
+            return;
+
         // calculate the new orientation
         Quaternion newRotation = Kinect2AvatarRot(jointRotation, boneIndex);
 
         if (externalRootMotion)
-		{
-			newRotation = transform.rotation * newRotation;
-		}
-        
+        {
+            newRotation = transform.rotation * newRotation;
+        }
+
 
         // Smoothly transition to the new rotation
         if (smoothFactor != 0f)
@@ -708,19 +708,31 @@ public class AvatarController : MonoBehaviour
         else
             boneTransform.rotation = newRotation;
 
-        if (joint == KinectInterop.JointType.ShoulderLeft || joint == KinectInterop.JointType.ShoulderRight)
-        {   
-            if (avatarScaler != null)
-            {
-                ShoulderFixer sg = avatarScaler.shoulderFixer;
+        switch (joint)
+        {
+            case KinectInterop.JointType.ShoulderLeft:
+            case KinectInterop.JointType.ShoulderRight:
+            //if (avatarScaler != null)
+            //{
+            //    ShoulderFixer sg = avatarScaler.shoulderFixer;
 
-                float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp);
-                float elbowDotShoulderUpPlane = joint == KinectInterop.JointType.ShoulderLeft ? sg.elbowLeftDotShoulderUpPlane : sg.elbowRightDotShoulderUpPlane;
-                Debug.Log(joint + " elbowDotShoulderUpPlane=" + elbowDotShoulderUpPlane);
-                boneTransform.Rotate(sg.shoulderTUp, elbowDotShoulderUpPlane * shoulderAngle * shoulderUnrotateFactor, Space.World);
+            //    float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp);
+            //    float elbowDotShoulderUpPlane = joint == KinectInterop.JointType.ShoulderLeft ? sg.elbowLeftDotShoulderUpPlane : sg.elbowRightDotShoulderUpPlane;
+            //    Debug.Log(joint + " elbowDotShoulderUpPlane=" + elbowDotShoulderUpPlane);
+            //    boneTransform.Rotate(sg.shoulderTUp, elbowDotShoulderUpPlane * shoulderAngle * shoulderUnrotateFactor, Space.World);
+            //}
+            //    break;
+            case KinectInterop.JointType.ElbowLeft:
+            case KinectInterop.JointType.ElbowRight:
+            case KinectInterop.JointType.WristLeft:
+            case KinectInterop.JointType.WristRight:
+            case KinectInterop.JointType.HandLeft:
+            case KinectInterop.JointType.HandRight:
+                boneTransform.position = GetJointWorldPos(joint);
+                break;
 
-            }
         }
+        boneTransform.position = GetJointWorldPos(joint);
     }
 
     // Apply the rotations tracked by kinect to a special joint
