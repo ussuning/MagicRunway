@@ -7,8 +7,14 @@ public class UserScore : MonoBehaviour {
 
     public Text UserName;
     public GameObject ScoreTextPrefab;
+    public PoseFeedbackLightraysFX lightRaysFX;
 
     long userID;
+
+    public void DebugScoreText()
+    {
+        GenerateEffects();
+    }
 
     public void Init(long user)
     {
@@ -23,14 +29,22 @@ public class UserScore : MonoBehaviour {
 
     void OnDisable()
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
     }
 
     public void OnUserPoseMatched(object param, object paramEx)
     {
         long matchedUserID = (long)param;
-        if(matchedUserID == userID)
-            GenerateScoreText();
+        if (matchedUserID == userID)
+        {
+            GenerateEffects();
+        }
+    }
+
+    public void GenerateEffects()
+    {
+        lightRaysFX.StartFX();
+        GenerateScoreText();
     }
 
     public void GenerateScoreText()
