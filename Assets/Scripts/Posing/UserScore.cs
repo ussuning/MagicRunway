@@ -19,7 +19,7 @@ public class UserScore : MonoBehaviour {
     public void Init(long user)
     {
         userID = user;
-        UserName.text = user.ToString();
+        UserName.text = string.Format("Player  {0}", KinectManager.Instance.GetUserIndexById(userID) + 1);
     }
 
     void OnEnable()
