@@ -4,7 +4,6 @@ using System;
 
 public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListenerInterface
 {
-    public AppManager appManager;
     public long uid;
     public int uindex;
    
@@ -47,7 +46,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                                   KinectInterop.JointType joint, Vector3 screenPos)
     {
 
-        if(appManager.getMode() != Mode.LIVE)
+        if(AppManager.Instance.getMode() == Mode.AUTO)
         {
             return false;
         }
@@ -66,8 +65,8 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             return false;
         }
 
-            // store gender
-            UIManager.Instance.HideGestureGender(true);
+        // store gender
+        UIManager.Instance.HideGestureGender(true);
 
         if(gesture == KinectGestures.Gestures.RaiseLeftHand)
         {

@@ -132,7 +132,7 @@ public class UIManager : Singleton<UIManager>
     public void HideAll()
     {
         HideOutfit(false);
-        HideCollection(false);
+        //  HideCollection(false);    // turn off to use for player UI
         HideUpNext();
         HideGestureGender(false);
         HideHandCursor();
@@ -163,14 +163,15 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowCollection(Collection collection)
     {
-        CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
-        cd.ShowCollection(collection);
+        // turn off to use for player UI
+       // CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
+       // cd.ShowCollection(collection);
     }
 
     public void HideCollection(bool animate = true)
     {
-        CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
-        cd.Hide(animate);
+          CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
+          cd.Hide(animate);
     }
 
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {

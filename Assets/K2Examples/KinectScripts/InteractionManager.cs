@@ -98,8 +98,6 @@ public class InteractionManager : MonoBehaviour
 	[Tooltip("Whether the hand grips and releases control mouse dragging or not.")]
 	public bool controlMouseDrag = false;
 
-    public AppManager appManager;
-
 	// Bool to specify whether to convert Unity screen coordinates to full screen mouse coordinates
 	//public bool convertMouseToFullScreen = false;
 	

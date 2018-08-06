@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class UserManager : Singleton<UserManager>
 {
-    public AppManager appManager;
     public GameObject kinectController;
     public GameObject userSkeletonPrefab;
     public GameObject userScorePrefab;
@@ -56,7 +55,7 @@ public class UserManager : Singleton<UserManager>
         StartCoroutine(addUser(userId, userIndex));
 
         // show gender icons 
-        Mode mode = appManager.getMode();
+        Mode mode = AppManager.Instance.getMode();
         if (mode == Mode.LIVE)
         {
             UIManager.Instance.HideStickMan(true);
@@ -77,11 +76,11 @@ public class UserManager : Singleton<UserManager>
         int count = KinectManager.Instance.GetUsersCount();
         if (count == 0)
         {
-            Mode mode = appManager.getMode();
+            Mode mode = AppManager.Instance.getMode();
             if (mode == Mode.LIVE)
             {
                 Debug.Log("User count = 0 cries. Going back to Auto Runway");
-                appManager.LiveToAuto();
+                AppManager.Instance.LiveToAuto();
             }
             if (mode == Mode.AUTO)
             {
@@ -168,8 +167,8 @@ public class UserManager : Singleton<UserManager>
 
         // instantiate prefab for new user - move to user
         GameObject userSkeletonGO = (GameObject)Instantiate(userSkeletonPrefab);
-        userSkeletonPrefab.name = "User Skeleton_" + userId;
-        userSkeletonPrefab.transform.SetParent(userContainer.transform);
+        userSkeletonGO.name = "User Skeleton_" + userId;
+        userSkeletonGO.transform.SetParent(userContainer.transform);
     }
 
     protected void removeUserModel(long userId)
@@ -297,7 +296,7 @@ public class UserManager : Singleton<UserManager>
     void Update()
     {
         // display gender icon next to each user on every tick
-        if (appManager.getMode() == Mode.LIVE)
+        if (AppManager.Instance.getMode() == Mode.LIVE)
         {
             foreach (KeyValuePair<long, User> user in userLookup)
             {
