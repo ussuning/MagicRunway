@@ -278,6 +278,9 @@ public class UserManager : Singleton<UserManager>
         // instantiate prefab for new user - turn off, causing runtime issues
         renderUserModel(userId);
 
+        // instantiate user pose score prefab
+        addUserScoreUI(userId);
+
         // add listener and assign for user 
         addGestureListener(userId, userIndex);
 
