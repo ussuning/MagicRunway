@@ -6,11 +6,13 @@ public class UserManager : Singleton<UserManager>
 {
     public AppManager appManager;
     public GameObject kinectController;
-    private GameObject userSkeletonPrefab;
-    private GameObject malePrefab;
-    private GameObject femalePrefab;
+    public GameObject userSkeletonPrefab;
+    public GameObject userScorePrefab;
+    public GameObject malePrefab;
+    public GameObject femalePrefab;
     private GameObject outfitMenu;
     private Dictionary<long, User> userLookup = new Dictionary<long, User>();
+    private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();
     private KinectManager kinectManager;
 
     public void Start()
@@ -129,6 +131,9 @@ public class UserManager : Singleton<UserManager>
         // remove user data from scene
         removeUserModel(userId);
 
+        // remove user score box (UI)
+        removeUserScoreUI(userId);
+
         // destory user data
         userLookup.Remove(userId);
     }
@@ -174,7 +179,27 @@ public class UserManager : Singleton<UserManager>
         Destroy(userContainer);
     }
 
-    protected bool addGestureListener(long userId, int userIndex)
+    protected void addUserScoreUI(long uid)
+    {
+        GameObject scoreContainer = GameObject.Find("PoseScoreContainer");
+
+        // instantiate prefab for new user - move to user
+        GameObject userScoreGO = (GameObject)Instantiate(userScorePrefab, scoreContainer.transform);
+        userScoreGO.GetComponent<UserScore>().Init(uid);
+        userScoreBoxes.Add(uid, userScoreGO);
+    }
+
+    protected void removeUserScoreUI(long uid)
+    {
+        if(userScoreBoxes.ContainsKey(uid))
+        {
+            GameObject userScoreGO = userScoreBoxes[uid];
+            userScoreBoxes.Remove(uid);
+            Destroy(userScoreGO);
+        }
+    }
+
+    protected bool addGestureListener(long userId, int userIndex )
     {
         foreach (var component in kinectController.GetComponents<UserGestureListener>())
         {
