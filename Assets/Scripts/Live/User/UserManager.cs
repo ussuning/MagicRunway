@@ -111,15 +111,15 @@ public class UserManager : Singleton<UserManager>
 
         if (gender == "female")
         {
-            femalePrefab = (GameObject)Instantiate(Resources.Load("User/gender_female"));
-            femalePrefab.name = "Female";
-            femalePrefab.transform.SetParent(genderGO.transform);
+            GameObject femaleGO = (GameObject)Instantiate(femalePrefab);
+            femaleGO.name = "Female";
+            femaleGO.transform.SetParent(genderGO.transform);
         }
         else
-        {
-            malePrefab = (GameObject)Instantiate(Resources.Load("User/gender_male"));
-            malePrefab.name = "Male";
-            malePrefab.transform.SetParent(genderGO.transform);
+        { 
+            GameObject maleGO = (GameObject)Instantiate(malePrefab);
+            maleGO.name = "Male";
+            maleGO.transform.SetParent(genderGO.transform);
         }
     }
 
@@ -167,7 +167,7 @@ public class UserManager : Singleton<UserManager>
         GameObject userContainer = GameObject.Find(userContainerName);
 
         // instantiate prefab for new user - move to user
-        userSkeletonPrefab = (GameObject)Instantiate(Resources.Load("User/UserSkeleton"));
+        GameObject userSkeletonGO = (GameObject)Instantiate(userSkeletonPrefab);
         userSkeletonPrefab.name = "User Skeleton_" + userId;
         userSkeletonPrefab.transform.SetParent(userContainer.transform);
     }
@@ -303,7 +303,7 @@ public class UserManager : Singleton<UserManager>
             {
                 // render gender icon
                 updateGenderIconPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
-              //  updateOufitMenuPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
+                //updateOufitMenuPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
             }
         }
     }
