@@ -32,13 +32,12 @@ public class UIManager : Singleton<UIManager>
 
     public void Start()
     {
-        uiStartMenu.SetActive(false);
         //uiShowcase.SetActive(false);
         uiGestureGender.SetActive(false);
+        uiStartMenu.SetActive(false);
 
         uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
         uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
-
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
         faderStickMan = uiStickMan.GetComponent<CanvasFader>();
 

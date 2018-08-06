@@ -5,8 +5,8 @@ using System;
 public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListenerInterface
 {
     public AppManager appManager;
-    public int playerIndex = 0;
     public long uid;
+    public int uindex;
    
     // singleton instance of the class
     private static UserGestureListener instance = null;
@@ -19,10 +19,10 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         }
     }
   
-    public void initialize(long userId, int userIndex)
+    public void Initialize(long userId, int userIndex)
     {
         Debug.Log("User Gesture Listener initialized");
-        playerIndex = userIndex;
+        uindex = userIndex;
         uid = userId;
     }
 
@@ -51,15 +51,16 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         {
             return false;
         }
+    
 
         Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
 
         // the gestures are allowed for the primary user only
-        if (userIndex != playerIndex)
+        if (userIndex != uindex)
             return false;
 
         // return if gender already set
-        if(UserManager.Instance.getUserByIndex(userIndex).getGender() != null)
+        if(UserManager.Instance.getUserById(userId).getGender() != null)
         {
             Debug.Log("Gender already set");
             return false;
@@ -71,16 +72,16 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         if(gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
             Debug.Log("User " + userId + " is female");
-            UserManager.Instance.addGenderIcon(userIndex, "female");
-            UserManager.Instance.setGender(userIndex, "female");
+            UserManager.Instance.addGenderIcon(userId, "female");
+            UserManager.Instance.setGender(userId, "female");
             UIManager.Instance.ShowFemaleGender();
             UIManager.Instance.ShowStickManDelay(2.0f);
         }
         else
         {
             Debug.Log("User " + userId + " is male");
-            UserManager.Instance.addGenderIcon(userIndex, "male");
-            UserManager.Instance.setGender(userIndex, "male");
+            UserManager.Instance.addGenderIcon(userId, "male");
+            UserManager.Instance.setGender(userId, "male");
             UIManager.Instance.ShowMaleGender();
             UIManager.Instance.ShowStickManDelay(2.0f);
         }
@@ -92,7 +93,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                                   KinectInterop.JointType joint)
     {
         // the gestures are allowed for the primary user only
-        if (userIndex != playerIndex)
+        if (userIndex != uindex)
         {
             return false;
         }

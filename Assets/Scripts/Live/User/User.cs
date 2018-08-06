@@ -17,7 +17,7 @@ public class User : MonoBehaviour {
         uindex = index;
     }
 
-    public void Initialize(long id, int index)
+    public void initialize(long id, int index)
     {
         uid = id;
         uindex = index;
