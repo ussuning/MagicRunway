@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PoseComboDetector : MonoBehaviour {
 
-    public Text ComboText;
-
     private int combo = 0;
     public int ComboNum
     {
@@ -37,8 +35,8 @@ public class PoseComboDetector : MonoBehaviour {
         if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).pose_time)
         {
             combo++;
-            if(combo > 1)
-                UpdateComboText(userID);
+            if (combo > 1)
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, userID, combo);
             PoseMgr.Instance.GenerateNewPose();
             poseTimeEllapsed = 0f;
         }
@@ -48,7 +46,6 @@ public class PoseComboDetector : MonoBehaviour {
     {
         combo = 0;
         poseTimeEllapsed = 0f;
-        ClearComboText();
 
         PoseMgr.Instance.GenerateNewPose();
         poseTimeEllapsed = 0f;
@@ -64,21 +61,5 @@ public class PoseComboDetector : MonoBehaviour {
             PoseMgr.Instance.GenerateNewPose();
             poseTimeEllapsed = 0f;
         }
-    }
-
-    void UpdateComboText(long user)
-    {
-        CancelInvoke("ClearComboText");
-
-        if (ComboText)
-            ComboText.text = string.Format("{0} x COMBO\nby {1}", combo, user);
-
-        Invoke("ClearComboText", 2f);
-    }
-
-    void ClearComboText()
-    {
-        if (ComboText)
-            ComboText.text = "";
     }
 }

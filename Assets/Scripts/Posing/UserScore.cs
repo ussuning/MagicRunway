@@ -35,20 +35,23 @@ public class UserScore : MonoBehaviour {
     public void OnUserPoseMatched(object param, object paramEx)
     {
         long matchedUserID = (long)param;
+        float poseScore = (float)paramEx;
         if (matchedUserID == userID)
         {
-            GenerateEffects();
+            GenerateEffects(poseScore);
         }
     }
 
-    public void GenerateEffects()
+    public void GenerateEffects(float poseScore = 0f)
     {
         lightRaysFX.StartFX();
-        GenerateScoreText();
+        GenerateScoreText(poseScore);
     }
 
-    public void GenerateScoreText()
+    public void GenerateScoreText(float poseScore = 0f)
     {
-        Instantiate(ScoreTextPrefab, this.transform);
+        GameObject scoreTextGO = Instantiate(ScoreTextPrefab, this.transform);
+        PoseFeedbackTextFX textFX = scoreTextGO.GetComponent<PoseFeedbackTextFX>();
+        textFX.ActivateTextFX(poseScore);
     }
 }
