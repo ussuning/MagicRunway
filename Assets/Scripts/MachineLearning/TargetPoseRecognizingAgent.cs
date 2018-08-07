@@ -21,7 +21,7 @@ public class TargetPoseRecognizingAgent : Agent {
 
     private float poseScore;
 
-    float PoseCD = 0.2f;
+    float PoseCD = 0.25f;
 
     PoseParameter pose;
 
@@ -90,7 +90,7 @@ public class TargetPoseRecognizingAgent : Agent {
         int isMatched = Mathf.RoundToInt(vectorAction[0]);
         if (isMatched >= 1)
             PoseMatchCount++;
-        Debug.Log(string.Format("Agent {0}: action = {1}, isMatched = {2}", poseID, vectorAction[0], isMatched));
+        Debug.Log(string.Format("User {0} : Agent {1}: action = {2}, isMatched = {3}", this.name, poseID, vectorAction[0], isMatched));
     }
 
     public override void AgentOnDone()

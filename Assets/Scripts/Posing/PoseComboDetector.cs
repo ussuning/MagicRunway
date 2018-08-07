@@ -37,11 +37,7 @@ public class PoseComboDetector : MonoBehaviour {
             combo++;
             if (combo > 1)
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, userID, combo);
-
-            if (poseTimeEllapsed >= 1f)
-                GenerateNewPose();
-            else
-                Invoke("GenerateNewPose", 1f - poseTimeEllapsed);
+            GenerateNewPose();
         }
     }
 
