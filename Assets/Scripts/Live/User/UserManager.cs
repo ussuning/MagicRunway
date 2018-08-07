@@ -9,7 +9,7 @@ public class UserManager : Singleton<UserManager>
     public GameObject userScorePrefab;
     public GameObject malePrefab;
     public GameObject femalePrefab;
-    private GameObject outfitMenu;
+    public GameObject outfitMenuPrefab;
     private Dictionary<long, User> userLookup = new Dictionary<long, User>();
     private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();
     private KinectManager kinectManager;
@@ -17,7 +17,6 @@ public class UserManager : Singleton<UserManager>
     public void Start()
     {
         kinectManager = KinectManager.Instance;
-        outfitMenu = (GameObject)Instantiate(Resources.Load("User/OutFitMenu"));
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;
     }
@@ -31,12 +30,17 @@ public class UserManager : Singleton<UserManager>
         return new User(0, 0);
     }
 
-    // stub - program later
     public bool userExists(long uid)
     {
-        return false;
+        if (! userLookup.ContainsKey(uid))
+        {
+            return false;
+        }
+
+        return true;
     }
 
+    // move to user controller
     // New User detected, instantiate user skeleton and attach gesture listener
     void UserManager_NewUserDetected(long userId, int userIndex)
     {
@@ -66,6 +70,7 @@ public class UserManager : Singleton<UserManager>
         }
     }
 
+    // move to user controller
     // User Lost detected, remove game object
     void UserManager_UserLostDetected(long userId, int userIndex)
     {
@@ -102,6 +107,7 @@ public class UserManager : Singleton<UserManager>
         return userLookup;
     }
 
+    // need to clean up later - move to UI Manager
     public void addGenderIcon(long userId, string gender)
     {
         string userContainerName = "User_" + userId;
@@ -159,7 +165,7 @@ public class UserManager : Singleton<UserManager>
         genderContainer.transform.SetParent(userContainer.transform);
     }
 
-    // need to clean up later
+    // need to clean up later - move to UI Manager
     protected void renderUserModel(long userId)
     {
         string userContainerName = "User_" + userId;
@@ -171,11 +177,40 @@ public class UserManager : Singleton<UserManager>
         userSkeletonGO.transform.SetParent(userContainer.transform);
     }
 
+    // need to clean up later - move to UI Manager
     protected void removeUserModel(long userId)
     {
         string userContainerName = "User_" + userId;
         GameObject userContainer = GameObject.Find(userContainerName);
         Destroy(userContainer);
+    }
+
+    protected void addOutfitMenu(long userId)
+    {
+        string userContainerName = "User_" + userId;
+        string outfitMenuName = "OutFitMenu_" + userId;
+        GameObject userContainer = GameObject.Find(userContainerName);
+   
+        GameObject outfitMenuGO = (GameObject)Instantiate(outfitMenuPrefab);
+        outfitMenuGO.name = outfitMenuName;
+        outfitMenuGO.transform.SetParent(userContainer.transform);
+        
+    }
+
+    // need to clean up later - move to UI Manager
+    protected void showOutfitMenu(long userId)
+    {
+        string outfitMenuName = "OutFitMenu_" + userId;
+        GameObject outfitMenuGO = GameObject.Find(outfitMenuName);
+        outfitMenuGO.SetActive(true);
+    }
+
+    // need to clean up later - move to UI Manager
+    protected void hideOutfitMenu(long userId)
+    {
+        string outfitMenuName = "OutFitMenu_" + userId;
+        GameObject outfitMenuGO = GameObject.Find(outfitMenuName);
+        outfitMenuGO.SetActive(true);
     }
 
     protected void addUserScoreUI(long uid)
@@ -255,10 +290,16 @@ public class UserManager : Singleton<UserManager>
         }
     }
 
-    protected void updateOufitMenuPos(long userId, Vector3 pos)
+    protected void updateOufitMenuPos(long userId, int userIndex, Vector3 pos)
     {   
-        GameObject outfitMenuContainer = GameObject.Find("OutfitMenu");
-        outfitMenuContainer.transform.position = pos; 
+     /*   if(userIndex == 0)
+        {
+            outfitMenuGO.transform.position = pos;
+        }
+        else if(userIndex == 1)
+        {
+            outfitMenuGO.transform.position = pos;
+        }*/
     }
 
     IEnumerator joinLivePrompt()
@@ -286,6 +327,9 @@ public class UserManager : Singleton<UserManager>
         // pose detection setup
         addPoseDetection(userId);
 
+        // show outfit menu selection
+        addOutfitMenu(userId);
+
         // show start menu button to transition into Live mode
         StartCoroutine(joinLivePrompt());
 
@@ -298,12 +342,16 @@ public class UserManager : Singleton<UserManager>
         // display gender icon next to each user on every tick
         if (AppManager.Instance.getMode() == Mode.LIVE)
         {
+            Debug.Log("In LIVE Mode");
             foreach (KeyValuePair<long, User> user in userLookup)
             {
                 // render gender icon
                 updateGenderIconPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
-                //updateOufitMenuPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
             }
+        }
+        else
+        {
+            Debug.Log("Not in Live");
         }
     }
 }
