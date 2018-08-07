@@ -350,7 +350,6 @@ public class UserManager : Singleton<UserManager>
         // display gender icon next to each user on every tick
         if (AppManager.Instance.getMode() == Mode.LIVE)
         {
-            Debug.Log("In LIVE Mode");
             foreach (KeyValuePair<long, User> user in userLookup)
             {
                 // render gender icon
