@@ -183,6 +183,8 @@ public class UserManager : Singleton<UserManager>
         GameObject userSkeletonGO = (GameObject)Instantiate(userSkeletonPrefab);
         userSkeletonGO.name = "User Skeleton_" + userId;
         userSkeletonGO.transform.SetParent(userContainer.transform);
+        userLookup[userId].setUserSkeletonGO(userSkeletonGO);
+
     }
 
     // need to clean up later - move to UI Manager
@@ -272,7 +274,7 @@ public class UserManager : Singleton<UserManager>
 
     protected void addPoseDetection(long uid)
     {
-        PoseAgentSelector agentSelector = userSkeletonPrefab.GetComponent<PoseAgentSelector>();
+        PoseAgentSelector agentSelector = userLookup[uid].getUserSkeletonGO().GetComponent<PoseAgentSelector>();
         agentSelector.Init(uid);
     }
 
@@ -336,7 +338,7 @@ public class UserManager : Singleton<UserManager>
         addPoseDetection(userId);
 
         // show outfit menu selection
-        addOutfitMenu(userId);
+       // addOutfitMenu(userId);
 
         // show start menu button to transition into Live mode
         StartCoroutine(joinLivePrompt());

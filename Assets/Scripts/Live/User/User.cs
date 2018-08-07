@@ -9,6 +9,7 @@ public class User : MonoBehaviour {
     public string ugender;    // switch to enum later
     public Vector3 uposition;
     public Vector3 genderIconPosition;
+    private GameObject userSkeletonGO;
 
     // Use this for initialization
     public User(long id, int index)
@@ -48,9 +49,19 @@ public class User : MonoBehaviour {
         return genderIconPosition;
     }
 
+    public GameObject getUserSkeletonGO()
+    {
+        return userSkeletonGO;
+    }
+
     public void setGender(string gender)
     {
         ugender = gender;
+    }
+
+    public void setUserSkeletonGO(GameObject go)
+    {
+        userSkeletonGO = go;
     }
 
     protected Vector3 getCurrentPosition(int iJointIndex)
