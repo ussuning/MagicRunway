@@ -68,22 +68,63 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         // store gender
         UIManager.Instance.HideGestureGender(true);
 
-        if(gesture == KinectGestures.Gestures.RaiseLeftHand)
+        if (gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
             Debug.Log("User " + userId + " is female");
             UserManager.Instance.addGenderIcon(userId, "female");
             UserManager.Instance.setGender(userId, "female");
             UIManager.Instance.ShowFemaleGender();
             UIManager.Instance.ShowStickManDelay(2.0f);
+
+            // show outfit menu for females
+            //UserManager.Instance.addOutfitMenu(userId, "female");   //testing
+
         }
-        else
+        else if (gesture == KinectGestures.Gestures.RaiseRightHand)
         {
             Debug.Log("User " + userId + " is male");
             UserManager.Instance.addGenderIcon(userId, "male");
             UserManager.Instance.setGender(userId, "male");
             UIManager.Instance.ShowMaleGender();
             UIManager.Instance.ShowStickManDelay(2.0f);
+
+            // show outfit menu for males
+            //UserManager.Instance.addOutfitMenu(userId, "male");   //testing
         }
+        else if (gesture == KinectGestures.Gestures.SwipeLeft)
+        {
+            if(UserManager.Instance.getUserById(userId).isOutfitMenuDisplayed() == true)
+            {
+                // shift menu left
+                // maybe hide outfit menu when user hits a pose
+            }
+        }
+        else if (gesture == KinectGestures.Gestures.SwipeRight)
+        {
+            if (UserManager.Instance.getUserById(userId).isOutfitMenuDisplayed() == true)
+            {
+                // shift menu right
+                // maybe hide outfit menu when user hits a pose
+            }
+        }
+        else if (gesture == KinectGestures.Gestures.SwipeUp)
+        {
+            if (UserManager.Instance.getUserById(userId).isOutfitMenuDisplayed() == false 
+                && UserManager.Instance.getUserById(userId).getGender() != null)
+            {
+                UserManager.Instance.showOutfitMenu(userId);
+            }
+        }
+        else if (gesture == KinectGestures.Gestures.SwipeDown)
+        {
+            if (UserManager.Instance.getUserById(userId).isOutfitMenuDisplayed() == true
+                 && UserManager.Instance.getUserById(userId).getGender() != null)
+            {
+                UserManager.Instance.hideOutfitMenu(userId);
+            }
+        }
+
+
 
         return true;
     }
