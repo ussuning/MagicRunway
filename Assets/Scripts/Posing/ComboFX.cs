@@ -11,6 +11,7 @@ public class ComboFX : MonoBehaviour {
     public Text ComboLabel;
 
     private long comboHoldingUser;
+    private int lastComboNum;
 
     int debug_comboNum = 0;
     public void debugComboText()
@@ -47,6 +48,7 @@ public class ComboFX : MonoBehaviour {
     void SetComboText(long userID, int comboNum)
     {
         comboHoldingUser = userID;
+        lastComboNum = comboNum;
 
         CancelInvoke("ClearComboText");
 
@@ -64,8 +66,11 @@ public class ComboFX : MonoBehaviour {
 
     void ClearComboText()
     {
-        if(steelingMode)
+        if (steelingMode)
+        {
             FlyToUser(comboHoldingUser);
+            AddUserScore(comboHoldingUser, lastComboNum);
+        }
 
         ComboNumText.enabled = false;
         ComboLabel.enabled = false;
@@ -78,5 +83,12 @@ public class ComboFX : MonoBehaviour {
 
         GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
         ft.ActivateFlying(userScoreBoxGO.transform.position);
+    }
+
+    void AddUserScore(long userID, int comboNum)
+    {
+        GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
+        UserScore us = userScoreBoxGO.GetComponent<UserScore>();
+        us.AddScore(comboNum * 10);
     }
 }

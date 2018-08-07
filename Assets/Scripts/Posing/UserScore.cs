@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class UserScore : MonoBehaviour {
 
     public Text UserName;
-    public GameObject ScoreTextPrefab;
+    public Text UserScoreText;
     public PoseFeedbackLightraysFX lightRaysFX;
+    public GameObject ScoreTextPrefab;
+
+    private float score;
 
     long userID;
 
@@ -20,6 +23,13 @@ public class UserScore : MonoBehaviour {
     {
         userID = user;
         UserName.text = string.Format("Player  {0}", KinectManager.Instance.GetUserIndexById(userID) + 1);
+        score = 0;
+    }
+
+    public void AddScore(int points)
+    {
+        score += points;
+        UserScoreText.text = score.ToString();
     }
 
     void OnEnable()
@@ -38,6 +48,7 @@ public class UserScore : MonoBehaviour {
         float poseConfidence = (float)paramEx;
         if (matchedUserID == userID)
         {
+            AddScore(5);
             GenerateEffects(poseConfidence);
         }
     }
