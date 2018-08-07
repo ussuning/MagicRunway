@@ -10,6 +10,13 @@ public class ComboFX : MonoBehaviour {
     public Text ComboNumText;
     public Text ComboLabel;
 
+    int debug_comboNum = 0;
+    public void debugComboText()
+    {
+        debug_comboNum++;
+        SetComboText(0L, debug_comboNum);
+    }
+     
     void Start ()
     {
         ClearComboText();
@@ -30,10 +37,10 @@ public class ComboFX : MonoBehaviour {
         long userID = (long)param;
         int comboNum = (int)paramEx;
 
-        SetComboText(comboNum);
+        SetComboText(userID, comboNum);
     }
 
-    void SetComboText(int comboNum)
+    void SetComboText(long userID, int comboNum)
     {
         CancelInvoke("ClearComboText");
 
@@ -42,6 +49,8 @@ public class ComboFX : MonoBehaviour {
         ComboNumText.enabled = true;
         ComboLabel.enabled = true;
 
+        FlyToUser(userID);
+
         Invoke("ClearComboText", textLifeSpan);
     }
 
@@ -49,5 +58,14 @@ public class ComboFX : MonoBehaviour {
     {
         ComboNumText.enabled = false;
         ComboLabel.enabled = false;
+    }
+
+    void FlyToUser(long userID)
+    {
+        GameObject userComboNum = Instantiate(ComboNumText.gameObject, this.transform);
+        FlyingText ft = userComboNum.AddComponent<FlyingText>();
+
+        GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
+        ft.ActivateFlying(userScoreBoxGO.transform.position);
     }
 }

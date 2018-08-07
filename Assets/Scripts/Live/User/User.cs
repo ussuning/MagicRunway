@@ -84,6 +84,9 @@ public class User : MonoBehaviour {
         // get this user's pos on every tick
         uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
         genderIconPosition = getCurrentPosition((int)KinectInterop.JointType.ShoulderLeft);
+
+        //update gameObject pos 
+        gameObject.transform.position = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
     }
 
 }

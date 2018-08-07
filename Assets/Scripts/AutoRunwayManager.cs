@@ -22,7 +22,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     private bool loop = false;
     private int loopAmount = 1;
-    private bool showFinale = true;
+    private bool showFinale = false;
     private float pauseToFinale = 3;
     private float pauseToNextCollection = 3;
 
@@ -399,7 +399,8 @@ public class AutoRunwayManager : MonoBehaviour
         animator.runtimeAnimatorController = null;
 
         parentModel.SetActive(false);
-        
+
+        QueueUp();
 
         if (isCollectionEnding == false) { return; }
 
@@ -439,7 +440,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void OnRunwayMidExit(Collider other)
     {
-        QueueUp();
+        //QueueUp();
     }
 
     private void OnRunwayEndEnter(Collider other)

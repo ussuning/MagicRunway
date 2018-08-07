@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum AutoRunwayCamera { MAIN, SLOW_MO };
 public enum AutoRunwayCameraFollowState { FOLLOW, UNFOLLOW, NONE}
-public enum AutoRunwayCameraSlowMo { SLOW, VERY_SLOW, SUPER_SLOW }
+public enum AutoRunwayCameraSpeed { NORMAL, SLOW, VERY_SLOW }
+public enum AutoRunwayCameraState { DEFAULT, CLOSE_UP, CLOSE_UP_PAN }
+public enum AutoRunwayCameraTransition { CUT, SMOOTH, FADE }
 
 public class RunwayCameraController : MonoBehaviour {
  
@@ -23,18 +26,18 @@ public class RunwayCameraController : MonoBehaviour {
 
     public Camera MainCamera;
     public Camera SlowMoCamera;
-    //public GameObject MidFlashes;
-    //public GameObject FrontFlashes;
-    public AutoRunwayCamera curCamera = AutoRunwayCamera.MAIN;
+
+    public AutoRunwayCamera curCam = AutoRunwayCamera.MAIN;
     public AutoRunwayCameraFollowState curCamFollowState = AutoRunwayCameraFollowState.NONE;
+    public AutoRunwayCameraState curCamState = AutoRunwayCameraState.DEFAULT;
+    public AutoRunwayCameraTransition curCamTransition = AutoRunwayCameraTransition.CUT;
+    public Image blackout;
 
     public float mainCamMinFOV = 20f;
     public float targetHeightPercent = 0.65f;
     public float fovSpeed = 60f; // fov/sec 
 
     protected Camera activeCam;
-
-    protected float timeUntilEndFrontFlashes = 0f;
 
     internal ColliderInfoMap modelsInMidZone = new ColliderInfoMap();
     internal ColliderInfoMap modelsOnRunway = new ColliderInfoMap();
@@ -46,6 +49,9 @@ public class RunwayCameraController : MonoBehaviour {
     private Vector3 mainCamOriginRot;
     private Vector3 slowMoCamOriginRot;
 
+    //private float panStartY = 0.8f;
+    private float panStartY = 0.4f;
+    private float panEndY = -0.2f;
     //----------------------------------------
     // MonoBehaviour Overrides
     //----------------------------------------
@@ -62,7 +68,8 @@ public class RunwayCameraController : MonoBehaviour {
 
     void OnEnable()
     {
-        Init();
+        AddAllListeners();
+        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
     }
 
     void OnDisable()
@@ -79,76 +86,36 @@ public class RunwayCameraController : MonoBehaviour {
 
     void OnDestroy()
     {
+        Time.timeScale = 1.0f;
+
         RemoveAllListeners();
     }
 
     void Update()
     {
-        if (curCamFollowState == AutoRunwayCameraFollowState.NONE) { return; }
-
-        if (curCamFollowState == AutoRunwayCameraFollowState.FOLLOW)
-        {
-            UpdateFollowCam();
-            return;
-        }
-
-        if (curCamFollowState == AutoRunwayCameraFollowState.UNFOLLOW)
-        {
-            return;
-        }
+        if (curCamState == AutoRunwayCameraState.DEFAULT) { UpdateToOrigin(); }
+        else if (curCamState == AutoRunwayCameraState.CLOSE_UP) { UpdateCloseUp(); }
+        else if (curCamState == AutoRunwayCameraState.CLOSE_UP_PAN) { UpdateCloseUpPan(); }
     }
-
-
-    private void Init() {
-        AddAllListeners();
-        CamerasReset();
-        SelectCamera(AutoRunwayCamera.MAIN);
-        
-        /*
-        if (MidFlashes == null)
-            MidFlashes = GameObject.Find("MidFlashes");
-        if (FrontFlashes == null)
-            FrontFlashes = GameObject.Find("FrontFlashes");
-            */
-
-        //EnableMidFlashes(false);
-        //EnableFrontFlashes(false);
-	}
-
-    private void SlowMo(AutoRunwayCameraSlowMo speed)
-    {
-        curCamFollowState = AutoRunwayCameraFollowState.FOLLOW;
-
-        if (speed == AutoRunwayCameraSlowMo.VERY_SLOW)
-        {
-            Time.timeScale = 0.5f;
-        }
-        else if (speed == AutoRunwayCameraSlowMo.SUPER_SLOW)
-        {
-            Time.timeScale = 0.25f;
-        }
-        else
-        {
-            Time.timeScale = 0.95f;
-        }
-        
-        timeSinceSlowMo = 0.0f;
-        SelectCamera(AutoRunwayCamera.SLOW_MO);
-    }
-
-    private void UpdateFollowCam()
+ 
+    private void UpdateCloseUpPan()
     {
         if (modelsOnRunway.active.Count == 0) { return; }
 
+        activeCam.fieldOfView = 6.7f;
+
         Bounds b = modelsOnRunway.active[0].bounds;
 
-        if (curCamera == AutoRunwayCamera.SLOW_MO)
+        if (curCam == AutoRunwayCamera.SLOW_MO)
         {
             timeSinceSlowMo += Time.unscaledDeltaTime;
             float t = (Mathf.Cos(timeSinceSlowMo / 2.0f) + 1.0f) / 2.0f;
+            //0.15
+            //Vector3 max = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.max.y, panStartY), b.center.z);
+            //Vector3 min = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.min.y, 0), b.center.z);
 
-            Vector3 max = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.max.y, 0.15f), b.center.z);
-            Vector3 min = new Vector3(b.center.x, Mathf.Lerp(b.center.y, b.min.y, 0.1f), b.center.z);
+            Vector3 max = new Vector3(b.center.x, b.center.y + panStartY, b.center.z);
+            Vector3 min = new Vector3(b.center.x, b.center.y + panEndY, b.center.z);
 
             camLookAtFinal.position = Vector3.Lerp(min, max, t);
         }
@@ -157,11 +124,8 @@ public class RunwayCameraController : MonoBehaviour {
             camLookAtFinal.position = b.center;
         }
 
-        UpdateMainCameraZoom(b);
-
-        // Lerp camLookAt towards camLookAtFinal
         camLookAt.transform.position = Vector3.Lerp(camLookAt.transform.position, camLookAtFinal.transform.position, Time.deltaTime * camLerpFactor);
-        activeCam.transform.LookAt(camLookAt);
+        activeCam.transform.LookAt(camLookAt);    
     }
    
     private void UpdateMainCameraZoom(Bounds b) {
@@ -176,49 +140,49 @@ public class RunwayCameraController : MonoBehaviour {
         MainCamera.fieldOfView = Mathf.Clamp(MainCamera.fieldOfView, mainCamMinFOV, float.MaxValue);
     }
 
-    private void UpdateMainCameraToOrigin()
+    private void UpdateToOrigin()
     {
-        MainCamera.transform.eulerAngles = Vector3.Lerp(MainCamera.transform.eulerAngles, mainCamOriginRot, 3.0f * Time.deltaTime);
-        MainCamera.fieldOfView = Mathf.Lerp(MainCamera.fieldOfView, mainCamOriginFOV, 2.0f * Time.deltaTime);
+        if (curCamTransition == AutoRunwayCameraTransition.SMOOTH)
+        {
+            activeCam.transform.eulerAngles = Vector3.Lerp(activeCam.transform.eulerAngles, mainCamOriginRot, 3.0f * Time.deltaTime);
+            activeCam.fieldOfView = Mathf.Lerp(activeCam.fieldOfView, mainCamOriginFOV, 2.0f * Time.deltaTime);
+        }
+        else
+        {
+            activeCam.transform.eulerAngles = mainCamOriginRot;
+            activeCam.fieldOfView = mainCamOriginFOV;
+        }
     }
 
-
-    /*
-    private void EnableMidFlashes(bool enable) {
-        MidFlashes.gameObject.SetActive(enable);
-    }
-
-    private void EnableFrontFlashes(bool enable)
+    private void UpdateCloseUp()
     {
-        FrontFlashes.gameObject.SetActive(enable);
-    }
-    */
+        Vector3 pointDown = new Vector3(6, 90, 0);
+        Int32 fov = 38;
 
+        if (curCamTransition == AutoRunwayCameraTransition.SMOOTH)
+        {
+            activeCam.transform.eulerAngles = Vector3.Lerp(activeCam.transform.eulerAngles, pointDown, 3.0f * Time.deltaTime);
+            activeCam.fieldOfView = Mathf.Lerp(activeCam.fieldOfView, fov, 2.0f * Time.deltaTime);
+        }
+        else
+        {
+            activeCam.transform.eulerAngles = pointDown;
+            activeCam.fieldOfView = fov;
+        }
+    }
 
     private void CamerasReset()
     {
-        SelectCamera(AutoRunwayCamera.MAIN);
-
         MainCamera.fieldOfView = mainCamOriginFOV;
         MainCamera.transform.eulerAngles = new Vector3(mainCamOriginRot.x, mainCamOriginRot.y, mainCamOriginRot.z);
-
         SlowMoCamera.transform.eulerAngles = new Vector3(slowMoCamOriginRot.x, slowMoCamOriginRot.y, slowMoCamOriginRot.z);
-
-        //curCamFollowState = AutoRunwayCameraFollowState.NONE;
     }
 
     private void SelectCamera(AutoRunwayCamera arc)
     {
-        curCamera = arc;
+        curCam = arc;
 
-        if(arc == AutoRunwayCamera.MAIN)
-        {
-            Time.timeScale = 1.0f;
-            MainCamera.enabled = true;
-            SlowMoCamera.enabled = false;
-            activeCam = MainCamera;
-        }
-        else if(arc == AutoRunwayCamera.SLOW_MO)
+        if(arc == AutoRunwayCamera.SLOW_MO)
         {
             MainCamera.enabled = false;
             SlowMoCamera.enabled = true;
@@ -232,60 +196,104 @@ public class RunwayCameraController : MonoBehaviour {
         }
     }
 
+    private void SeekCameraToModel()
+    {
+        if (modelsOnRunway.active.Count == 0) { return; }
+
+        Bounds b = modelsOnRunway.active[0].bounds;
+
+        camLookAt.transform.position = new Vector3(b.center.x,b.center.y + panStartY,b.center.z);
+        activeCam.transform.LookAt(camLookAt);
+    }
+
+    private void SetCamera(AutoRunwayCamera cam, AutoRunwayCameraState camState, AutoRunwayCameraTransition camTrans, AutoRunwayCameraSpeed camSpeed = AutoRunwayCameraSpeed.NORMAL)
+    {
+        CamerasReset();
+        SelectCamera(cam);
+
+        if(camState == AutoRunwayCameraState.CLOSE_UP_PAN && camTrans != AutoRunwayCameraTransition.SMOOTH)
+        {
+            SeekCameraToModel();
+        }
+
+        if (camSpeed == AutoRunwayCameraSpeed.VERY_SLOW) { Time.timeScale = 0.5f; }
+        else if (camSpeed == AutoRunwayCameraSpeed.SLOW) { Time.timeScale = 0.95f; }
+        else { Time.timeScale = 1.0f; }
+
+        timeSinceSlowMo = 0.0f;
+
+        curCamTransition = camTrans;
+        curCamState = camState;
+    }
+
     //----------------------------------------
     // Event Callbacks
     //----------------------------------------
 
     private void OnRunwayEnter(Collider model)
     {
-        Debug.Log("HERE COMES A NEW CHALLENGER!" + model.ToString());
+        //Debug.Log("HERE COMES A NEW CHALLENGER!" + model.ToString());
         if (modelsOnRunway.history.ContainsKey(model) == false)
         {
             modelsOnRunway.history.Add(model, Time.unscaledTime);
         }
 
         modelsOnRunway.active.Add(model);
-        //curCamFollowState = AutoRunwayCameraFollowState.FOLLOW;
+
+        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
     }
 
     private void OnRunwayMidEnter(Collider model)
     {
-        Debug.Log("SLOW MO TIME!  " + model.ToString());
+        //Debug.Log("SLOW MO TIME!  " + model.ToString());
         if (modelsInMidZone.history.ContainsKey(model) == false)
         {
+            //Enter 1st time
             modelsInMidZone.history.Add(model, Time.unscaledTime);
-            SlowMo(AutoRunwayCameraSlowMo.VERY_SLOW);
+
+            SetCamera(AutoRunwayCamera.SLOW_MO, AutoRunwayCameraState.CLOSE_UP_PAN, AutoRunwayCameraTransition.CUT, AutoRunwayCameraSpeed.VERY_SLOW);
         } else
         {
+            //Enter 2nd time
             modelsInMidZone.active.Add(model);
-            SlowMo(AutoRunwayCameraSlowMo.SLOW);
+
+            SetCamera(AutoRunwayCamera.SLOW_MO, AutoRunwayCameraState.CLOSE_UP_PAN, AutoRunwayCameraTransition.CUT, AutoRunwayCameraSpeed.VERY_SLOW);
+            /*
+            curCamTransition = AutoRunwayCameraTransition.CUT;
+            curCamState = AutoRunwayCameraState.CLOSE_UP_PAN;
+            SlowMo(AutoRunwayCameraSpeed.SLOW);
+            */
         }
     }
 
     private void OnRunwayMidExit(Collider model)
     {
-        CamerasReset();
+        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
 
         //Model Exiting Mid Zone 2nd time
         if (modelsInMidZone.active.Count > 0)
         {
             modelsInMidZone.active.RemoveAt(0);
-
-            PurgeModel(model);
+            ClearModelHistory(model);
         }
     }
 
     private void OnRunwayEndEnter(Collider model)
     {
-        timeUntilEndFrontFlashes = 2.5f;
+        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.CLOSE_UP, AutoRunwayCameraTransition.SMOOTH);
+    }
+
+    private void OnRunwayEndExit(Collider model)
+    {
+        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
     }
 
     private void OnRunwayExit(Collider model)
     {
-        PurgeModel(model);
+        ClearModelHistory(model);
     }
 
-    private void PurgeModel(Collider model)
+    private void ClearModelHistory(Collider model)
     {
         if (modelsOnRunway.active.Contains(model))
             modelsOnRunway.active.Remove(model);
@@ -331,6 +339,7 @@ public class RunwayCameraController : MonoBehaviour {
         RunwayExitEvents.OnTriggerEnterEvt += OnRunwayExit;
 
         RunwayEndEvents.OnTriggerEnterEvt += OnRunwayEndEnter;
+        RunwayEndEvents.OnTriggerExitEvt += OnRunwayEndExit;
     }
 
     private void AddAutoRunwayListeners()
@@ -350,6 +359,7 @@ public class RunwayCameraController : MonoBehaviour {
         RunwayExitEvents.OnTriggerEnterEvt -= OnRunwayExit;
 
         RunwayEndEvents.OnTriggerEnterEvt -= OnRunwayEndEnter;
+        RunwayEndEvents.OnTriggerExitEvt -= OnRunwayEndExit;
     }
 
     private void RemoveAutoRunwayListeners()
