@@ -26,7 +26,7 @@ public class PoseFeedbackTextFX : MonoBehaviour {
         text = GetComponent<Text>();
     }
 
-    public void ActivateTextFX(float poseScore)
+    public void ActivateTextFX(float poseConfidence)
     {
         initScale = TweenToControl.rectTransform.localScale;
         enlargedScale = initScale * TargetScale;
@@ -34,7 +34,7 @@ public class PoseFeedbackTextFX : MonoBehaviour {
         initPos = TweenToControl.rectTransform.anchoredPosition;
         targetPos = TweenToControl.rectTransform.anchoredPosition + 1000f * Vector2.down;
 
-        string feedbackString = GetFeedbackString(poseScore);
+        string feedbackString = GetFeedbackString(poseConfidence);
         SetText(feedbackString);
 
         Destroy(this.gameObject, TweenToControl.GetAnimationDuration() + 0.5f);
@@ -63,17 +63,17 @@ public class PoseFeedbackTextFX : MonoBehaviour {
 
     string GetFeedbackString(float poseScore)
     {
-        if (poseScore >= 60f)
+        if (poseScore >= 1.0f)
             return feedbackStrings[5];
-        else if(poseScore >= 50f)
+        else if(poseScore >= 0.98f)
             return feedbackStrings[4];
-        else if (poseScore >= 40f)
+        else if (poseScore >= 0.96f)
             return feedbackStrings[3];
-        else if (poseScore >= 30f)
+        else if (poseScore >= 0.94f)
             return feedbackStrings[2];
-        else if (poseScore >= 20f)
+        else if (poseScore >= 0.92f)
             return feedbackStrings[1];
-        else if (poseScore >= 10f)
+        else if (poseScore >= 0.9f)
             return feedbackStrings[0];
         return "";
     }

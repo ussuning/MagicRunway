@@ -19,7 +19,7 @@ public class TargetPoseRecognizingAgent : Agent {
     private float poseCDTimeEllapsed;
     //private float poseTimeEllapsed;
 
-    private float poseScore;
+    //private float poseScore;
     private float poseConfidence;
 
     float PoseCD = 0.25f;
@@ -59,7 +59,7 @@ public class TargetPoseRecognizingAgent : Agent {
 
         if (isPoseMatched && poseCDTimeEllapsed >= PoseCD)
         {
-            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId, poseScore);
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId, poseConfidence);
             isPoseMatched = false;
             poseCDTimeEllapsed = 0f;
         }
@@ -92,7 +92,7 @@ public class TargetPoseRecognizingAgent : Agent {
         int isMatched = Mathf.RoundToInt(vectorAction[0]);
         if (isMatched >= 1)
             PoseMatchCount++;
-        Debug.Log(string.Format("User {0} : Agent {1}: action = {2}, isMatched = {3}", this.name, poseID, vectorAction[0], isMatched));
+        //Debug.Log(string.Format("User {0} : Agent {1}: action = {2}, isMatched = {3}", this.name, poseID, vectorAction[0], isMatched));
     }
 
     public override void AgentOnDone()
@@ -109,21 +109,22 @@ public class TargetPoseRecognizingAgent : Agent {
 
     void EstimatePose()
     {
-        if (estimationTimeEllapsed > pose.estimate_time)
-        {
-            if (PoseMatchCount > 0)
-            {
-                poseScore = PoseMatchCount / estimationTimeEllapsed;
-                isPoseMatched = poseScore >= pose.min_confidence;
-            }
-            else
-            {
-                isPoseMatched = false;
-            }
+        //if (estimationTimeEllapsed > pose.estimate_time)
+        //{
+        //    if (PoseMatchCount > 0)
+        //    {
+        //        poseScore = PoseMatchCount / estimationTimeEllapsed;
+        //        isPoseMatched = poseScore >= pose.min_confidence;
+        //    }
+        //    else
+        //    {
+        //        isPoseMatched = false;
+        //    }
 
-            estimationTimeEllapsed = 0f;
-            PoseMatchCount = 0;
-        }
+        //    estimationTimeEllapsed = 0f;
+        //    PoseMatchCount = 0;
+        //}
+        isPoseMatched = poseConfidence >= 0.9f;
     }
 
     //Normalizing to [-1, 1]
