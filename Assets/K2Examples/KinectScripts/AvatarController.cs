@@ -197,7 +197,12 @@ public class AvatarController : MonoBehaviour
         Quaternion posRotation = mirroredMovement ? Quaternion.Euler (0f, 180f, 0f) * initialRotation : initialRotation;
         worldPosition = posRotation * worldPosition;
 
-        return jointPosition; // bodyRootPosition + worldPosition;
+        return bodyRootPosition + worldPosition;
+    }
+
+    public Vector3 GetRawJointWorldPos(KinectInterop.JointType jointType)
+    {
+        return kinectManager.GetJointPosition(playerId, (int)jointType);
     }
 
 	/// <summary>
@@ -467,7 +472,7 @@ public class AvatarController : MonoBehaviour
 	/// </summary>
 	/// <param name="UserID">User ID</param>
     public void UpdateAvatar(Int64 UserID)
-    {	
+    {
 		if(!gameObject.activeInHierarchy) 
 			return;
 
@@ -728,11 +733,11 @@ public class AvatarController : MonoBehaviour
             case KinectInterop.JointType.WristRight:
             case KinectInterop.JointType.HandLeft:
             case KinectInterop.JointType.HandRight:
-                boneTransform.position = GetJointWorldPos(joint);
+                boneTransform.position = GetRawJointWorldPos(joint);
                 break;
 
         }
-        boneTransform.position = GetJointWorldPos(joint);
+        boneTransform.position = GetRawJointWorldPos(joint);
     }
 
     // Apply the rotations tracked by kinect to a special joint

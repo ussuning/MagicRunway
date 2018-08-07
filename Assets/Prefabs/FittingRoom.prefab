@@ -77,7 +77,7 @@ GameObject:
   - component: {fileID: 114476672337628362}
   - component: {fileID: 114859545441367230}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Conversion Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +198,7 @@ GameObject:
   - component: {fileID: 223873265891697190}
   - component: {fileID: 114523943013916724}
   m_Layer: 0
-  m_Name: Main Camera Canvas
+  m_Name: Conversion Camera Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -410,9 +410,9 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -0.2815985
+    x: 0
     y: 0
-    width: 1.563197
+    width: 1
     height: 1
   near clip plane: 0.1
   far clip plane: 100
@@ -653,7 +653,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1bad4c20bc090243869c68a48fe87ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aspectRatio: 1.77
+  aspectRatio: 1.7777778
 --- !u!114 &114919376212860122
 MonoBehaviour:
   m_ObjectHideFlags: 1
