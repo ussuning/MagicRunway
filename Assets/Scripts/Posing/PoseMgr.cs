@@ -9,6 +9,7 @@ public class ComboData
 {
     public int combo_num;
     public float pose_time;
+    public float combo_time;
 }
 
 [Serializable]
@@ -47,6 +48,8 @@ public class PoseMgr : MonoBehaviour {
 
     public ComboData GetComboInfo(int comboNum)
     {
+        if (comboNum > ComboCount - 1)
+            return ComboInfo.combos[ComboCount - 1];
         return ComboInfo.combos[comboNum];
     }
 

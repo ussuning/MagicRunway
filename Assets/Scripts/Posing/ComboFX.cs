@@ -7,8 +7,6 @@ public class ComboFX : MonoBehaviour {
 
     public bool steelingMode = true;
 
-    public float textLifeSpan = 2f;
-
     public Text ComboNumText;
     public Text ComboLabel;
 
@@ -24,7 +22,8 @@ public class ComboFX : MonoBehaviour {
     void Start ()
     {
         comboHoldingUser = 0L;
-        ClearComboText();
+        ComboNumText.enabled = false;
+        ComboLabel.enabled = false;
     }
 
     void OnEnable()
@@ -59,7 +58,8 @@ public class ComboFX : MonoBehaviour {
         if (!steelingMode)
             FlyToUser(comboHoldingUser);
 
-        Invoke("ClearComboText", textLifeSpan);
+        float comboTime = PoseMgr.Instance.GetComboInfo(comboNum).combo_time;
+        Invoke("ClearComboText", comboTime);
     }
 
     void ClearComboText()

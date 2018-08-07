@@ -32,13 +32,13 @@ public class PoseComboDetector : MonoBehaviour {
     {
         long userID = (long)param;
 
-        if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).pose_time)
+        if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).combo_time)
         {
             combo++;
             if (combo > 1)
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, userID, combo);
-            GenerateNewPose();
         }
+        GenerateNewPose();
     }
 
     void Start()
