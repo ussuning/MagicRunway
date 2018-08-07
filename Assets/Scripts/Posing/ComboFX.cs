@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class ComboFX : MonoBehaviour {
 
+    public bool steelingMode = true;
+
     public float textLifeSpan = 2f;
 
     public Text ComboNumText;
     public Text ComboLabel;
+
+    private long comboHoldingUser;
 
     int debug_comboNum = 0;
     public void debugComboText()
@@ -19,6 +23,7 @@ public class ComboFX : MonoBehaviour {
      
     void Start ()
     {
+        comboHoldingUser = 0L;
         ClearComboText();
     }
 
@@ -42,6 +47,8 @@ public class ComboFX : MonoBehaviour {
 
     void SetComboText(long userID, int comboNum)
     {
+        comboHoldingUser = userID;
+
         CancelInvoke("ClearComboText");
 
         ComboNumText.text = comboNum.ToString();
@@ -49,13 +56,17 @@ public class ComboFX : MonoBehaviour {
         ComboNumText.enabled = true;
         ComboLabel.enabled = true;
 
-        FlyToUser(userID);
+        if (!steelingMode)
+            FlyToUser(comboHoldingUser);
 
         Invoke("ClearComboText", textLifeSpan);
     }
 
     void ClearComboText()
     {
+        if(steelingMode)
+            FlyToUser(comboHoldingUser);
+
         ComboNumText.enabled = false;
         ComboLabel.enabled = false;
     }
