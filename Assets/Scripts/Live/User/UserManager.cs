@@ -31,6 +31,13 @@ public class UserManager : Singleton<UserManager>
         return new User(0, 0);
     }
 
+    public GameObject getUserScoreBoxById(long userId)
+    {
+        if (userScoreBoxes.ContainsKey(userId))
+            return userScoreBoxes[userId];
+        return null;
+    }
+
     // stub - program later
     public bool userExists(long uid)
     {
