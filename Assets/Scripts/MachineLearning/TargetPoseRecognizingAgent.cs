@@ -20,6 +20,7 @@ public class TargetPoseRecognizingAgent : Agent {
     //private float poseTimeEllapsed;
 
     private float poseScore;
+    private float poseConfidence;
 
     float PoseCD = 0.25f;
 
@@ -87,6 +88,7 @@ public class TargetPoseRecognizingAgent : Agent {
 
     public override void AgentAction(float[] vectorAction, string textAction)
     {
+        poseConfidence = vectorAction[0];
         int isMatched = Mathf.RoundToInt(vectorAction[0]);
         if (isMatched >= 1)
             PoseMatchCount++;
