@@ -58,7 +58,7 @@ public class TargetPoseRecognizingAgent : Agent {
 
         if (isPoseMatched && poseCDTimeEllapsed >= PoseCD)
         {
-            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId);
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId, poseScore);
             isPoseMatched = false;
             poseCDTimeEllapsed = 0f;
         }

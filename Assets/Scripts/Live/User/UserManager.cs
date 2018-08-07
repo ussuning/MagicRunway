@@ -4,26 +4,31 @@ using UnityEngine;
 
 public class UserManager : Singleton<UserManager>
 {
-    public AppManager appManager;
+    public GameObject kinectController;
     public GameObject userSkeletonPrefab;
     public GameObject userScorePrefab;
     public GameObject malePrefab;
     public GameObject femalePrefab;
-    public GameObject kinectController;
-    private Dictionary<int, User> userLookup = new Dictionary<int, User>();
+    private GameObject outfitMenu;
+    private Dictionary<long, User> userLookup = new Dictionary<long, User>();
     private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();
     private KinectManager kinectManager;
 
     public void Start()
     {
         kinectManager = KinectManager.Instance;
+        outfitMenu = (GameObject)Instantiate(Resources.Load("User/OutFitMenu"));
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;
     }
 
-    public User getUserByIndex(int userIndex)
+    public User getUserById(long userId)
     {
-        return userLookup[userIndex];
+        if (userLookup.ContainsKey(userId))
+        {
+            return userLookup[userId];
+        }
+        return new User(0, 0);
     }
 
     // stub - program later
@@ -38,22 +43,19 @@ public class UserManager : Singleton<UserManager>
         Debug.Log("UserManager: New User Event Callback invoked.");
 
         // add user if not already exists, sometimes same user is detected as new user multiple times
-        foreach(KeyValuePair<int, User> user in userLookup)
+        if(userLookup.ContainsKey(userId)) 
         {
-            if(user.Value.getUserId() == userId)
-            {
-                return;
-            }
+            return;
         }
-
+      
         // listening for these gestures for this user  
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
 
-        addUser(userId, userIndex);
+        StartCoroutine(addUser(userId, userIndex));
 
         // show gender icons 
-        Mode mode = appManager.getMode();
+        Mode mode = AppManager.Instance.getMode();
         if (mode == Mode.LIVE)
         {
             UIManager.Instance.HideStickMan(true);
@@ -74,11 +76,11 @@ public class UserManager : Singleton<UserManager>
         int count = KinectManager.Instance.GetUsersCount();
         if (count == 0)
         {
-            Mode mode = appManager.getMode();
+            Mode mode = AppManager.Instance.getMode();
             if (mode == Mode.LIVE)
             {
                 Debug.Log("User count = 0 cries. Going back to Auto Runway");
-                appManager.LiveToAuto();
+                AppManager.Instance.LiveToAuto();
             }
             if (mode == Mode.AUTO)
             {
@@ -87,90 +89,68 @@ public class UserManager : Singleton<UserManager>
         }
     }
 
-    public void setGender(int userIndex, string gender)
+    public void setGender(long userId, string gender)
     {
-        userLookup[userIndex].setGender(gender);
+        if (userLookup.ContainsKey(userId))
+        {
+            userLookup[userId].setGender(gender);
+        }
     }
 
-    public Dictionary<int, User> getCurrentUsers()
+    public Dictionary<long, User> getCurrentUsers()
     {
         return userLookup;
     }
 
-    public void addGenderIcon(int userIndex, string gender)
+    public void addGenderIcon(long userId, string gender)
     {
-        int playerNumber = userIndex + 1;
-        string userContainerName = "User" + playerNumber;
+        string userContainerName = "User_" + userId;
         GameObject userContainer = GameObject.Find(userContainerName);
         GameObject genderGO = userContainer.transform.Find("Gender").gameObject;
 
         if (gender == "female")
         {
-            femalePrefab = (GameObject)Instantiate(Resources.Load("User/gender_female"));
-            femalePrefab.name = "Female";
-            femalePrefab.transform.SetParent(genderGO.transform);
+            GameObject femaleGO = (GameObject)Instantiate(femalePrefab);
+            femaleGO.name = "Female";
+            femaleGO.transform.SetParent(genderGO.transform);
         }
         else
-        {
-            malePrefab = (GameObject)Instantiate(Resources.Load("User/gender_male"));
-            malePrefab.name = "Male";
-            malePrefab.transform.SetParent(genderGO.transform);
+        { 
+            GameObject maleGO = (GameObject)Instantiate(malePrefab);
+            maleGO.name = "Male";
+            maleGO.transform.SetParent(genderGO.transform);
         }
-    }
-
-    protected void addUser(long userId, int userIndex)
-    {
-        // add user to scene
-        setup(userIndex);
-
-        // instantiate prefab for new user 
-        renderUserModel(userIndex);
-
-        // instantiate user score box (UI)
-        addUserScoreUI(userId);
-
-        // add listener and assign for user 
-        addGestureListener(userId, userIndex);
-
-        // pose detection setup
-        addPoseDetection(userId);
-
-        // instantiate user instance and add to user lookup
-        int playerNumber = userIndex + 1;
-        string userContainerName = "User" + playerNumber;
-        GameObject userContainer = GameObject.Find(userContainerName);
-        User user = userContainer.AddComponent<User>();
-        user.Initialize(userId, userIndex);
-        userLookup[userIndex] = user;
-
-        // show start menu button to transition into Live mode
-        StartCoroutine(joinLivePrompt());
     }
 
     protected void removeUser(long userId, int userIndex)
     {
         // remove listener
-        removeGestureListener(userIndex);
+        removeGestureListener(userId, userIndex);
 
         // remove user data from scene
-        removeUserModel(userIndex);
+        removeUserModel(userId);
 
         // remove user score box (UI)
         removeUserScoreUI(userId);
 
         // destory user data
-        userLookup.Remove(userIndex);
+        userLookup.Remove(userId);
     }
 
-    protected void setup(int userIndex)
+    protected void setup(long userId, int userIndex)
     {
-        int playerNumber = userIndex + 1;
         GameObject Users = GameObject.Find("Users");
-        string userContainerName = "User" + playerNumber;
+        string userContainerName = "User_" + userId ;
 
         // create gameobject for this user
         GameObject userContainer = new GameObject();
         userContainer.name = userContainerName;
+
+        // instantiate user instance and add to user lookup
+        User user = userContainer.AddComponent<User>();
+        user.initialize(userId, userIndex);
+        userLookup[userId] = user;
+
         userContainer.transform.SetParent(Users.transform);
 
         // add gender gameobject for this user
@@ -179,22 +159,21 @@ public class UserManager : Singleton<UserManager>
         genderContainer.transform.SetParent(userContainer.transform);
     }
 
-    protected void renderUserModel(int userIndex)
+    // need to clean up later
+    protected void renderUserModel(long userId)
     {
-        int playerNumber = userIndex + 1;
-        string userContainerName = "User" + playerNumber;
+        string userContainerName = "User_" + userId;
         GameObject userContainer = GameObject.Find(userContainerName);
 
         // instantiate prefab for new user - move to user
-        userSkeletonPrefab = (GameObject)Instantiate(Resources.Load("UserSkeleton"));
-        userSkeletonPrefab.name = "User Skeleton " + playerNumber;
-        userSkeletonPrefab.transform.SetParent(userContainer.transform);
+        GameObject userSkeletonGO = (GameObject)Instantiate(userSkeletonPrefab);
+        userSkeletonGO.name = "User Skeleton_" + userId;
+        userSkeletonGO.transform.SetParent(userContainer.transform);
     }
 
-    protected void removeUserModel(int userIndex)
+    protected void removeUserModel(long userId)
     {
-        int playerNumber = userIndex + 1;
-        string userContainerName = "User" + playerNumber;
+        string userContainerName = "User_" + userId;
         GameObject userContainer = GameObject.Find(userContainerName);
         Destroy(userContainer);
     }
@@ -223,9 +202,11 @@ public class UserManager : Singleton<UserManager>
     {
         foreach (var component in kinectController.GetComponents<UserGestureListener>())
         {
-            if (component.playerIndex == userIndex)
+            Debug.Log("addgesturelistener  " + userId + " " + userIndex);
+
+            if (component.uindex == userIndex)
             {
-                component.initialize(userId, userIndex);
+                component.Initialize(userId, userIndex);
                 return true;
             }
         }
@@ -233,11 +214,11 @@ public class UserManager : Singleton<UserManager>
         return false;
     }
 
-    protected bool removeGestureListener(int userIndex)
+    protected bool removeGestureListener(long userId, int userIndex)
     {
         foreach (var component in kinectController.GetComponents<UserGestureListener>())
         {
-            if (component.playerIndex == userIndex)
+            if (component.uindex == userIndex)
             {
                 component.uid = 0;
                 return true;
@@ -252,41 +233,76 @@ public class UserManager : Singleton<UserManager>
         agentSelector.Init(uid);
     }
 
-    protected void updateGenderIconPos(int userIndex, Vector3 pos)
+    protected void updateGenderIconPos(long userId, Vector3 pos)
     {
         // move icon to pos
-        int playerNumber = userIndex + 1;
-        string userContainerName = "User" + playerNumber;
+        string userContainerName = "User_" + userId;
         GameObject userContainer = GameObject.Find(userContainerName);
 
-        if(userLookup[userIndex].getGender() == "female")
+        if (userLookup.ContainsKey(userId))
         {
+            if (userLookup[userId].getGender() == "female")
+            {
 
-            GameObject gender = userContainer.transform.Find("Gender/Female").gameObject;
-            gender.transform.position = pos;
+                GameObject gender = userContainer.transform.Find("Gender/Female").gameObject;
+                gender.transform.position = pos;
+            }
+            else if (userLookup[userId].getGender() == "male")
+            {
+                GameObject gender = userContainer.transform.Find("Gender/Male").gameObject;
+                gender.transform.position = pos;
+            }
         }
-        else if(userLookup[userIndex].getGender() == "male")
-        {
-            GameObject gender = userContainer.transform.Find("Gender/Male").gameObject;
-            gender.transform.position = pos;
-        }
+    }
+
+    protected void updateOufitMenuPos(long userId, Vector3 pos)
+    {   
+        GameObject outfitMenuContainer = GameObject.Find("OutfitMenu");
+        outfitMenuContainer.transform.position = pos; 
     }
 
     IEnumerator joinLivePrompt()
     {
+        Debug.Log("UserManager COROUTINE- Show Start Menu!!");
         yield return new WaitForSeconds(5);
         UIManager.Instance.ShowStartMenu(true);
     }
 
-    private void Update()
+    IEnumerator addUser(long userId, int userIndex)
+    {
+        Debug.Log("UserManager COROUTINE- Setup");
+        // add user to scene
+        setup(userId, userIndex);
+
+        // instantiate prefab for new user - turn off, causing runtime issues
+        renderUserModel(userId);
+
+        // instantiate user pose score prefab
+        addUserScoreUI(userId);
+
+        // add listener and assign for user 
+        addGestureListener(userId, userIndex);
+
+        // pose detection setup
+        addPoseDetection(userId);
+
+        // show start menu button to transition into Live mode
+        StartCoroutine(joinLivePrompt());
+
+        Debug.Log("UserManager COROUTINE- ALL DONE!!!!!!");
+        yield return null;
+    }
+
+    void Update()
     {
         // display gender icon next to each user on every tick
-        if (appManager.getMode() == Mode.LIVE)
+        if (AppManager.Instance.getMode() == Mode.LIVE)
         {
-            foreach (KeyValuePair<int, User> user in userLookup)
+            foreach (KeyValuePair<long, User> user in userLookup)
             {
                 // render gender icon
-                updateGenderIconPos(user.Value.getUserIndex(), user.Value.getGenderIconPosition());
+                updateGenderIconPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
+                //updateOufitMenuPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
             }
         }
     }

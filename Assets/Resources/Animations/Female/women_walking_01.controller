@@ -3,7 +3,7 @@
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: women_walking_01
   serializedVersion: 5
@@ -21,14 +21,22 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
+<<<<<<< HEAD
 --- !u!1102 &1102168409022310650
+=======
+--- !u!1102 &1102605543900415158
+>>>>>>> 50751ef36552e15b9d495e59dc516541d0a3e89b
 AnimatorState:
   serializedVersion: 5
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Take 001
+<<<<<<< HEAD
   m_Speed: 1.3
+=======
+  m_Speed: 1
+>>>>>>> 50751ef36552e15b9d495e59dc516541d0a3e89b
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
@@ -50,13 +58,18 @@ AnimatorState:
 AnimatorStateMachine:
   serializedVersion: 5
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
+<<<<<<< HEAD
     m_State: {fileID: 1102168409022310650}
     m_Position: {x: 696, y: 396, z: 0}
+=======
+    m_State: {fileID: 1102605543900415158}
+    m_Position: {x: 58.819214, y: 361.48615, z: 0}
+>>>>>>> 50751ef36552e15b9d495e59dc516541d0a3e89b
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -64,6 +77,10 @@ AnimatorStateMachine:
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
   m_EntryPosition: {x: 50, y: 120, z: 0}
-  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ExitPosition: {x: 2112, y: 984, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+<<<<<<< HEAD
   m_DefaultState: {fileID: 1102168409022310650}
+=======
+  m_DefaultState: {fileID: 1102605543900415158}
+>>>>>>> 50751ef36552e15b9d495e59dc516541d0a3e89b
