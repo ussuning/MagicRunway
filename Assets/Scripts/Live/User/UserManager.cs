@@ -61,8 +61,12 @@ public class UserManager : Singleton<UserManager>
         }
       
         // listening for these gestures for this user  
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);       // move icons left
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);      // move icons right
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
 
         StartCoroutine(addUser(userId, userIndex));
 
@@ -115,7 +119,7 @@ public class UserManager : Singleton<UserManager>
         return userLookup;
     }
 
-    // need to clean up later - move to UI Manager
+    // need to clean up later - move to UI 
     public void addGenderIcon(long userId, string gender)
     {
         string userContainerName = "User_" + userId;
@@ -173,7 +177,7 @@ public class UserManager : Singleton<UserManager>
         genderContainer.transform.SetParent(userContainer.transform);
     }
 
-    // need to clean up later - move to UI Manager
+    // need to clean up later - move to UI 
     protected void renderUserModel(long userId)
     {
         string userContainerName = "User_" + userId;
@@ -187,7 +191,7 @@ public class UserManager : Singleton<UserManager>
 
     }
 
-    // need to clean up later - move to UI Manager
+    // need to clean up later - move to UI
     protected void removeUserModel(long userId)
     {
         string userContainerName = "User_" + userId;
@@ -195,32 +199,35 @@ public class UserManager : Singleton<UserManager>
         Destroy(userContainer);
     }
 
-    protected void addOutfitMenu(long userId)
+    public void addOutfitMenu(long userId, string gender)
     {
         string userContainerName = "User_" + userId;
         string outfitMenuName = "OutFitMenu_" + userId;
         GameObject userContainer = GameObject.Find(userContainerName);
-   
+
+        // populate outfit menu icons from json based on gender
         GameObject outfitMenuGO = (GameObject)Instantiate(outfitMenuPrefab);
         outfitMenuGO.name = outfitMenuName;
         outfitMenuGO.transform.SetParent(userContainer.transform);
-        
+        userLookup[userId].setOutfitMenuStatus(true);
     }
 
-    // need to clean up later - move to UI Manager
-    protected void showOutfitMenu(long userId)
+    // need to clean up later - move to UI
+    public void showOutfitMenu(long userId)
     {
         string outfitMenuName = "OutFitMenu_" + userId;
         GameObject outfitMenuGO = GameObject.Find(outfitMenuName);
         outfitMenuGO.SetActive(true);
+        userLookup[userId].setOutfitMenuStatus(true);
     }
 
-    // need to clean up later - move to UI Manager
-    protected void hideOutfitMenu(long userId)
+    // need to clean up later - move to UI,  maybe hide outfit menu when user hits a pose 
+    public void hideOutfitMenu(long userId)
     {
         string outfitMenuName = "OutFitMenu_" + userId;
         GameObject outfitMenuGO = GameObject.Find(outfitMenuName);
-        outfitMenuGO.SetActive(true);
+        outfitMenuGO.SetActive(false);
+        userLookup[userId].setOutfitMenuStatus(false);
     }
 
     protected void addUserScoreUI(long uid)
@@ -336,9 +343,6 @@ public class UserManager : Singleton<UserManager>
 
         // pose detection setup
         addPoseDetection(userId);
-
-        // show outfit menu selection
-       // addOutfitMenu(userId);
 
         // show start menu button to transition into Live mode
         StartCoroutine(joinLivePrompt());

@@ -10,6 +10,7 @@ public class User : MonoBehaviour {
     public Vector3 uposition;
     public Vector3 genderIconPosition;
     private GameObject userSkeletonGO;
+    private bool isOutfitMenuOn = false;
 
     // Use this for initialization
     public User(long id, int index)
@@ -62,6 +63,16 @@ public class User : MonoBehaviour {
     public void setUserSkeletonGO(GameObject go)
     {
         userSkeletonGO = go;
+    }
+
+    public bool isOutfitMenuDisplayed()
+    {
+        return isOutfitMenuOn;
+    }
+
+    public void setOutfitMenuStatus(bool status)
+    {
+        isOutfitMenuOn = status;
     }
 
     protected Vector3 getCurrentPosition(int iJointIndex)
