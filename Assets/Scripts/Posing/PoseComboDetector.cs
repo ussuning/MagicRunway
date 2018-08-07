@@ -37,8 +37,11 @@ public class PoseComboDetector : MonoBehaviour {
             combo++;
             if (combo > 1)
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, userID, combo);
-            PoseMgr.Instance.GenerateNewPose();
-            poseTimeEllapsed = 0f;
+
+            if (poseTimeEllapsed >= 1f)
+                GenerateNewPose();
+            else
+                Invoke("GenerateNewPose", 1f - poseTimeEllapsed);
         }
     }
 
@@ -47,8 +50,7 @@ public class PoseComboDetector : MonoBehaviour {
         combo = 0;
         poseTimeEllapsed = 0f;
 
-        PoseMgr.Instance.GenerateNewPose();
-        poseTimeEllapsed = 0f;
+        GenerateNewPose();
     }
 
     void Update()
@@ -58,8 +60,13 @@ public class PoseComboDetector : MonoBehaviour {
         if (poseTimeEllapsed > PoseMgr.Instance.GetComboInfo(ComboNum).pose_time)
         {
             combo = 0;
-            PoseMgr.Instance.GenerateNewPose();
-            poseTimeEllapsed = 0f;
+            GenerateNewPose();
         }
+    }
+
+    void GenerateNewPose()
+    {
+        PoseMgr.Instance.GenerateNewPose();
+        poseTimeEllapsed = 0f;
     }
 }
