@@ -357,9 +357,5 @@ public class UserManager : Singleton<UserManager>
                 updateGenderIconPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
             }
         }
-        else
-        {
-            Debug.Log("Not in Live");
-        }
     }
 }
