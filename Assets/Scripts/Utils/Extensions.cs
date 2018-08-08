@@ -197,7 +197,7 @@ namespace MR
 #if UNITY_EDITOR
         public static bool IsPrefabInstance(this GameObject gameObject)
         {
-            return PrefabUtility.GetPrefabParent(gameObject) != null || PrefabUtility.GetPrefabObject(gameObject) != null;
+            return PrefabUtility.GetCorrespondingObjectFromSource(gameObject) != null || PrefabUtility.GetPrefabObject(gameObject) != null;
         }
 #endif
     }
