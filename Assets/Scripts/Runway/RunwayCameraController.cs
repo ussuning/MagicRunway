@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public enum AutoRunwayCamera { MAIN, SLOW_MO };
-public enum AutoRunwayCameraFollowState { FOLLOW, UNFOLLOW, NONE}
+//public enum AutoRunwayCameraFollowState { FOLLOW, UNFOLLOW, NONE}
 public enum AutoRunwayCameraSpeed { NORMAL, SLOW, VERY_SLOW }
-public enum AutoRunwayCameraState { DEFAULT, CLOSE_UP, CLOSE_UP_PAN }
+public enum AutoRunwayCameraState { DEFAULT, CLOSE_UP, CLOSE_UP_PAN, ZOOM }
 public enum AutoRunwayCameraTransition { CUT, SMOOTH, FADE }
 
 public class RunwayCameraController : MonoBehaviour {
@@ -28,7 +28,7 @@ public class RunwayCameraController : MonoBehaviour {
     public Camera SlowMoCamera;
 
     public AutoRunwayCamera curCam = AutoRunwayCamera.MAIN;
-    public AutoRunwayCameraFollowState curCamFollowState = AutoRunwayCameraFollowState.NONE;
+    //public AutoRunwayCameraFollowState curCamFollowState = AutoRunwayCameraFollowState.NONE;
     public AutoRunwayCameraState curCamState = AutoRunwayCameraState.DEFAULT;
     public AutoRunwayCameraTransition curCamTransition = AutoRunwayCameraTransition.CUT;
     public Image blackout;
@@ -52,6 +52,9 @@ public class RunwayCameraController : MonoBehaviour {
     //private float panStartY = 0.8f;
     private float panStartY = 0.4f;
     private float panEndY = -0.2f;
+
+    private Vector3 zoomRot1 = new Vector3(1.2f, 96.35f, 0);
+    private float zoomFOV1 = 12f;
     //----------------------------------------
     // MonoBehaviour Overrides
     //----------------------------------------
@@ -96,6 +99,7 @@ public class RunwayCameraController : MonoBehaviour {
         if (curCamState == AutoRunwayCameraState.DEFAULT) { UpdateToOrigin(); }
         else if (curCamState == AutoRunwayCameraState.CLOSE_UP) { UpdateCloseUp(); }
         else if (curCamState == AutoRunwayCameraState.CLOSE_UP_PAN) { UpdateCloseUpPan(); }
+        else if (curCamState == AutoRunwayCameraState.ZOOM) { UpdateZoomUp(); }
     }
  
     private void UpdateCloseUpPan()
@@ -171,6 +175,20 @@ public class RunwayCameraController : MonoBehaviour {
         }
     }
 
+    private void UpdateZoomUp()
+    {
+        if (curCamTransition == AutoRunwayCameraTransition.SMOOTH)
+        {
+            activeCam.transform.eulerAngles = Vector3.Lerp(activeCam.transform.eulerAngles, zoomRot1, 3.0f * Time.deltaTime);
+            activeCam.fieldOfView = Mathf.Lerp(activeCam.fieldOfView, zoomFOV1, 2.0f * Time.deltaTime);
+        }
+        else
+        {
+            activeCam.transform.eulerAngles = zoomRot1;
+            activeCam.fieldOfView = zoomFOV1;
+        }
+    }
+
     private void CamerasReset()
     {
         MainCamera.fieldOfView = mainCamOriginFOV;
@@ -240,7 +258,7 @@ public class RunwayCameraController : MonoBehaviour {
 
         modelsOnRunway.active.Add(model);
 
-        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
+        SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.ZOOM, AutoRunwayCameraTransition.SMOOTH);
     }
 
     private void OnRunwayMidEnter(Collider model)
@@ -258,11 +276,6 @@ public class RunwayCameraController : MonoBehaviour {
             modelsInMidZone.active.Add(model);
 
             SetCamera(AutoRunwayCamera.SLOW_MO, AutoRunwayCameraState.CLOSE_UP_PAN, AutoRunwayCameraTransition.CUT, AutoRunwayCameraSpeed.VERY_SLOW);
-            /*
-            curCamTransition = AutoRunwayCameraTransition.CUT;
-            curCamState = AutoRunwayCameraState.CLOSE_UP_PAN;
-            SlowMo(AutoRunwayCameraSpeed.SLOW);
-            */
         }
     }
 

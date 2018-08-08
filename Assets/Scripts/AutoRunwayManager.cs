@@ -319,15 +319,7 @@ public class AutoRunwayManager : MonoBehaviour
 
         foreach (ObiSolver os in oss)
         {
-            if(secondTime)
-            {
-                
-                os.enabled = true;
-            } else
-            {
-                os.enabled = true;
-            }
-            
+            os.enabled = true; 
         }
 
         model.SetActive(true);
@@ -400,7 +392,7 @@ public class AutoRunwayManager : MonoBehaviour
 
         parentModel.SetActive(false);
 
-        QueueUp();
+        //QueueUp();
 
         if (isCollectionEnding == false) { return; }
 
@@ -440,7 +432,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void OnRunwayMidExit(Collider other)
     {
-        //QueueUp();
+        QueueUp();
     }
 
     private void OnRunwayEndEnter(Collider other)
