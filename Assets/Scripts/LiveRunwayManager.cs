@@ -99,9 +99,9 @@ public class LiveRunwayManager : MonoBehaviour {
 
         PrepareCollectionLiveModelPrefabs();
 
-        UIManager.Instance.ShowGestureGender(30.0f);
+        UIManager.Instance.ShowGestureGender(10.0f);
 
-        UIManager.Instance.ShowStickMan(true);
+        UIManager.Instance.ShowStickManDelay(11.0f);
     }
 
     private void PrepareCollectionLiveModelPrefabs()

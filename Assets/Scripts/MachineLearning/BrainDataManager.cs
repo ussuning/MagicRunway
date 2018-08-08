@@ -32,7 +32,7 @@ public class BrainDataManager : MonoBehaviour
 
     public static BrainDataManager Instance;
 
-    public string poseDataFilePath = "/StreamingAssets/pose_data.json";
+    public string brainDataFilePath = "/StreamingAssets/brain_data.json";
     public string trainedDataFolderPath = "MachineLearningModels/TargetPoseRecognizing/TargetPoseTraining_training_"; //Rooted from Resources
 
     private Brain[] brains;
@@ -68,7 +68,7 @@ public class BrainDataManager : MonoBehaviour
 
     private void LoadBrainData()
     {
-        string filePath = Application.dataPath + poseDataFilePath;
+        string filePath = Application.dataPath + brainDataFilePath;
 
         if (File.Exists(filePath))
         {

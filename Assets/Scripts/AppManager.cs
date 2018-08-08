@@ -5,7 +5,7 @@ using System.Collections;
 
 public enum Mode { AUTO,LIVE };
 
-public class AppManager : MonoBehaviour
+public class AppManager : Singleton<AppManager>
 {
     public AutoRunwayManager autoRunwayManager;
     public LiveRunwayManager liveRunwayManager;

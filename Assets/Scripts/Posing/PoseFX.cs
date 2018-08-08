@@ -4,16 +4,13 @@ using UnityEngine;
 
 public class PoseFX : MonoBehaviour {
 
-    public GameObject[] partileFX;
-    public Sprite[] poseThumbnails;
+    public GameObject partileFX;
 
-    SpriteRenderer poseImage;
-    TextMesh comboText;
+    private long userID;
 
-    void Awake ()
+    public void Init(long user)
     {
-        poseImage = GetComponentInChildren<SpriteRenderer>();
-        comboText = GetComponentInChildren<TextMesh>();
+        userID = user;
     }
 
     void OnEnable()
@@ -28,38 +25,42 @@ public class PoseFX : MonoBehaviour {
 
     public void OnPoseDetected(object param, object paramEx)
     {
-        int combo = (int)param;
-        int poseIdx = (int)paramEx;
-
-        UpdateComboParticles(combo);
-        UpdateDetectedPoseImage(poseIdx, combo);
+        long matched_userID = (long)param;
+        if(matched_userID == userID)
+            UpdateComboParticles();
     }
 
-    void UpdateComboParticles(int combo)
+    void UpdateComboParticles()
     {
         GameObject particleGO;
-        if (combo <= partileFX.Length)
-            particleGO = (GameObject)Instantiate(partileFX[combo - 1], transform.parent.position + new Vector3(0, 1, 0), Quaternion.identity);
-        else
-            particleGO = (GameObject)Instantiate(partileFX[partileFX.Length - 1], transform.parent.position + new Vector3(0, 1, 0), Quaternion.identity);
+        if (partileFX)
+            particleGO = (GameObject)Instantiate(partileFX, GetUserScreenPos(), Quaternion.identity);
     }
 
-    void UpdateDetectedPoseImage(int poseIdx, float combo = 0f)
+    Vector3 GetUserScreenPos()
     {
-        CancelInvoke("ClearDetection");
+        KinectManager manager = KinectManager.Instance;
 
-        poseImage.sprite = poseThumbnails[poseIdx];
-        poseImage.enabled = true;
+        if (manager && manager.IsInitialized())
+        {
+            // get the background rectangle (use the portrait background, if available)
+            Camera foregroundCamera = Camera.main;
+            Rect backgroundRect = foregroundCamera.pixelRect;
+            PortraitBackground portraitBack = PortraitBackground.Instance;
 
-        if (combo > 1)
-            comboText.text = string.Format("x{0} COMBO", combo.ToString());
+            if (portraitBack && portraitBack.enabled)
+            {
+                backgroundRect = portraitBack.GetBackgroundRect();
+            }
 
-        Invoke("ClearDetection", 2f);
+            int iJointIndex = (int)KinectInterop.JointType.SpineMid;
+            if (manager.IsJointTracked(userID, iJointIndex))
+            {
+                return manager.GetJointPosColorOverlay(userID, iJointIndex, foregroundCamera, backgroundRect);
+            }      
+        }
+
+        return Vector3.zero;
     }
 
-    void ClearDetection()
-    {
-        poseImage.enabled = false;
-        comboText.text = "";
-    }
 }

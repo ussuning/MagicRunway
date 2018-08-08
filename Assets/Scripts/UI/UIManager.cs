@@ -21,6 +21,7 @@ public class UIManager : Singleton<UIManager>
     private CanvasFader faderStartMenu;
     private CanvasFader faderStickMan;
     private IEnumerator gestureGenderCoroutine;
+    private IEnumerator stickManCoroutine;
 
     void OnEnable()
     {
@@ -31,13 +32,12 @@ public class UIManager : Singleton<UIManager>
 
     public void Start()
     {
-        uiStartMenu.SetActive(false);
         //uiShowcase.SetActive(false);
         uiGestureGender.SetActive(false);
+        uiStartMenu.SetActive(false);
 
         uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
         uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
-
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
         faderStickMan = uiStickMan.GetComponent<CanvasFader>();
 
@@ -87,6 +87,12 @@ public class UIManager : Singleton<UIManager>
         StartMenuButton.onClick.Invoke();
     }
 
+    public void ShowStickManDelay(float time = 30.0f)
+    {
+        stickManCoroutine = WaitToShowStickMan(time);
+        StartCoroutine(stickManCoroutine);
+    }
+
     public void ShowStickMan(bool animate)
     {
         if (animate == true)
@@ -126,7 +132,7 @@ public class UIManager : Singleton<UIManager>
     public void HideAll()
     {
         HideOutfit(false);
-        HideCollection(false);
+        //  HideCollection(false);    // turn off to use for player UI
         HideUpNext();
         HideGestureGender(false);
         HideHandCursor();
@@ -157,14 +163,15 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowCollection(Collection collection)
     {
-        CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
-        cd.ShowCollection(collection);
+        // turn off to use for player UI
+       // CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
+       // cd.ShowCollection(collection);
     }
 
     public void HideCollection(bool animate = true)
     {
-        CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
-        cd.Hide(animate);
+          CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
+          cd.Hide(animate);
     }
 
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {
@@ -224,6 +231,12 @@ public class UIManager : Singleton<UIManager>
     {
         yield return new WaitForSeconds(delay);
         HideGestureGender();
+    }
+
+    IEnumerator WaitToShowStickMan(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ShowStickMan(true);
     }
 
     public void HideGestureGender(bool animate = true)
