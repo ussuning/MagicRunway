@@ -48,7 +48,7 @@ public class UserScore : MonoBehaviour {
         float poseConfidence = (float)paramEx;
         if (matchedUserID == userID)
         {
-            AddScore(5);
+            AddScore(ScoreMgr.Instance.SinglePoseScore);
             GenerateEffects(poseConfidence);
         }
     }

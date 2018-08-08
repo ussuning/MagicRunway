@@ -89,6 +89,6 @@ public class ComboFX : MonoBehaviour {
     {
         GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
         UserScore us = userScoreBoxGO.GetComponent<UserScore>();
-        us.AddScore(comboNum * 10);
+        us.AddScore(ScoreMgr.Instance.GetComboScore(comboNum));
     }
 }
