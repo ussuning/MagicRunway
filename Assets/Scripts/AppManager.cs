@@ -85,7 +85,7 @@ public class AppManager : Singleton<AppManager>
         if (curMode == Mode.LIVE) { return; }
 
         curMode = Mode.LIVE;
-        music.Stop(0);
+        music.Stop();
         StartCoroutine(FadeOutLLevelToLive());
     }
 
