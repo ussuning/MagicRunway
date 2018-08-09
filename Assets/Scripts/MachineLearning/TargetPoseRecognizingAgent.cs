@@ -124,7 +124,7 @@ public class TargetPoseRecognizingAgent : Agent {
         //    estimationTimeEllapsed = 0f;
         //    PoseMatchCount = 0;
         //}
-        isPoseMatched = poseConfidence >= 0.9f;
+        isPoseMatched = poseConfidence >= pose.min_confidence;
     }
 
     //Normalizing to [-1, 1]
