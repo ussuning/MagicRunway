@@ -10,4 +10,6 @@ public class EventDef
     public const int New_Pose_Generated = 100;
     public const int User_Pose_Detected = New_Pose_Generated + 1;
     public const int User_Combo_Detected = User_Pose_Detected + 1;
+    public const int High_Combo_Detected = User_Combo_Detected + 1;
+    public const int Combo_Broken_Detected = High_Combo_Detected + 1;
 }
