@@ -540,7 +540,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &71191219
 RectTransform:
   m_ObjectHideFlags: 0
@@ -601,8 +601,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1023743740}
-        m_MethodName: AutoToLive
+      - m_Target: {fileID: 1023743737}
+        m_MethodName: FadeOutVid
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
