@@ -24,7 +24,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     private bool loop = false;
     private int loopAmount = 1;
-    private bool showFinale = true;
+    private bool showFinale = false;
     private float pauseToFinale = 3;
     private float pauseToNextCollection = 3;
 
@@ -45,7 +45,10 @@ public class AutoRunwayManager : MonoBehaviour
     private byte videoFadeState;
     private float videoFadeStartTime;
     private float videoFadeDeltaTime;
-    private float videoFadeDuration = 1.0f;
+    private float videoFadeDuration = 3.0f;
+    private float videoColor = 0;
+    private Material videoMaterial;
+    private Texture2D videoSplash;
 
     void Awake()
     {
@@ -69,8 +72,12 @@ public class AutoRunwayManager : MonoBehaviour
     {
         Material[] mats = videoWall.GetComponent<Renderer>().materials;
         Debug.Log(mats[0].ToString());
-        Material vid = mats[0];
-        vid.SetColor("_EmissionColor", Color.black);
+        videoMaterial = mats[0];
+        //vid.SetColor("_EmissionColor", Color.black);
+        //vid.color = Color.black;
+        //Color.Lerp
+        //vid.SetColor("_EmissionColor", HSBColor.ToColor(HSBColor.Lerp(HSBColor.FromColor(vid.color), _targetColorHSB, Time.deltaTime / timeLeft)));
+        VideoWallStartFadeOut(false);
         //rend.material.color = Color.black;
     }
 
@@ -80,6 +87,72 @@ public class AutoRunwayManager : MonoBehaviour
     }
 
     private void UpdateVideoWall()
+    {
+        if (videoFadeState == 1)
+        {
+            videoMaterial.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.white, videoColor));
+            videoMaterial.color = Color.Lerp(Color.black, Color.white, videoColor);
+            if (videoColor < 1)
+            {
+                videoColor += Time.deltaTime / videoFadeDuration;
+            } else
+            {
+                videoMaterial.SetColor("_EmissionColor", Color.white);
+                videoMaterial.color = Color.white;
+
+                videoFadeState = 0;
+            }
+        }
+
+        if (videoFadeState == 2)
+        {
+            videoMaterial.SetColor("_EmissionColor", Color.Lerp(Color.white, Color.black, videoColor));
+            videoMaterial.color = Color.Lerp(Color.white, Color.black, videoColor);
+            if (videoColor < 1)
+            {
+                videoColor += Time.deltaTime / videoFadeDuration;
+            }
+            else
+            {
+                videoMaterial.SetColor("_EmissionColor", Color.black);
+                videoMaterial.color = Color.black;
+
+                videoFadeState = 0;
+            }
+        }
+    }
+
+    public void FadeOutVid()
+    {
+        VideoWallStartFadeOut();
+    }
+
+    private void VideoWallStartFadeIn()
+    {
+        videoMaterial.SetColor("_EmissionColor", Color.black);
+        videoMaterial.color = Color.black;
+        videoFadeStartTime = Time.realtimeSinceStartup;
+        videoColor = 0;
+        videoFadeState = 1;
+    }
+
+    private void VideoWallStartFadeOut(bool animate = true)
+    {
+        if (animate == false)
+        {
+            videoMaterial.SetColor("_EmissionColor", Color.black);
+            videoMaterial.color = Color.black;
+            return;
+        }
+
+        videoMaterial.SetColor("_EmissionColor", Color.white);
+        videoMaterial.color = Color.white;
+        videoFadeStartTime = Time.realtimeSinceStartup;
+        videoColor = 0;
+        videoFadeState = 2;
+    }
+
+    private void VideoWallChangePic()
     {
 
     }
@@ -188,7 +261,6 @@ public class AutoRunwayManager : MonoBehaviour
 
         totalOutfits = curCollection.outfits.Count;
         
-
         foreach (Outfit outfit in curCollection.outfits)
         {
             string sex = (outfit.sex == "f") ? "Female" : "Male";
@@ -223,6 +295,7 @@ public class AutoRunwayManager : MonoBehaviour
     {
         //Debug.Log("READY FOR NEXT COLLECTION");
         UIManager.Instance.HideCollection();
+        VideoWallStartFadeOut();
 
         curCollectionIndex++;
 
@@ -244,7 +317,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void ClearModel(GameObject model)
     {
-        Debug.Log("DELETE MODEL " + model.name);
+        //Debug.Log("DELETE MODEL " + model.name);
         GameObject parent = model.transform.parent.gameObject;
         Destroy(parent);
         for (int x = 0; x < models.Count; x++)
@@ -284,14 +357,22 @@ public class AutoRunwayManager : MonoBehaviour
         UIManager.Instance.HideStartMenu(false);
         UIManager.Instance.HideGestureGender(false);
         curOutfit = 0;
-        RunModel(curOutfit);
-        //StartCoroutine(BeginShow());
+        //RunModel(curOutfit);
+
+        videoSplash = Resources.Load<Texture2D>(curCollection.splash);
+        Debug.Log(videoSplash);
+        videoMaterial.SetTexture("_MainTex", videoSplash);
+        videoMaterial.SetTexture("_EmissionMap", videoSplash);
+
+        VideoWallStartFadeIn();
+        //videoSplash = curCollection.splash;
+        StartCoroutine(BeginShow());
     }
 
     IEnumerator BeginShow()
     {
-        yield return new WaitForSeconds(3);
-        HideAllModels();
+        yield return new WaitForSeconds(5);
+        //HideAllModels();
         RunModel(curOutfit);
     }
     
