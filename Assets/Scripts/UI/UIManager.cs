@@ -98,7 +98,8 @@ public class UIManager : Singleton<UIManager>
         if (animate == true)
         {
             uiStickMan.SetActive(true);
-            faderStickMan.StartFading(CanvasFade.IN);
+            if(faderStickMan)
+                faderStickMan.StartFading(CanvasFade.IN);
         }
         else
         {
