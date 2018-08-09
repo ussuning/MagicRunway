@@ -357,9 +357,7 @@ public class AutoRunwayManager : MonoBehaviour
         UIManager.Instance.HideStartMenu(false);
         UIManager.Instance.HideGestureGender(false);
         curOutfit = 0;
-        RunModel(curOutfit);
-
-        videoMaterial.EnableKeyword("_NORMALMAP");
+        //RunModel(curOutfit);
 
         videoSplash = Resources.Load<Texture2D>(curCollection.splash);
         Debug.Log(videoSplash);
@@ -368,13 +366,13 @@ public class AutoRunwayManager : MonoBehaviour
 
         VideoWallStartFadeIn();
         //videoSplash = curCollection.splash;
-        //StartCoroutine(BeginShow());
+        StartCoroutine(BeginShow());
     }
 
     IEnumerator BeginShow()
     {
-        yield return new WaitForSeconds(3);
-        HideAllModels();
+        yield return new WaitForSeconds(5);
+        //HideAllModels();
         RunModel(curOutfit);
     }
     
