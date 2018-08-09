@@ -284,6 +284,7 @@ public class RunwayCameraController : MonoBehaviour {
         SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
 
         //Model Exiting Mid Zone 2nd time
+        
         if (modelsInMidZone.active.Count > 0)
         {
             modelsInMidZone.active.RemoveAt(0);

@@ -71,14 +71,8 @@ public class AutoRunwayManager : MonoBehaviour
     void Start()
     {
         Material[] mats = videoWall.GetComponent<Renderer>().materials;
-        Debug.Log(mats[0].ToString());
         videoMaterial = mats[0];
-        //vid.SetColor("_EmissionColor", Color.black);
-        //vid.color = Color.black;
-        //Color.Lerp
-        //vid.SetColor("_EmissionColor", HSBColor.ToColor(HSBColor.Lerp(HSBColor.FromColor(vid.color), _targetColorHSB, Time.deltaTime / timeLeft)));
         VideoWallStartFadeOut(false);
-        //rend.material.color = Color.black;
     }
 
     private void Update()
@@ -167,6 +161,8 @@ public class AutoRunwayManager : MonoBehaviour
 
     public void ReadyAutoRunway(GameObject level = null)
     {
+        Application.targetFrameRate = 120;
+
         HideAllLevels();
 
         if (level == null) {
@@ -241,7 +237,6 @@ public class AutoRunwayManager : MonoBehaviour
         RunwayFinish.OnTriggerEnterEvt += OnRunwayFinish;
         RunwayEnd.OnTriggerEnterEvt += OnRunwayEndEnter;
         RunwayEnd.OnTriggerExitEvt += OnRunwayEndExit;
-
     }
 
     private void PrepareCollectionRunwayModelPrefabs()
@@ -269,6 +264,9 @@ public class AutoRunwayManager : MonoBehaviour
             
             go.SetActive(true);
 
+            Animator animator = go.GetComponent<Animator>();
+            animator.enabled = false;
+
             ObiSolver[] oss = go.GetComponentsInChildren<ObiSolver>();
 
             foreach (ObiSolver os in oss)
@@ -282,6 +280,13 @@ public class AutoRunwayManager : MonoBehaviour
             {
                 oc.enabled = true;
                 oc.ResetActor();
+            }
+
+            Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
+
+            foreach (Renderer renderer in renderers)
+            {
+                renderer.enabled = false;
             }
 
             //ObiSolver os = go.transform.Find("ObiSolver").GetComponent<ObiSolver>();
@@ -360,12 +365,11 @@ public class AutoRunwayManager : MonoBehaviour
         //RunModel(curOutfit);
 
         videoSplash = Resources.Load<Texture2D>(curCollection.splash);
-        Debug.Log(videoSplash);
         videoMaterial.SetTexture("_MainTex", videoSplash);
         videoMaterial.SetTexture("_EmissionMap", videoSplash);
 
         VideoWallStartFadeIn();
-        //videoSplash = curCollection.splash;
+
         StartCoroutine(BeginShow());
     }
 
@@ -416,7 +420,7 @@ public class AutoRunwayManager : MonoBehaviour
         }
     }
 
-    private void RunModel(int index, bool secondTime = false)
+    private void RunModel(int index)
     {
         Collection collection = MRData.Instance.collections.collections[curCollectionIndex];
         GameObject model = models[index];
@@ -426,7 +430,17 @@ public class AutoRunwayManager : MonoBehaviour
 
         string animation = ModelAnimationManager.GetPoseAnimation(outfit.sex);
 
-        animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(Resources.Load(animation), model.transform);
+        Renderer[] renderers = model.GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = true;
+        }
+
+
+        RuntimeAnimatorController ani = (RuntimeAnimatorController)Resources.Load(animation, typeof(RuntimeAnimatorController));
+       
+        animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(ani, model.transform);
         animator.enabled = true;
         
         ObiSolver[] oss = model.GetComponentsInChildren<ObiSolver>();
@@ -458,7 +472,7 @@ public class AutoRunwayManager : MonoBehaviour
         int count = 0;
         while (count < totalOutfits)
         {
-            RunModel(count,true);
+            RunModel(count);
             count++;
             
             yield return new WaitForSeconds(1);
@@ -489,37 +503,32 @@ public class AutoRunwayManager : MonoBehaviour
         //Animator animator = other.gameObject.GetComponent<Animator>();
 
         //animation is on the parent layer of collider
-        if (showFinale == true)
+       
+        GameObject parentModel = other.gameObject.transform.parent.gameObject;
+        Animator animator = parentModel.GetComponent<Animator>();
+        ObiSolver[] oss = parentModel.GetComponentsInChildren<ObiSolver>();
+
+        foreach (ObiSolver os in oss)
         {
-            GameObject parentModel = other.gameObject.transform.parent.gameObject;
-            Animator animator = parentModel.GetComponent<Animator>();
-            ObiSolver[] oss = parentModel.GetComponentsInChildren<ObiSolver>();
-
-            foreach (ObiSolver os in oss)
-            {
-                os.enabled = false;
-            }
-
-            ObiCloth[] ocs = parentModel.GetComponentsInChildren<ObiCloth>();
-
-            foreach (ObiCloth oc in ocs)
-            {
-                //oc.ResetActor();
-                oc.enabled = false;
-            }
-
-            if (animator == null)
-                animator = other.gameObject.GetComponentInParent<Animator>();
-
-            animator.enabled = false;
-            animator.runtimeAnimatorController = null;
-
-            parentModel.SetActive(false);
-        } else
-        {
-            //Debug.Log("DELETE MODEL RIGHT AWAY");
-            ClearModel(other.gameObject);
+            os.enabled = false;
         }
+
+        ObiCloth[] ocs = parentModel.GetComponentsInChildren<ObiCloth>();
+
+        foreach (ObiCloth oc in ocs)
+        {
+            //oc.ResetActor();
+            oc.enabled = false;
+        }
+
+        if (animator == null)
+            animator = other.gameObject.GetComponentInParent<Animator>();
+
+        animator.enabled = false;
+        animator.runtimeAnimatorController = null;
+
+        parentModel.SetActive(false);
+       
         if (isCollectionEnding == false) { return; }
 
         if (showFinale == true && isInFinale == false)

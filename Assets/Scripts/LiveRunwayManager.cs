@@ -7,6 +7,7 @@ public class LiveRunwayManager : MonoBehaviour {
     public GameObject canvas;
     public GameObject fittingRoom;
     public GameObject userModel;
+    public GameObject poseRecogAcademy;
 
     private Collection curCollection;
     private Collection nextCollection;
@@ -30,6 +31,7 @@ public class LiveRunwayManager : MonoBehaviour {
     //Setup before starting live mode -- happens before fading in
     public void ReadyLiveRunway()
     {
+        poseRecogAcademy.SetActive(true);
         AttachFittingRoom();
         AttachCanvas();
         AttachUserModel();
@@ -48,6 +50,7 @@ public class LiveRunwayManager : MonoBehaviour {
 
     public void StopLiveRunway()
     {
+        poseRecogAcademy.SetActive(false);
         ClearModels();
         
         UIManager.Instance.HideAll();

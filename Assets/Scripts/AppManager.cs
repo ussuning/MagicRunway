@@ -13,11 +13,13 @@ public class AppManager : Singleton<AppManager>
     public Image blackout;
     public Animator blackoutAnimator;
     public AudioSource music;
+    public GameObject stickman;
 
     private Mode curMode = Mode.AUTO;
 
     void Start()
     {
+        stickman.SetActive(false);
         blackoutAnimator.SetBool("FadeIn", false);
         blackoutAnimator.SetBool("FadeOut", false);
 
@@ -43,6 +45,7 @@ public class AppManager : Singleton<AppManager>
 
     public void PlayLiveRunway()
     {
+        stickman.SetActive(true);
         autoRunwayManager.StopAutoRunway();
         autoRunwayManager.HideAllLevels();
         liveRunwayManager.ReadyLiveRunway();
@@ -60,6 +63,7 @@ public class AppManager : Singleton<AppManager>
         //    liveRunwayManager.StopLiveRunway();
         music.Play(0);
         //Debug.Log("started");
+        stickman.SetActive(false);
         autoRunwayManager.ReadyAutoRunway(PickRandomLevel());
         StartCoroutine(FadeInLevel());
     }
