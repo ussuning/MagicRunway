@@ -3092,7 +3092,7 @@ Prefab:
       objectReference: {fileID: 791904330}
     - target: {fileID: 1092431475659024, guid: 052f4c09e2574654a930df511157ed8d, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 052f4c09e2574654a930df511157ed8d, type: 2}
@@ -3860,7 +3860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinectController: {fileID: 1314250646}
-  userSkeletonPrefab: {fileID: 1640589798265450, guid: f6bdf48009d32bb4d861bdb2ea5eb173,
+  userSkeletonPrefab: {fileID: 1073119087643734, guid: c79782251b62a2644905e6eb286cbdd2,
     type: 2}
   userScorePrefab: {fileID: 1167869696003300, guid: 4b2cb008ba23371459836841ca39e775,
     type: 2}
@@ -5146,6 +5146,7 @@ GameObject:
   - component: {fileID: 1295224656}
   - component: {fileID: 1295224657}
   - component: {fileID: 1295224659}
+  - component: {fileID: 1295224658}
   m_Layer: 0
   m_Name: Posing
   m_TagString: Untagged
@@ -5186,6 +5187,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboDataFilePath: /StreamingAssets/combo_data.json
+--- !u!114 &1295224658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1295224655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fb1cff13cbce5a4aaf4e9369c155ab0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  feedbackDataFilePath: /StreamingAssets/feedback_data.json
 --- !u!114 &1295224659
 MonoBehaviour:
   m_ObjectHideFlags: 0
