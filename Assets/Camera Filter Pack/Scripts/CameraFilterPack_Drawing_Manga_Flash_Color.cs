@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections;
 [ExecuteInEditMode]
 [AddComponentMenu ("Camera Filter Pack/Drawing/Manga_Flash_Color")]
-public class CameraFilterPack_Drawing_Manga_Flash_Color : MonoBehaviour {
+public class CameraFilterPack_Drawing_Manga_Flash_Color : CameraShader {
 #region Variables
 public Shader SCShader;
 private float TimeX = 1.0f;
@@ -21,8 +21,8 @@ public int Speed = 5;
 public float PosX = 0.5f;
 [Range(0f, 1f)]
 public float PosY = 0.5f;
-    [Range(0f, 1f)]
-    public float Intensity = 1f;
+    //[Range(0f, 1f)]
+    //public float Intensity = 1f;
 
     #endregion
     #region Properties
@@ -59,6 +59,10 @@ material.SetFloat("_Value", Size);
 material.SetFloat("_Value2", (float)Speed);
 material.SetFloat("_Value3", PosX);
 material.SetFloat("_Value4", PosY);
+            if (MaxIntensity > -1 && Intensity > MaxIntensity)
+                Intensity = MaxIntensity;
+            //if (MinIntensity > -1 && Intensity < MinIntensity)
+            //    Intensity = MinIntensity;
             material.SetFloat("_Intensity", Intensity);
 
             material.SetColor("Color",Color);

@@ -5,7 +5,8 @@ using UnityEngine;
 using System.Collections;
 [ExecuteInEditMode]
 [AddComponentMenu ("Camera Filter Pack/Glow/Glow_Color")]
-public class CameraFilterPack_Glow_Glow_Color : MonoBehaviour {
+public class CameraFilterPack_Glow_Glow_Color : CameraShader
+{
 #region Variables
 public Shader SCShader;
 private float TimeX = 1.0f;
@@ -17,8 +18,8 @@ public float Amount = 4f;
 public int FastFilter = 4;
 [Range(0,1f)]
 public float Threshold = 0.5f;
-[Range(0,3f)]
-public float Intensity = 2.25f;
+//[Range(0,3f)]
+//public float Intensity = 2.25f;
 [Range(-1,1f)]
 public float Precision = 0.56f;
 public Color GlowColor = new Color(0,0.7f,1,1);
@@ -56,7 +57,11 @@ if (TimeX>100)  TimeX=0;
 material.SetFloat("_TimeX", TimeX);
 material.SetFloat("_Amount", Amount);
 material.SetFloat("_Value1", Threshold);
-material.SetFloat("_Value2", Intensity);
+            if (MaxIntensity > -1 && Intensity > MaxIntensity)
+                Intensity = MaxIntensity;
+            //if (MinIntensity > -1 && Intensity < MinIntensity)
+            //    Intensity = MinIntensity;
+            material.SetFloat("_Value2", Intensity);
 material.SetFloat("_Value3", Precision);
 material.SetColor ("_GlowColor",GlowColor);
 material.SetVector("_ScreenResolution",new Vector2(Screen.width/DownScale,Screen.height/DownScale));

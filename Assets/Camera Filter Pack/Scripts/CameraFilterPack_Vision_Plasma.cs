@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections;
 [ExecuteInEditMode]
 [AddComponentMenu ("Camera Filter Pack/Vision/Plasma")]
-public class CameraFilterPack_Vision_Plasma : MonoBehaviour {
+public class CameraFilterPack_Vision_Plasma : CameraShader {
 #region Variables
 public Shader SCShader;
 private float TimeX = 1.0f;
@@ -16,8 +16,8 @@ private Material SCMaterial;
 public float Value = 0.6f;
 [Range(-2f, 2f)]
 public float Value2 = 0.2f;
-[Range(0f, 60f)]
-public float Intensity = 15f;
+//[Range(0f, 60f)]
+//public float Intensity = 15f;
 [Range(0f, 10f)]
 private float Value4 = 1f;
 
@@ -56,7 +56,11 @@ if (TimeX>100)  TimeX=0;
 material.SetFloat("_TimeX", TimeX);
 material.SetFloat("_Value", Value);
 material.SetFloat("_Value2", Value2);
-material.SetFloat("_Value3", Intensity);
+            if (MaxIntensity > -1 && Intensity > MaxIntensity)
+                Intensity = MaxIntensity;
+            //if (MinIntensity > -1 && Intensity < MinIntensity)
+            //    Intensity = MinIntensity;
+            material.SetFloat("_Value3", Intensity);
 material.SetFloat("_Value4", Value4);
 material.SetVector("_ScreenResolution",new Vector4(sourceTexture.width,sourceTexture.height,0.0f,0.0f));
 Graphics.Blit(sourceTexture, destTexture, material);

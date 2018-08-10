@@ -2,33 +2,68 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class CameraShaderController
+{
+    public CameraShader ShaderScript;
+    public float fadeInSpeed;
+    public float fadeOutSpeed;
+
+    //Normalized intensity [0, 1]
+    private float curIntensity;
+    private float targetIntensity;
+    public float TargetIntensity
+    {
+        set
+        {
+            targetIntensity = value;
+        }
+    }
+
+    public void ZeroIntensity()
+    {
+        ShaderScript.Intensity = curIntensity = targetIntensity = 0f;
+        //ShaderScript.enabled = false;
+    }
+
+    public void UpdateIntensity()
+    {
+        if (curIntensity < targetIntensity)
+        {
+            curIntensity += fadeInSpeed * Time.deltaTime;
+            if (curIntensity > targetIntensity)
+                curIntensity = targetIntensity;
+            ShaderScript.Intensity = curIntensity * ShaderScript.MaxIntensity;
+        }
+        else if (curIntensity > targetIntensity)
+        {
+            curIntensity -= fadeOutSpeed * Time.deltaTime;
+            if (curIntensity < targetIntensity)
+                curIntensity = targetIntensity;
+            ShaderScript.Intensity = curIntensity * ShaderScript.MaxIntensity;
+        }
+
+        //ShaderScript.enabled = !(curIntensity == ShaderScript.MinIntensity);
+    }
+}
+
 public class CameraShaderMgr : MonoBehaviour {
 
-    public float fadeInSpeed = 0.5f;
-    public float fadeOutSpeed = 1f;
-    public CameraFilterPack_Glow_Glow_Color GlowColor;
-
-    float curGlowIntensity = 0f;
+    public CameraShaderController[] shaderControllers;
 
     void Start ()
     {
-        GlowColor.Intensity = curGlowIntensity = 0f;
+        for(int i=0; i<shaderControllers.Length; i++)
+        {
+            shaderControllers[i].ZeroIntensity();
+        }
     }
 
-    void Update ()
+    void Update()
     {
-        //GlowColor.Intensity = Mathf.Lerp(GlowColor.Intensity, curGlowIntensity, transitionSpeed);
-        if (GlowColor.Intensity < curGlowIntensity)
+        for (int i = 0; i < shaderControllers.Length; i++)
         {
-            GlowColor.Intensity += fadeInSpeed * Time.deltaTime;
-            if (GlowColor.Intensity > curGlowIntensity)
-                GlowColor.Intensity = curGlowIntensity;
-        }
-        else if(GlowColor.Intensity > curGlowIntensity)
-        {
-            GlowColor.Intensity -= fadeOutSpeed * Time.deltaTime;
-            if (GlowColor.Intensity < curGlowIntensity)
-                GlowColor.Intensity = curGlowIntensity;
+            shaderControllers[i].UpdateIntensity();
         }
     }
 
@@ -48,14 +83,20 @@ public class CameraShaderMgr : MonoBehaviour {
     {
         int comboNum = (int)param;
 
-        curGlowIntensity = (float)(comboNum - 4);
-        if (curGlowIntensity > 3f)
-            curGlowIntensity = 3f;
-        Debug.Log(string.Format("[CameraShaderMgr] OnHighComboDetected: comboNum {0}  glowIntensity {1}", comboNum, curGlowIntensity));
+        for (int i = 0; i < shaderControllers.Length; i++)
+        {
+            float targetIntensity = (float)((comboNum - 4) / 3);
+            if (targetIntensity > 1f)
+                targetIntensity = 1f;
+            shaderControllers[i].TargetIntensity = targetIntensity;
+        }
     }
 
     public void OnComboBroken(object param, object paramEx)
     {
-        curGlowIntensity = 0f;
+        for (int i = 0; i < shaderControllers.Length; i++)
+        {
+            shaderControllers[i].TargetIntensity = 0f;
+        }
     }
 }
