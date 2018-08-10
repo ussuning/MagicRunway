@@ -30,6 +30,7 @@ public class Collection : System.Object
     public string name;
     public List<string> outfitids;
     public List<Outfit> outfits;
+    public string splash;
 }
 
 [System.Serializable]
