@@ -77,7 +77,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     void OnDisable()
     {
-        Time.timeScale = 1.0f;
+        TimeManager.instance.timeScale = 1.0f;
 
         modelsInMidZone.active.Clear();
         modelsInMidZone.history.Clear();
@@ -89,7 +89,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     void OnDestroy()
     {
-        Time.timeScale = 1.0f;
+        TimeManager.instance.timeScale = 1.0f;
 
         RemoveAllListeners();
     }
@@ -234,9 +234,9 @@ public class RunwayCameraController : MonoBehaviour {
             SeekCameraToModel();
         }
 
-        if (camSpeed == AutoRunwayCameraSpeed.VERY_SLOW) { Time.timeScale = 0.5f; }
-        else if (camSpeed == AutoRunwayCameraSpeed.SLOW) { Time.timeScale = 0.95f; }
-        else { Time.timeScale = 1.0f; }
+        if (camSpeed == AutoRunwayCameraSpeed.VERY_SLOW) { TimeManager.instance.timeScale = 0.5f; }
+        else if (camSpeed == AutoRunwayCameraSpeed.SLOW) { TimeManager.instance.timeScale = 0.95f; }
+        else { TimeManager.instance.timeScale = 1.0f; }
 
         timeSinceSlowMo = 0.0f;
 

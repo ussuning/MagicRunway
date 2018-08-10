@@ -10,7 +10,7 @@ public float curTime = 0f;
 	// Use this for initialization
 	void Start () {
 		curTime = 0f;
-        Time.timeScale = 1f;
+        TimeManager.instance.timeScale = 1f;
 	}
 	
 	// Update is called once per frame

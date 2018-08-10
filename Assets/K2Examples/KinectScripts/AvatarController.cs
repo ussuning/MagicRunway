@@ -713,31 +713,43 @@ public class AvatarController : MonoBehaviour
         else
             boneTransform.rotation = newRotation;
 
+        boneTransform.position = GetRawJointWorldPos(joint);
+
+        // Correct orientation for Shoulders
         switch (joint)
         {
             case KinectInterop.JointType.ShoulderLeft:
-            case KinectInterop.JointType.ShoulderRight:
-            //if (avatarScaler != null)
-            //{
-            //    ShoulderFixer sg = avatarScaler.shoulderFixer;
-
-            //    float shoulderAngle = -Vector3.SignedAngle(-avatarScaler.foregroundCamera.transform.right, sg.shoulderTRight, sg.shoulderTUp);
-            //    float elbowDotShoulderUpPlane = joint == KinectInterop.JointType.ShoulderLeft ? sg.elbowLeftDotShoulderUpPlane : sg.elbowRightDotShoulderUpPlane;
-            //    Debug.Log(joint + " elbowDotShoulderUpPlane=" + elbowDotShoulderUpPlane);
-            //    boneTransform.Rotate(sg.shoulderTUp, elbowDotShoulderUpPlane * shoulderAngle * shoulderUnrotateFactor, Space.World);
-            //}
-            //    break;
-            case KinectInterop.JointType.ElbowLeft:
-            case KinectInterop.JointType.ElbowRight:
-            case KinectInterop.JointType.WristLeft:
-            case KinectInterop.JointType.WristRight:
-            case KinectInterop.JointType.HandLeft:
-            case KinectInterop.JointType.HandRight:
-                boneTransform.position = GetRawJointWorldPos(joint);
+                Vector3 shoulderLeftForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft) - GetRawJointWorldPos(joint);
+                Vector3 elbowLeftForward = GetRawJointWorldPos(KinectInterop.JointType.WristLeft) - GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
+                Vector3 elbowOut = Vector3.Cross(shoulderLeftForward, elbowLeftForward);
+                Vector3 shoulderLeftDown = Vector3.Cross(shoulderLeftForward, elbowOut);
+                boneTransform.rotation = Quaternion.LookRotation(shoulderLeftDown, shoulderLeftForward);
+                //boneTransform.LookAt(GetRawJointWorldPos(joint) + elbowOut.normalized * shoulderLeftForward.magnitude);
                 break;
+            //case KinectInterop.JointType.ElbowLeft:
+                //shoulderLeftForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft) - GetRawJointWorldPos(joint);
+                //elbowLeftForward = GetRawJointWorldPos(KinectInterop.JointType.WristLeft) - GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
+                //elbowOut = Vector3.Cross(shoulderLeftForward, elbowLeftForward);
+                //Vector3 elbowLeftDown = Vector3.Cross(elbowLeftForward, elbowOut);
+                //boneTransform.rotation = Quaternion.LookRotation(elbowLeftDown, elbowLeftForward);
+                //break;
+            case KinectInterop.JointType.ShoulderRight:
+                Vector3 shoulderRightForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight) - GetRawJointWorldPos(joint);
+                Vector3 elbowRightForward = GetRawJointWorldPos(KinectInterop.JointType.WristRight) - GetRawJointWorldPos(KinectInterop.JointType.ElbowRight);
+                elbowOut = Vector3.Cross(shoulderRightForward, elbowRightForward);
+                Vector3 shoulderRightDown = Vector3.Cross(shoulderRightForward, elbowOut);
+                boneTransform.rotation = Quaternion.LookRotation(shoulderRightDown, shoulderRightForward);
+                break;
+            //case KinectInterop.JointType.ElbowLeft:
+            //case KinectInterop.JointType.ElbowRight:
+            //case KinectInterop.JointType.WristLeft:
+            //case KinectInterop.JointType.WristRight:
+            //case KinectInterop.JointType.HandLeft:
+            //case KinectInterop.JointType.HandRight:
+            //    boneTransform.position = GetRawJointWorldPos(joint);
+            //    break;
 
         }
-        boneTransform.position = GetRawJointWorldPos(joint);
     }
 
     // Apply the rotations tracked by kinect to a special joint
