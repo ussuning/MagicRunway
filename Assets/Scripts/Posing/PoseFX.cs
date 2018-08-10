@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PoseFX : MonoBehaviour {
 
-    public GameObject partileFX;
+    public GameObject [] partileFX;
 
     private long userID;
 
@@ -26,15 +26,17 @@ public class PoseFX : MonoBehaviour {
     public void OnPoseDetected(object param, object paramEx)
     {
         long matched_userID = (long)param;
+        float pose_confidence = (float)paramEx;
         if(matched_userID == userID)
-            UpdateComboParticles();
+            UpdateComboParticles(pose_confidence);
     }
 
-    void UpdateComboParticles()
+    void UpdateComboParticles(float confidence)
     {
         GameObject particleGO;
-        if (partileFX)
-            particleGO = (GameObject)Instantiate(partileFX, GetUserScreenPos(), Quaternion.identity);
+        int feedbackParticleID = FeedbackMgr.Instance.GetPoseFeedback(confidence).feedback_particles_id;
+        if (feedbackParticleID < partileFX.Length)
+            particleGO = (GameObject)Instantiate(partileFX[feedbackParticleID], GetUserScreenPos(), Quaternion.identity);
     }
 
     Vector3 GetUserScreenPos()

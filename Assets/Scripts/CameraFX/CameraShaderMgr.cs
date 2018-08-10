@@ -85,7 +85,7 @@ public class CameraShaderMgr : MonoBehaviour {
 
         for (int i = 0; i < shaderControllers.Length; i++)
         {
-            float targetIntensity = (float)((comboNum - 4) / 3);
+            float targetIntensity = FeedbackMgr.Instance.GetComboFeedback(comboNum).intensity;//(float)((comboNum - 4) / 3);
             if (targetIntensity > 1f)
                 targetIntensity = 1f;
             shaderControllers[i].TargetIntensity = targetIntensity;
