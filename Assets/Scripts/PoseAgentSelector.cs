@@ -19,10 +19,6 @@ public class PoseAgentSelector : MonoBehaviour
 
     void generatePoseAgents(long userID)
     {
-        TargetPoseRecognizingAgent [] agents = GetComponents<TargetPoseRecognizingAgent>();
-        foreach (TargetPoseRecognizingAgent a in agents)
-            Destroy(a);
-
         poseAgents = new TargetPoseRecognizingAgent[BrainDataManager.Instance.NumPoses];
         for (int i = 0; i < BrainDataManager.Instance.NumPoses; i++)
         {

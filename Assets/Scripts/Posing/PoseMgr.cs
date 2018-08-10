@@ -89,7 +89,7 @@ public class PoseMgr : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Combo Data doesn't exist!");
+            Debug.Log("Pose Data doesn't exist!");
         }
     }
 }

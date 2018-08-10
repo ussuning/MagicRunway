@@ -18,8 +18,6 @@ public class PoseFeedbackTextFX : MonoBehaviour {
     Vector2 initPos;
     Vector2 targetPos;
 
-    string[] feedbackStrings = { "GOOD JOB", "AWESOME", "BEAUTIFUL", "FANTASTIC", "AMAZING", "PERFECT" };
-
     void Awake ()
     {
         TweenToControl = GetComponent<EasyTween>();
@@ -34,13 +32,15 @@ public class PoseFeedbackTextFX : MonoBehaviour {
         initPos = TweenToControl.rectTransform.anchoredPosition;
         targetPos = TweenToControl.rectTransform.anchoredPosition + 1000f * Vector2.down;
 
-        string feedbackString = GetFeedbackString(poseConfidence);
-        SetText(feedbackString);
+        PoseFeedback pf = FeedbackMgr.Instance.GetPoseFeedback(poseConfidence);
+        string feedbackString = pf.feedback_text;
+        Color feedbackColor = new Color(pf.feedback_color_r, pf.feedback_color_g, pf.feedback_color_b, 1f);
+        SetText(feedbackString, feedbackColor);
 
         Destroy(this.gameObject, TweenToControl.GetAnimationDuration() + 0.5f);
     }
 
-    public void SetText(string txt)
+    public void SetText(string txt, Color txtColor)
     {
         text.text = txt;
         ScaleText();
@@ -59,22 +59,5 @@ public class PoseFeedbackTextFX : MonoBehaviour {
             TweenToControl.SetAnimationPosition(TweenToControl.rectTransform.anchoredPosition, initPos, TranslatingCurve, TranslatingCurve);
         }
         TweenToControl.OpenCloseObjectAnimation();
-    }
-
-    string GetFeedbackString(float poseScore)
-    {
-        if (poseScore >= 1.0f)
-            return feedbackStrings[5];
-        else if(poseScore >= 0.98f)
-            return feedbackStrings[4];
-        else if (poseScore >= 0.96f)
-            return feedbackStrings[3];
-        else if (poseScore >= 0.94f)
-            return feedbackStrings[2];
-        else if (poseScore >= 0.92f)
-            return feedbackStrings[1];
-        else if (poseScore >= 0.9f)
-            return feedbackStrings[0];
-        return "";
     }
 }
