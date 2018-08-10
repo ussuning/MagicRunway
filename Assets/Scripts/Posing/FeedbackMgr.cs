@@ -52,11 +52,13 @@ public class FeedbackMgr : MonoBehaviour {
             if (con >= feedbacks[i].pose_confidence)
                 return feedbacks[i];
         }
-        return null;
+        return feedbacks[feedbacks.Count - 1];
     }
 
     public ComboFeedback GetComboFeedback(int combo)
     {
+        if(combo >= FeedbackData.combo_feedbacks.Count)
+            return FeedbackData.combo_feedbacks[FeedbackData.combo_feedbacks.Count - 1];
         return FeedbackData.combo_feedbacks[combo];
     }
 
