@@ -17,8 +17,11 @@ public class RunwayCameraController : MonoBehaviour {
     public ColliderEvents RunwayEndEvents;
     public ColliderEvents RunwayExitEvents;
 
+    public GameObject FlashMid;
+    public GameObject FlashFront;
     public Transform camLookAt;
     public Transform camLookAtFinal;
+    public AudioSource Flash;
 
     [Tooltip("Higher value increase camera responsiveness, but may have more jitter. Lower values increase smoothness, but lower lookAt responsiveness.")]
     [Range(0.1f, 10.0f)]
@@ -55,6 +58,11 @@ public class RunwayCameraController : MonoBehaviour {
 
     private Vector3 zoomRot1 = new Vector3(1.2f, 96.35f, 0);
     private float zoomFOV1 = 12f;
+
+    private ParticleSystem flashMidParticle;
+    private ParticleSystem flashFrontParticle;
+    private int midFlashParticles = 0;
+    private int frontFlashParticles = 0;
     //----------------------------------------
     // MonoBehaviour Overrides
     //----------------------------------------
@@ -67,17 +75,24 @@ public class RunwayCameraController : MonoBehaviour {
 
         mainCamOriginFOV = MainCamera.fieldOfView;
         slowMoCamOriginFOV = SlowMoCamera.fieldOfView;
+
+        flashMidParticle = FlashMid.GetComponent<ParticleSystem>();
+        flashFrontParticle = FlashFront.GetComponent<ParticleSystem>();
     }
 
     void OnEnable()
     {
         AddAllListeners();
         SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
+        FlashMid.SetActive(false);
+        FlashFront.SetActive(false);
     }
 
     void OnDisable()
     {
         TimeManager.instance.timeScale = 1.0f;
+        FlashMid.SetActive(false);
+        FlashFront.SetActive(false);
 
         modelsInMidZone.active.Clear();
         modelsInMidZone.history.Clear();
@@ -100,8 +115,31 @@ public class RunwayCameraController : MonoBehaviour {
         else if (curCamState == AutoRunwayCameraState.CLOSE_UP) { UpdateCloseUp(); }
         else if (curCamState == AutoRunwayCameraState.CLOSE_UP_PAN) { UpdateCloseUpPan(); }
         else if (curCamState == AutoRunwayCameraState.ZOOM) { UpdateZoomUp(); }
+
+        UpdateFlashSound();
     }
  
+    private void UpdateFlashSound()
+    {
+        int count = flashMidParticle.particleCount;
+
+        if (count > midFlashParticles)
+        {
+            Flash.Play();
+        }
+        midFlashParticles = count;
+
+        int count2 = flashFrontParticle.particleCount;
+
+        if (count2 > frontFlashParticles)
+        {
+            Flash.Play();
+        }
+        frontFlashParticles = count2;
+        //midFlashParticles = 0;
+        //frontFlashParticles = 0;
+
+    }
     private void UpdateCloseUpPan()
     {
         if (modelsOnRunway.active.Count == 0) { return; }
@@ -250,6 +288,7 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayEnter(Collider model)
     {
+        
         //Debug.Log("HERE COMES A NEW CHALLENGER!" + model.ToString());
         if (modelsOnRunway.history.ContainsKey(model) == false)
         {
@@ -268,8 +307,9 @@ public class RunwayCameraController : MonoBehaviour {
         {
             //Enter 1st time
             modelsInMidZone.history.Add(model, Time.unscaledTime);
-
+            
             SetCamera(AutoRunwayCamera.SLOW_MO, AutoRunwayCameraState.CLOSE_UP_PAN, AutoRunwayCameraTransition.CUT, AutoRunwayCameraSpeed.VERY_SLOW);
+            FlashMid.SetActive(true);
         } else
         {
             //Enter 2nd time
@@ -284,7 +324,7 @@ public class RunwayCameraController : MonoBehaviour {
         SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
 
         //Model Exiting Mid Zone 2nd time
-        
+        FlashMid.SetActive(false);
         if (modelsInMidZone.active.Count > 0)
         {
             modelsInMidZone.active.RemoveAt(0);
@@ -295,11 +335,13 @@ public class RunwayCameraController : MonoBehaviour {
     private void OnRunwayEndEnter(Collider model)
     {
         SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.CLOSE_UP, AutoRunwayCameraTransition.SMOOTH);
+        FlashFront.SetActive(true);
     }
 
     private void OnRunwayEndExit(Collider model)
     {
         SetCamera(AutoRunwayCamera.MAIN, AutoRunwayCameraState.DEFAULT, AutoRunwayCameraTransition.CUT);
+        FlashFront.SetActive(false);
     }
 
     private void OnRunwayExit(Collider model)

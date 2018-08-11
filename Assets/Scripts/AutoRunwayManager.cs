@@ -12,15 +12,16 @@ public class AutoRunwayManager : MonoBehaviour
     public GameObject outfits;
     public GameObject autoRunwayContainer;
     public GameObject videoWall;
+    public AudioSource sfx;
     public ColliderEvents RunwayMidExit;
     public ColliderEvents RunwayFinish;
     public ColliderEvents RunwayEnd;
+    public ColliderEvents RunwayEnterEvents;
     public List<GameObject> levels;
     public GameObject curLevel;
 
     private RunwayCameraController runwayCamera;
     private GameObject agents;
-
 
     private bool loop = false;
     private int loopAmount = 1;
@@ -52,6 +53,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     void Awake()
     {
+
         if (autoRunwayContainer == null)
         {
             autoRunwayContainer = GameObject.Find("Auto Runway");
@@ -226,6 +228,8 @@ public class AutoRunwayManager : MonoBehaviour
 
     private void SetupEvents()
     {
+        if (RunwayEnterEvents == null)
+            RunwayEnterEvents = GameObject.Find("RunwayEnter")?.GetComponent<ColliderEvents>();
         if (RunwayMidExit == null)
             RunwayMidExit = GameObject.Find("RunwayMidExit")?.GetComponent<ColliderEvents>();
         if (RunwayFinish == null)
@@ -233,6 +237,7 @@ public class AutoRunwayManager : MonoBehaviour
         if (RunwayEnd == null)
             RunwayEnd = GameObject.Find("RunwayEnd")?.GetComponent<ColliderEvents>();
 
+        RunwayEnterEvents.OnTriggerEnterEvt += OnRunwayEnter;
         RunwayMidExit.OnTriggerEnterEvt += OnRunwayMidExit;
         RunwayFinish.OnTriggerEnterEvt += OnRunwayFinish;
         RunwayEnd.OnTriggerEnterEvt += OnRunwayEndEnter;
@@ -497,6 +502,21 @@ public class AutoRunwayManager : MonoBehaviour
         cameraGroup.SetActive(active);
     }
 
+    private void OnRunwayEnter(Collider model)
+    {
+        List<string> crowd = new List<string>(new string[] { SfxManager.CROWD_SHORT, SfxManager.CROWD_MEN_SHORT, SfxManager.APPLAUSE_1, SfxManager.APPLAUSE_2 });
+        int index = Random.Range(0, crowd.Count);
+
+        AudioClip clip = SfxManager.LoadClip(crowd[index]);
+
+        if (curOutfit == 0)
+        {
+            clip = SfxManager.LoadClip(SfxManager.CROWD_LONG);
+        }
+        
+        sfx.PlayOneShot(clip);
+    }
+
     private void OnRunwayFinish(Collider other)
     {
         //animation on the same layer of collider
@@ -591,5 +611,6 @@ public class AutoRunwayManager : MonoBehaviour
         RunwayFinish.OnTriggerEnterEvt -= OnRunwayFinish;
         RunwayEnd.OnTriggerEnterEvt -= OnRunwayEndEnter;
         RunwayEnd.OnTriggerExitEvt -= OnRunwayEndExit;
+        RunwayEnterEvents.OnTriggerEnterEvt -= OnRunwayEnter;
     }
 }

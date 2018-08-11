@@ -6,8 +6,7 @@ public class LiveRunwayManager : MonoBehaviour {
     public GameObject outfits;
     public GameObject canvas;
     public GameObject fittingRoom;
-    public GameObject userModel;
-    public GameObject poseRecogAcademy;
+    //public GameObject userModel;
 
     private Collection curCollection;
     private Collection nextCollection;
@@ -31,10 +30,9 @@ public class LiveRunwayManager : MonoBehaviour {
     //Setup before starting live mode -- happens before fading in
     public void ReadyLiveRunway()
     {
-        poseRecogAcademy.SetActive(true);
         AttachFittingRoom();
         AttachCanvas();
-        AttachUserModel();
+        //AttachUserModel();
         Setup();
     }
 
@@ -50,13 +48,12 @@ public class LiveRunwayManager : MonoBehaviour {
 
     public void StopLiveRunway()
     {
-        poseRecogAcademy.SetActive(false);
         ClearModels();
         
         UIManager.Instance.HideAll();
         DetachCanvas();
         DetachFittingRoom();
-        DetachUserModel();
+        //DetachUserModel();
     }
 
     public void ShowGestureGender()
@@ -83,7 +80,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         fittingRoom.SetActive(false);
     }
-
+    /*
     public void AttachUserModel()
     {
         userModel.SetActive(true);
@@ -93,7 +90,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         userModel.SetActive(false);
     }
-
+    */
     private void Setup()
     {
         curCollectionIndex = 0;
