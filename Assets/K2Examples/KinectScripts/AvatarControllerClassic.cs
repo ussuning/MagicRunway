@@ -6,7 +6,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Text; 
+using System.Text;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 /// <summary>
@@ -120,3 +124,24 @@ public class AvatarControllerClassic : AvatarController
 	
 }
 
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(AvatarControllerClassic))]
+public class AvatarControllerClassicEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        AvatarControllerClassic myScript = (AvatarControllerClassic)target;
+        if (GUILayout.Button("Save Config Data"))
+        {
+            myScript.SaveConfigData();
+        }
+        if (GUILayout.Button("Load Config Data"))
+        {
+            myScript.LoadConfigData();
+        }
+    }
+}
+#endif
