@@ -2,7 +2,7 @@
 
 Shader "Outlined/Silhouette Only" {
 	Properties {
-		_OutlineColor ("Outline Color", Color) = (0,0,0,1)
+		_OutlineColor ("Outline Color", Color) = (0,0,0,0)
 		_Outline ("Outline width", Range (0.0, 0.03)) = .005
 	}
  
@@ -71,6 +71,7 @@ CGPROGRAM
 #pragma fragment frag
  
 half4 frag(v2f i) :COLOR {
+	i.color = i.color * 1 / 2 * (sin(_Time[1]) + 1);
 	return i.color;
 }
 ENDCG
