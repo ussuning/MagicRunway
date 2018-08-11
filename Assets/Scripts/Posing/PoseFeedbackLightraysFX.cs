@@ -12,12 +12,15 @@ public class PoseFeedbackLightraysFX : MonoBehaviour {
 
     private float curAlpha = 0f;
 
+    private float curConfidence = 0f;
+
     Image lightRaysImage;
     Material lightRaysMat;
 
-    public void StartFX()
+    public void StartFX(float confidence)
     {
         curAlpha = 1f;
+        curConfidence = confidence;
         UpdateLightRaysAlpha();
     }
 
@@ -47,7 +50,17 @@ public class PoseFeedbackLightraysFX : MonoBehaviour {
 
     void UpdateLightRaysAlpha()
     {
-        lightRaysMat.SetColor("_Color1", new Color(LightRaysColor1.r, LightRaysColor1.g, LightRaysColor1.b, curAlpha));
-        lightRaysMat.SetColor("_Color2", new Color(LightRaysColor2.r, LightRaysColor2.g, LightRaysColor2.b, curAlpha));
+        if (curAlpha > 0)
+        {
+            PoseFeedback pf = FeedbackMgr.Instance.GetPoseFeedback(curConfidence);
+            Color feedbackColor = new Color(pf.feedback_color_r, pf.feedback_color_g, pf.feedback_color_b, 1f);
+            lightRaysMat.SetColor("_Color1", new Color(LightRaysColor1.r, LightRaysColor1.g, LightRaysColor1.b, curAlpha));
+            lightRaysMat.SetColor("_Color2", new Color(feedbackColor.r, feedbackColor.g, feedbackColor.b, curAlpha));
+        }
+        else
+        {
+            lightRaysMat.SetColor("_Color1", new Color(0f, 0f, 0f, curAlpha));
+            lightRaysMat.SetColor("_Color2", new Color(0f, 0f, 0f, curAlpha));
+        }
     }
 }

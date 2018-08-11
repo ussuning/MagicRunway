@@ -55,7 +55,7 @@ public class UserScore : MonoBehaviour {
 
     public void GenerateEffects(float poseConfidence)
     {
-        lightRaysFX.StartFX();
+        lightRaysFX.StartFX(poseConfidence);
         GenerateScoreText(poseConfidence);
     }
 

@@ -43,6 +43,7 @@ public class PoseFeedbackTextFX : MonoBehaviour {
     public void SetText(string txt, Color txtColor)
     {
         text.text = txt;
+        text.color = txtColor;
         ScaleText();
     }
 
