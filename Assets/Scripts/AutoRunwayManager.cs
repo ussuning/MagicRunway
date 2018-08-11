@@ -199,6 +199,7 @@ public class AutoRunwayManager : MonoBehaviour
 
     public void StopAutoRunway()
     {
+        sfx.Stop();
         SetCameraActive(false);
 
         ClearModels();

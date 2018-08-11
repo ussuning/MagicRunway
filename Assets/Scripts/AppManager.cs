@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum Mode { AUTO,LIVE };
 
@@ -16,6 +17,9 @@ public class AppManager : Singleton<AppManager>
     public GameObject stickman;
 
     private Mode curMode = Mode.AUTO;
+
+    private List<string> playList = new List<string>(new string[] { "dream", "5min" });
+    private int curSong = 0;
 
     void Start()
     {
@@ -61,7 +65,8 @@ public class AppManager : Singleton<AppManager>
     public void PlayAutoRunway()
     {
         //    liveRunwayManager.StopLiveRunway();
-        music.Play(0);
+        StartCoroutine(ContinuousPlayMusic());
+
         //Debug.Log("started");
         stickman.SetActive(false);
         autoRunwayManager.ReadyAutoRunway(PickRandomLevel());
@@ -89,8 +94,11 @@ public class AppManager : Singleton<AppManager>
         if (curMode == Mode.LIVE) { return; }
 
         curMode = Mode.LIVE;
-        music.Stop();
-        StartCoroutine(FadeOutLLevelToLive());
+        //music.Stop();
+        IEnumerator fader = AudioFader.FadeOut(music, 3.0f);
+        StartCoroutine(fader);
+
+        StartCoroutine(FadeOutLevelToLive());
     }
 
     public void ChangeLevel()
@@ -123,7 +131,7 @@ public class AppManager : Singleton<AppManager>
         RunAutoRunway();
     }
 
-    IEnumerator FadeOutLLevelToLive()
+    IEnumerator FadeOutLevelToLive()
     {
         blackoutAnimator.SetBool("FadeOut", true);
         yield return new WaitUntil(() => blackout.color.a == 1);
@@ -131,7 +139,7 @@ public class AppManager : Singleton<AppManager>
         PlayLiveRunway();
     }
 
-    IEnumerator FadeOutLLevelToLevel()
+    IEnumerator FadeOutLevelToLevel()
     {
         blackoutAnimator.SetBool("FadeOut", true);
         yield return new WaitUntil(() => blackout.color.a == 1);
@@ -153,6 +161,23 @@ public class AppManager : Singleton<AppManager>
         yield return new WaitUntil(() => blackout.color.a == 1);
         blackoutAnimator.SetBool("FadeOut", false);
         PlayAutoRunway();
+    }
+
+    IEnumerator ContinuousPlayMusic()
+    {
+        AudioClip clip = SfxManager.LoadClip(playList[curSong]);
+        music.volume = 0.8f;
+        music.clip = clip;
+        music.Play();
+        yield return new WaitForSeconds(music.clip.length);
+        curSong++;
+        if(curSong == playList.Count)
+        {
+            curSong = 0;
+        }
+        AudioClip nextClip = SfxManager.LoadClip(playList[curSong]);
+        music.clip = clip;
+        music.Play();
     }
 }
 

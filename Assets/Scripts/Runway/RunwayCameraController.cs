@@ -91,6 +91,7 @@ public class RunwayCameraController : MonoBehaviour {
     void OnDisable()
     {
         TimeManager.instance.timeScale = 1.0f;
+        Flash.Stop();
         FlashMid.SetActive(false);
         FlashFront.SetActive(false);
 
