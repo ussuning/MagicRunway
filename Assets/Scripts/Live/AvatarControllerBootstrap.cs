@@ -14,7 +14,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     public bool disableOnStart = false;
     
     protected string BackgroundCamera1 = "BackgroundCamera1";
-    protected string MainCamera = "Main Camera";
+    protected string MainCamera = "Conversion Camera";
 
     void Start()
     {
@@ -84,16 +84,16 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         avatarController.smoothFactor = 10;
         avatarController.Awake();
 
-        // Initialize avatar scalar
-        AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
-        if (avatarScalar == null)
-            avatarScalar = this.gameObject.AddComponent<AvatarScaler>();
-        avatarScalar.foregroundCamera = GameObject.Find(MainCamera)?.GetComponent<Camera>();
-        if (avatarScalar.foregroundCamera == null)
-            Debug.LogError("Failed to find " + MainCamera);
-        avatarScalar.mirroredAvatar = true;
-        avatarScalar.continuousScaling = true;
-        avatarScalar.smoothFactor = 10;
+        //// Initialize avatar scalar
+        //AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
+        //if (avatarScalar == null)
+        //    avatarScalar = this.gameObject.AddComponent<AvatarScaler>();
+        //avatarScalar.foregroundCamera = GameObject.Find(MainCamera)?.GetComponent<Camera>();
+        //if (avatarScalar.foregroundCamera == null)
+        //    Debug.LogError("Failed to find " + MainCamera);
+        //avatarScalar.mirroredAvatar = true;
+        //avatarScalar.continuousScaling = true;
+        //avatarScalar.smoothFactor = 10;
 
         // Initialize face tracking manager
         FacetrackingManager faceTrackingMgr = GetComponent<FacetrackingManager>();

@@ -6,7 +6,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Text; 
+using System.Text;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 
 /// <summary>
@@ -75,9 +79,9 @@ public class AvatarController : MonoBehaviour
 	[Range(-0.5f, 0.5f)]
 	public float forwardOffset = 0f;
 
-    [Tooltip("Forward offset of the avatar with respect to the position of user's spine-base.")]
-    [Range(-2.0f, 2.0f)]
-    public float shoulderUnrotateFactor = 1.0f;
+    //[Tooltip("Forward offset of the avatar with respect to the position of user's spine-base.")]
+    //[Range(-2.0f, 2.0f)]
+    //public float shoulderUnrotateFactor = 1.0f;
 
     // userId of the player
     [NonSerialized]
@@ -109,9 +113,18 @@ public class AvatarController : MonoBehaviour
 	protected Vector3 offsetNodePos;
 	protected Quaternion offsetNodeRot;
 	protected Vector3 bodyRootPosition;
-	
-	// Calibration Offset Variables for Character Position.
-	[NonSerialized]
+    
+    [Range(-0.5f, 0.5f)]
+    public float spineVerticalOffset = 0f; 
+    [Range(-0.5f, 0.5f)]
+    public float shoulderCenterVerticalOffset = 0f; //Compensate for when shoulderCenter is not actually (vertically) at same height as left and right arm sockets.
+    [Range(-0.5f, 0.5f)]
+    public float neckVerticalOffset = 0f; 
+    [Range(-0.5f, 0.5f)]
+    public float headVerticalOffset = 0f; //Compensate for head is not actually
+
+    // Calibration Offset Variables for Character Position.
+    [NonSerialized]
 	public bool offsetCalibrated = false;
 	protected Vector3 offsetPos = Vector3.zero;
 	//protected float xOffset, yOffset, zOffset;
@@ -714,6 +727,23 @@ public class AvatarController : MonoBehaviour
             boneTransform.rotation = newRotation;
 
         boneTransform.position = GetRawJointWorldPos(joint);
+
+        // Compensate for joint mapping differences
+        switch (joint)
+        {
+            case KinectInterop.JointType.SpineShoulder:
+                boneTransform.localPosition += new Vector3(0, shoulderCenterVerticalOffset, 0);
+                break;
+            case KinectInterop.JointType.SpineMid:
+                boneTransform.localPosition += new Vector3(0, spineVerticalOffset, 0);
+                break;
+            case KinectInterop.JointType.Neck:
+                boneTransform.localPosition += new Vector3(0, neckVerticalOffset, 0);
+                break;
+            case KinectInterop.JointType.Head:
+                boneTransform.localPosition += new Vector3(0, headVerticalOffset, 0);
+                break;
+        }
 
         // Correct orientation for Shoulders
         switch (joint)
@@ -1732,5 +1762,46 @@ public class AvatarController : MonoBehaviour
 		{29, HumanBodyBones.RightLittleDistal}
 	};
 
+    public void SaveConfigData()
+    {
+        AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
+        acConfigData.entries.Remove(this.name);
+        acConfigData.entries.Add(this.name, new AvatarControllerData(this));
+        acConfigData.Save();
+    }
+
+    public void LoadConfigData()
+    {
+        AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
+        if (acConfigData.entries.ContainsKey(this.name))
+        {
+            AvatarControllerData data = acConfigData.entries[this.name];
+            data.PopulateTo(this);
+        }
+    }
+
 }
+
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(AvatarController))]
+public class AvatarControllerEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        AvatarController myScript = (AvatarController)target;
+        if (GUILayout.Button("Save Config Data"))
+        {
+            myScript.SaveConfigData();
+        }
+        if (GUILayout.Button("Load Config Data"))
+        {
+            myScript.LoadConfigData();
+        }
+    }
+}
+#endif
+
 
