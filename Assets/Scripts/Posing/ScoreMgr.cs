@@ -64,7 +64,7 @@ public class ScoreMgr : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Combo Data doesn't exist!");
+            Debug.Log("Score Data doesn't exist!");
         }
     }
 }
