@@ -59,6 +59,9 @@ public class PoseAgentSelector : MonoBehaviour
 
     void activatePoseAgent(int poseID)
     {
+        if (poseAgents == null)
+            return;
+
         for (int i = 0; i < poseAgents.Length; i++)
         {
             if (poseID > 0 && i == poseID - 1 /*&& poseAgents[i].agentParameters != null*/)

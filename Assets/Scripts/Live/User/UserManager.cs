@@ -284,6 +284,8 @@ public class UserManager : Singleton<UserManager>
     {
         PoseAgentSelector agentSelector = userLookup[uid].getUserSkeletonGO().GetComponent<PoseAgentSelector>();
         poseAgents.Add(uid, agentSelector);
+        if (AppManager.Instance.getMode() == Mode.LIVE)
+            agentSelector.Init(uid);
     }
 
     public void initPoseDetection()

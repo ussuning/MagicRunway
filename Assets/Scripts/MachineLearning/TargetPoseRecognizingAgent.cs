@@ -84,6 +84,13 @@ public class TargetPoseRecognizingAgent : Agent {
                 }
             }
         }
+        else
+        {
+            for (int i = 0; i < pose.num_joint_detections; i++)
+            {
+                AddVectorObs(Vector3.zero);
+            }
+        }
     }
 
     public override void AgentAction(float[] vectorAction, string textAction)
