@@ -1780,6 +1780,10 @@ public class AvatarController : MonoBehaviour
         }
     }
 
+    public static implicit operator AvatarController(List<AvatarController> v)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

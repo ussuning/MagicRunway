@@ -24,8 +24,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         }
 
         // There's a bug where camera unset themselves on play after being set with the "Initialize" button.
-        GetComponent<AvatarControllerClassic>().posRelativeToCamera = gameObject.FindAny<Camera>(BackgroundCamera1);// Find(BackgroundCamera1)?.GetComponent<Camera>();
-        GetComponent<AvatarScaler>().foregroundCamera = gameObject.FindAny<Camera>(MainCamera);
+        //GetComponent<AvatarControllerClassic>().posRelativeToCamera = gameObject.FindAny<Camera>(BackgroundCamera1);// Find(BackgroundCamera1)?.GetComponent<Camera>();
+        //GetComponent<AvatarScaler>().foregroundCamera = gameObject.FindAny<Camera>(MainCamera);
     }
 
     public void DisableAvatarControllers()
@@ -41,7 +41,12 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     }
 
     [ExecuteInEditMode]
-    public void Init() { 
+    public void Init() {
+        // First, deactivate this gameobject.
+        gameObject.SetActive(false);
+
+        transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+        transform.FindDeepChild("body")?.gameObject.SetActive(false);
 
         // Initialize avatar controller classic
         AvatarControllerClassic avatarController = GetComponent<AvatarControllerClassic>();
@@ -99,7 +104,16 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         FacetrackingManager faceTrackingMgr = GetComponent<FacetrackingManager>();
         if (faceTrackingMgr == null)
             faceTrackingMgr = this.gameObject.AddComponent<FacetrackingManager>();
-	}
+
+        // Register with KinectManager
+
+        if (!KinectManager.Instance.avatarControllers.Contains(avatarController))
+            KinectManager.Instance.avatarControllers.Add(avatarController);
+
+        // Reactivate
+        gameObject.SetActive(true);
+        avatarController.LoadConfigData();
+    }
 }
 
 
