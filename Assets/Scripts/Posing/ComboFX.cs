@@ -82,13 +82,19 @@ public class ComboFX : MonoBehaviour {
         FlyingText ft = userComboNum.AddComponent<FlyingText>();
 
         GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
-        ft.ActivateFlying(userScoreBoxGO.transform.position);
+        if (userScoreBoxGO)
+            ft.ActivateFlying(userScoreBoxGO.transform.position);
+        else
+            Destroy(userComboNum);
     }
 
     void AddUserScore(long userID, int comboNum)
     {
         GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
-        UserScore us = userScoreBoxGO.GetComponent<UserScore>();
-        us.AddScore(ScoreMgr.Instance.GetComboScore(comboNum));
+        if (userScoreBoxGO)
+        {
+            UserScore us = userScoreBoxGO.GetComponent<UserScore>();
+            us.AddScore(ScoreMgr.Instance.GetComboScore(comboNum));
+        }
     }
 }
