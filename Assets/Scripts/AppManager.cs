@@ -71,6 +71,7 @@ public class AppManager : Singleton<AppManager>
         StartCoroutine(ContinuousPlayMusic());
 
         //Debug.Log("started");
+        poseAcademy.SetActive(false);
         stickman.SetActive(false);
         autoRunwayManager.ReadyAutoRunway(PickRandomLevel());
         StartCoroutine(FadeInLevel());
