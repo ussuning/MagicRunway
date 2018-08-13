@@ -11,6 +11,7 @@ public class UserManager : Singleton<UserManager>
     public GameObject femalePrefab;
     public GameObject outfitMenuPrefab;
     private Dictionary<long, User> userLookup = new Dictionary<long, User>();
+    private Dictionary<long, PoseAgentSelector> poseAgents = new Dictionary<long, PoseAgentSelector>();
     private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();
     private KinectManager kinectManager;
 
@@ -282,7 +283,15 @@ public class UserManager : Singleton<UserManager>
     protected void addPoseDetection(long uid)
     {
         PoseAgentSelector agentSelector = userLookup[uid].getUserSkeletonGO().GetComponent<PoseAgentSelector>();
-        agentSelector.Init(uid);
+        poseAgents.Add(uid, agentSelector);
+    }
+
+    public void initPoseDetection()
+    {
+        foreach(long uid in poseAgents.Keys)
+        {
+            poseAgents[uid].Init(uid);
+        }
     }
 
     protected void updateGenderIconPos(long userId, Vector3 pos)

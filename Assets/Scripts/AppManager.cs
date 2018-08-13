@@ -15,6 +15,7 @@ public class AppManager : Singleton<AppManager>
     public Animator blackoutAnimator;
     public AudioSource music;
     public GameObject stickman;
+    public GameObject poseAcademy;
 
     private Mode curMode = Mode.AUTO;
 
@@ -49,6 +50,8 @@ public class AppManager : Singleton<AppManager>
 
     public void PlayLiveRunway()
     {
+        poseAcademy.SetActive(true);
+        UserManager.Instance.initPoseDetection();
         stickman.SetActive(true);
         autoRunwayManager.StopAutoRunway();
         autoRunwayManager.HideAllLevels();
