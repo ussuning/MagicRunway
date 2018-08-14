@@ -131,7 +131,7 @@ public class TargetPoseRecognizingAgent : Agent {
         //    estimationTimeEllapsed = 0f;
         //    PoseMatchCount = 0;
         //}
-        isPoseMatched = poseConfidence >= pose.min_confidence;
+        isPoseMatched = !PoseMgr.Instance.IsInNewPoseCooldown  && poseConfidence >= pose.min_confidence;
     }
 
     //Normalizing to [-1, 1]

@@ -33,6 +33,14 @@ public class PoseMgr : MonoBehaviour {
 
     private int curPose = 0;
     private int prevPose = 0;
+    private bool isInNewPoseCD = false;
+    public bool IsInNewPoseCooldown
+    {
+        get
+        {
+            return isInNewPoseCD;
+        }
+    }
 
     Combos ComboInfo;
 
@@ -64,7 +72,16 @@ public class PoseMgr : MonoBehaviour {
         prevPose = curPose;
         curPose = newPose;
 
+        StartCoroutine(SetNewPoseCooldown());
+
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, curPose);
+    }
+
+    IEnumerator SetNewPoseCooldown()
+    {
+        isInNewPoseCD = true;
+        yield return new WaitForSeconds(0.25f);
+        isInNewPoseCD = false;
     }
 
     void Awake ()
