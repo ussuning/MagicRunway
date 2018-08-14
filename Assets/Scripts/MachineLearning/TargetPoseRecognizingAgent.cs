@@ -22,7 +22,7 @@ public class TargetPoseRecognizingAgent : Agent {
     //private float poseScore;
     private float poseConfidence;
 
-    float PoseCD = 0.25f;
+    float PoseCD = 0.75f;
 
     PoseParameter pose;
 

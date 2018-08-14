@@ -30,6 +30,7 @@ public class PoseMgr : MonoBehaviour {
     public static PoseMgr Instance;
 
     public string comboDataFilePath = "/StreamingAssets/combo_data.json";
+    float PoseCD = 0.75f;
 
     private int curPose = 0;
     private int prevPose = 0;
@@ -80,7 +81,7 @@ public class PoseMgr : MonoBehaviour {
     IEnumerator SetNewPoseCooldown()
     {
         isInNewPoseCD = true;
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(PoseCD);
         isInNewPoseCD = false;
     }
 
