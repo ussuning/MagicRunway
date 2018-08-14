@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TargetPoseRecognizingAgent : Agent {
     
-    //public float PoseTime = 0.25f;
-
     private KinectManager kinectMgr;
     private long KinectUserId;
 
@@ -13,13 +11,8 @@ public class TargetPoseRecognizingAgent : Agent {
     private int poseID;
 
     private bool isPoseMatched = false;
-    private int PoseMatchCount;
-    private float estimationTimeEllapsed;
-
     private float poseCDTimeEllapsed;
-    //private float poseTimeEllapsed;
 
-    //private float poseScore;
     private float poseConfidence;
 
     float PoseCD = 0.75f;
@@ -41,10 +34,9 @@ public class TargetPoseRecognizingAgent : Agent {
 
     void Update()
     {
-        estimationTimeEllapsed += Time.deltaTime;
         poseCDTimeEllapsed += Time.deltaTime;
 
-        EstimatePose();
+        isPoseMatched = !PoseMgr.Instance.IsInNewPoseCooldown && poseConfidence >= pose.min_confidence;
 
         //if (isPoseMatched)
         //    poseTimeEllapsed += Time.deltaTime;
@@ -96,9 +88,6 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         poseConfidence = vectorAction[0];
-        int isMatched = Mathf.RoundToInt(vectorAction[0]);
-        if (isMatched >= 1)
-            PoseMatchCount++;
         //Debug.Log(string.Format("User {0} : Agent {1}: action = {2}, isMatched = {3}", this.name, poseID, vectorAction[0], isMatched));
     }
 
@@ -110,30 +99,7 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void AgentReset()
     {
         isPoseMatched = false;
-        PoseMatchCount = 0;
-        estimationTimeEllapsed = 0f;
     }
-
-    void EstimatePose()
-    {
-        //if (estimationTimeEllapsed > pose.estimate_time)
-        //{
-        //    if (PoseMatchCount > 0)
-        //    {
-        //        poseScore = PoseMatchCount / estimationTimeEllapsed;
-        //        isPoseMatched = poseScore >= pose.min_confidence;
-        //    }
-        //    else
-        //    {
-        //        isPoseMatched = false;
-        //    }
-
-        //    estimationTimeEllapsed = 0f;
-        //    PoseMatchCount = 0;
-        //}
-        isPoseMatched = !PoseMgr.Instance.IsInNewPoseCooldown  && poseConfidence >= pose.min_confidence;
-    }
-
     //Normalizing to [-1, 1]
     Vector3 NormalizeAngles(Vector3 angles)
     {
