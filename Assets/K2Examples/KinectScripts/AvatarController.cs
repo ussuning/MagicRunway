@@ -753,7 +753,9 @@ public class AvatarController : MonoBehaviour
                 Vector3 elbowLeftForward = GetRawJointWorldPos(KinectInterop.JointType.WristLeft) - GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
                 Vector3 elbowOut = Vector3.Cross(shoulderLeftForward, elbowLeftForward);
                 Vector3 shoulderLeftDown = Vector3.Cross(shoulderLeftForward, elbowOut);
+                Vector3 shoulderLeftOut = Vector3.Cross(shoulderLeftDown, shoulderLeftForward);
                 boneTransform.rotation = Quaternion.LookRotation(shoulderLeftDown, shoulderLeftForward);
+                boneTransform.Rotate(0, -135, 0);
                 //boneTransform.LookAt(GetRawJointWorldPos(joint) + elbowOut.normalized * shoulderLeftForward.magnitude);
                 break;
             //case KinectInterop.JointType.ElbowLeft:
@@ -769,6 +771,7 @@ public class AvatarController : MonoBehaviour
                 elbowOut = Vector3.Cross(shoulderRightForward, elbowRightForward);
                 Vector3 shoulderRightDown = Vector3.Cross(shoulderRightForward, elbowOut);
                 boneTransform.rotation = Quaternion.LookRotation(shoulderRightDown, shoulderRightForward);
+                boneTransform.Rotate(0, 135, 0);
                 break;
             //case KinectInterop.JointType.ElbowLeft:
             //case KinectInterop.JointType.ElbowRight:

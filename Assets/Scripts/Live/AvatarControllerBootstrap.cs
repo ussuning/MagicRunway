@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 using MR;
+using Obi;
 
 // This should be used on clothing prefabs, in editor mod. 
 // Be sure to click "Initialize" BEFORE to starting the app. Buggy things happen if you try to run Init() after the app starts.
@@ -106,8 +107,12 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         if (faceTrackingMgr == null)
             faceTrackingMgr = this.gameObject.AddComponent<FacetrackingManager>();
 
-        // Register with KinectManager
+        // Change simulation mode to LateUpdate for performance
+        ObiSolver[] solvers = GetComponentsInChildren<ObiSolver>();
+        foreach (ObiSolver solver in solvers)
+            solver.UpdateOrder = ObiSolver.SimulationOrder.LateUpdate;
 
+        // Register with KinectManager
         if (!KinectManager.Instance.avatarControllers.Contains(avatarController))
             KinectManager.Instance.avatarControllers.Add(avatarController);
 
@@ -117,6 +122,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         // RefreshAvaterUserIds, this is important to bind, otherwise clothing will wait until another user enters/leaves scene -HH
         KinectManager.Instance.RefreshAvatarUserIds();
+
     }
 }
 
