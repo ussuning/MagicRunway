@@ -35,6 +35,8 @@ public class ScoreMgr : MonoBehaviour {
     {
         get
         {
+            if (ScoreInfo == null)
+                return 0;
             return ScoreInfo.single_pose_score;
         }
     }

@@ -43,13 +43,17 @@ public class BrainDataManager : MonoBehaviour
     Poses posesData;
     public PoseParameter GetPoseInfo(int PoseID)
     {
-        return posesData.poses[PoseID];
+        if(PoseID < NumPoses)
+            return posesData.poses[PoseID];
+        return null;
     }
 
     public int NumPoses
     {
         get
         {
+            if (posesData == null)
+                return 0;
             return posesData.poses.Count;
         }
     }
