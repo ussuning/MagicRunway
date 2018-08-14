@@ -205,7 +205,7 @@ public abstract class Academy : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        InitializeEnvironment();
+        //InitializeEnvironment();
     }
 
     /// <summary>
