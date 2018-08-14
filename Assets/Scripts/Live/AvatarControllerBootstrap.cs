@@ -41,7 +41,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     }
 
     [ExecuteInEditMode]
-    public void Init() {
+    public void Init(int playerIndex = 0) {
         // First, deactivate this gameobject.
         gameObject.SetActive(false);
 
@@ -87,6 +87,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         avatarController.mirroredMovement = true;
         avatarController.verticalMovement = true;
         avatarController.smoothFactor = 10;
+        avatarController.playerIndex = playerIndex;
         avatarController.Awake();
 
         //// Initialize avatar scalar
@@ -113,6 +114,9 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         // Reactivate
         gameObject.SetActive(true);
         avatarController.LoadConfigData();
+
+        // RefreshAvaterUserIds, this is important to bind, otherwise clothing will wait until another user enters/leaves scene -HH
+        KinectManager.Instance.RefreshAvatarUserIds();
     }
 }
 
