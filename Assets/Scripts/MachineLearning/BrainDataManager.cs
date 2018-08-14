@@ -34,6 +34,7 @@ public class BrainDataManager : MonoBehaviour
     public string brainDataFilePath = "/StreamingAssets/brain_data.json";
     public string trainedDataFolderPath = "MachineLearningModels/TargetPoseRecognizing/TargetPoseTraining_training_"; //Rooted from Resources
 
+    private Academy academy;
     private Brain[] brains;
     public Brain GetBrain(int i)
     {
@@ -60,8 +61,10 @@ public class BrainDataManager : MonoBehaviour
 
     void OnEnable()
     {
+        academy = GetComponent<Academy>();
         brains = GetComponentsInChildren<Brain>();
         LoadBrainData();
+        academy.InitializeEnvironment();
     }
 
     void Awake ()

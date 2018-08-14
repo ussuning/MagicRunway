@@ -211,7 +211,7 @@ public abstract class Academy : MonoBehaviour
     /// <summary>
     /// Initializes the environment, configures it and initialized the Academy.
     /// </summary>
-    void InitializeEnvironment()
+    public void InitializeEnvironment()
     {
         // Retrieve Brain and initialize Academy
         List<Brain> brains = GetBrains(gameObject);
