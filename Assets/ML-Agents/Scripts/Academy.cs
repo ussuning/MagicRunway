@@ -284,7 +284,7 @@ public abstract class Academy : MonoBehaviour
         QualitySettings.SetQualityLevel(config.qualityLevel, true);
         Time.timeScale = config.timeScale;
         //Time.captureFramerate = 60;
-        Application.targetFrameRate = config.targetFrameRate;
+        //Application.targetFrameRate = config.targetFrameRate;
     }
 
     /// <summary>
