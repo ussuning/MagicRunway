@@ -21,6 +21,7 @@ public int Speed = 5;
 public float PosX = 0.5f;
 [Range(0f, 1f)]
 public float PosY = 0.5f;
+    public float CenterSize = 2.0f;
     //[Range(0f, 1f)]
     //public float Intensity = 1f;
 
@@ -59,6 +60,7 @@ material.SetFloat("_Value", Size);
 material.SetFloat("_Value2", (float)Speed);
 material.SetFloat("_Value3", PosX);
 material.SetFloat("_Value4", PosY);
+            material.SetFloat("_CenterSize", CenterSize);
             if (MaxIntensity > -1 && Intensity > MaxIntensity)
                 Intensity = MaxIntensity;
             //if (MinIntensity > -1 && Intensity < MinIntensity)

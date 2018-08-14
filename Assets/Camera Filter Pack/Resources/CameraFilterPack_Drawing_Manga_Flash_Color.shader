@@ -30,6 +30,7 @@ uniform float _Value;
 uniform float _Value2;
 uniform float _Value3;
 uniform float _Value4;
+uniform float _CenterSize;
 uniform float _Intensity;
 uniform float4 Color;
 
@@ -76,7 +77,7 @@ float2 uvst = UnityStereoScreenSpaceUVAdjust(i.texcoord, _MainTex_ST);
 float2 uv = uvst;
 float2 vec = uvst - float2(_Value3,_Value4);
 float PI = 3.141592653589793*_Value;
-float l = length(vec) / length(float2(1.0,1.0) - float2(0.5,0.5));
+float l = length(vec) / length(float2(_CenterSize, _CenterSize) - float2(0.5, 0.5));
 float r = (atan2(vec.y, vec.x) + PI) / (2.0 * PI);
 float t = getFrameTime();
 t = max(t, 0.1);
