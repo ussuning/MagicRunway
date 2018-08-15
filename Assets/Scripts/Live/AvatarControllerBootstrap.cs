@@ -12,37 +12,40 @@ using Obi;
 // If you don't want AvatarController to be controlled via kinect, select disableOnStart or invoke DisableAvatarControllers();
 
 public class AvatarControllerBootstrap : MonoBehaviour {
-    public bool disableOnStart = false;
-    
+    //public bool disableOnStart = false;
+    public int playerIndex = 0;
+
     protected string BackgroundCamera1 = "BackgroundCamera1";
     protected string MainCamera = "Conversion Camera";
+    protected AvatarControllerClassic avatarController = null;
 
     void Start()
     {
-        if (disableOnStart)
-        {
-            DisableAvatarControllers();
-        }
+        //if (disableOnStart)
+        //{
+        //    DisableAvatarControllers();
+        //}
 
         // There's a bug where camera unset themselves on play after being set with the "Initialize" button.
         //GetComponent<AvatarControllerClassic>().posRelativeToCamera = gameObject.FindAny<Camera>(BackgroundCamera1);// Find(BackgroundCamera1)?.GetComponent<Camera>();
         //GetComponent<AvatarScaler>().foregroundCamera = gameObject.FindAny<Camera>(MainCamera);
     }
 
-    public void DisableAvatarControllers()
-    {
-        AvatarControllerClassic avatarController = GetComponent<AvatarControllerClassic>();
-        AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
-        FacetrackingManager faceTrackingMgr = GetComponent<FacetrackingManager>();
-        MonoBehaviour[] scripts = new MonoBehaviour[] { avatarScalar, avatarController, faceTrackingMgr };
+    //public void DisableAvatarControllers()
+    //{
+    //    AvatarControllerClassic avatarController = GetComponent<AvatarControllerClassic>();
+    //    AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
+    //    FacetrackingManager faceTrackingMgr = GetComponent<FacetrackingManager>();
+    //    MonoBehaviour[] scripts = new MonoBehaviour[] { avatarScalar, avatarController, faceTrackingMgr };
 
-        foreach (MonoBehaviour script in scripts)
-            if (script != null)
-                Destroy(script);
-    }
+    //    foreach (MonoBehaviour script in scripts)
+    //        if (script != null)
+    //            Destroy(script);
+    //}
 
     [ExecuteInEditMode]
     public void Init(int playerIndex = 0) {
+
         // First, deactivate this gameobject.
         gameObject.SetActive(false);
 
@@ -50,7 +53,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         transform.FindDeepChild("body")?.gameObject.SetActive(false);
 
         // Initialize avatar controller classic
-        AvatarControllerClassic avatarController = GetComponent<AvatarControllerClassic>();
+        avatarController = GetComponent<AvatarControllerClassic>();
         if (avatarController == null)
             avatarController = this.gameObject.AddComponent<AvatarControllerClassic>();
 
@@ -139,7 +142,7 @@ public class AvatarControllerBootstrapEditor : Editor
         AvatarControllerBootstrap myScript = (AvatarControllerBootstrap)target;
         if (GUILayout.Button("Initialize"))
         {
-            myScript.Init();
+            myScript.Init(myScript.playerIndex);
         }
     }
 }

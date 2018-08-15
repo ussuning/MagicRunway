@@ -6,22 +6,41 @@ using System.Text;
 using System;
 
 [System.Serializable]
-class AvatarControllerData
+class AvatarControllerEntry
 {
-    public char delimiter = '|';
+    public string avatarControllerName = "";
+    public float spineVerticalOffset = 0f;
+    public float shoulderCenterVerticalOffset = 0f; //Compensate for when shoulderCenter is not actually (vertically) at same height as left and right arm sockets.
+    public float neckVerticalOffset = 0f;
+    public float headVerticalOffset = 0f; //Compensate for head is not actually
+    public float hipWidthFactor = 1.0f;
+    public float shoulderWidthFactor = 1.0f;
 
-    public AvatarControllerData()
+    public static AvatarControllerEntry ParseJson(string json)
     {
-
+        AvatarControllerEntry d = null;
+        try {
+            d = JsonUtility.FromJson<AvatarControllerEntry>(json);
+        }
+        catch (Exception e) {
+            Debug.LogError("AvatarControllerData::ParseJson() Error: " + e.Message);
+        }
+        return d;
     }
 
-    public AvatarControllerData(AvatarController avatarController)
+    public AvatarControllerEntry()
+    {
+    }
+
+    public AvatarControllerEntry(AvatarController avatarController)
     {
         this.avatarControllerName = avatarController.name;
         this.spineVerticalOffset = avatarController.spineVerticalOffset;
         this.shoulderCenterVerticalOffset = avatarController.shoulderCenterVerticalOffset;
         this.neckVerticalOffset = avatarController.neckVerticalOffset;
         this.headVerticalOffset = avatarController.headVerticalOffset;
+        this.hipWidthFactor = avatarController.hipWidthFactor;
+        this.shoulderWidthFactor = avatarController.shoulderWidthFactor;
     }
 
     public void PopulateTo(AvatarController avatarController)
@@ -34,50 +53,51 @@ class AvatarControllerData
         avatarController.shoulderCenterVerticalOffset = this.shoulderCenterVerticalOffset;
         avatarController.neckVerticalOffset = this.neckVerticalOffset;
         avatarController.headVerticalOffset = this.headVerticalOffset;
+        avatarController.hipWidthFactor = this.hipWidthFactor;
+        avatarController.shoulderWidthFactor = this.shoulderWidthFactor;
     }
 
-    public override string ToString()
+    public string ToJSON()
     {
-        return this.avatarControllerName + delimiter
-            + this.spineVerticalOffset + delimiter
-            + this.shoulderCenterVerticalOffset + delimiter
-            + this.neckVerticalOffset + delimiter
-            + this.headVerticalOffset;
+        return JsonUtility.ToJson(this);
     }
 
-    public bool LoadFromString(string line)
-    {
-        string[] values = line.Split(
-            new[] { delimiter },
-            StringSplitOptions.None
-        );
+    //public override string ToString()
+    //{
+    //    return this.avatarControllerName + delimiter
+    //        + this.spineVerticalOffset + delimiter
+    //        + this.shoulderCenterVerticalOffset + delimiter
+    //        + this.neckVerticalOffset + delimiter
+    //        + this.headVerticalOffset;
+    //}
 
-        try
-        {
-            this.avatarControllerName = values[0];
-            this.spineVerticalOffset = float.Parse(values[1]);
-            this.shoulderCenterVerticalOffset = float.Parse(values[2]);
-            this.neckVerticalOffset = float.Parse(values[3]);
-            this.headVerticalOffset = float.Parse(values[4]);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.Message);
-            return false;
-        }
-        return true;
-    }
+    //public bool LoadFromString(string line)
+    //{
+    //    string[] values = line.Split(
+    //        new[] { delimiter },
+    //        StringSplitOptions.None
+    //    );
 
-    public string avatarControllerName = "";
-    public float spineVerticalOffset = 0f;
-    public float shoulderCenterVerticalOffset = 0f; //Compensate for when shoulderCenter is not actually (vertically) at same height as left and right arm sockets.
-    public float neckVerticalOffset = 0f;
-    public float headVerticalOffset = 0f; //Compensate for head is not actually
+    //    try
+    //    {
+    //        this.avatarControllerName = values[0];
+    //        this.spineVerticalOffset = float.Parse(values[1]);
+    //        this.shoulderCenterVerticalOffset = float.Parse(values[2]);
+    //        this.neckVerticalOffset = float.Parse(values[3]);
+    //        this.headVerticalOffset = float.Parse(values[4]);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.LogError(e.Message);
+    //        return false;
+    //    }
+    //    return true;
+    //}
 }
 
 class AvatarControllerConfigData
 {
-    public Dictionary<string, AvatarControllerData> entries = new Dictionary<string, AvatarControllerData>();
+    public Dictionary<string, AvatarControllerEntry> entries = new Dictionary<string, AvatarControllerEntry>();
 
     public string ConfigDatatPath
     {
@@ -108,8 +128,10 @@ class AvatarControllerConfigData
         {
             if (line.Length > 1)
             {
-                AvatarControllerData acData = new AvatarControllerData();
-                if (acData.LoadFromString(line))
+                AvatarControllerEntry acData = AvatarControllerEntry.ParseJson(line);
+                if (acData != null && 
+                    acData.avatarControllerName != null && 
+                    acData.avatarControllerName.Length > 0)
                     entries.Add(acData.avatarControllerName, acData);
             }
         }
@@ -118,8 +140,8 @@ class AvatarControllerConfigData
     public void Save()
     {
         StreamWriter writer = new StreamWriter(ConfigDatatPath, false);
-        foreach (AvatarControllerData data in entries.Values)
-            writer.WriteLine(data.ToString());
+        foreach (AvatarControllerEntry data in entries.Values)
+            writer.WriteLine(data.ToJSON());
         writer.Close();
     }
 }

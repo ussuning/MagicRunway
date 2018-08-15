@@ -114,17 +114,23 @@ public class AvatarController : MonoBehaviour
 	protected Quaternion offsetNodeRot;
 	protected Vector3 bodyRootPosition;
     
-    [Range(-0.5f, 0.5f)]
+    [Range(-0.25f, 0.25f)]
     public float spineVerticalOffset = 0f; 
-    [Range(-0.5f, 0.5f)]
+    [Range(-0.25f, 0.25f)]
     public float shoulderCenterVerticalOffset = 0f; //Compensate for when shoulderCenter is not actually (vertically) at same height as left and right arm sockets.
-    [Range(-0.5f, 0.5f)]
+    [Range(-0.25f, 0.25f)]
     public float neckVerticalOffset = 0f; 
-    [Range(-0.5f, 0.5f)]
+    [Range(-0.25f, 0.25f)]
     public float headVerticalOffset = 0f; //Compensate for head is not actually
+    [Range(0.5f, 2.0f)]
+    public float hipWidthFactor = 1.0f;
+    [Range(0.5f, 2.0f)]
+    public float shoulderWidthFactor = 1.0f;
 
-    // Calibration Offset Variables for Character Position.
-    [NonSerialized]
+
+
+     // Calibration Offset Variables for Character Position.
+     [NonSerialized]
 	public bool offsetCalibrated = false;
 	protected Vector3 offsetPos = Vector3.zero;
 	//protected float xOffset, yOffset, zOffset;
@@ -695,6 +701,7 @@ public class AvatarController : MonoBehaviour
         offsetCalibrated = false;       // this cause also calibrating kinect offset in moveAvatar function 
     }
 
+
     // Apply the rotations tracked by kinect to the joints.
     protected void TransformBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
@@ -743,51 +750,67 @@ public class AvatarController : MonoBehaviour
             case KinectInterop.JointType.Head:
                 boneTransform.localPosition += new Vector3(0, headVerticalOffset, 0);
                 break;
+            case KinectInterop.JointType.HipLeft:
+            case KinectInterop.JointType.HipRight:
+                Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
+                Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
+                Vector3 hipCenter = Vector3.Lerp(hipLeft, hipRight, 0.5f);
+                Vector3 dirHipFromCenter = (joint == KinectInterop.JointType.HipLeft) ? hipLeft - hipCenter : hipRight - hipCenter;
+                boneTransform.position = hipCenter + dirHipFromCenter * hipWidthFactor;
+                break;
+            case KinectInterop.JointType.ShoulderLeft:
+            case KinectInterop.JointType.ShoulderRight:
+                Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
+                Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
+                Vector3 shoulderCenter = Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f);
+                Vector3 dirShoulderFromCenter = (joint == KinectInterop.JointType.ShoulderLeft) ? shoulderLeft - shoulderCenter : shoulderRight - shoulderCenter;
+                boneTransform.position = shoulderCenter + dirShoulderFromCenter * shoulderWidthFactor;
+                break;
         }
 
         // Correct orientation for Shoulders
         switch (joint)
         {
             case KinectInterop.JointType.ShoulderLeft:
-                Vector3 shoulderLeftForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft) - GetRawJointWorldPos(joint);
+                Vector3 shoulderLeftForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft) - boneTransform.position;
                 Vector3 elbowLeftForward = GetRawJointWorldPos(KinectInterop.JointType.WristLeft) - GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
                 Vector3 elbowOut = Vector3.Cross(shoulderLeftForward, elbowLeftForward);
                 Vector3 shoulderLeftDown = Vector3.Cross(shoulderLeftForward, elbowOut);
                 Vector3 shoulderLeftOut = Vector3.Cross(shoulderLeftDown, shoulderLeftForward);
                 boneTransform.rotation = Quaternion.LookRotation(shoulderLeftDown, shoulderLeftForward);
-                boneTransform.Rotate(0, -135, 0);
-                //boneTransform.LookAt(GetRawJointWorldPos(joint) + elbowOut.normalized * shoulderLeftForward.magnitude);
+                boneTransform.Rotate(0, -90, 0);
                 break;
-            //case KinectInterop.JointType.ElbowLeft:
-                //shoulderLeftForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft) - GetRawJointWorldPos(joint);
-                //elbowLeftForward = GetRawJointWorldPos(KinectInterop.JointType.WristLeft) - GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
-                //elbowOut = Vector3.Cross(shoulderLeftForward, elbowLeftForward);
-                //Vector3 elbowLeftDown = Vector3.Cross(elbowLeftForward, elbowOut);
-                //boneTransform.rotation = Quaternion.LookRotation(elbowLeftDown, elbowLeftForward);
-                //break;
             case KinectInterop.JointType.ShoulderRight:
-                Vector3 shoulderRightForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight) - GetRawJointWorldPos(joint);
+                Vector3 shoulderRightForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight) - boneTransform.position;
                 Vector3 elbowRightForward = GetRawJointWorldPos(KinectInterop.JointType.WristRight) - GetRawJointWorldPos(KinectInterop.JointType.ElbowRight);
                 elbowOut = Vector3.Cross(shoulderRightForward, elbowRightForward);
                 Vector3 shoulderRightDown = Vector3.Cross(shoulderRightForward, elbowOut);
                 boneTransform.rotation = Quaternion.LookRotation(shoulderRightDown, shoulderRightForward);
-                boneTransform.Rotate(0, 135, 0);
+                boneTransform.Rotate(0, 90, 0);
                 break;
-            //case KinectInterop.JointType.ElbowLeft:
-            //case KinectInterop.JointType.ElbowRight:
-            //case KinectInterop.JointType.WristLeft:
-            //case KinectInterop.JointType.WristRight:
-            //case KinectInterop.JointType.HandLeft:
-            //case KinectInterop.JointType.HandRight:
-            //    boneTransform.position = GetRawJointWorldPos(joint);
-            //    break;
+            case KinectInterop.JointType.HipLeft:
+                Vector3 hipLeftForward = GetRawJointWorldPos(KinectInterop.JointType.KneeLeft) - boneTransform.position;
+                Vector3 kneeLeftForward = GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft) - GetRawJointWorldPos(KinectInterop.JointType.KneeLeft);
+                Vector3 kneeOut = Vector3.Cross(hipLeftForward, kneeLeftForward);
+                Vector3 hipLeftDown = Vector3.Cross(hipLeftForward, kneeOut);
+                boneTransform.rotation = Quaternion.LookRotation(hipLeftDown, hipLeftForward);
+                break;
+            case KinectInterop.JointType.HipRight:
+                Vector3 hipRightForward = GetRawJointWorldPos(KinectInterop.JointType.KneeRight) - boneTransform.position;
+                Vector3 kneeRightForward = GetRawJointWorldPos(KinectInterop.JointType.AnkleRight) - GetRawJointWorldPos(KinectInterop.JointType.KneeRight);
+                kneeOut = Vector3.Cross(hipRightForward, kneeRightForward);
+                Vector3 hipRightDown = Vector3.Cross(hipRightForward, kneeOut);
+                boneTransform.rotation = Quaternion.LookRotation(hipRightDown, hipRightForward);
+                break;
 
         }
     }
 
     // Apply the rotations tracked by kinect to a special joint
+    // Clavicle left and right are boneIndex 25 and 26 respectively
     protected void TransformSpecialBone(Int64 userId, KinectInterop.JointType joint, KinectInterop.JointType jointParent, int boneIndex, Vector3 baseDir, bool flip)
 	{
+
 		Transform boneTransform = bones[boneIndex];
 		if(boneTransform == null || kinectManager == null)
 			return;
@@ -1769,7 +1792,7 @@ public class AvatarController : MonoBehaviour
     {
         AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
         acConfigData.entries.Remove(this.name);
-        acConfigData.entries.Add(this.name, new AvatarControllerData(this));
+        acConfigData.entries.Add(this.name, new AvatarControllerEntry(this));
         acConfigData.Save();
     }
 
@@ -1778,14 +1801,9 @@ public class AvatarController : MonoBehaviour
         AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
         if (acConfigData.entries.ContainsKey(this.name))
         {
-            AvatarControllerData data = acConfigData.entries[this.name];
+            AvatarControllerEntry data = acConfigData.entries[this.name];
             data.PopulateTo(this);
         }
-    }
-
-    public static implicit operator AvatarController(List<AvatarController> v)
-    {
-        throw new NotImplementedException();
     }
 }
 
