@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class ComboFX : MonoBehaviour {
 
-    public bool steelingMode = true;
-
     public Text ComboNumText;
     public Text ComboLabel;
 
@@ -30,11 +28,13 @@ public class ComboFX : MonoBehaviour {
     void OnEnable()
     {
         EventMsgDispatcher.Instance.registerEvent(EventDef.User_Combo_Detected, OnUserComboDetected);
+        EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
     }
 
     void OnDisable()
     {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Combo_Detected, OnUserComboDetected);
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
     }
 
     public void OnUserComboDetected(object param, object paramEx)
@@ -45,32 +45,25 @@ public class ComboFX : MonoBehaviour {
         SetComboText(userID, comboNum);
     }
 
+    public void OnComboBroken(object param, object paramEx)
+    {
+        ClearComboText();
+    }
+
     void SetComboText(long userID, int comboNum)
     {
         comboHoldingUser = userID;
         lastComboNum = comboNum;
 
-        CancelInvoke("ClearComboText");
-
         ComboNumText.text = comboNum.ToString();
 
         ComboNumText.enabled = true;
         ComboLabel.enabled = true;
-
-        if (!steelingMode)
-            FlyToUser(comboHoldingUser);
-
-        float comboTime = PoseMgr.Instance.GetComboInfo(comboNum).combo_time;
-        Invoke("ClearComboText", comboTime);
     }
 
     void ClearComboText()
     {
-        if (steelingMode)
-        {
-            FlyToUser(comboHoldingUser);
-            AddUserScore(comboHoldingUser, lastComboNum);
-        }
+        FlyToUser(comboHoldingUser);
 
         ComboNumText.enabled = false;
         ComboLabel.enabled = false;
@@ -86,15 +79,5 @@ public class ComboFX : MonoBehaviour {
             ft.ActivateFlying(userScoreBoxGO.transform.position);
         else
             Destroy(userComboNum);
-    }
-
-    void AddUserScore(long userID, int comboNum)
-    {
-        GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
-        if (userScoreBoxGO)
-        {
-            UserScore us = userScoreBoxGO.GetComponent<UserScore>();
-            us.AddScore(ScoreMgr.Instance.GetComboScore(comboNum));
-        }
     }
 }

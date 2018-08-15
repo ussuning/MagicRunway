@@ -17,6 +17,7 @@ public class PoseComboDetector : MonoBehaviour {
     }
 
     private float poseTimeEllapsed = 0f;
+    private long lastComboOwner = 0L;
 
     void OnEnable()
     {
@@ -30,13 +31,13 @@ public class PoseComboDetector : MonoBehaviour {
 
     public void OnUserPoseMatched(object param, object paramEx)
     {
-        long userID = (long)param;
+        lastComboOwner = (long)param;
 
         if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).combo_time)
         {
             combo++;
             if (combo > 1)
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, userID, combo);
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, lastComboOwner, combo);
             if (combo > 4)
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.High_Combo_Detected, combo);
         }
@@ -45,6 +46,9 @@ public class PoseComboDetector : MonoBehaviour {
             combo = 1;
         }
         GenerateNewPose();
+
+        CancelInvoke("ClearCombo");
+        Invoke("ClearCombo", PoseMgr.Instance.GetComboInfo(ComboNum).combo_time);
     }
 
     void Start()
@@ -58,13 +62,6 @@ public class PoseComboDetector : MonoBehaviour {
     void Update()
     {
         poseTimeEllapsed += Time.deltaTime;
-
-        if(poseTimeEllapsed > PoseMgr.Instance.GetComboInfo(ComboNum).combo_time)
-        {
-            if (combo > 4)
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Broken_Detected);
-            combo = 0;
-        }
         if (poseTimeEllapsed > PoseMgr.Instance.GetComboInfo(ComboNum).pose_time)
         {
             GenerateNewPose();
@@ -75,5 +72,11 @@ public class PoseComboDetector : MonoBehaviour {
     {
         PoseMgr.Instance.GenerateNewPose();
         poseTimeEllapsed = 0f;
+    }
+
+    void ClearCombo()
+    {
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Broken_Detected, lastComboOwner, combo);
+        combo = 0;
     }
 }

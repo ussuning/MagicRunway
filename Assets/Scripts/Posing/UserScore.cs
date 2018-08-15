@@ -35,11 +35,13 @@ public class UserScore : MonoBehaviour {
     void OnEnable()
     {
         EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
+        EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Broken_Detected, OnComboScored);
     }
 
     void OnDisable()
     {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboScored);
     }
 
     public void OnUserPoseMatched(object param, object paramEx)
@@ -50,6 +52,16 @@ public class UserScore : MonoBehaviour {
         {
             AddScore(ScoreMgr.Instance.SinglePoseScore);
             GenerateEffects(poseConfidence);
+        }
+    }
+
+    public void OnComboScored(object param, object paramEx)
+    {
+        long lastComboOwner = (long)param;
+        int combo = (int)paramEx;
+        if (lastComboOwner == userID)
+        {
+            AddScore(ScoreMgr.Instance.GetComboScore(combo));
         }
     }
 
