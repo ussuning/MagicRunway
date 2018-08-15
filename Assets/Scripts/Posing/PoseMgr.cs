@@ -91,11 +91,11 @@ public class PoseMgr : MonoBehaviour {
         LoadComboData();
     }
 
-    void Start()
-    {
-        curPose = 0;
-        prevPose = 0;
-    }
+    //void Start()
+    //{
+    //    curPose = 0;
+    //    prevPose = 0;
+    //}
 
     private void LoadComboData()
     {
