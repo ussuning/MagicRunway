@@ -765,6 +765,7 @@ public class AvatarController : MonoBehaviour
                 Vector3 shoulderCenter = Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f);
                 Vector3 dirShoulderFromCenter = (joint == KinectInterop.JointType.ShoulderLeft) ? shoulderLeft - shoulderCenter : shoulderRight - shoulderCenter;
                 boneTransform.position = shoulderCenter + dirShoulderFromCenter * shoulderWidthFactor;
+                boneTransform.position += GetShoulderVerticalOffset(joint);
                 break;
         }
 
@@ -810,7 +811,7 @@ public class AvatarController : MonoBehaviour
     // Clavicle left and right are boneIndex 25 and 26 respectively
     protected void TransformSpecialBone(Int64 userId, KinectInterop.JointType joint, KinectInterop.JointType jointParent, int boneIndex, Vector3 baseDir, bool flip)
 	{
-
+        
 		Transform boneTransform = bones[boneIndex];
 		if(boneTransform == null || kinectManager == null)
 			return;
@@ -866,8 +867,67 @@ public class AvatarController : MonoBehaviour
 			else
 				boneTransform.rotation = newRotation;
 		}
-		
-	}
+
+        // Adjust clavicle based on how raised the arms are relative to spine.
+        if(boneIndex == 26 || boneIndex == 25)
+        {
+            boneTransform.Rotate(boneTransform.right, GetShoulderVerticalOffsetAngle(joint));
+        }
+
+    }
+
+    Vector3 GetShoulderVerticalOffset(KinectInterop.JointType joint)
+    {
+        if (joint != KinectInterop.JointType.ShoulderLeft &&
+            joint != KinectInterop.JointType.ShoulderRight)
+        {
+            Debug.LogError("Invalid joint type for method GetShoulderVerticalOffset!");
+            return Vector3.zero;
+        }
+
+        float angle = GetShoulderVerticalOffsetAngle(joint);
+
+        int spineBoneIdx = jointMap2boneIndex[KinectInterop.JointType.SpineShoulder];
+        Transform spineTransform = bones[spineBoneIdx];
+        return spineTransform.up * 0.05f * (angle / 30.0f);
+    }
+
+    float GetShoulderVerticalOffsetAngle(KinectInterop.JointType joint)
+    {
+        if (joint != KinectInterop.JointType.ShoulderLeft &&
+            joint != KinectInterop.JointType.ShoulderRight)
+        {
+            Debug.LogError("Invalid joint type for method GetShoulderVerticalOffsetAngle!");
+            return 0;
+        }
+
+        int spineBoneIdx = jointMap2boneIndex[KinectInterop.JointType.SpineShoulder];
+        Transform spineTransform = bones[spineBoneIdx];
+
+        // Get left shoulder and elbow positions relative to spine, so it's easy to check height value (Y)
+        KinectInterop.JointType elbowJoint = joint == KinectInterop.JointType.ShoulderLeft ? KinectInterop.JointType.ElbowLeft : KinectInterop.JointType.ElbowRight;
+        KinectInterop.JointType shoulderJoint = joint == KinectInterop.JointType.ShoulderLeft ? KinectInterop.JointType.ShoulderLeft : KinectInterop.JointType.ShoulderRight;
+        Vector3 shoulderLeftLocalPos = spineTransform.InverseTransformPoint(GetRawJointWorldPos(shoulderJoint));
+        Vector3 elbowLeftLocalPos = spineTransform.InverseTransformPoint(GetRawJointWorldPos(elbowJoint));
+
+        //Debug.Log("shoulder.y" + shoulderLeftLocalPos.y);
+        //Debug.Log("elbow.y" + elbowLeftLocalPos.y);
+        //boneTransform.rotation = initialRotations[boneIndex];
+        //boneTransform.localRotation = localRotations[boneIndex];
+        if (elbowLeftLocalPos.y > shoulderLeftLocalPos.y)
+        {
+            //boneTransform.localEulerAngles += new Vector3(-30, 0, 0);
+            // 
+            //Vector3 spineUp = spineTransform.up;
+            Vector3 elbowLeftFlatPos = elbowLeftLocalPos;
+            elbowLeftFlatPos.y = shoulderLeftLocalPos.y;
+            float angle = Vector3.Angle(elbowLeftFlatPos, elbowLeftLocalPos);
+            //Debug.Log("Angle = " + angle);
+            //boneTransform.Rotate(boneTransform.right, angle);
+            return angle;
+        }
+        return 0;
+    }
 
 	// Apply the rotations tracked by kinect to fingers (one joint = multiple bones)
 	protected void TransformSpecialBoneFingers(Int64 userId, int joint, int boneIndex, bool flip)

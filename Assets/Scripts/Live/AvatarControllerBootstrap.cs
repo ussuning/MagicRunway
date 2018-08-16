@@ -90,7 +90,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         avatarController.mirroredMovement = true;
         avatarController.verticalMovement = true;
-        avatarController.smoothFactor = 10;
+        avatarController.smoothFactor = 0;
         avatarController.playerIndex = playerIndex;
         avatarController.Awake();
 
