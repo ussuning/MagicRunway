@@ -997,7 +997,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b3de9e5fcc0744a8fb8d811fab58c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steelingMode: 1
   ComboNumText: {fileID: 1864236522}
   ComboLabel: {fileID: 1277376607}
 --- !u!222 &147944707
@@ -4881,7 +4880,7 @@ MonoBehaviour:
   FastFilter: 4
   Threshold: 0.5
   Precision: 0.56
-  GlowColor: {r: 0.69803923, g: 0, b: 1, a: 1}
+  GlowColor: {r: 0.65882355, g: 0.49803922, b: 0.20392157, a: 1}
 --- !u!114 &1235082966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4915,7 +4914,7 @@ MonoBehaviour:
   Intensity: 0
   SCShader: {fileID: 4800000, guid: 6453c5de383d702428c215f2a0b4724a, type: 3}
   Size: 10
-  Color: {r: 0.69803923, g: 0, b: 1, a: 0.29411766}
+  Color: {r: 1, g: 1, b: 0.40392157, a: 0.29411766}
   Speed: 5
   PosX: 0.5
   PosY: 0.5
@@ -6510,6 +6509,8 @@ MonoBehaviour:
   shoulderCenterVerticalOffset: 0
   neckVerticalOffset: 0
   headVerticalOffset: 0
+  hipWidthFactor: 1
+  shoulderWidthFactor: 1
 --- !u!114 &1683970777
 MonoBehaviour:
   m_ObjectHideFlags: 0
