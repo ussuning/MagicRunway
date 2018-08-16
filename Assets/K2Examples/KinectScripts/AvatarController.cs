@@ -582,12 +582,26 @@ public class AvatarController : MonoBehaviour
 			}
 		}
 
+        ScaleTorso();
+
 		if (applyMuscleLimits && kinectManager && kinectManager.IsUserTracked(UserID)) 
 		{
 			// check for limits
 			CheckMuscleLimits();
 		}
 	}
+
+    void ScaleTorso()
+    {
+        Transform spineBaseTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]];
+        Transform spineMidTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]];
+        Transform spineShoulderTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineShoulder]];
+
+        spineBaseTransform.localScale = new Vector3(hipWidthFactor, 1, 1);
+        float midScaleX = 1f / hipWidthFactor * shoulderWidthFactor;
+        spineMidTransform.localScale = new Vector3(midScaleX, 1, 1);
+        spineShoulderTransform.localScale = new Vector3(1f / midScaleX, 1, 1);
+    }
 	
 	/// <summary>
 	/// Resets bones to their initial positions and rotations. This also releases avatar control from KM, by settings playerId to 0 
