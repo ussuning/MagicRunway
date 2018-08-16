@@ -49,6 +49,11 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         // First, deactivate this gameobject.
         gameObject.SetActive(false);
 
+        // Remove any animator controller
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+            animator.runtimeAnimatorController = null;
+
         transform.localEulerAngles = new Vector3(0f, 180f, 0f);
         transform.FindDeepChild("body")?.gameObject.SetActive(false);
 
@@ -125,6 +130,19 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         // RefreshAvaterUserIds, this is important to bind, otherwise clothing will wait until another user enters/leaves scene -HH
         KinectManager.Instance.RefreshAvatarUserIds();
+
+        // Other KinectManager settings.
+        // Smoothing is not desired, we want the most resonsiveness. Also, smoothing implementation seems to create weird rotational drifting,
+        // most noticably in the shoulder joints (overrotatting if you rotate them quickly). -HH
+        KinectManager.Instance.velocitySmoothing = KinectManager.Smoothing.None;
+        KinectManager.Instance.smoothing = KinectManager.Smoothing.None;
+        KinectManager.Instance.sensorHeight = KinectManager.Instance.sensorAngle = 0;
+        KinectManager.Instance.autoHeightAngle = KinectManager.AutoHeightAngle.DontUse;
+        KinectManager.Instance.computeUserMap = KinectManager.UserMapType.BodyTexture;
+        KinectManager.Instance.computeColorMap = true;
+        KinectManager.Instance.computeInfraredMap = false;
+        KinectManager.Instance.lateUpdateAvatars = true;
+        KinectManager.Instance.estimateJointVelocities = false;
 
     }
 }

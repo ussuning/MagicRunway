@@ -127,7 +127,7 @@ public class AvatarController : MonoBehaviour
     [Range(0.5f, 2.0f)]
     public float shoulderWidthFactor = 1.0f;
 
-
+    public float shoulderAngleRange = 1f;
 
      // Calibration Offset Variables for Character Position.
      [NonSerialized]
@@ -584,21 +584,21 @@ public class AvatarController : MonoBehaviour
 
         ScaleTorso();
 
-		if (applyMuscleLimits && kinectManager && kinectManager.IsUserTracked(UserID)) 
-		{
-			// check for limits
-			CheckMuscleLimits();
-		}
+		//if (applyMuscleLimits && kinectManager && kinectManager.IsUserTracked(UserID)) 
+		//{
+		//	// check for limits
+		//	CheckMuscleLimits();
+		//}
 	}
 
     void ScaleTorso()
     {
-        Transform spineBaseTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]];
+        //Transform spineBaseTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]];
         Transform spineMidTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]];
         Transform spineShoulderTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineShoulder]];
 
-        spineBaseTransform.localScale = new Vector3(hipWidthFactor, 1, 1);
-        float midScaleX = 1f / hipWidthFactor * shoulderWidthFactor;
+        //spineBaseTransform.localScale = new Vector3(hipWidthFactor, 1, 1);
+        float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
         spineMidTransform.localScale = new Vector3(midScaleX, 1, 1);
         spineShoulderTransform.localScale = new Vector3(1f / midScaleX, 1, 1);
     }
@@ -793,7 +793,9 @@ public class AvatarController : MonoBehaviour
                 Vector3 shoulderLeftDown = Vector3.Cross(shoulderLeftForward, elbowOut);
                 Vector3 shoulderLeftOut = Vector3.Cross(shoulderLeftDown, shoulderLeftForward);
                 boneTransform.rotation = Quaternion.LookRotation(shoulderLeftDown, shoulderLeftForward);
-                boneTransform.Rotate(0, -90, 0);
+                boneTransform.Rotate(0, -90f, 0);
+                //CheckLimitShoulderAngle(boneTransform);
+                Debug.Log("boneTransform.localEuler.y L = " + boneTransform.localEulerAngles.y + " initial = " + localRotations[boneIndex].y);
                 break;
             case KinectInterop.JointType.ShoulderRight:
                 Vector3 shoulderRightForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight) - boneTransform.position;
@@ -802,6 +804,8 @@ public class AvatarController : MonoBehaviour
                 Vector3 shoulderRightDown = Vector3.Cross(shoulderRightForward, elbowOut);
                 boneTransform.rotation = Quaternion.LookRotation(shoulderRightDown, shoulderRightForward);
                 boneTransform.Rotate(0, 90, 0);
+                //CheckLimitShoulderAngle(boneTransform);
+                Debug.Log("boneTransform.localEuler.y R = " + boneTransform.localEulerAngles.y + " initial = " + localRotations[boneIndex].y);
                 break;
             case KinectInterop.JointType.HipLeft:
                 Vector3 hipLeftForward = GetRawJointWorldPos(KinectInterop.JointType.KneeLeft) - boneTransform.position;
@@ -819,6 +823,24 @@ public class AvatarController : MonoBehaviour
                 break;
 
         }
+    }
+
+    protected void CheckLimitShoulderAngle(Transform bone)
+    {
+        float angle = bone.localEulerAngles.y % 360f;
+        if (angle > 180f) {
+            if (angle < (360f - shoulderAngleRange))
+                angle = 360f - shoulderAngleRange;
+        }
+        else if (angle < 180f)
+        {
+            if (angle > shoulderAngleRange)
+                angle = shoulderAngleRange;
+        }
+
+        if (angle != bone.localEulerAngles.y)
+            bone.localEulerAngles = new Vector3(bone.localEulerAngles.x, angle, bone.localEulerAngles.z);
+
     }
 
     // Apply the rotations tracked by kinect to a special joint
