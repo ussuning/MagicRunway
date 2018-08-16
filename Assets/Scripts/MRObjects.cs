@@ -37,6 +37,9 @@ public class Collection : System.Object
 public class Outfits : System.Object
 {
     public List<Outfit> outfits;
+    protected List<Outfit> maleOutfits;
+    protected List<Outfit> femaleOutfits;
+
     public Dictionary<string, Outfit> to_dict()
     {
         Dictionary<string, Outfit> dict = new Dictionary<string, Outfit>();
@@ -48,6 +51,19 @@ public class Outfits : System.Object
 
         return dict;
     }
+
+    public List<Outfit> filter_outfits(string gender)
+    {
+        if(gender == "m")
+        {
+            if(maleOutfits != null)
+            {
+                return maleOutfits;
+            }
+        }
+      
+        return femaleOutfits;
+    }
 }
 
 [System.Serializable]
@@ -58,6 +74,7 @@ public class Outfit : System.Object
     public string sex;
     public string desc;
     public string prefab;
+    public string icon;
     public List<string> wearableids;
     public List<Wearable> wearables;
 }
