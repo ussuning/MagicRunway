@@ -9,7 +9,6 @@ public class UserManager : Singleton<UserManager>
     public GameObject userScorePrefab;
     public GameObject malePrefab;
     public GameObject femalePrefab;
-    public GameObject outfitMenuPrefab;
     private Dictionary<long, User> userLookup = new Dictionary<long, User>();
     private Dictionary<long, PoseAgentSelector> poseAgents = new Dictionary<long, PoseAgentSelector>();
     private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();

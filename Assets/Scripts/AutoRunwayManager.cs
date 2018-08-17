@@ -175,7 +175,7 @@ public class AutoRunwayManager : MonoBehaviour
         }
 
         curLevel.SetActive(true);
-
+       
         if (curLevel == null)
         {
             Debug.Log("ERROR - LEVEL NOT FOUND");
@@ -367,6 +367,7 @@ public class AutoRunwayManager : MonoBehaviour
         UIManager.Instance.HideUpNext();
         UIManager.Instance.HideStartMenu(false);
         UIManager.Instance.HideGestureGender(false);
+        UIManager.Instance.HideInventory(false);
         curOutfit = 0;
         //RunModel(curOutfit);
 
