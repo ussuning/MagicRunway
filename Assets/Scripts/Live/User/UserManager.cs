@@ -199,19 +199,6 @@ public class UserManager : Singleton<UserManager>
         Destroy(userContainer);
     }
 
-    public void addOutfitMenu(long userId, string gender)
-    {
-        string userContainerName = "User_" + userId;
-        string outfitMenuName = "OutFitMenu_" + userId;
-        GameObject userContainer = GameObject.Find(userContainerName);
-
-        // populate outfit menu icons from json based on gender
-        GameObject outfitMenuGO = (GameObject)Instantiate(outfitMenuPrefab);
-        outfitMenuGO.name = outfitMenuName;
-        outfitMenuGO.transform.SetParent(userContainer.transform);
-        userLookup[userId].setOutfitMenuStatus(true);
-    }
-
     // need to clean up later - move to UI
     public void showOutfitMenu(long userId)
     {
