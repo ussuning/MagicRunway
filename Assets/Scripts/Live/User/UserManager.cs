@@ -87,10 +87,10 @@ public class UserManager : Singleton<UserManager>
     void UserManager_UserLostDetected(long userId, int userIndex)
     {
         // remove listener
-        removeUser(userId, userIndex);
+        int count = removeUser(userId, userIndex);
 
         // hide start menu button if no users detected
-        int count = KinectManager.Instance.GetUsersCount();
+        // int count = KinectManager.Instance.GetUsersCount();    // not dependable, sometimes kinect returns 1 when no users present
         if (count == 0)
         {
             Mode mode = AppManager.Instance.getMode();
@@ -140,7 +140,7 @@ public class UserManager : Singleton<UserManager>
         }
     }
 
-    protected void removeUser(long userId, int userIndex)
+    protected int removeUser(long userId, int userIndex)
     {
         // remove listener
         removeGestureListener(userId, userIndex);
@@ -153,6 +153,8 @@ public class UserManager : Singleton<UserManager>
 
         // destory user data
         userLookup.Remove(userId);
+
+        return userLookup.Count;
     }
 
     protected void setup(long userId, int userIndex)
