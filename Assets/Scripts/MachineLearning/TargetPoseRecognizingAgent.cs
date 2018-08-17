@@ -11,11 +11,8 @@ public class TargetPoseRecognizingAgent : Agent {
     private int poseID;
 
     private bool isPoseMatched = false;
-    private float poseCDTimeEllapsed;
 
     private float poseConfidence;
-
-    float PoseCD = 0.75f;
 
     PoseParameter pose;
 
@@ -34,26 +31,13 @@ public class TargetPoseRecognizingAgent : Agent {
 
     void Update()
     {
-        poseCDTimeEllapsed += Time.deltaTime;
-
         isPoseMatched = !PoseMgr.Instance.IsInNewPoseCooldown && poseConfidence >= pose.min_confidence;
 
-        //if (isPoseMatched)
-        //    poseTimeEllapsed += Time.deltaTime;
-        //else
-        //    poseTimeEllapsed = 0f;
-
-        //if(poseTimeEllapsed >= PoseTime)
-        //{
-        //    EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId);
-        //    poseTimeEllapsed = 0f;
-        //}
-
-        if (isPoseMatched && poseCDTimeEllapsed >= PoseCD)
+        if (isPoseMatched)
         {
             EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId, poseConfidence);
             isPoseMatched = false;
-            poseCDTimeEllapsed = 0f;
+            //Debug.Log(string.Format("User {0} : Agent {1}: action = {2} @ {3}", this.name, poseID, poseConfidence, poseCDTimeEllapsed));
         }
     }
 
@@ -88,7 +72,7 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         poseConfidence = vectorAction[0];
-        //Debug.Log(string.Format("User {0} : Agent {1}: action = {2}, isMatched = {3}", this.name, poseID, vectorAction[0], isMatched));
+        //Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
     }
 
     public override void AgentOnDone()
