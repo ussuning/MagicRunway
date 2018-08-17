@@ -41,6 +41,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         // AutoRunwayEvents.CollectionStart(curCollection);
         UIManager.Instance.HideStartMenu(false);
+        UIManager.Instance.ShowInventory(true);
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.ShowUpNext(curCollection);
         UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);

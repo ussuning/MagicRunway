@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     public GameObject uiStartMenu;
+    public GameObject uiInventory;
     public GameObject uiJoinIn;
     public GameObject uiShowcase;
     public GameObject uiCollection;
@@ -19,6 +20,7 @@ public class UIManager : Singleton<UIManager>
     protected Button uiJoinInButton;
 
     private CanvasFader faderStartMenu;
+    private CanvasFader faderInventory;
     private CanvasFader faderStickMan;
     private IEnumerator gestureGenderCoroutine;
     private IEnumerator stickManCoroutine;
@@ -39,6 +41,7 @@ public class UIManager : Singleton<UIManager>
         uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
         uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
+        faderInventory = uiInventory.GetComponent<CanvasFader>();
         faderStickMan = uiStickMan.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
@@ -77,6 +80,35 @@ public class UIManager : Singleton<UIManager>
         else
         {
             uiStartMenu.SetActive(false);
+        }
+    }
+
+    //----------------------------------------
+    // Inventory 
+    //----------------------------------------
+
+    public void ShowInventory(bool animate)
+    {
+        if (animate == true)
+        {
+            uiInventory.SetActive(true);
+            faderInventory.StartFading(CanvasFade.IN);
+        }
+        else
+        {
+            uiInventory.SetActive(true);
+        }
+    }
+
+    public void HideInventory(bool animate)
+    {
+        if (animate == true)
+        {
+            faderInventory.StartFading(CanvasFade.OUT);
+        }
+        else
+        {
+            uiInventory.SetActive(false);
         }
     }
 
@@ -139,6 +171,7 @@ public class UIManager : Singleton<UIManager>
         HideGestureGender(false);
         HideHandCursor();
         HideStartMenu(true);
+        HideInventory(true);
     }
 
     //----------------------------------------
