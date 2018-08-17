@@ -167,11 +167,11 @@ public class UIManager : Singleton<UIManager>
     {
         HideOutfit(false);
         //  HideCollection(false);    // turn off to use for player UI
+        HideInventory(false);
         HideUpNext();
         HideGestureGender(false);
         HideHandCursor();
         HideStartMenu(true);
-        HideInventory(true);
     }
 
     //----------------------------------------
