@@ -3992,8 +3992,6 @@ MonoBehaviour:
   malePrefab: {fileID: 1672246862943368, guid: 0314efb665d1ed64ca76b461d144fa36, type: 2}
   femalePrefab: {fileID: 1218878641123848, guid: 865915783ab6bc7478b8a69e7795d61a,
     type: 2}
-  outfitMenuPrefab: {fileID: 1112001718338782, guid: f79b551172c1dbc4cac720c1fc62cfcd,
-    type: 2}
 --- !u!114 &1023743740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5679,7 +5677,7 @@ Camera:
   m_GameObject: {fileID: 1349649417}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
