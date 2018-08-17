@@ -795,7 +795,7 @@ public class AvatarController : MonoBehaviour
                 boneTransform.rotation = Quaternion.LookRotation(shoulderLeftDown, shoulderLeftForward);
                 boneTransform.Rotate(0, -90f, 0);
                 //CheckLimitShoulderAngle(boneTransform);
-                Debug.Log("boneTransform.localEuler.y L = " + boneTransform.localEulerAngles.y + " initial = " + localRotations[boneIndex].y);
+                //Debug.Log("boneTransform.localEuler.y L = " + boneTransform.localEulerAngles.y + " initial = " + localRotations[boneIndex].y);
                 break;
             case KinectInterop.JointType.ShoulderRight:
                 Vector3 shoulderRightForward = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight) - boneTransform.position;
@@ -805,7 +805,7 @@ public class AvatarController : MonoBehaviour
                 boneTransform.rotation = Quaternion.LookRotation(shoulderRightDown, shoulderRightForward);
                 boneTransform.Rotate(0, 90, 0);
                 //CheckLimitShoulderAngle(boneTransform);
-                Debug.Log("boneTransform.localEuler.y R = " + boneTransform.localEulerAngles.y + " initial = " + localRotations[boneIndex].y);
+                //Debug.Log("boneTransform.localEuler.y R = " + boneTransform.localEulerAngles.y + " initial = " + localRotations[boneIndex].y);
                 break;
             case KinectInterop.JointType.HipLeft:
                 Vector3 hipLeftForward = GetRawJointWorldPos(KinectInterop.JointType.KneeLeft) - boneTransform.position;
