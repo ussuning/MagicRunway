@@ -45,6 +45,12 @@ public class LiveRunwayManager : MonoBehaviour {
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.ShowUpNext(curCollection);
         UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);
+
+        Dictionary<long, User> currentUsers = UserManager.Instance.getCurrentUsers();
+        foreach (KeyValuePair<long, User> user in currentUsers)
+        {
+            UserManager.Instance.renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
+        }
     }
 
     public void StopLiveRunway()
@@ -103,12 +109,6 @@ public class LiveRunwayManager : MonoBehaviour {
         UIManager.Instance.ShowGestureGender(10.0f);
 
         UIManager.Instance.ShowStickManDelay(11.0f);
-
-        Dictionary<long, User> currentUsers = UserManager.Instance.getCurrentUsers();
-        foreach (KeyValuePair<long, User> user in currentUsers)
-        {
-            UserManager.Instance.renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
-        }
     }
 
     private void PrepareCollectionLiveModelPrefabs()
