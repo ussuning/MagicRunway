@@ -860,6 +860,28 @@ public class KinectManager : MonoBehaviour
 		
 		return false;
 	}
+
+    public KinectInterop.JointData GetJointData(Int64 userId, int joint)
+    {
+        if (dictUserIdToIndex.ContainsKey(userId))
+        {
+            int index = dictUserIdToIndex[userId];
+
+            if (index >= 0 && index < sensorData.bodyCount &&
+                bodyFrame.bodyData[index].bIsTracked != 0)
+            {
+                if (joint >= 0 && joint < sensorData.jointCount)
+                {
+                    KinectInterop.JointData jointData = bodyFrame.bodyData[index].joint[joint];
+                    return jointData;
+                }
+            }
+        }
+
+        KinectInterop.JointData untrackedJointData = new KinectInterop.JointData();
+        untrackedJointData.trackingState = KinectInterop.TrackingState.NotTracked;
+        return untrackedJointData;
+    }
 	
 	/// <summary>
 	/// Gets the joint position of the specified user, in Kinect coordinate system, in meters.

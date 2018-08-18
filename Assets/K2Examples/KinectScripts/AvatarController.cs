@@ -591,16 +591,9 @@ public class AvatarController : MonoBehaviour
 		//}
 	}
 
-    void ScaleTorso()
+    protected virtual void ScaleTorso()
     {
-        //Transform spineBaseTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]];
-        Transform spineMidTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]];
-        Transform spineShoulderTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineShoulder]];
-
-        //spineBaseTransform.localScale = new Vector3(hipWidthFactor, 1, 1);
-        float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
-        spineMidTransform.localScale = new Vector3(midScaleX, 1, 1);
-        spineShoulderTransform.localScale = new Vector3(1f / midScaleX, 1, 1);
+        // Do nothing here. Only AvatarControllerClassic has all the necessary spine points to scale torso properly.
     }
 	
 	/// <summary>
@@ -925,7 +918,7 @@ public class AvatarController : MonoBehaviour
 
         int spineBoneIdx = jointMap2boneIndex[KinectInterop.JointType.SpineShoulder];
         Transform spineTransform = bones[spineBoneIdx];
-        return spineTransform.up * 0.05f * (angle / 30.0f);
+        return spineTransform.up * 0.1f * (angle / 30.0f);
     }
 
     float GetShoulderVerticalOffsetAngle(KinectInterop.JointType joint)
@@ -958,7 +951,7 @@ public class AvatarController : MonoBehaviour
             Vector3 elbowLeftFlatPos = elbowLeftLocalPos;
             elbowLeftFlatPos.y = shoulderLeftLocalPos.y;
             float angle = Vector3.Angle(elbowLeftFlatPos, elbowLeftLocalPos);
-            //Debug.Log("Angle = " + angle);
+            Debug.Log(joint + " Angle = " + angle);
             //boneTransform.Rotate(boneTransform.right, angle);
             return angle;
         }

@@ -15,8 +15,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     //public bool disableOnStart = false;
     public int playerIndex = 0;
 
-    protected string BackgroundCamera1 = "BackgroundCamera1";
-    protected string MainCamera = "Conversion Camera";
+    //protected string BackgroundCamera1 = "BackgroundCamera1";
+    protected string ConversionCamera = "Conversion Camera";
     protected AvatarControllerClassic avatarController = null;
 
     void Start()
@@ -62,12 +62,13 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         if (avatarController == null)
             avatarController = this.gameObject.AddComponent<AvatarControllerClassic>();
 
-        avatarController.posRelativeToCamera = GameObject.Find(BackgroundCamera1)?.GetComponent<Camera>();
+        avatarController.posRelativeToCamera = gameObject.FindAny<Camera>(ConversionCamera);
         if (avatarController.posRelativeToCamera == null)
-            Debug.LogError("Failed to find " + BackgroundCamera1);
+            Debug.LogError("Failed to find " + ConversionCamera);
         avatarController.posRelOverlayColor = true;
         avatarController.HipCenter =        transform.FindDeepChild("mixamorig:Hips");
         avatarController.Spine =            transform.FindDeepChild("mixamorig:Spine");
+        avatarController.SpineMid =         transform.FindDeepChild("mixamorig:Spine1");
         avatarController.ShoulderCenter =   transform.FindDeepChild("mixamorig:Spine2");
         avatarController.Neck =             transform.FindDeepChild("mixamorig:Neck");
         avatarController.Head =             transform.FindDeepChild("mixamorig:Head");
