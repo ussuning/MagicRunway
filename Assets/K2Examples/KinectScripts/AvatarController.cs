@@ -129,8 +129,12 @@ public class AvatarController : MonoBehaviour
 
     public float shoulderAngleRange = 1f;
 
-     // Calibration Offset Variables for Character Position.
-     [NonSerialized]
+    float initialShoulderWidth = 0;
+    float initialHipWidth = 0;
+    float initialTorsoHeight = 0;
+
+    // Calibration Offset Variables for Character Position.
+    [NonSerialized]
 	public bool offsetCalibrated = false;
 	protected Vector3 offsetPos = Vector3.zero;
 	//protected float xOffset, yOffset, zOffset;
@@ -541,9 +545,32 @@ public class AvatarController : MonoBehaviour
 				lastRightHandEvent = rightHandEvent;
 			}
 		}
-		
-		// rotate the avatar bones
-		for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
+
+        // Determine hipWidthFactor, shoulderWidthFactor, torseHeightFactor
+
+        Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
+        Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
+        float hipWidth = (hipLeft - hipRight).magnitude;
+        float currHipWidthFactor = hipWidth / initialHipWidth;
+        Debug.Log("hipWidth = " + hipWidth);
+        Debug.Log("hipWidthFactor = " + currHipWidthFactor);
+        Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
+        Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
+        float shoulderWidth = (shoulderLeft - shoulderRight).magnitude;
+        float currShoulderWidthFactor = shoulderWidth / initialShoulderWidth;
+        Debug.Log("shoulderWidth = " + shoulderWidth);
+        Debug.Log("shoulderWidthFactor = " + shoulderWidth / initialShoulderWidth);
+        float torsoHeight = (Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f) - Vector3.Lerp(hipLeft, hipRight, 0.5f)).magnitude;
+        Debug.Log("torsoHeight = " + torsoHeight);
+        Debug.Log("torsoHeightFactor = " + torsoHeight / initialTorsoHeight);
+
+        if (currHipWidthFactor > hipWidthFactor)
+            hipWidthFactor = currHipWidthFactor;
+        if (currShoulderWidthFactor > shoulderWidthFactor)
+            shoulderWidthFactor = currShoulderWidthFactor;
+
+        // rotate the avatar bones
+        for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
 		{
 			if (!bones[boneIndex] || isBoneDisabled[boneIndex]) 
 				continue;
@@ -1469,10 +1496,27 @@ public class AvatarController : MonoBehaviour
 
 		// Restore the initial rotation
 		transform.rotation = initialRotation;
-	}
-	
-	// Converts kinect joint rotation to avatar joint rotation, depending on joint initial rotation and offset rotation
-	protected Quaternion Kinect2AvatarRot(Quaternion jointRotation, int boneIndex)
+
+        initialShoulderWidth = (bones[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]].position -
+            bones[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]].position).magnitude;
+        initialHipWidth = (bones[jointMap2boneIndex[KinectInterop.JointType.HipLeft]].position -
+            bones[jointMap2boneIndex[KinectInterop.JointType.HipRight]].position).magnitude;
+        initialTorsoHeight = (
+            Vector3.Lerp(
+                bones[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]].position,
+                bones[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]].position, 0.5f) -
+            Vector3.Lerp(
+                bones[jointMap2boneIndex[KinectInterop.JointType.HipLeft]].position,
+                bones[jointMap2boneIndex[KinectInterop.JointType.HipRight]].position, 0.5f)
+                ).magnitude;
+
+        Debug.Log("initialShoulderWidth = " + initialShoulderWidth);
+        Debug.Log("initialHipWidth = " + initialHipWidth);
+        Debug.Log("initialTorsoHeight = " + initialTorsoHeight);
+    }
+
+    // Converts kinect joint rotation to avatar joint rotation, depending on joint initial rotation and offset rotation
+    protected Quaternion Kinect2AvatarRot(Quaternion jointRotation, int boneIndex)
 	{
 		Quaternion newRotation = jointRotation * initialRotations[boneIndex];
 		//newRotation = initialRotation * newRotation;

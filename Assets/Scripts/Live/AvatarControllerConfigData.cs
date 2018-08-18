@@ -39,8 +39,8 @@ class AvatarControllerEntry
         this.shoulderCenterVerticalOffset = avatarController.shoulderCenterVerticalOffset;
         this.neckVerticalOffset = avatarController.neckVerticalOffset;
         this.headVerticalOffset = avatarController.headVerticalOffset;
-        this.hipWidthFactor = avatarController.hipWidthFactor;
-        this.shoulderWidthFactor = avatarController.shoulderWidthFactor;
+        //this.hipWidthFactor = avatarController.hipWidthFactor;
+        //this.shoulderWidthFactor = avatarController.shoulderWidthFactor;
     }
 
     public void PopulateTo(AvatarController avatarController)
@@ -53,8 +53,8 @@ class AvatarControllerEntry
         avatarController.shoulderCenterVerticalOffset = this.shoulderCenterVerticalOffset;
         avatarController.neckVerticalOffset = this.neckVerticalOffset;
         avatarController.headVerticalOffset = this.headVerticalOffset;
-        avatarController.hipWidthFactor = this.hipWidthFactor;
-        avatarController.shoulderWidthFactor = this.shoulderWidthFactor;
+        //avatarController.hipWidthFactor = this.hipWidthFactor;
+        //avatarController.shoulderWidthFactor = this.shoulderWidthFactor;
     }
 
     public string ToJSON()
