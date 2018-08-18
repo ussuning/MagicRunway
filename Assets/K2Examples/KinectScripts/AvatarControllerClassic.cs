@@ -20,8 +20,9 @@ public class AvatarControllerClassic : AvatarController
 {	
 	// Public variables that will get matched to bones. If empty, the Kinect will simply not track it.
 	public Transform HipCenter;
-	public Transform Spine;
-	public Transform ShoulderCenter;
+    public Transform Spine;
+    public Transform SpineMid;
+    public Transform ShoulderCenter;
 	public Transform Neck;
 	public Transform Head;
 
@@ -121,6 +122,19 @@ public class AvatarControllerClassic : AvatarController
 //			bodyRoot = transform;
 //		}
 	}
+
+    protected override void ScaleTorso()
+    {
+        float hipScaleX = hipWidthFactor;
+        HipCenter.localScale = new Vector3(hipScaleX, 1, 1);
+        HipLeft.localScale = HipRight.localScale = new Vector3(1f / hipScaleX, 1, 1);
+        
+        //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
+        float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
+        SpineMid.localScale = new Vector3(1f / hipScaleX * midScaleX, 1, 1);
+        float shoulderScaleX = shoulderWidthFactor;
+        ShoulderCenter.localScale = new Vector3(1f / midScaleX * shoulderScaleX, 1, 1);
+    }
 	
 }
 

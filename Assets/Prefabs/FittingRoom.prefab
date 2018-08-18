@@ -20,9 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4019385311799562}
   - component: {fileID: 20107782086253348}
-  - component: {fileID: 124095379522951946}
-  - component: {fileID: 92603468039314250}
-  - component: {fileID: 81501544554637704}
   m_Layer: 0
   m_Name: BackgroundCamera1
   m_TagString: Untagged
@@ -114,7 +111,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1512578842937756
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,7 +367,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0.019607844}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0.019607844}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -528,20 +525,6 @@ AudioListener:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1725528163540188}
   m_Enabled: 1
---- !u!81 &81501544554637704
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1022031380391492}
-  m_Enabled: 0
---- !u!92 &92603468039314250
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1022031380391492}
-  m_Enabled: 1
 --- !u!108 &108691691266948616
 Light:
   m_ObjectHideFlags: 1
@@ -685,7 +668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a630cacf0572fa43b1fabef76c0dcbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  depthThreshold: 0.08
+  depthThreshold: 0.07
   backgroundImage: {fileID: 114612656619986802}
   backrgoundCamera: {fileID: 20107782086253348}
   backgroundCamera2: {fileID: 20166323031998498}
@@ -774,7 +757,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 4579729960e221b4f96b998fc4a9b5a7, type: 3}
+  m_Texture: {fileID: 2800000, guid: a01be5baee29de840bbe3466a398317c, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -842,13 +825,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetAspectRatio: {x: 0, y: 0}
---- !u!124 &124095379522951946
-Behaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1022031380391492}
-  m_Enabled: 0
 --- !u!124 &124507617694637996
 Behaviour:
   m_ObjectHideFlags: 1
