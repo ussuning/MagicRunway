@@ -9,6 +9,7 @@ public class PrefabReference : MonoBehaviour {
 
     public void Load(int playerIndex)
     {
+        Debug.Log("PrefabRef Start");
         if (prefab == null)
         {
             Debug.LogError("PrefabReference::Load() ERROR: Prefab reference is missing!");
@@ -27,8 +28,9 @@ public class PrefabReference : MonoBehaviour {
         {
             acBootstrap = instance.AddComponent<AvatarControllerBootstrap>();
         }
-
+        Debug.Log("boo");
         acBootstrap.Init(playerIndex);
+        Debug.Log("end");
     }
 
     public void Unload()
