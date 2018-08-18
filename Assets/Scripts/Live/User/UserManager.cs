@@ -232,7 +232,8 @@ public class UserManager : Singleton<UserManager>
     public void renderOutfit(long userId, int slot)
     {
         Debug.Log("User Manager slot = " + slot + " " + userId);
-        string inventoryMenuName = "InventoryMenu_" + slot;
+        string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex() + 1);
+        Debug.Log("Inventory Menu Name = " + inventoryMenuName);
         GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
         GameObject slotGO = inventoryMenuGO.transform.Find("slot_" + slot).gameObject;
         PrefabReference prefabRef = slotGO.GetComponent<PrefabReference>();
@@ -364,7 +365,14 @@ public class UserManager : Singleton<UserManager>
         addPoseDetection(userId);
 
         // show start menu button to transition into Live mode
-        StartCoroutine(joinLivePrompt());
+        if (AppManager.Instance.getMode() == Mode.AUTO)
+        {
+            StartCoroutine(joinLivePrompt());
+        }
+        else
+        {
+            renderOutfit(userId, 1);   // remove hard code later
+        }
 
         Debug.Log("UserManager COROUTINE- ALL DONE!!!!!!");
         yield return null;

@@ -951,7 +951,7 @@ public class AvatarController : MonoBehaviour
             Vector3 elbowLeftFlatPos = elbowLeftLocalPos;
             elbowLeftFlatPos.y = shoulderLeftLocalPos.y;
             float angle = Vector3.Angle(elbowLeftFlatPos, elbowLeftLocalPos);
-            Debug.Log(joint + " Angle = " + angle);
+         //   Debug.Log(joint + " Angle = " + angle);
             //boneTransform.Rotate(boneTransform.right, angle);
             return angle;
         }
