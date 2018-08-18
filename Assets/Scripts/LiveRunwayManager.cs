@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LiveRunwayManager : MonoBehaviour {
     public GameObject outfits;
-    public GameObject canvas;
+   // public GameObject canvas;
     public GameObject fittingRoom;
     //public GameObject userModel;
 
@@ -31,7 +31,7 @@ public class LiveRunwayManager : MonoBehaviour {
     public void ReadyLiveRunway()
     {
         AttachFittingRoom();
-        AttachCanvas();
+      //  AttachCanvas();
         //AttachUserModel();
         Setup();
     }
@@ -52,7 +52,7 @@ public class LiveRunwayManager : MonoBehaviour {
         ClearModels();
         
         UIManager.Instance.HideAll();
-        DetachCanvas();
+     //   DetachCanvas();
         DetachFittingRoom();
         //DetachUserModel();
     }
@@ -61,7 +61,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         UIManager.Instance.ShowGestureGender(gestureGenderShowLength);
     }
-
+    /*
     public void AttachCanvas()
     {
         canvas.SetActive(true);
@@ -71,7 +71,7 @@ public class LiveRunwayManager : MonoBehaviour {
     {
         canvas.SetActive(false);
     }
-
+    */
     public void AttachFittingRoom()
     {
         fittingRoom.SetActive(true);
@@ -103,6 +103,12 @@ public class LiveRunwayManager : MonoBehaviour {
         UIManager.Instance.ShowGestureGender(10.0f);
 
         UIManager.Instance.ShowStickManDelay(11.0f);
+
+        Dictionary<long, User> currentUsers = UserManager.Instance.getCurrentUsers();
+        foreach (KeyValuePair<long, User> user in currentUsers)
+        {
+            UserManager.Instance.renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
+        }
     }
 
     private void PrepareCollectionLiveModelPrefabs()

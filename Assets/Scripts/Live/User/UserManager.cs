@@ -21,6 +21,16 @@ public class UserManager : Singleton<UserManager>
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;
     }
 
+    public List<long> getCurrentUserIds()
+    {
+        List<long> users = new List<long>();
+        foreach (KeyValuePair<long, User> user in userLookup)
+        {
+            users.Add(user.Value.getUserId());
+        }
+        return users;
+    }
+
     public User getUserById(long userId)
     {
         if (userLookup.ContainsKey(userId))
@@ -217,6 +227,16 @@ public class UserManager : Singleton<UserManager>
         GameObject outfitMenuGO = GameObject.Find(outfitMenuName);
         outfitMenuGO.SetActive(false);
         userLookup[userId].setOutfitMenuStatus(false);
+    }
+
+    public void renderOutfit(long userId, int slot)
+    {
+        Debug.Log("User Manager slot = " + slot + " " + userId);
+        string inventoryMenuName = "InventoryMenu_" + slot;
+        GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
+        GameObject slotGO = inventoryMenuGO.transform.Find("slot_" + slot).gameObject;
+        PrefabReference prefabRef = slotGO.GetComponent<PrefabReference>();
+        prefabRef.Load(userLookup[userId].getUserIndex());
     }
 
     protected void addUserScoreUI(long uid)

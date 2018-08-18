@@ -7,6 +7,8 @@ public class User : MonoBehaviour {
     public int uindex;
     public long uid;
     public string ugender;    // switch to enum later
+    public long outfitId = 1;
+    public int inventorySlot = 1;
     public Vector3 uposition;
     public Vector3 genderIconPosition;
     private GameObject userSkeletonGO;
@@ -43,6 +45,11 @@ public class User : MonoBehaviour {
     public Vector3 getPosition()
     {
         return uposition;
+    }
+
+    public int getInventorySlot()
+    {
+        return inventorySlot;
     }
 
     public Vector3 getGenderIconPosition()
