@@ -64,10 +64,6 @@ public class TargetPoseRecognizingAgent : Agent {
                     //KinectInterop.JointData Joint = kinectMgr.GetJointData(KinectUserId, JointIdx);
                     //Vector3 JointRot = Joint.normalRotation.eulerAngles;
                     //AddVectorObs(JointRot);
-
-                    //KinectInterop.JointData Joint = kinectMgr.GetJointData(KinectUserId, JointIdx);
-                    //Vector3 JointLastAngle = new Vector3(Joint.lastAngle, Joint.lastAngle, Joint.lastAngle);
-                    //AddVectorObs(JointLastAngle);
                 }
             }
         }
