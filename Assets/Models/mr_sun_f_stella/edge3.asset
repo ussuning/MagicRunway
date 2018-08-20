@@ -1,0 +1,4730 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baa3485173ea340f684ba7f357a77f79, type: 3}
+  m_Name: edge3
+  m_EditorClassIdentifier: 
+  input: {fileID: 4300018, guid: c8f1e051a07b01446a7764801f4dc5f5, type: 3}
+  scale: {x: 1, y: 1, z: 1}
+  initialized: 1
+  vertexCount: 158
+  heFaces:
+  - index: 0
+    halfEdge: 0
+  - index: 1
+    halfEdge: 3
+  - index: 2
+    halfEdge: 6
+  - index: 3
+    halfEdge: 9
+  - index: 4
+    halfEdge: 12
+  - index: 5
+    halfEdge: 15
+  - index: 6
+    halfEdge: 18
+  - index: 7
+    halfEdge: 21
+  - index: 8
+    halfEdge: 24
+  - index: 9
+    halfEdge: 27
+  - index: 10
+    halfEdge: 30
+  - index: 11
+    halfEdge: 33
+  - index: 12
+    halfEdge: 36
+  - index: 13
+    halfEdge: 39
+  - index: 14
+    halfEdge: 42
+  - index: 15
+    halfEdge: 45
+  - index: 16
+    halfEdge: 48
+  - index: 17
+    halfEdge: 51
+  - index: 18
+    halfEdge: 54
+  - index: 19
+    halfEdge: 57
+  - index: 20
+    halfEdge: 60
+  - index: 21
+    halfEdge: 63
+  - index: 22
+    halfEdge: 66
+  - index: 23
+    halfEdge: 69
+  - index: 24
+    halfEdge: 72
+  - index: 25
+    halfEdge: 75
+  - index: 26
+    halfEdge: 78
+  - index: 27
+    halfEdge: 81
+  - index: 28
+    halfEdge: 84
+  - index: 29
+    halfEdge: 87
+  - index: 30
+    halfEdge: 90
+  - index: 31
+    halfEdge: 93
+  - index: 32
+    halfEdge: 96
+  - index: 33
+    halfEdge: 99
+  - index: 34
+    halfEdge: 102
+  - index: 35
+    halfEdge: 105
+  - index: 36
+    halfEdge: 108
+  - index: 37
+    halfEdge: 111
+  - index: 38
+    halfEdge: 114
+  - index: 39
+    halfEdge: 117
+  - index: 40
+    halfEdge: 120
+  - index: 41
+    halfEdge: 123
+  - index: 42
+    halfEdge: 126
+  - index: 43
+    halfEdge: 129
+  - index: 44
+    halfEdge: 132
+  - index: 45
+    halfEdge: 135
+  - index: 46
+    halfEdge: 138
+  - index: 47
+    halfEdge: 141
+  - index: 48
+    halfEdge: 144
+  - index: 49
+    halfEdge: 147
+  - index: 50
+    halfEdge: 150
+  - index: 51
+    halfEdge: 153
+  - index: 52
+    halfEdge: 156
+  - index: 53
+    halfEdge: 159
+  - index: 54
+    halfEdge: 162
+  - index: 55
+    halfEdge: 165
+  - index: 56
+    halfEdge: 168
+  - index: 57
+    halfEdge: 171
+  - index: 58
+    halfEdge: 174
+  - index: 59
+    halfEdge: 177
+  - index: 60
+    halfEdge: 180
+  - index: 61
+    halfEdge: 183
+  - index: 62
+    halfEdge: 186
+  - index: 63
+    halfEdge: 189
+  - index: 64
+    halfEdge: 192
+  - index: 65
+    halfEdge: 195
+  - index: 66
+    halfEdge: 198
+  - index: 67
+    halfEdge: 201
+  - index: 68
+    halfEdge: 204
+  - index: 69
+    halfEdge: 207
+  - index: 70
+    halfEdge: 210
+  - index: 71
+    halfEdge: 213
+  - index: 72
+    halfEdge: 216
+  - index: 73
+    halfEdge: 219
+  - index: 74
+    halfEdge: 222
+  - index: 75
+    halfEdge: 225
+  - index: 76
+    halfEdge: 228
+  - index: 77
+    halfEdge: 231
+  - index: 78
+    halfEdge: 234
+  - index: 79
+    halfEdge: 237
+  - index: 80
+    halfEdge: 240
+  - index: 81
+    halfEdge: 243
+  - index: 82
+    halfEdge: 246
+  - index: 83
+    halfEdge: 249
+  - index: 84
+    halfEdge: 252
+  - index: 85
+    halfEdge: 255
+  - index: 86
+    halfEdge: 258
+  - index: 87
+    halfEdge: 261
+  - index: 88
+    halfEdge: 264
+  - index: 89
+    halfEdge: 267
+  - index: 90
+    halfEdge: 270
+  - index: 91
+    halfEdge: 273
+  - index: 92
+    halfEdge: 276
+  - index: 93
+    halfEdge: 279
+  - index: 94
+    halfEdge: 282
+  - index: 95
+    halfEdge: 285
+  - index: 96
+    halfEdge: 288
+  - index: 97
+    halfEdge: 291
+  - index: 98
+    halfEdge: 294
+  - index: 99
+    halfEdge: 297
+  - index: 100
+    halfEdge: 300
+  - index: 101
+    halfEdge: 303
+  - index: 102
+    halfEdge: 306
+  - index: 103
+    halfEdge: 309
+  - index: 104
+    halfEdge: 312
+  - index: 105
+    halfEdge: 315
+  - index: 106
+    halfEdge: 318
+  - index: 107
+    halfEdge: 321
+  - index: 108
+    halfEdge: 324
+  - index: 109
+    halfEdge: 327
+  - index: 110
+    halfEdge: 330
+  - index: 111
+    halfEdge: 333
+  - index: 112
+    halfEdge: 336
+  - index: 113
+    halfEdge: 339
+  - index: 114
+    halfEdge: 342
+  - index: 115
+    halfEdge: 345
+  - index: 116
+    halfEdge: 348
+  - index: 117
+    halfEdge: 351
+  - index: 118
+    halfEdge: 354
+  - index: 119
+    halfEdge: 357
+  - index: 120
+    halfEdge: 360
+  - index: 121
+    halfEdge: 363
+  - index: 122
+    halfEdge: 366
+  - index: 123
+    halfEdge: 369
+  - index: 124
+    halfEdge: 372
+  - index: 125
+    halfEdge: 375
+  - index: 126
+    halfEdge: 378
+  - index: 127
+    halfEdge: 381
+  - index: 128
+    halfEdge: 384
+  - index: 129
+    halfEdge: 387
+  - index: 130
+    halfEdge: 390
+  - index: 131
+    halfEdge: 393
+  - index: 132
+    halfEdge: 396
+  - index: 133
+    halfEdge: 399
+  - index: 134
+    halfEdge: 402
+  - index: 135
+    halfEdge: 405
+  - index: 136
+    halfEdge: 408
+  - index: 137
+    halfEdge: 411
+  - index: 138
+    halfEdge: 414
+  - index: 139
+    halfEdge: 417
+  - index: 140
+    halfEdge: 420
+  - index: 141
+    halfEdge: 423
+  - index: 142
+    halfEdge: 426
+  - index: 143
+    halfEdge: 429
+  - index: 144
+    halfEdge: 432
+  - index: 145
+    halfEdge: 435
+  - index: 146
+    halfEdge: 438
+  - index: 147
+    halfEdge: 441
+  - index: 148
+    halfEdge: 444
+  - index: 149
+    halfEdge: 447
+  - index: 150
+    halfEdge: 450
+  - index: 151
+    halfEdge: 453
+  - index: 152
+    halfEdge: 456
+  - index: 153
+    halfEdge: 459
+  - index: 154
+    halfEdge: 462
+  - index: 155
+    halfEdge: 465
+  heHalfEdges:
+  - index: 0
+    indexInFace: 0
+    face: 0
+    nextHalfEdge: 1
+    pair: 4
+    endVertex: 0
+  - index: 1
+    indexInFace: 1
+    face: 0
+    nextHalfEdge: 2
+    pair: 38
+    endVertex: 1
+  - index: 2
+    indexInFace: 2
+    face: 0
+    nextHalfEdge: 0
+    pair: 625
+    endVertex: 2
+  - index: 3
+    indexInFace: 0
+    face: 1
+    nextHalfEdge: 4
+    pair: 604
+    endVertex: 0
+  - index: 4
+    indexInFace: 1
+    face: 1
+    nextHalfEdge: 5
+    pair: 0
+    endVertex: 2
+  - index: 5
+    indexInFace: 2
+    face: 1
+    nextHalfEdge: 3
+    pair: 7
+    endVertex: 3
+  - index: 6
+    indexInFace: 0
+    face: 2
+    nextHalfEdge: 7
+    pair: 10
+    endVertex: 3
+  - index: 7
+    indexInFace: 1
+    face: 2
+    nextHalfEdge: 8
+    pair: 5
+    endVertex: 2
+  - index: 8
+    indexInFace: 2
+    face: 2
+    nextHalfEdge: 6
+    pair: 612
+    endVertex: 4
+  - index: 9
+    indexInFace: 0
+    face: 3
+    nextHalfEdge: 10
+    pair: 613
+    endVertex: 3
+  - index: 10
+    indexInFace: 1
+    face: 3
+    nextHalfEdge: 11
+    pair: 6
+    endVertex: 4
+  - index: 11
+    indexInFace: 2
+    face: 3
+    nextHalfEdge: 9
+    pair: 13
+    endVertex: 5
+  - index: 12
+    indexInFace: 0
+    face: 4
+    nextHalfEdge: 13
+    pair: 16
+    endVertex: 5
+  - index: 13
+    indexInFace: 1
+    face: 4
+    nextHalfEdge: 14
+    pair: 11
+    endVertex: 4
+  - index: 14
+    indexInFace: 2
+    face: 4
+    nextHalfEdge: 12
+    pair: 609
+    endVertex: 6
+  - index: 15
+    indexInFace: 0
+    face: 5
+    nextHalfEdge: 16
+    pair: 494
+    endVertex: 5
+  - index: 16
+    indexInFace: 1
+    face: 5
+    nextHalfEdge: 17
+    pair: 12
+    endVertex: 6
+  - index: 17
+    indexInFace: 2
+    face: 5
+    nextHalfEdge: 15
+    pair: 19
+    endVertex: 7
+  - index: 18
+    indexInFace: 0
+    face: 6
+    nextHalfEdge: 19
+    pair: 22
+    endVertex: 7
+  - index: 19
+    indexInFace: 1
+    face: 6
+    nextHalfEdge: 20
+    pair: 17
+    endVertex: 6
+  - index: 20
+    indexInFace: 2
+    face: 6
+    nextHalfEdge: 18
+    pair: 585
+    endVertex: 8
+  - index: 21
+    indexInFace: 0
+    face: 7
+    nextHalfEdge: 22
+    pair: 619
+    endVertex: 7
+  - index: 22
+    indexInFace: 1
+    face: 7
+    nextHalfEdge: 23
+    pair: 18
+    endVertex: 8
+  - index: 23
+    indexInFace: 2
+    face: 7
+    nextHalfEdge: 21
+    pair: 25
+    endVertex: 9
+  - index: 24
+    indexInFace: 0
+    face: 8
+    nextHalfEdge: 25
+    pair: 28
+    endVertex: 9
+  - index: 25
+    indexInFace: 1
+    face: 8
+    nextHalfEdge: 26
+    pair: 23
+    endVertex: 8
+  - index: 26
+    indexInFace: 2
+    face: 8
+    nextHalfEdge: 24
+    pair: 554
+    endVertex: 10
+  - index: 27
+    indexInFace: 0
+    face: 9
+    nextHalfEdge: 28
+    pair: 587
+    endVertex: 9
+  - index: 28
+    indexInFace: 1
+    face: 9
+    nextHalfEdge: 29
+    pair: 24
+    endVertex: 10
+  - index: 29
+    indexInFace: 2
+    face: 9
+    nextHalfEdge: 27
+    pair: 31
+    endVertex: 11
+  - index: 30
+    indexInFace: 0
+    face: 10
+    nextHalfEdge: 31
+    pair: 34
+    endVertex: 11
+  - index: 31
+    indexInFace: 1
+    face: 10
+    nextHalfEdge: 32
+    pair: 29
+    endVertex: 10
+  - index: 32
+    indexInFace: 2
+    face: 10
+    nextHalfEdge: 30
+    pair: 592
+    endVertex: 12
+  - index: 33
+    indexInFace: 0
+    face: 11
+    nextHalfEdge: 34
+    pair: 623
+    endVertex: 11
+  - index: 34
+    indexInFace: 1
+    face: 11
+    nextHalfEdge: 35
+    pair: 30
+    endVertex: 12
+  - index: 35
+    indexInFace: 2
+    face: 11
+    nextHalfEdge: 33
+    pair: 49
+    endVertex: 13
+  - index: 36
+    indexInFace: 0
+    face: 12
+    nextHalfEdge: 37
+    pair: 602
+    endVertex: 14
+  - index: 37
+    indexInFace: 1
+    face: 12
+    nextHalfEdge: 38
+    pair: 39
+    endVertex: 1
+  - index: 38
+    indexInFace: 2
+    face: 12
+    nextHalfEdge: 36
+    pair: 1
+    endVertex: 0
+  - index: 39
+    indexInFace: 0
+    face: 13
+    nextHalfEdge: 40
+    pair: 37
+    endVertex: 14
+  - index: 40
+    indexInFace: 1
+    face: 13
+    nextHalfEdge: 41
+    pair: 44
+    endVertex: 15
+  - index: 41
+    indexInFace: 2
+    face: 13
+    nextHalfEdge: 39
+    pair: 577
+    endVertex: 1
+  - index: 42
+    indexInFace: 0
+    face: 14
+    nextHalfEdge: 43
+    pair: 594
+    endVertex: 16
+  - index: 43
+    indexInFace: 1
+    face: 14
+    nextHalfEdge: 44
+    pair: 45
+    endVertex: 15
+  - index: 44
+    indexInFace: 2
+    face: 14
+    nextHalfEdge: 42
+    pair: 40
+    endVertex: 14
+  - index: 45
+    indexInFace: 0
+    face: 15
+    nextHalfEdge: 46
+    pair: 43
+    endVertex: 16
+  - index: 46
+    indexInFace: 1
+    face: 15
+    nextHalfEdge: 47
+    pair: 395
+    endVertex: 17
+  - index: 47
+    indexInFace: 2
+    face: 15
+    nextHalfEdge: 45
+    pair: 600
+    endVertex: 15
+  - index: 48
+    indexInFace: 0
+    face: 16
+    nextHalfEdge: 49
+    pair: 52
+    endVertex: 13
+  - index: 49
+    indexInFace: 1
+    face: 16
+    nextHalfEdge: 50
+    pair: 35
+    endVertex: 12
+  - index: 50
+    indexInFace: 2
+    face: 16
+    nextHalfEdge: 48
+    pair: 614
+    endVertex: 18
+  - index: 51
+    indexInFace: 0
+    face: 17
+    nextHalfEdge: 52
+    pair: 601
+    endVertex: 13
+  - index: 52
+    indexInFace: 1
+    face: 17
+    nextHalfEdge: 53
+    pair: 48
+    endVertex: 18
+  - index: 53
+    indexInFace: 2
+    face: 17
+    nextHalfEdge: 51
+    pair: 55
+    endVertex: 19
+  - index: 54
+    indexInFace: 0
+    face: 18
+    nextHalfEdge: 55
+    pair: 58
+    endVertex: 19
+  - index: 55
+    indexInFace: 1
+    face: 18
+    nextHalfEdge: 56
+    pair: 53
+    endVertex: 18
+  - index: 56
+    indexInFace: 2
+    face: 18
+    nextHalfEdge: 54
+    pair: 485
+    endVertex: 20
+  - index: 57
+    indexInFace: 0
+    face: 19
+    nextHalfEdge: 58
+    pair: 566
+    endVertex: 19
+  - index: 58
+    indexInFace: 1
+    face: 19
+    nextHalfEdge: 59
+    pair: 54
+    endVertex: 20
+  - index: 59
+    indexInFace: 2
+    face: 19
+    nextHalfEdge: 57
+    pair: 61
+    endVertex: 21
+  - index: 60
+    indexInFace: 0
+    face: 20
+    nextHalfEdge: 61
+    pair: 64
+    endVertex: 21
+  - index: 61
+    indexInFace: 1
+    face: 20
+    nextHalfEdge: 62
+    pair: 59
+    endVertex: 20
+  - index: 62
+    indexInFace: 2
+    face: 20
+    nextHalfEdge: 60
+    pair: 511
+    endVertex: 22
+  - index: 63
+    indexInFace: 0
+    face: 21
+    nextHalfEdge: 64
+    pair: 584
+    endVertex: 21
+  - index: 64
+    indexInFace: 1
+    face: 21
+    nextHalfEdge: 65
+    pair: 60
+    endVertex: 22
+  - index: 65
+    indexInFace: 2
+    face: 21
+    nextHalfEdge: 63
+    pair: 67
+    endVertex: 23
+  - index: 66
+    indexInFace: 0
+    face: 22
+    nextHalfEdge: 67
+    pair: 70
+    endVertex: 23
+  - index: 67
+    indexInFace: 1
+    face: 22
+    nextHalfEdge: 68
+    pair: 65
+    endVertex: 22
+  - index: 68
+    indexInFace: 2
+    face: 22
+    nextHalfEdge: 66
+    pair: 591
+    endVertex: 24
+  - index: 69
+    indexInFace: 0
+    face: 23
+    nextHalfEdge: 70
+    pair: 590
+    endVertex: 23
+  - index: 70
+    indexInFace: 1
+    face: 23
+    nextHalfEdge: 71
+    pair: 66
+    endVertex: 24
+  - index: 71
+    indexInFace: 2
+    face: 23
+    nextHalfEdge: 69
+    pair: 73
+    endVertex: 25
+  - index: 72
+    indexInFace: 0
+    face: 24
+    nextHalfEdge: 73
+    pair: 76
+    endVertex: 25
+  - index: 73
+    indexInFace: 1
+    face: 24
+    nextHalfEdge: 74
+    pair: 71
+    endVertex: 24
+  - index: 74
+    indexInFace: 2
+    face: 24
+    nextHalfEdge: 72
+    pair: 506
+    endVertex: 26
+  - index: 75
+    indexInFace: 0
+    face: 25
+    nextHalfEdge: 76
+    pair: 548
+    endVertex: 25
+  - index: 76
+    indexInFace: 1
+    face: 25
+    nextHalfEdge: 77
+    pair: 72
+    endVertex: 26
+  - index: 77
+    indexInFace: 2
+    face: 25
+    nextHalfEdge: 75
+    pair: 79
+    endVertex: 27
+  - index: 78
+    indexInFace: 0
+    face: 26
+    nextHalfEdge: 79
+    pair: 82
+    endVertex: 27
+  - index: 79
+    indexInFace: 1
+    face: 26
+    nextHalfEdge: 80
+    pair: 77
+    endVertex: 26
+  - index: 80
+    indexInFace: 2
+    face: 26
+    nextHalfEdge: 78
+    pair: 603
+    endVertex: 28
+  - index: 81
+    indexInFace: 0
+    face: 27
+    nextHalfEdge: 82
+    pair: 582
+    endVertex: 27
+  - index: 82
+    indexInFace: 1
+    face: 27
+    nextHalfEdge: 83
+    pair: 78
+    endVertex: 28
+  - index: 83
+    indexInFace: 2
+    face: 27
+    nextHalfEdge: 81
+    pair: 85
+    endVertex: 29
+  - index: 84
+    indexInFace: 0
+    face: 28
+    nextHalfEdge: 85
+    pair: 88
+    endVertex: 29
+  - index: 85
+    indexInFace: 1
+    face: 28
+    nextHalfEdge: 86
+    pair: 83
+    endVertex: 28
+  - index: 86
+    indexInFace: 2
+    face: 28
+    nextHalfEdge: 84
+    pair: 599
+    endVertex: 30
+  - index: 87
+    indexInFace: 0
+    face: 29
+    nextHalfEdge: 88
+    pair: 596
+    endVertex: 29
+  - index: 88
+    indexInFace: 1
+    face: 29
+    nextHalfEdge: 89
+    pair: 84
+    endVertex: 30
+  - index: 89
+    indexInFace: 2
+    face: 29
+    nextHalfEdge: 87
+    pair: 91
+    endVertex: 31
+  - index: 90
+    indexInFace: 0
+    face: 30
+    nextHalfEdge: 91
+    pair: 94
+    endVertex: 31
+  - index: 91
+    indexInFace: 1
+    face: 30
+    nextHalfEdge: 92
+    pair: 89
+    endVertex: 30
+  - index: 92
+    indexInFace: 2
+    face: 30
+    nextHalfEdge: 90
+    pair: 544
+    endVertex: 32
+  - index: 93
+    indexInFace: 0
+    face: 31
+    nextHalfEdge: 94
+    pair: 521
+    endVertex: 31
+  - index: 94
+    indexInFace: 1
+    face: 31
+    nextHalfEdge: 95
+    pair: 90
+    endVertex: 32
+  - index: 95
+    indexInFace: 2
+    face: 31
+    nextHalfEdge: 93
+    pair: 97
+    endVertex: 33
+  - index: 96
+    indexInFace: 0
+    face: 32
+    nextHalfEdge: 97
+    pair: 100
+    endVertex: 33
+  - index: 97
+    indexInFace: 1
+    face: 32
+    nextHalfEdge: 98
+    pair: 95
+    endVertex: 32
+  - index: 98
+    indexInFace: 2
+    face: 32
+    nextHalfEdge: 96
+    pair: 551
+    endVertex: 34
+  - index: 99
+    indexInFace: 0
+    face: 33
+    nextHalfEdge: 100
+    pair: 593
+    endVertex: 33
+  - index: 100
+    indexInFace: 1
+    face: 33
+    nextHalfEdge: 101
+    pair: 96
+    endVertex: 34
+  - index: 101
+    indexInFace: 2
+    face: 33
+    nextHalfEdge: 99
+    pair: 103
+    endVertex: 35
+  - index: 102
+    indexInFace: 0
+    face: 34
+    nextHalfEdge: 103
+    pair: 106
+    endVertex: 35
+  - index: 103
+    indexInFace: 1
+    face: 34
+    nextHalfEdge: 104
+    pair: 101
+    endVertex: 34
+  - index: 104
+    indexInFace: 2
+    face: 34
+    nextHalfEdge: 102
+    pair: 581
+    endVertex: 36
+  - index: 105
+    indexInFace: 0
+    face: 35
+    nextHalfEdge: 106
+    pair: 605
+    endVertex: 35
+  - index: 106
+    indexInFace: 1
+    face: 35
+    nextHalfEdge: 107
+    pair: 102
+    endVertex: 36
+  - index: 107
+    indexInFace: 2
+    face: 35
+    nextHalfEdge: 105
+    pair: 109
+    endVertex: 37
+  - index: 108
+    indexInFace: 0
+    face: 36
+    nextHalfEdge: 109
+    pair: 112
+    endVertex: 37
+  - index: 109
+    indexInFace: 1
+    face: 36
+    nextHalfEdge: 110
+    pair: 107
+    endVertex: 36
+  - index: 110
+    indexInFace: 2
+    face: 36
+    nextHalfEdge: 108
+    pair: 579
+    endVertex: 38
+  - index: 111
+    indexInFace: 0
+    face: 37
+    nextHalfEdge: 112
+    pair: 557
+    endVertex: 37
+  - index: 112
+    indexInFace: 1
+    face: 37
+    nextHalfEdge: 113
+    pair: 108
+    endVertex: 38
+  - index: 113
+    indexInFace: 2
+    face: 37
+    nextHalfEdge: 111
+    pair: 115
+    endVertex: 39
+  - index: 114
+    indexInFace: 0
+    face: 38
+    nextHalfEdge: 115
+    pair: 118
+    endVertex: 39
+  - index: 115
+    indexInFace: 1
+    face: 38
+    nextHalfEdge: 116
+    pair: 113
+    endVertex: 38
+  - index: 116
+    indexInFace: 2
+    face: 38
+    nextHalfEdge: 114
+    pair: 545
+    endVertex: 40
+  - index: 117
+    indexInFace: 0
+    face: 39
+    nextHalfEdge: 118
+    pair: 583
+    endVertex: 39
+  - index: 118
+    indexInFace: 1
+    face: 39
+    nextHalfEdge: 119
+    pair: 114
+    endVertex: 40
+  - index: 119
+    indexInFace: 2
+    face: 39
+    nextHalfEdge: 117
+    pair: 121
+    endVertex: 41
+  - index: 120
+    indexInFace: 0
+    face: 40
+    nextHalfEdge: 121
+    pair: 124
+    endVertex: 41
+  - index: 121
+    indexInFace: 1
+    face: 40
+    nextHalfEdge: 122
+    pair: 119
+    endVertex: 40
+  - index: 122
+    indexInFace: 2
+    face: 40
+    nextHalfEdge: 120
+    pair: 570
+    endVertex: 42
+  - index: 123
+    indexInFace: 0
+    face: 41
+    nextHalfEdge: 124
+    pair: 569
+    endVertex: 41
+  - index: 124
+    indexInFace: 1
+    face: 41
+    nextHalfEdge: 125
+    pair: 120
+    endVertex: 42
+  - index: 125
+    indexInFace: 2
+    face: 41
+    nextHalfEdge: 123
+    pair: 127
+    endVertex: 43
+  - index: 126
+    indexInFace: 0
+    face: 42
+    nextHalfEdge: 127
+    pair: 130
+    endVertex: 43
+  - index: 127
+    indexInFace: 1
+    face: 42
+    nextHalfEdge: 128
+    pair: 125
+    endVertex: 42
+  - index: 128
+    indexInFace: 2
+    face: 42
+    nextHalfEdge: 126
+    pair: 616
+    endVertex: 44
+  - index: 129
+    indexInFace: 0
+    face: 43
+    nextHalfEdge: 130
+    pair: 567
+    endVertex: 43
+  - index: 130
+    indexInFace: 1
+    face: 43
+    nextHalfEdge: 131
+    pair: 126
+    endVertex: 44
+  - index: 131
+    indexInFace: 2
+    face: 43
+    nextHalfEdge: 129
+    pair: 133
+    endVertex: 45
+  - index: 132
+    indexInFace: 0
+    face: 44
+    nextHalfEdge: 133
+    pair: 136
+    endVertex: 45
+  - index: 133
+    indexInFace: 1
+    face: 44
+    nextHalfEdge: 134
+    pair: 131
+    endVertex: 44
+  - index: 134
+    indexInFace: 2
+    face: 44
+    nextHalfEdge: 132
+    pair: 624
+    endVertex: 46
+  - index: 135
+    indexInFace: 0
+    face: 45
+    nextHalfEdge: 136
+    pair: 565
+    endVertex: 45
+  - index: 136
+    indexInFace: 1
+    face: 45
+    nextHalfEdge: 137
+    pair: 132
+    endVertex: 46
+  - index: 137
+    indexInFace: 2
+    face: 45
+    nextHalfEdge: 135
+    pair: 139
+    endVertex: 47
+  - index: 138
+    indexInFace: 0
+    face: 46
+    nextHalfEdge: 139
+    pair: 142
+    endVertex: 47
+  - index: 139
+    indexInFace: 1
+    face: 46
+    nextHalfEdge: 140
+    pair: 137
+    endVertex: 46
+  - index: 140
+    indexInFace: 2
+    face: 46
+    nextHalfEdge: 138
+    pair: 564
+    endVertex: 48
+  - index: 141
+    indexInFace: 0
+    face: 47
+    nextHalfEdge: 142
+    pair: 595
+    endVertex: 47
+  - index: 142
+    indexInFace: 1
+    face: 47
+    nextHalfEdge: 143
+    pair: 138
+    endVertex: 48
+  - index: 143
+    indexInFace: 2
+    face: 47
+    nextHalfEdge: 141
+    pair: 145
+    endVertex: 49
+  - index: 144
+    indexInFace: 0
+    face: 48
+    nextHalfEdge: 145
+    pair: 148
+    endVertex: 49
+  - index: 145
+    indexInFace: 1
+    face: 48
+    nextHalfEdge: 146
+    pair: 143
+    endVertex: 48
+  - index: 146
+    indexInFace: 2
+    face: 48
+    nextHalfEdge: 144
+    pair: 563
+    endVertex: 50
+  - index: 147
+    indexInFace: 0
+    face: 49
+    nextHalfEdge: 148
+    pair: 549
+    endVertex: 49
+  - index: 148
+    indexInFace: 1
+    face: 49
+    nextHalfEdge: 149
+    pair: 144
+    endVertex: 50
+  - index: 149
+    indexInFace: 2
+    face: 49
+    nextHalfEdge: 147
+    pair: 151
+    endVertex: 51
+  - index: 150
+    indexInFace: 0
+    face: 50
+    nextHalfEdge: 151
+    pair: 154
+    endVertex: 51
+  - index: 151
+    indexInFace: 1
+    face: 50
+    nextHalfEdge: 152
+    pair: 149
+    endVertex: 50
+  - index: 152
+    indexInFace: 2
+    face: 50
+    nextHalfEdge: 150
+    pair: 622
+    endVertex: 52
+  - index: 153
+    indexInFace: 0
+    face: 51
+    nextHalfEdge: 154
+    pair: 598
+    endVertex: 51
+  - index: 154
+    indexInFace: 1
+    face: 51
+    nextHalfEdge: 155
+    pair: 150
+    endVertex: 52
+  - index: 155
+    indexInFace: 2
+    face: 51
+    nextHalfEdge: 153
+    pair: 157
+    endVertex: 53
+  - index: 156
+    indexInFace: 0
+    face: 52
+    nextHalfEdge: 157
+    pair: 160
+    endVertex: 53
+  - index: 157
+    indexInFace: 1
+    face: 52
+    nextHalfEdge: 158
+    pair: 155
+    endVertex: 52
+  - index: 158
+    indexInFace: 2
+    face: 52
+    nextHalfEdge: 156
+    pair: 559
+    endVertex: 54
+  - index: 159
+    indexInFace: 0
+    face: 53
+    nextHalfEdge: 160
+    pair: 558
+    endVertex: 53
+  - index: 160
+    indexInFace: 1
+    face: 53
+    nextHalfEdge: 161
+    pair: 156
+    endVertex: 54
+  - index: 161
+    indexInFace: 2
+    face: 53
+    nextHalfEdge: 159
+    pair: 163
+    endVertex: 55
+  - index: 162
+    indexInFace: 0
+    face: 54
+    nextHalfEdge: 163
+    pair: 166
+    endVertex: 55
+  - index: 163
+    indexInFace: 1
+    face: 54
+    nextHalfEdge: 164
+    pair: 161
+    endVertex: 54
+  - index: 164
+    indexInFace: 2
+    face: 54
+    nextHalfEdge: 162
+    pair: 561
+    endVertex: 56
+  - index: 165
+    indexInFace: 0
+    face: 55
+    nextHalfEdge: 166
+    pair: 575
+    endVertex: 55
+  - index: 166
+    indexInFace: 1
+    face: 55
+    nextHalfEdge: 167
+    pair: 162
+    endVertex: 56
+  - index: 167
+    indexInFace: 2
+    face: 55
+    nextHalfEdge: 165
+    pair: 169
+    endVertex: 57
+  - index: 168
+    indexInFace: 0
+    face: 56
+    nextHalfEdge: 169
+    pair: 172
+    endVertex: 57
+  - index: 169
+    indexInFace: 1
+    face: 56
+    nextHalfEdge: 170
+    pair: 167
+    endVertex: 56
+  - index: 170
+    indexInFace: 2
+    face: 56
+    nextHalfEdge: 168
+    pair: 560
+    endVertex: 58
+  - index: 171
+    indexInFace: 0
+    face: 57
+    nextHalfEdge: 172
+    pair: 589
+    endVertex: 57
+  - index: 172
+    indexInFace: 1
+    face: 57
+    nextHalfEdge: 173
+    pair: 168
+    endVertex: 58
+  - index: 173
+    indexInFace: 2
+    face: 57
+    nextHalfEdge: 171
+    pair: 175
+    endVertex: 59
+  - index: 174
+    indexInFace: 0
+    face: 58
+    nextHalfEdge: 175
+    pair: 178
+    endVertex: 59
+  - index: 175
+    indexInFace: 1
+    face: 58
+    nextHalfEdge: 176
+    pair: 173
+    endVertex: 58
+  - index: 176
+    indexInFace: 2
+    face: 58
+    nextHalfEdge: 174
+    pair: 574
+    endVertex: 60
+  - index: 177
+    indexInFace: 0
+    face: 59
+    nextHalfEdge: 178
+    pair: 615
+    endVertex: 59
+  - index: 178
+    indexInFace: 1
+    face: 59
+    nextHalfEdge: 179
+    pair: 174
+    endVertex: 60
+  - index: 179
+    indexInFace: 2
+    face: 59
+    nextHalfEdge: 177
+    pair: 181
+    endVertex: 61
+  - index: 180
+    indexInFace: 0
+    face: 60
+    nextHalfEdge: 181
+    pair: 184
+    endVertex: 61
+  - index: 181
+    indexInFace: 1
+    face: 60
+    nextHalfEdge: 182
+    pair: 179
+    endVertex: 60
+  - index: 182
+    indexInFace: 2
+    face: 60
+    nextHalfEdge: 180
+    pair: 568
+    endVertex: 62
+  - index: 183
+    indexInFace: 0
+    face: 61
+    nextHalfEdge: 184
+    pair: 555
+    endVertex: 61
+  - index: 184
+    indexInFace: 1
+    face: 61
+    nextHalfEdge: 185
+    pair: 180
+    endVertex: 62
+  - index: 185
+    indexInFace: 2
+    face: 61
+    nextHalfEdge: 183
+    pair: 187
+    endVertex: 63
+  - index: 186
+    indexInFace: 0
+    face: 62
+    nextHalfEdge: 187
+    pair: 190
+    endVertex: 63
+  - index: 187
+    indexInFace: 1
+    face: 62
+    nextHalfEdge: 188
+    pair: 185
+    endVertex: 62
+  - index: 188
+    indexInFace: 2
+    face: 62
+    nextHalfEdge: 186
+    pair: 576
+    endVertex: 64
+  - index: 189
+    indexInFace: 0
+    face: 63
+    nextHalfEdge: 190
+    pair: 611
+    endVertex: 63
+  - index: 190
+    indexInFace: 1
+    face: 63
+    nextHalfEdge: 191
+    pair: 186
+    endVertex: 64
+  - index: 191
+    indexInFace: 2
+    face: 63
+    nextHalfEdge: 189
+    pair: 193
+    endVertex: 65
+  - index: 192
+    indexInFace: 0
+    face: 64
+    nextHalfEdge: 193
+    pair: 196
+    endVertex: 65
+  - index: 193
+    indexInFace: 1
+    face: 64
+    nextHalfEdge: 194
+    pair: 191
+    endVertex: 64
+  - index: 194
+    indexInFace: 2
+    face: 64
+    nextHalfEdge: 192
+    pair: 550
+    endVertex: 66
+  - index: 195
+    indexInFace: 0
+    face: 65
+    nextHalfEdge: 196
+    pair: 610
+    endVertex: 65
+  - index: 196
+    indexInFace: 1
+    face: 65
+    nextHalfEdge: 197
+    pair: 192
+    endVertex: 66
+  - index: 197
+    indexInFace: 2
+    face: 65
+    nextHalfEdge: 195
+    pair: 199
+    endVertex: 67
+  - index: 198
+    indexInFace: 0
+    face: 66
+    nextHalfEdge: 199
+    pair: 202
+    endVertex: 67
+  - index: 199
+    indexInFace: 1
+    face: 66
+    nextHalfEdge: 200
+    pair: 197
+    endVertex: 66
+  - index: 200
+    indexInFace: 2
+    face: 66
+    nextHalfEdge: 198
+    pair: 546
+    endVertex: 68
+  - index: 201
+    indexInFace: 0
+    face: 67
+    nextHalfEdge: 202
+    pair: 571
+    endVertex: 67
+  - index: 202
+    indexInFace: 1
+    face: 67
+    nextHalfEdge: 203
+    pair: 198
+    endVertex: 68
+  - index: 203
+    indexInFace: 2
+    face: 67
+    nextHalfEdge: 201
+    pair: 205
+    endVertex: 69
+  - index: 204
+    indexInFace: 0
+    face: 68
+    nextHalfEdge: 205
+    pair: 208
+    endVertex: 69
+  - index: 205
+    indexInFace: 1
+    face: 68
+    nextHalfEdge: 206
+    pair: 203
+    endVertex: 68
+  - index: 206
+    indexInFace: 2
+    face: 68
+    nextHalfEdge: 204
+    pair: 543
+    endVertex: 70
+  - index: 207
+    indexInFace: 0
+    face: 69
+    nextHalfEdge: 208
+    pair: 542
+    endVertex: 69
+  - index: 208
+    indexInFace: 1
+    face: 69
+    nextHalfEdge: 209
+    pair: 204
+    endVertex: 70
+  - index: 209
+    indexInFace: 2
+    face: 69
+    nextHalfEdge: 207
+    pair: 211
+    endVertex: 71
+  - index: 210
+    indexInFace: 0
+    face: 70
+    nextHalfEdge: 211
+    pair: 214
+    endVertex: 71
+  - index: 211
+    indexInFace: 1
+    face: 70
+    nextHalfEdge: 212
+    pair: 209
+    endVertex: 70
+  - index: 212
+    indexInFace: 2
+    face: 70
+    nextHalfEdge: 210
+    pair: 540
+    endVertex: 72
+  - index: 213
+    indexInFace: 0
+    face: 71
+    nextHalfEdge: 214
+    pair: 539
+    endVertex: 71
+  - index: 214
+    indexInFace: 1
+    face: 71
+    nextHalfEdge: 215
+    pair: 210
+    endVertex: 72
+  - index: 215
+    indexInFace: 2
+    face: 71
+    nextHalfEdge: 213
+    pair: 217
+    endVertex: 73
+  - index: 216
+    indexInFace: 0
+    face: 72
+    nextHalfEdge: 217
+    pair: 220
+    endVertex: 73
+  - index: 217
+    indexInFace: 1
+    face: 72
+    nextHalfEdge: 218
+    pair: 215
+    endVertex: 72
+  - index: 218
+    indexInFace: 2
+    face: 72
+    nextHalfEdge: 216
+    pair: 537
+    endVertex: 74
+  - index: 219
+    indexInFace: 0
+    face: 73
+    nextHalfEdge: 220
+    pair: 536
+    endVertex: 73
+  - index: 220
+    indexInFace: 1
+    face: 73
+    nextHalfEdge: 221
+    pair: 216
+    endVertex: 74
+  - index: 221
+    indexInFace: 2
+    face: 73
+    nextHalfEdge: 219
+    pair: 223
+    endVertex: 75
+  - index: 222
+    indexInFace: 0
+    face: 74
+    nextHalfEdge: 223
+    pair: 226
+    endVertex: 75
+  - index: 223
+    indexInFace: 1
+    face: 74
+    nextHalfEdge: 224
+    pair: 221
+    endVertex: 74
+  - index: 224
+    indexInFace: 2
+    face: 74
+    nextHalfEdge: 222
+    pair: 534
+    endVertex: 76
+  - index: 225
+    indexInFace: 0
+    face: 75
+    nextHalfEdge: 226
+    pair: 533
+    endVertex: 75
+  - index: 226
+    indexInFace: 1
+    face: 75
+    nextHalfEdge: 227
+    pair: 222
+    endVertex: 76
+  - index: 227
+    indexInFace: 2
+    face: 75
+    nextHalfEdge: 225
+    pair: 229
+    endVertex: 77
+  - index: 228
+    indexInFace: 0
+    face: 76
+    nextHalfEdge: 229
+    pair: 232
+    endVertex: 77
+  - index: 229
+    indexInFace: 1
+    face: 76
+    nextHalfEdge: 230
+    pair: 227
+    endVertex: 76
+  - index: 230
+    indexInFace: 2
+    face: 76
+    nextHalfEdge: 228
+    pair: 541
+    endVertex: 78
+  - index: 231
+    indexInFace: 0
+    face: 77
+    nextHalfEdge: 232
+    pair: 487
+    endVertex: 77
+  - index: 232
+    indexInFace: 1
+    face: 77
+    nextHalfEdge: 233
+    pair: 228
+    endVertex: 78
+  - index: 233
+    indexInFace: 2
+    face: 77
+    nextHalfEdge: 231
+    pair: 235
+    endVertex: 79
+  - index: 234
+    indexInFace: 0
+    face: 78
+    nextHalfEdge: 235
+    pair: 238
+    endVertex: 79
+  - index: 235
+    indexInFace: 1
+    face: 78
+    nextHalfEdge: 236
+    pair: 233
+    endVertex: 78
+  - index: 236
+    indexInFace: 2
+    face: 78
+    nextHalfEdge: 234
+    pair: 532
+    endVertex: 80
+  - index: 237
+    indexInFace: 0
+    face: 79
+    nextHalfEdge: 238
+    pair: 535
+    endVertex: 79
+  - index: 238
+    indexInFace: 1
+    face: 79
+    nextHalfEdge: 239
+    pair: 234
+    endVertex: 80
+  - index: 239
+    indexInFace: 2
+    face: 79
+    nextHalfEdge: 237
+    pair: 241
+    endVertex: 81
+  - index: 240
+    indexInFace: 0
+    face: 80
+    nextHalfEdge: 241
+    pair: 244
+    endVertex: 81
+  - index: 241
+    indexInFace: 1
+    face: 80
+    nextHalfEdge: 242
+    pair: 239
+    endVertex: 80
+  - index: 242
+    indexInFace: 2
+    face: 80
+    nextHalfEdge: 240
+    pair: 606
+    endVertex: 82
+  - index: 243
+    indexInFace: 0
+    face: 81
+    nextHalfEdge: 244
+    pair: 524
+    endVertex: 81
+  - index: 244
+    indexInFace: 1
+    face: 81
+    nextHalfEdge: 245
+    pair: 240
+    endVertex: 82
+  - index: 245
+    indexInFace: 2
+    face: 81
+    nextHalfEdge: 243
+    pair: 247
+    endVertex: 83
+  - index: 246
+    indexInFace: 0
+    face: 82
+    nextHalfEdge: 247
+    pair: 250
+    endVertex: 83
+  - index: 247
+    indexInFace: 1
+    face: 82
+    nextHalfEdge: 248
+    pair: 245
+    endVertex: 82
+  - index: 248
+    indexInFace: 2
+    face: 82
+    nextHalfEdge: 246
+    pair: 531
+    endVertex: 84
+  - index: 249
+    indexInFace: 0
+    face: 83
+    nextHalfEdge: 250
+    pair: 530
+    endVertex: 83
+  - index: 250
+    indexInFace: 1
+    face: 83
+    nextHalfEdge: 251
+    pair: 246
+    endVertex: 84
+  - index: 251
+    indexInFace: 2
+    face: 83
+    nextHalfEdge: 249
+    pair: 253
+    endVertex: 85
+  - index: 252
+    indexInFace: 0
+    face: 84
+    nextHalfEdge: 253
+    pair: 256
+    endVertex: 85
+  - index: 253
+    indexInFace: 1
+    face: 84
+    nextHalfEdge: 254
+    pair: 251
+    endVertex: 84
+  - index: 254
+    indexInFace: 2
+    face: 84
+    nextHalfEdge: 252
+    pair: 528
+    endVertex: 86
+  - index: 255
+    indexInFace: 0
+    face: 85
+    nextHalfEdge: 256
+    pair: 527
+    endVertex: 85
+  - index: 256
+    indexInFace: 1
+    face: 85
+    nextHalfEdge: 257
+    pair: 252
+    endVertex: 86
+  - index: 257
+    indexInFace: 2
+    face: 85
+    nextHalfEdge: 255
+    pair: 259
+    endVertex: 87
+  - index: 258
+    indexInFace: 0
+    face: 86
+    nextHalfEdge: 259
+    pair: 262
+    endVertex: 87
+  - index: 259
+    indexInFace: 1
+    face: 86
+    nextHalfEdge: 260
+    pair: 257
+    endVertex: 86
+  - index: 260
+    indexInFace: 2
+    face: 86
+    nextHalfEdge: 258
+    pair: 621
+    endVertex: 88
+  - index: 261
+    indexInFace: 0
+    face: 87
+    nextHalfEdge: 262
+    pair: 525
+    endVertex: 87
+  - index: 262
+    indexInFace: 1
+    face: 87
+    nextHalfEdge: 263
+    pair: 258
+    endVertex: 88
+  - index: 263
+    indexInFace: 2
+    face: 87
+    nextHalfEdge: 261
+    pair: 265
+    endVertex: 89
+  - index: 264
+    indexInFace: 0
+    face: 88
+    nextHalfEdge: 265
+    pair: 268
+    endVertex: 89
+  - index: 265
+    indexInFace: 1
+    face: 88
+    nextHalfEdge: 266
+    pair: 263
+    endVertex: 88
+  - index: 266
+    indexInFace: 2
+    face: 88
+    nextHalfEdge: 264
+    pair: 529
+    endVertex: 90
+  - index: 267
+    indexInFace: 0
+    face: 89
+    nextHalfEdge: 268
+    pair: 500
+    endVertex: 89
+  - index: 268
+    indexInFace: 1
+    face: 89
+    nextHalfEdge: 269
+    pair: 264
+    endVertex: 90
+  - index: 269
+    indexInFace: 2
+    face: 89
+    nextHalfEdge: 267
+    pair: 271
+    endVertex: 91
+  - index: 270
+    indexInFace: 0
+    face: 90
+    nextHalfEdge: 271
+    pair: 274
+    endVertex: 91
+  - index: 271
+    indexInFace: 1
+    face: 90
+    nextHalfEdge: 272
+    pair: 269
+    endVertex: 90
+  - index: 272
+    indexInFace: 2
+    face: 90
+    nextHalfEdge: 270
+    pair: 562
+    endVertex: 92
+  - index: 273
+    indexInFace: 0
+    face: 91
+    nextHalfEdge: 274
+    pair: 523
+    endVertex: 91
+  - index: 274
+    indexInFace: 1
+    face: 91
+    nextHalfEdge: 275
+    pair: 270
+    endVertex: 92
+  - index: 275
+    indexInFace: 2
+    face: 91
+    nextHalfEdge: 273
+    pair: 277
+    endVertex: 93
+  - index: 276
+    indexInFace: 0
+    face: 92
+    nextHalfEdge: 277
+    pair: 280
+    endVertex: 93
+  - index: 277
+    indexInFace: 1
+    face: 92
+    nextHalfEdge: 278
+    pair: 275
+    endVertex: 92
+  - index: 278
+    indexInFace: 2
+    face: 92
+    nextHalfEdge: 276
+    pair: 617
+    endVertex: 94
+  - index: 279
+    indexInFace: 0
+    face: 93
+    nextHalfEdge: 280
+    pair: 573
+    endVertex: 93
+  - index: 280
+    indexInFace: 1
+    face: 93
+    nextHalfEdge: 281
+    pair: 276
+    endVertex: 94
+  - index: 281
+    indexInFace: 2
+    face: 93
+    nextHalfEdge: 279
+    pair: 283
+    endVertex: 95
+  - index: 282
+    indexInFace: 0
+    face: 94
+    nextHalfEdge: 283
+    pair: 286
+    endVertex: 95
+  - index: 283
+    indexInFace: 1
+    face: 94
+    nextHalfEdge: 284
+    pair: 281
+    endVertex: 94
+  - index: 284
+    indexInFace: 2
+    face: 94
+    nextHalfEdge: 282
+    pair: 520
+    endVertex: 96
+  - index: 285
+    indexInFace: 0
+    face: 95
+    nextHalfEdge: 286
+    pair: 519
+    endVertex: 95
+  - index: 286
+    indexInFace: 1
+    face: 95
+    nextHalfEdge: 287
+    pair: 282
+    endVertex: 96
+  - index: 287
+    indexInFace: 2
+    face: 95
+    nextHalfEdge: 285
+    pair: 289
+    endVertex: 97
+  - index: 288
+    indexInFace: 0
+    face: 96
+    nextHalfEdge: 289
+    pair: 292
+    endVertex: 97
+  - index: 289
+    indexInFace: 1
+    face: 96
+    nextHalfEdge: 290
+    pair: 287
+    endVertex: 96
+  - index: 290
+    indexInFace: 2
+    face: 96
+    nextHalfEdge: 288
+    pair: 518
+    endVertex: 98
+  - index: 291
+    indexInFace: 0
+    face: 97
+    nextHalfEdge: 292
+    pair: 517
+    endVertex: 97
+  - index: 292
+    indexInFace: 1
+    face: 97
+    nextHalfEdge: 293
+    pair: 288
+    endVertex: 98
+  - index: 293
+    indexInFace: 2
+    face: 97
+    nextHalfEdge: 291
+    pair: 295
+    endVertex: 99
+  - index: 294
+    indexInFace: 0
+    face: 98
+    nextHalfEdge: 295
+    pair: 298
+    endVertex: 99
+  - index: 295
+    indexInFace: 1
+    face: 98
+    nextHalfEdge: 296
+    pair: 293
+    endVertex: 98
+  - index: 296
+    indexInFace: 2
+    face: 98
+    nextHalfEdge: 294
+    pair: 580
+    endVertex: 100
+  - index: 297
+    indexInFace: 0
+    face: 99
+    nextHalfEdge: 298
+    pair: 608
+    endVertex: 99
+  - index: 298
+    indexInFace: 1
+    face: 99
+    nextHalfEdge: 299
+    pair: 294
+    endVertex: 100
+  - index: 299
+    indexInFace: 2
+    face: 99
+    nextHalfEdge: 297
+    pair: 301
+    endVertex: 101
+  - index: 300
+    indexInFace: 0
+    face: 100
+    nextHalfEdge: 301
+    pair: 304
+    endVertex: 101
+  - index: 301
+    indexInFace: 1
+    face: 100
+    nextHalfEdge: 302
+    pair: 299
+    endVertex: 100
+  - index: 302
+    indexInFace: 2
+    face: 100
+    nextHalfEdge: 300
+    pair: 516
+    endVertex: 102
+  - index: 303
+    indexInFace: 0
+    face: 101
+    nextHalfEdge: 304
+    pair: 538
+    endVertex: 101
+  - index: 304
+    indexInFace: 1
+    face: 101
+    nextHalfEdge: 305
+    pair: 300
+    endVertex: 102
+  - index: 305
+    indexInFace: 2
+    face: 101
+    nextHalfEdge: 303
+    pair: 307
+    endVertex: 103
+  - index: 306
+    indexInFace: 0
+    face: 102
+    nextHalfEdge: 307
+    pair: 310
+    endVertex: 103
+  - index: 307
+    indexInFace: 1
+    face: 102
+    nextHalfEdge: 308
+    pair: 305
+    endVertex: 102
+  - index: 308
+    indexInFace: 2
+    face: 102
+    nextHalfEdge: 306
+    pair: 526
+    endVertex: 104
+  - index: 309
+    indexInFace: 0
+    face: 103
+    nextHalfEdge: 310
+    pair: 514
+    endVertex: 103
+  - index: 310
+    indexInFace: 1
+    face: 103
+    nextHalfEdge: 311
+    pair: 306
+    endVertex: 104
+  - index: 311
+    indexInFace: 2
+    face: 103
+    nextHalfEdge: 309
+    pair: 313
+    endVertex: 105
+  - index: 312
+    indexInFace: 0
+    face: 104
+    nextHalfEdge: 313
+    pair: 316
+    endVertex: 105
+  - index: 313
+    indexInFace: 1
+    face: 104
+    nextHalfEdge: 314
+    pair: 311
+    endVertex: 104
+  - index: 314
+    indexInFace: 2
+    face: 104
+    nextHalfEdge: 312
+    pair: 513
+    endVertex: 106
+  - index: 315
+    indexInFace: 0
+    face: 105
+    nextHalfEdge: 316
+    pair: 512
+    endVertex: 105
+  - index: 316
+    indexInFace: 1
+    face: 105
+    nextHalfEdge: 317
+    pair: 312
+    endVertex: 106
+  - index: 317
+    indexInFace: 2
+    face: 105
+    nextHalfEdge: 315
+    pair: 319
+    endVertex: 107
+  - index: 318
+    indexInFace: 0
+    face: 106
+    nextHalfEdge: 319
+    pair: 322
+    endVertex: 107
+  - index: 319
+    indexInFace: 1
+    face: 106
+    nextHalfEdge: 320
+    pair: 317
+    endVertex: 106
+  - index: 320
+    indexInFace: 2
+    face: 106
+    nextHalfEdge: 318
+    pair: 510
+    endVertex: 108
+  - index: 321
+    indexInFace: 0
+    face: 107
+    nextHalfEdge: 322
+    pair: 509
+    endVertex: 107
+  - index: 322
+    indexInFace: 1
+    face: 107
+    nextHalfEdge: 323
+    pair: 318
+    endVertex: 108
+  - index: 323
+    indexInFace: 2
+    face: 107
+    nextHalfEdge: 321
+    pair: 325
+    endVertex: 109
+  - index: 324
+    indexInFace: 0
+    face: 108
+    nextHalfEdge: 325
+    pair: 328
+    endVertex: 109
+  - index: 325
+    indexInFace: 1
+    face: 108
+    nextHalfEdge: 326
+    pair: 323
+    endVertex: 108
+  - index: 326
+    indexInFace: 2
+    face: 108
+    nextHalfEdge: 324
+    pair: 508
+    endVertex: 110
+  - index: 327
+    indexInFace: 0
+    face: 109
+    nextHalfEdge: 328
+    pair: 507
+    endVertex: 109
+  - index: 328
+    indexInFace: 1
+    face: 109
+    nextHalfEdge: 329
+    pair: 324
+    endVertex: 110
+  - index: 329
+    indexInFace: 2
+    face: 109
+    nextHalfEdge: 327
+    pair: 331
+    endVertex: 111
+  - index: 330
+    indexInFace: 0
+    face: 110
+    nextHalfEdge: 331
+    pair: 334
+    endVertex: 111
+  - index: 331
+    indexInFace: 1
+    face: 110
+    nextHalfEdge: 332
+    pair: 329
+    endVertex: 110
+  - index: 332
+    indexInFace: 2
+    face: 110
+    nextHalfEdge: 330
+    pair: 493
+    endVertex: 112
+  - index: 333
+    indexInFace: 0
+    face: 111
+    nextHalfEdge: 334
+    pair: 578
+    endVertex: 111
+  - index: 334
+    indexInFace: 1
+    face: 111
+    nextHalfEdge: 335
+    pair: 330
+    endVertex: 112
+  - index: 335
+    indexInFace: 2
+    face: 111
+    nextHalfEdge: 333
+    pair: 337
+    endVertex: 113
+  - index: 336
+    indexInFace: 0
+    face: 112
+    nextHalfEdge: 337
+    pair: 340
+    endVertex: 113
+  - index: 337
+    indexInFace: 1
+    face: 112
+    nextHalfEdge: 338
+    pair: 335
+    endVertex: 112
+  - index: 338
+    indexInFace: 2
+    face: 112
+    nextHalfEdge: 336
+    pair: 522
+    endVertex: 114
+  - index: 339
+    indexInFace: 0
+    face: 113
+    nextHalfEdge: 340
+    pair: 505
+    endVertex: 113
+  - index: 340
+    indexInFace: 1
+    face: 113
+    nextHalfEdge: 341
+    pair: 336
+    endVertex: 114
+  - index: 341
+    indexInFace: 2
+    face: 113
+    nextHalfEdge: 339
+    pair: 343
+    endVertex: 115
+  - index: 342
+    indexInFace: 0
+    face: 114
+    nextHalfEdge: 343
+    pair: 346
+    endVertex: 115
+  - index: 343
+    indexInFace: 1
+    face: 114
+    nextHalfEdge: 344
+    pair: 341
+    endVertex: 114
+  - index: 344
+    indexInFace: 2
+    face: 114
+    nextHalfEdge: 342
+    pair: 488
+    endVertex: 116
+  - index: 345
+    indexInFace: 0
+    face: 115
+    nextHalfEdge: 346
+    pair: 503
+    endVertex: 115
+  - index: 346
+    indexInFace: 1
+    face: 115
+    nextHalfEdge: 347
+    pair: 342
+    endVertex: 116
+  - index: 347
+    indexInFace: 2
+    face: 115
+    nextHalfEdge: 345
+    pair: 349
+    endVertex: 117
+  - index: 348
+    indexInFace: 0
+    face: 116
+    nextHalfEdge: 349
+    pair: 352
+    endVertex: 117
+  - index: 349
+    indexInFace: 1
+    face: 116
+    nextHalfEdge: 350
+    pair: 347
+    endVertex: 116
+  - index: 350
+    indexInFace: 2
+    face: 116
+    nextHalfEdge: 348
+    pair: 501
+    endVertex: 118
+  - index: 351
+    indexInFace: 0
+    face: 117
+    nextHalfEdge: 352
+    pair: 499
+    endVertex: 117
+  - index: 352
+    indexInFace: 1
+    face: 117
+    nextHalfEdge: 353
+    pair: 348
+    endVertex: 118
+  - index: 353
+    indexInFace: 2
+    face: 117
+    nextHalfEdge: 351
+    pair: 355
+    endVertex: 119
+  - index: 354
+    indexInFace: 0
+    face: 118
+    nextHalfEdge: 355
+    pair: 358
+    endVertex: 119
+  - index: 355
+    indexInFace: 1
+    face: 118
+    nextHalfEdge: 356
+    pair: 353
+    endVertex: 118
+  - index: 356
+    indexInFace: 2
+    face: 118
+    nextHalfEdge: 354
+    pair: 504
+    endVertex: 120
+  - index: 357
+    indexInFace: 0
+    face: 119
+    nextHalfEdge: 358
+    pair: 496
+    endVertex: 119
+  - index: 358
+    indexInFace: 1
+    face: 119
+    nextHalfEdge: 359
+    pair: 354
+    endVertex: 120
+  - index: 359
+    indexInFace: 2
+    face: 119
+    nextHalfEdge: 357
+    pair: 361
+    endVertex: 121
+  - index: 360
+    indexInFace: 0
+    face: 120
+    nextHalfEdge: 361
+    pair: 364
+    endVertex: 121
+  - index: 361
+    indexInFace: 1
+    face: 120
+    nextHalfEdge: 362
+    pair: 359
+    endVertex: 120
+  - index: 362
+    indexInFace: 2
+    face: 120
+    nextHalfEdge: 360
+    pair: 495
+    endVertex: 122
+  - index: 363
+    indexInFace: 0
+    face: 121
+    nextHalfEdge: 364
+    pair: 620
+    endVertex: 121
+  - index: 364
+    indexInFace: 1
+    face: 121
+    nextHalfEdge: 365
+    pair: 360
+    endVertex: 122
+  - index: 365
+    indexInFace: 2
+    face: 121
+    nextHalfEdge: 363
+    pair: 367
+    endVertex: 123
+  - index: 366
+    indexInFace: 0
+    face: 122
+    nextHalfEdge: 367
+    pair: 370
+    endVertex: 123
+  - index: 367
+    indexInFace: 1
+    face: 122
+    nextHalfEdge: 368
+    pair: 365
+    endVertex: 122
+  - index: 368
+    indexInFace: 2
+    face: 122
+    nextHalfEdge: 366
+    pair: 556
+    endVertex: 124
+  - index: 369
+    indexInFace: 0
+    face: 123
+    nextHalfEdge: 370
+    pair: 547
+    endVertex: 123
+  - index: 370
+    indexInFace: 1
+    face: 123
+    nextHalfEdge: 371
+    pair: 366
+    endVertex: 124
+  - index: 371
+    indexInFace: 2
+    face: 123
+    nextHalfEdge: 369
+    pair: 373
+    endVertex: 125
+  - index: 372
+    indexInFace: 0
+    face: 124
+    nextHalfEdge: 373
+    pair: 376
+    endVertex: 125
+  - index: 373
+    indexInFace: 1
+    face: 124
+    nextHalfEdge: 374
+    pair: 371
+    endVertex: 124
+  - index: 374
+    indexInFace: 2
+    face: 124
+    nextHalfEdge: 372
+    pair: 553
+    endVertex: 126
+  - index: 375
+    indexInFace: 0
+    face: 125
+    nextHalfEdge: 376
+    pair: 588
+    endVertex: 125
+  - index: 376
+    indexInFace: 1
+    face: 125
+    nextHalfEdge: 377
+    pair: 372
+    endVertex: 126
+  - index: 377
+    indexInFace: 2
+    face: 125
+    nextHalfEdge: 375
+    pair: 379
+    endVertex: 127
+  - index: 378
+    indexInFace: 0
+    face: 126
+    nextHalfEdge: 379
+    pair: 382
+    endVertex: 127
+  - index: 379
+    indexInFace: 1
+    face: 126
+    nextHalfEdge: 380
+    pair: 377
+    endVertex: 126
+  - index: 380
+    indexInFace: 2
+    face: 126
+    nextHalfEdge: 378
+    pair: 492
+    endVertex: 128
+  - index: 381
+    indexInFace: 0
+    face: 127
+    nextHalfEdge: 382
+    pair: 491
+    endVertex: 127
+  - index: 382
+    indexInFace: 1
+    face: 127
+    nextHalfEdge: 383
+    pair: 378
+    endVertex: 128
+  - index: 383
+    indexInFace: 2
+    face: 127
+    nextHalfEdge: 381
+    pair: 515
+    endVertex: 129
+  - index: 384
+    indexInFace: 0
+    face: 128
+    nextHalfEdge: 385
+    pair: 388
+    endVertex: 130
+  - index: 385
+    indexInFace: 1
+    face: 128
+    nextHalfEdge: 386
+    pair: 398
+    endVertex: 131
+  - index: 386
+    indexInFace: 2
+    face: 128
+    nextHalfEdge: 384
+    pair: 489
+    endVertex: 132
+  - index: 387
+    indexInFace: 0
+    face: 129
+    nextHalfEdge: 388
+    pair: 486
+    endVertex: 130
+  - index: 388
+    indexInFace: 1
+    face: 129
+    nextHalfEdge: 389
+    pair: 384
+    endVertex: 132
+  - index: 389
+    indexInFace: 2
+    face: 129
+    nextHalfEdge: 387
+    pair: 391
+    endVertex: 133
+  - index: 390
+    indexInFace: 0
+    face: 130
+    nextHalfEdge: 391
+    pair: 394
+    endVertex: 133
+  - index: 391
+    indexInFace: 1
+    face: 130
+    nextHalfEdge: 392
+    pair: 389
+    endVertex: 132
+  - index: 392
+    indexInFace: 2
+    face: 130
+    nextHalfEdge: 390
+    pair: 498
+    endVertex: 17
+  - index: 393
+    indexInFace: 0
+    face: 131
+    nextHalfEdge: 394
+    pair: 484
+    endVertex: 133
+  - index: 394
+    indexInFace: 1
+    face: 131
+    nextHalfEdge: 395
+    pair: 390
+    endVertex: 17
+  - index: 395
+    indexInFace: 2
+    face: 131
+    nextHalfEdge: 393
+    pair: 46
+    endVertex: 16
+  - index: 396
+    indexInFace: 0
+    face: 132
+    nextHalfEdge: 397
+    pair: 483
+    endVertex: 134
+  - index: 397
+    indexInFace: 1
+    face: 132
+    nextHalfEdge: 398
+    pair: 399
+    endVertex: 131
+  - index: 398
+    indexInFace: 2
+    face: 132
+    nextHalfEdge: 396
+    pair: 385
+    endVertex: 130
+  - index: 399
+    indexInFace: 0
+    face: 133
+    nextHalfEdge: 400
+    pair: 397
+    endVertex: 134
+  - index: 400
+    indexInFace: 1
+    face: 133
+    nextHalfEdge: 401
+    pair: 404
+    endVertex: 135
+  - index: 401
+    indexInFace: 2
+    face: 133
+    nextHalfEdge: 399
+    pair: 490
+    endVertex: 131
+  - index: 402
+    indexInFace: 0
+    face: 134
+    nextHalfEdge: 403
+    pair: 482
+    endVertex: 136
+  - index: 403
+    indexInFace: 1
+    face: 134
+    nextHalfEdge: 404
+    pair: 405
+    endVertex: 135
+  - index: 404
+    indexInFace: 2
+    face: 134
+    nextHalfEdge: 402
+    pair: 400
+    endVertex: 134
+  - index: 405
+    indexInFace: 0
+    face: 135
+    nextHalfEdge: 406
+    pair: 403
+    endVertex: 136
+  - index: 406
+    indexInFace: 1
+    face: 135
+    nextHalfEdge: 407
+    pair: 410
+    endVertex: 137
+  - index: 407
+    indexInFace: 2
+    face: 135
+    nextHalfEdge: 405
+    pair: 480
+    endVertex: 135
+  - index: 408
+    indexInFace: 0
+    face: 136
+    nextHalfEdge: 409
+    pair: 497
+    endVertex: 138
+  - index: 409
+    indexInFace: 1
+    face: 136
+    nextHalfEdge: 410
+    pair: 411
+    endVertex: 137
+  - index: 410
+    indexInFace: 2
+    face: 136
+    nextHalfEdge: 408
+    pair: 406
+    endVertex: 136
+  - index: 411
+    indexInFace: 0
+    face: 137
+    nextHalfEdge: 412
+    pair: 409
+    endVertex: 138
+  - index: 412
+    indexInFace: 1
+    face: 137
+    nextHalfEdge: 413
+    pair: 416
+    endVertex: 139
+  - index: 413
+    indexInFace: 2
+    face: 137
+    nextHalfEdge: 411
+    pair: 479
+    endVertex: 137
+  - index: 414
+    indexInFace: 0
+    face: 138
+    nextHalfEdge: 415
+    pair: 502
+    endVertex: 140
+  - index: 415
+    indexInFace: 1
+    face: 138
+    nextHalfEdge: 416
+    pair: 417
+    endVertex: 139
+  - index: 416
+    indexInFace: 2
+    face: 138
+    nextHalfEdge: 414
+    pair: 412
+    endVertex: 138
+  - index: 417
+    indexInFace: 0
+    face: 139
+    nextHalfEdge: 418
+    pair: 415
+    endVertex: 140
+  - index: 418
+    indexInFace: 1
+    face: 139
+    nextHalfEdge: 419
+    pair: 422
+    endVertex: 141
+  - index: 419
+    indexInFace: 2
+    face: 139
+    nextHalfEdge: 417
+    pair: 478
+    endVertex: 139
+  - index: 420
+    indexInFace: 0
+    face: 140
+    nextHalfEdge: 421
+    pair: 424
+    endVertex: 142
+  - index: 421
+    indexInFace: 1
+    face: 140
+    nextHalfEdge: 422
+    pair: 597
+    endVertex: 141
+  - index: 422
+    indexInFace: 2
+    face: 140
+    nextHalfEdge: 420
+    pair: 418
+    endVertex: 140
+  - index: 423
+    indexInFace: 0
+    face: 141
+    nextHalfEdge: 424
+    pair: 428
+    endVertex: 142
+  - index: 424
+    indexInFace: 1
+    face: 141
+    nextHalfEdge: 425
+    pair: 420
+    endVertex: 140
+  - index: 425
+    indexInFace: 2
+    face: 141
+    nextHalfEdge: 423
+    pair: 477
+    endVertex: 143
+  - index: 426
+    indexInFace: 0
+    face: 142
+    nextHalfEdge: 427
+    pair: 430
+    endVertex: 144
+  - index: 427
+    indexInFace: 1
+    face: 142
+    nextHalfEdge: 428
+    pair: 481
+    endVertex: 142
+  - index: 428
+    indexInFace: 2
+    face: 142
+    nextHalfEdge: 426
+    pair: 423
+    endVertex: 143
+  - index: 429
+    indexInFace: 0
+    face: 143
+    nextHalfEdge: 430
+    pair: 434
+    endVertex: 144
+  - index: 430
+    indexInFace: 1
+    face: 143
+    nextHalfEdge: 431
+    pair: 426
+    endVertex: 143
+  - index: 431
+    indexInFace: 2
+    face: 143
+    nextHalfEdge: 429
+    pair: 572
+    endVertex: 145
+  - index: 432
+    indexInFace: 0
+    face: 144
+    nextHalfEdge: 433
+    pair: 476
+    endVertex: 146
+  - index: 433
+    indexInFace: 1
+    face: 144
+    nextHalfEdge: 434
+    pair: 435
+    endVertex: 144
+  - index: 434
+    indexInFace: 2
+    face: 144
+    nextHalfEdge: 432
+    pair: 429
+    endVertex: 145
+  - index: 435
+    indexInFace: 0
+    face: 145
+    nextHalfEdge: 436
+    pair: 433
+    endVertex: 146
+  - index: 436
+    indexInFace: 1
+    face: 145
+    nextHalfEdge: 437
+    pair: 440
+    endVertex: 147
+  - index: 437
+    indexInFace: 2
+    face: 145
+    nextHalfEdge: 435
+    pair: 475
+    endVertex: 144
+  - index: 438
+    indexInFace: 0
+    face: 146
+    nextHalfEdge: 439
+    pair: 552
+    endVertex: 148
+  - index: 439
+    indexInFace: 1
+    face: 146
+    nextHalfEdge: 440
+    pair: 441
+    endVertex: 147
+  - index: 440
+    indexInFace: 2
+    face: 146
+    nextHalfEdge: 438
+    pair: 436
+    endVertex: 146
+  - index: 441
+    indexInFace: 0
+    face: 147
+    nextHalfEdge: 442
+    pair: 439
+    endVertex: 148
+  - index: 442
+    indexInFace: 1
+    face: 147
+    nextHalfEdge: 443
+    pair: 446
+    endVertex: 149
+  - index: 443
+    indexInFace: 2
+    face: 147
+    nextHalfEdge: 441
+    pair: 607
+    endVertex: 147
+  - index: 444
+    indexInFace: 0
+    face: 148
+    nextHalfEdge: 445
+    pair: 474
+    endVertex: 150
+  - index: 445
+    indexInFace: 1
+    face: 148
+    nextHalfEdge: 446
+    pair: 447
+    endVertex: 149
+  - index: 446
+    indexInFace: 2
+    face: 148
+    nextHalfEdge: 444
+    pair: 442
+    endVertex: 148
+  - index: 447
+    indexInFace: 0
+    face: 149
+    nextHalfEdge: 448
+    pair: 445
+    endVertex: 150
+  - index: 448
+    indexInFace: 1
+    face: 149
+    nextHalfEdge: 449
+    pair: 452
+    endVertex: 151
+  - index: 449
+    indexInFace: 2
+    face: 149
+    nextHalfEdge: 447
+    pair: 473
+    endVertex: 149
+  - index: 450
+    indexInFace: 0
+    face: 150
+    nextHalfEdge: 451
+    pair: 586
+    endVertex: 152
+  - index: 451
+    indexInFace: 1
+    face: 150
+    nextHalfEdge: 452
+    pair: 453
+    endVertex: 151
+  - index: 452
+    indexInFace: 2
+    face: 150
+    nextHalfEdge: 450
+    pair: 448
+    endVertex: 150
+  - index: 453
+    indexInFace: 0
+    face: 151
+    nextHalfEdge: 454
+    pair: 451
+    endVertex: 152
+  - index: 454
+    indexInFace: 1
+    face: 151
+    nextHalfEdge: 455
+    pair: 458
+    endVertex: 153
+  - index: 455
+    indexInFace: 2
+    face: 151
+    nextHalfEdge: 453
+    pair: 472
+    endVertex: 151
+  - index: 456
+    indexInFace: 0
+    face: 152
+    nextHalfEdge: 457
+    pair: 460
+    endVertex: 154
+  - index: 457
+    indexInFace: 1
+    face: 152
+    nextHalfEdge: 458
+    pair: 471
+    endVertex: 153
+  - index: 458
+    indexInFace: 2
+    face: 152
+    nextHalfEdge: 456
+    pair: 454
+    endVertex: 152
+  - index: 459
+    indexInFace: 0
+    face: 153
+    nextHalfEdge: 460
+    pair: 464
+    endVertex: 154
+  - index: 460
+    indexInFace: 1
+    face: 153
+    nextHalfEdge: 461
+    pair: 456
+    endVertex: 152
+  - index: 461
+    indexInFace: 2
+    face: 153
+    nextHalfEdge: 459
+    pair: 470
+    endVertex: 155
+  - index: 462
+    indexInFace: 0
+    face: 154
+    nextHalfEdge: 463
+    pair: 466
+    endVertex: 156
+  - index: 463
+    indexInFace: 1
+    face: 154
+    nextHalfEdge: 464
+    pair: 469
+    endVertex: 154
+  - index: 464
+    indexInFace: 2
+    face: 154
+    nextHalfEdge: 462
+    pair: 459
+    endVertex: 155
+  - index: 465
+    indexInFace: 0
+    face: 155
+    nextHalfEdge: 466
+    pair: 468
+    endVertex: 156
+  - index: 466
+    indexInFace: 1
+    face: 155
+    nextHalfEdge: 467
+    pair: 462
+    endVertex: 155
+  - index: 467
+    indexInFace: 2
+    face: 155
+    nextHalfEdge: 465
+    pair: 618
+    endVertex: 157
+  - index: 468
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 618
+    pair: 465
+    endVertex: 157
+  - index: 469
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 468
+    pair: 463
+    endVertex: 156
+  - index: 470
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 586
+    pair: 461
+    endVertex: 152
+  - index: 471
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 469
+    pair: 457
+    endVertex: 154
+  - index: 472
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 471
+    pair: 455
+    endVertex: 153
+  - index: 473
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 472
+    pair: 449
+    endVertex: 151
+  - index: 474
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 552
+    pair: 444
+    endVertex: 148
+  - index: 475
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 607
+    pair: 437
+    endVertex: 147
+  - index: 476
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 572
+    pair: 432
+    endVertex: 145
+  - index: 477
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 502
+    pair: 425
+    endVertex: 140
+  - index: 478
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 597
+    pair: 419
+    endVertex: 141
+  - index: 479
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 478
+    pair: 413
+    endVertex: 139
+  - index: 480
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 479
+    pair: 407
+    endVertex: 137
+  - index: 481
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 475
+    pair: 427
+    endVertex: 144
+  - index: 482
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 483
+    pair: 402
+    endVertex: 134
+  - index: 483
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 486
+    pair: 396
+    endVertex: 130
+  - index: 484
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 594
+    pair: 393
+    endVertex: 16
+  - index: 485
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 614
+    pair: 56
+    endVertex: 18
+  - index: 486
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 484
+    pair: 387
+    endVertex: 133
+  - index: 487
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 535
+    pair: 231
+    endVertex: 79
+  - index: 488
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 522
+    pair: 344
+    endVertex: 114
+  - index: 489
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 490
+    pair: 386
+    endVertex: 131
+  - index: 490
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 480
+    pair: 401
+    endVertex: 135
+  - index: 491
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 515
+    pair: 381
+    endVertex: 129
+  - index: 492
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 553
+    pair: 380
+    endVertex: 126
+  - index: 493
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 508
+    pair: 332
+    endVertex: 110
+  - index: 494
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 619
+    pair: 15
+    endVertex: 7
+  - index: 495
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 504
+    pair: 362
+    endVertex: 120
+  - index: 496
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 620
+    pair: 357
+    endVertex: 121
+  - index: 497
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 482
+    pair: 408
+    endVertex: 136
+  - index: 498
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 489
+    pair: 392
+    endVertex: 132
+  - index: 499
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 496
+    pair: 351
+    endVertex: 119
+  - index: 500
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 523
+    pair: 267
+    endVertex: 91
+  - index: 501
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 488
+    pair: 350
+    endVertex: 116
+  - index: 502
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 497
+    pair: 414
+    endVertex: 138
+  - index: 503
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 499
+    pair: 345
+    endVertex: 117
+  - index: 504
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 501
+    pair: 356
+    endVertex: 118
+  - index: 505
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 503
+    pair: 339
+    endVertex: 115
+  - index: 506
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 591
+    pair: 74
+    endVertex: 24
+  - index: 507
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 578
+    pair: 327
+    endVertex: 111
+  - index: 508
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 510
+    pair: 326
+    endVertex: 108
+  - index: 509
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 507
+    pair: 321
+    endVertex: 109
+  - index: 510
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 513
+    pair: 320
+    endVertex: 106
+  - index: 511
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 485
+    pair: 62
+    endVertex: 20
+  - index: 512
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 509
+    pair: 315
+    endVertex: 107
+  - index: 513
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 526
+    pair: 314
+    endVertex: 104
+  - index: 514
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 512
+    pair: 309
+    endVertex: 105
+  - index: 515
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 492
+    pair: 383
+    endVertex: 128
+  - index: 516
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 580
+    pair: 302
+    endVertex: 100
+  - index: 517
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 608
+    pair: 291
+    endVertex: 99
+  - index: 518
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 520
+    pair: 290
+    endVertex: 96
+  - index: 519
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 517
+    pair: 285
+    endVertex: 97
+  - index: 520
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 617
+    pair: 284
+    endVertex: 94
+  - index: 521
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 593
+    pair: 93
+    endVertex: 33
+  - index: 522
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 493
+    pair: 338
+    endVertex: 112
+  - index: 523
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 573
+    pair: 273
+    endVertex: 93
+  - index: 524
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 530
+    pair: 243
+    endVertex: 83
+  - index: 525
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 500
+    pair: 261
+    endVertex: 89
+  - index: 526
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 516
+    pair: 308
+    endVertex: 102
+  - index: 527
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 525
+    pair: 255
+    endVertex: 87
+  - index: 528
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 531
+    pair: 254
+    endVertex: 84
+  - index: 529
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 621
+    pair: 266
+    endVertex: 88
+  - index: 530
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 527
+    pair: 249
+    endVertex: 85
+  - index: 531
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 606
+    pair: 248
+    endVertex: 82
+  - index: 532
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 541
+    pair: 236
+    endVertex: 78
+  - index: 533
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 487
+    pair: 225
+    endVertex: 77
+  - index: 534
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 537
+    pair: 224
+    endVertex: 74
+  - index: 535
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 524
+    pair: 237
+    endVertex: 81
+  - index: 536
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 533
+    pair: 219
+    endVertex: 75
+  - index: 537
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 540
+    pair: 218
+    endVertex: 72
+  - index: 538
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 514
+    pair: 303
+    endVertex: 103
+  - index: 539
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 536
+    pair: 213
+    endVertex: 73
+  - index: 540
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 543
+    pair: 212
+    endVertex: 70
+  - index: 541
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 534
+    pair: 230
+    endVertex: 76
+  - index: 542
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 539
+    pair: 207
+    endVertex: 71
+  - index: 543
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 546
+    pair: 206
+    endVertex: 68
+  - index: 544
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 599
+    pair: 92
+    endVertex: 30
+  - index: 545
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 579
+    pair: 116
+    endVertex: 38
+  - index: 546
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 550
+    pair: 200
+    endVertex: 66
+  - index: 547
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 588
+    pair: 369
+    endVertex: 125
+  - index: 548
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 582
+    pair: 75
+    endVertex: 27
+  - index: 549
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 598
+    pair: 147
+    endVertex: 51
+  - index: 550
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 576
+    pair: 194
+    endVertex: 64
+  - index: 551
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 544
+    pair: 98
+    endVertex: 32
+  - index: 552
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 476
+    pair: 438
+    endVertex: 146
+  - index: 553
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 556
+    pair: 374
+    endVertex: 124
+  - index: 554
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 585
+    pair: 26
+    endVertex: 8
+  - index: 555
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 611
+    pair: 183
+    endVertex: 63
+  - index: 556
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 495
+    pair: 368
+    endVertex: 122
+  - index: 557
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 583
+    pair: 111
+    endVertex: 39
+  - index: 558
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 575
+    pair: 159
+    endVertex: 55
+  - index: 559
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 622
+    pair: 158
+    endVertex: 52
+  - index: 560
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 561
+    pair: 170
+    endVertex: 56
+  - index: 561
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 559
+    pair: 164
+    endVertex: 54
+  - index: 562
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 529
+    pair: 272
+    endVertex: 90
+  - index: 563
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 564
+    pair: 146
+    endVertex: 48
+  - index: 564
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 624
+    pair: 140
+    endVertex: 46
+  - index: 565
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 595
+    pair: 135
+    endVertex: 47
+  - index: 566
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 584
+    pair: 57
+    endVertex: 21
+  - index: 567
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 565
+    pair: 129
+    endVertex: 45
+  - index: 568
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 574
+    pair: 182
+    endVertex: 60
+  - index: 569
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 567
+    pair: 123
+    endVertex: 43
+  - index: 570
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 545
+    pair: 122
+    endVertex: 40
+  - index: 571
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 542
+    pair: 201
+    endVertex: 69
+  - index: 572
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 477
+    pair: 431
+    endVertex: 143
+  - index: 573
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 519
+    pair: 279
+    endVertex: 95
+  - index: 574
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 560
+    pair: 176
+    endVertex: 58
+  - index: 575
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 589
+    pair: 165
+    endVertex: 57
+  - index: 576
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 568
+    pair: 188
+    endVertex: 62
+  - index: 577
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 600
+    pair: 41
+    endVertex: 15
+  - index: 578
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 505
+    pair: 333
+    endVertex: 113
+  - index: 579
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 581
+    pair: 110
+    endVertex: 36
+  - index: 580
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 518
+    pair: 296
+    endVertex: 98
+  - index: 581
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 551
+    pair: 104
+    endVertex: 34
+  - index: 582
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 596
+    pair: 81
+    endVertex: 29
+  - index: 583
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 569
+    pair: 117
+    endVertex: 41
+  - index: 584
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 590
+    pair: 63
+    endVertex: 23
+  - index: 585
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 609
+    pair: 20
+    endVertex: 6
+  - index: 586
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 474
+    pair: 450
+    endVertex: 150
+  - index: 587
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 623
+    pair: 27
+    endVertex: 11
+  - index: 588
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 491
+    pair: 375
+    endVertex: 127
+  - index: 589
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 615
+    pair: 171
+    endVertex: 59
+  - index: 590
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 548
+    pair: 69
+    endVertex: 25
+  - index: 591
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 511
+    pair: 68
+    endVertex: 22
+  - index: 592
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 554
+    pair: 32
+    endVertex: 10
+  - index: 593
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 605
+    pair: 99
+    endVertex: 35
+  - index: 594
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 602
+    pair: 42
+    endVertex: 14
+  - index: 595
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 549
+    pair: 141
+    endVertex: 49
+  - index: 596
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 521
+    pair: 87
+    endVertex: 31
+  - index: 597
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 481
+    pair: 421
+    endVertex: 142
+  - index: 598
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 558
+    pair: 153
+    endVertex: 53
+  - index: 599
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 603
+    pair: 86
+    endVertex: 28
+  - index: 600
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 498
+    pair: 47
+    endVertex: 17
+  - index: 601
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 566
+    pair: 51
+    endVertex: 19
+  - index: 602
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 604
+    pair: 36
+    endVertex: 0
+  - index: 603
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 506
+    pair: 80
+    endVertex: 26
+  - index: 604
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 613
+    pair: 3
+    endVertex: 3
+  - index: 605
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 557
+    pair: 105
+    endVertex: 37
+  - index: 606
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 532
+    pair: 242
+    endVertex: 80
+  - index: 607
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 473
+    pair: 443
+    endVertex: 149
+  - index: 608
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 538
+    pair: 297
+    endVertex: 101
+  - index: 609
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 612
+    pair: 14
+    endVertex: 4
+  - index: 610
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 571
+    pair: 195
+    endVertex: 67
+  - index: 611
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 610
+    pair: 189
+    endVertex: 65
+  - index: 612
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 625
+    pair: 8
+    endVertex: 2
+  - index: 613
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 494
+    pair: 9
+    endVertex: 5
+  - index: 614
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 592
+    pair: 50
+    endVertex: 12
+  - index: 615
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 555
+    pair: 177
+    endVertex: 61
+  - index: 616
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 570
+    pair: 128
+    endVertex: 42
+  - index: 617
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 562
+    pair: 278
+    endVertex: 92
+  - index: 618
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 470
+    pair: 467
+    endVertex: 155
+  - index: 619
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 587
+    pair: 21
+    endVertex: 9
+  - index: 620
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 547
+    pair: 363
+    endVertex: 123
+  - index: 621
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 528
+    pair: 260
+    endVertex: 86
+  - index: 622
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 563
+    pair: 152
+    endVertex: 50
+  - index: 623
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 601
+    pair: 33
+    endVertex: 13
+  - index: 624
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 616
+    pair: 134
+    endVertex: 44
+  - index: 625
+    indexInFace: -1
+    face: -1
+    nextHalfEdge: 577
+    pair: 2
+    endVertex: 1
+  heVertices:
+  - index: 0
+    halfEdge: 604
+    position: {x: -0.03247152, y: 1.3950291, z: 0.13310094}
+  - index: 1
+    halfEdge: 577
+    position: {x: -0.03422237, y: 1.3970748, z: 0.12935096}
+  - index: 2
+    halfEdge: 625
+    position: {x: -0.017116869, y: 1.4014089, z: 0.13618493}
+  - index: 3
+    halfEdge: 613
+    position: {x: -0.0151622845, y: 1.3996097, z: 0.14001076}
+  - index: 4
+    halfEdge: 612
+    position: {x: -0.0024212736, y: 1.4055401, z: 0.14350985}
+  - index: 5
+    halfEdge: 494
+    position: {x: -0.00034990683, y: 1.403909, z: 0.14751706}
+  - index: 6
+    halfEdge: 609
+    position: {x: 0.010137222, y: 1.4080075, z: 0.1514145}
+  - index: 7
+    halfEdge: 619
+    position: {x: 0.012230055, y: 1.4064375, z: 0.15573034}
+  - index: 8
+    halfEdge: 585
+    position: {x: 0.020833204, y: 1.4087514, z: 0.15956503}
+  - index: 9
+    halfEdge: 587
+    position: {x: 0.02290236, y: 1.4071918, z: 0.16432224}
+  - index: 10
+    halfEdge: 554
+    position: {x: 0.029941263, y: 1.4077117, z: 0.16762742}
+  - index: 11
+    halfEdge: 623
+    position: {x: 0.03199177, y: 1.4061679, z: 0.1729644}
+  - index: 12
+    halfEdge: 592
+    position: {x: 0.038072232, y: 1.4047655, z: 0.1750829}
+  - index: 13
+    halfEdge: 601
+    position: {x: 0.040207434, y: 1.4032098, z: 0.18103343}
+  - index: 14
+    halfEdge: 602
+    position: {x: -0.052542057, y: 1.3916569, z: 0.12667711}
+  - index: 15
+    halfEdge: 600
+    position: {x: -0.05401059, y: 1.3939993, z: 0.12291902}
+  - index: 16
+    halfEdge: 594
+    position: {x: -0.07333838, y: 1.3910307, z: 0.12059778}
+  - index: 17
+    halfEdge: 498
+    position: {x: -0.07446296, y: 1.3936361, z: 0.116821036}
+  - index: 18
+    halfEdge: 614
+    position: {x: 0.045836944, y: 1.399789, z: 0.18141265}
+  - index: 19
+    halfEdge: 566
+    position: {x: 0.048258513, y: 1.3981612, z: 0.18790607}
+  - index: 20
+    halfEdge: 485
+    position: {x: 0.052594546, y: 1.3924817, z: 0.18594594}
+  - index: 21
+    halfEdge: 584
+    position: {x: 0.055333436, y: 1.3907043, z: 0.19278233}
+  - index: 22
+    halfEdge: 511
+    position: {x: 0.05770418, y: 1.3825432, z: 0.18801205}
+  - index: 23
+    halfEdge: 590
+    position: {x: 0.060620613, y: 1.380522, z: 0.19486226}
+  - index: 24
+    halfEdge: 591
+    position: {x: 0.060767487, y: 1.3706555, z: 0.18864006}
+  - index: 25
+    halfEdge: 548
+    position: {x: 0.063696794, y: 1.3683771, z: 0.19527158}
+  - index: 26
+    halfEdge: 506
+    position: {x: 0.061386116, y: 1.3575008, z: 0.18885902}
+  - index: 27
+    halfEdge: 582
+    position: {x: 0.06413875, y: 1.3550329, z: 0.19513595}
+  - index: 28
+    halfEdge: 603
+    position: {x: 0.059174545, y: 1.3441684, z: 0.1886674}
+  - index: 29
+    halfEdge: 596
+    position: {x: 0.061617833, y: 1.3416111, z: 0.1944664}
+  - index: 30
+    halfEdge: 599
+    position: {x: 0.05374731, y: 1.3317479, z: 0.18806355}
+  - index: 31
+    halfEdge: 521
+    position: {x: 0.055805426, y: 1.3292335, z: 0.19327384}
+  - index: 32
+    halfEdge: 544
+    position: {x: 0.0459622, y: 1.3208663, z: 0.18727875}
+  - index: 33
+    halfEdge: 593
+    position: {x: 0.04763134, y: 1.3184569, z: 0.19176239}
+  - index: 34
+    halfEdge: 551
+    position: {x: 0.036677036, y: 1.3121504, z: 0.18654436}
+  - index: 35
+    halfEdge: 605
+    position: {x: 0.038025375, y: 1.3098375, z: 0.19013612}
+  - index: 36
+    halfEdge: 581
+    position: {x: 0.026009312, y: 1.305341, z: 0.18653138}
+  - index: 37
+    halfEdge: 557
+    position: {x: 0.027105603, y: 1.3031241, z: 0.18928607}
+  - index: 38
+    halfEdge: 579
+    position: {x: 0.014076528, y: 1.3001791, z: 0.18791093}
+  - index: 39
+    halfEdge: 583
+    position: {x: 0.014990063, y: 1.2980652, z: 0.19010329}
+  - index: 40
+    halfEdge: 545
+    position: {x: 0.0010409524, y: 1.2957488, z: 0.19021514}
+  - index: 41
+    halfEdge: 569
+    position: {x: 0.0018327521, y: 1.293702, z: 0.19206564}
+  - index: 42
+    halfEdge: 570
+    position: {x: -0.012935146, y: 1.2911339, z: 0.19297613}
+  - index: 43
+    halfEdge: 567
+    position: {x: -0.012212351, y: 1.2890761, z: 0.19465096}
+  - index: 44
+    halfEdge: 616
+    position: {x: -0.027172936, y: 1.2858535, z: 0.19498405}
+  - index: 45
+    halfEdge: 565
+    position: {x: -0.026488565, y: 1.2837211, z: 0.19658367}
+  - index: 46
+    halfEdge: 624
+    position: {x: -0.040993594, y: 1.2794268, z: 0.19502918}
+  - index: 47
+    halfEdge: 595
+    position: {x: -0.04033922, y: 1.2771716, z: 0.19658814}
+  - index: 48
+    halfEdge: 564
+    position: {x: -0.050487563, y: 1.27232, z: 0.19292922}
+  - index: 49
+    halfEdge: 549
+    position: {x: -0.04982404, y: 1.2699249, z: 0.19445537}
+  - index: 50
+    halfEdge: 563
+    position: {x: -0.051745296, y: 1.2649996, z: 0.188502}
+  - index: 51
+    halfEdge: 598
+    position: {x: -0.05100276, y: 1.2624791, z: 0.18997627}
+  - index: 52
+    halfEdge: 622
+    position: {x: -0.04482207, y: 1.2585826, z: 0.18298446}
+  - index: 53
+    halfEdge: 558
+    position: {x: -0.043902066, y: 1.2560073, z: 0.18435454}
+  - index: 54
+    halfEdge: 559
+    position: {x: -0.029773185, y: 1.2541866, z: 0.17761342}
+  - index: 55
+    halfEdge: 575
+    position: {x: -0.028548671, y: 1.2516834, z: 0.17879383}
+  - index: 56
+    halfEdge: 561
+    position: {x: -0.009803271, y: 1.2500468, z: 0.17261676}
+  - index: 57
+    halfEdge: 589
+    position: {x: -0.008199577, y: 1.2476135, z: 0.17358558}
+  - index: 58
+    halfEdge: 560
+    position: {x: 0.01188303, y: 1.2443984, z: 0.1682223}
+  - index: 59
+    halfEdge: 615
+    position: {x: 0.013888202, y: 1.2419037, z: 0.16902134}
+  - index: 60
+    halfEdge: 574
+    position: {x: 0.03304265, y: 1.2358692, z: 0.16585965}
+  - index: 61
+    halfEdge: 555
+    position: {x: 0.03547104, y: 1.2332137, z: 0.16671155}
+  - index: 62
+    halfEdge: 568
+    position: {x: 0.05143253, y: 1.2230873, z: 0.16695844}
+  - index: 63
+    halfEdge: 611
+    position: {x: 0.054305315, y: 1.2202034, z: 0.16826667}
+  - index: 64
+    halfEdge: 576
+    position: {x: 0.066956446, y: 1.2075936, z: 0.17113665}
+  - index: 65
+    halfEdge: 610
+    position: {x: 0.07025, y: 1.2044705, z: 0.17314328}
+  - index: 66
+    halfEdge: 550
+    position: {x: 0.07951814, y: 1.1909286, z: 0.17801224}
+  - index: 67
+    halfEdge: 571
+    position: {x: 0.08316402, y: 1.1876135, z: 0.18079792}
+  - index: 68
+    halfEdge: 546
+    position: {x: 0.08831556, y: 1.1734172, z: 0.18683429}
+  - index: 69
+    halfEdge: 542
+    position: {x: 0.09208681, y: 1.1698905, z: 0.1905193}
+  - index: 70
+    halfEdge: 543
+    position: {x: 0.092546575, y: 1.1553841, z: 0.19685195}
+  - index: 71
+    halfEdge: 539
+    position: {x: 0.09605772, y: 1.1515601, z: 0.20159619}
+  - index: 72
+    halfEdge: 540
+    position: {x: 0.09271382, y: 1.1375501, z: 0.20681444}
+  - index: 73
+    halfEdge: 536
+    position: {x: 0.09586006, y: 1.1334552, z: 0.21246755}
+  - index: 74
+    halfEdge: 537
+    position: {x: 0.089319855, y: 1.1206356, z: 0.21547115}
+  - index: 75
+    halfEdge: 533
+    position: {x: 0.0922771, y: 1.1164087, z: 0.22157256}
+  - index: 76
+    halfEdge: 534
+    position: {x: 0.082314335, y: 1.1051354, z: 0.22152282}
+  - index: 77
+    halfEdge: 487
+    position: {x: 0.085178144, y: 1.1008489, z: 0.22770034}
+  - index: 78
+    halfEdge: 541
+    position: {x: 0.07164691, y: 1.0915439, z: 0.22367027}
+  - index: 79
+    halfEdge: 535
+    position: {x: 0.07443247, y: 1.0872037, z: 0.22964011}
+  - index: 80
+    halfEdge: 532
+    position: {x: 0.056260336, y: 1.0804456, z: 0.22285642}
+  - index: 81
+    halfEdge: 524
+    position: {x: 0.058934085, y: 1.076099, z: 0.22831972}
+  - index: 82
+    halfEdge: 606
+    position: {x: 0.03509741, y: 1.0724252, z: 0.22002421}
+  - index: 83
+    halfEdge: 530
+    position: {x: 0.037577026, y: 1.0681604, z: 0.22466697}
+  - index: 84
+    halfEdge: 531
+    position: {x: 0.009542433, y: 1.0670418, z: 0.21466811}
+  - index: 85
+    halfEdge: 527
+    position: {x: 0.011743222, y: 1.0630015, z: 0.21836904}
+  - index: 86
+    halfEdge: 528
+    position: {x: -0.019020278, y: 1.0638545, z: 0.20628257}
+  - index: 87
+    halfEdge: 525
+    position: {x: -0.01718539, y: 1.0602354, z: 0.209113}
+  - index: 88
+    halfEdge: 621
+    position: {x: -0.048088465, y: 1.0614933, z: 0.19562061}
+  - index: 89
+    halfEdge: 500
+    position: {x: -0.046683855, y: 1.0583892, z: 0.19771986}
+  - index: 90
+    halfEdge: 529
+    position: {x: -0.07515986, y: 1.0585884, z: 0.18343534}
+  - index: 91
+    halfEdge: 523
+    position: {x: -0.0742272, y: 1.0559896, z: 0.1850106}
+  - index: 92
+    halfEdge: 562
+    position: {x: -0.09711062, y: 1.0534567, z: 0.17150095}
+  - index: 93
+    halfEdge: 573
+    position: {x: -0.09661555, y: 1.051271, z: 0.17277943}
+  - index: 94
+    halfEdge: 617
+    position: {x: -0.110816896, y: 1.0444158, z: 0.16159163}
+  - index: 95
+    halfEdge: 519
+    position: {x: -0.11064904, y: 1.0424671, z: 0.16282047}
+  - index: 96
+    halfEdge: 520
+    position: {x: -0.11542949, y: 1.0339642, z: 0.15455228}
+  - index: 97
+    halfEdge: 517
+    position: {x: -0.11543802, y: 1.0321134, z: 0.15589759}
+  - index: 98
+    halfEdge: 518
+    position: {x: -0.11009921, y: 1.0246009, z: 0.15122779}
+  - index: 99
+    halfEdge: 608
+    position: {x: -0.11009286, y: 1.0227451, z: 0.15277468}
+  - index: 100
+    halfEdge: 580
+    position: {x: -0.09682308, y: 1.0164604, z: 0.15166983}
+  - index: 101
+    halfEdge: 538
+    position: {x: -0.096715435, y: 1.0144925, z: 0.15336248}
+  - index: 102
+    halfEdge: 516
+    position: {x: -0.07759816, y: 1.009678, z: 0.1559301}
+  - index: 103
+    halfEdge: 514
+    position: {x: -0.07740763, y: 1.0074857, z: 0.15757175}
+  - index: 104
+    halfEdge: 526
+    position: {x: -0.05756748, y: 1.0037818, z: 0.16229999}
+  - index: 105
+    halfEdge: 512
+    position: {x: -0.057318874, y: 1.0013032, z: 0.16391796}
+  - index: 106
+    halfEdge: 513
+    position: {x: -0.04187404, y: 0.9983, z: 0.16907094}
+  - index: 107
+    halfEdge: 509
+    position: {x: -0.041598618, y: 0.99552244, z: 0.17091663}
+  - index: 108
+    halfEdge: 510
+    position: {x: -0.03062838, y: 0.99152076, z: 0.17608304}
+  - index: 109
+    halfEdge: 507
+    position: {x: -0.030288113, y: 0.9886234, z: 0.17829494}
+  - index: 110
+    halfEdge: 508
+    position: {x: -0.02394103, y: 0.98173183, z: 0.18317652}
+  - index: 111
+    halfEdge: 578
+    position: {x: -0.02342859, y: 0.9790858, z: 0.18578018}
+  - index: 112
+    halfEdge: 493
+    position: {x: -0.021457285, y: 0.97003067, z: 0.18915465}
+  - index: 113
+    halfEdge: 505
+    position: {x: -0.020769086, y: 0.9677983, z: 0.19204578}
+  - index: 114
+    halfEdge: 522
+    position: {x: -0.02282244, y: 0.95751417, z: 0.19282092}
+  - index: 115
+    halfEdge: 503
+    position: {x: -0.022058636, y: 0.95564955, z: 0.19576523}
+  - index: 116
+    halfEdge: 488
+    position: {x: -0.028033242, y: 0.94471985, z: 0.19365326}
+  - index: 117
+    halfEdge: 499
+    position: {x: -0.027264304, y: 0.94310254, z: 0.19647552}
+  - index: 118
+    halfEdge: 501
+    position: {x: -0.03708644, y: 0.93218493, z: 0.19112961}
+  - index: 119
+    halfEdge: 496
+    position: {x: -0.036353145, y: 0.9306201, z: 0.19371359}
+  - index: 120
+    halfEdge: 504
+    position: {x: -0.05104244, y: 0.9194083, z: 0.1840911}
+  - index: 121
+    halfEdge: 620
+    position: {x: -0.050327204, y: 0.9178163, z: 0.18640095}
+  - index: 122
+    halfEdge: 495
+    position: {x: -0.07096164, y: 0.9058888, z: 0.17137888}
+  - index: 123
+    halfEdge: 547
+    position: {x: -0.070188515, y: 0.90430534, z: 0.17345908}
+  - index: 124
+    halfEdge: 556
+    position: {x: -0.09353611, y: 0.89340603, z: 0.1547943}
+  - index: 125
+    halfEdge: 588
+    position: {x: -0.09263612, y: 0.89189285, z: 0.15676472}
+  - index: 126
+    halfEdge: 553
+    position: {x: -0.11545793, y: 0.88373977, z: 0.13613886}
+  - index: 127
+    halfEdge: 491
+    position: {x: -0.11436909, y: 0.8823848, z: 0.13819458}
+  - index: 128
+    halfEdge: 492
+    position: {x: -0.13705342, y: 0.87548155, z: 0.11644796}
+  - index: 129
+    halfEdge: 515
+    position: {x: -0.1357447, y: 0.87432885, z: 0.11868657}
+  - index: 130
+    halfEdge: 486
+    position: {x: -0.10870495, y: 1.4021168, z: 0.10964664}
+  - index: 131
+    halfEdge: 490
+    position: {x: -0.1090827, y: 1.4048775, z: 0.10600271}
+  - index: 132
+    halfEdge: 489
+    position: {x: -0.093560904, y: 1.3974388, z: 0.11098889}
+  - index: 133
+    halfEdge: 484
+    position: {x: -0.092825, y: 1.3946882, z: 0.11472151}
+  - index: 134
+    halfEdge: 483
+    position: {x: -0.11868127, y: 1.4128036, z: 0.10597162}
+  - index: 135
+    halfEdge: 480
+    position: {x: -0.118806586, y: 1.4154221, z: 0.10244273}
+  - index: 136
+    halfEdge: 482
+    position: {x: -0.12558986, y: 1.4247905, z: 0.10054248}
+  - index: 137
+    halfEdge: 479
+    position: {x: -0.12551275, y: 1.4271324, z: 0.097212054}
+  - index: 138
+    halfEdge: 497
+    position: {x: -0.13226666, y: 1.4361187, z: 0.09020529}
+  - index: 139
+    halfEdge: 478
+    position: {x: -0.13198136, y: 1.4380689, z: 0.08721382}
+  - index: 140
+    halfEdge: 502
+    position: {x: -0.13844411, y: 1.4458493, z: 0.07822336}
+  - index: 141
+    halfEdge: 597
+    position: {x: -0.13798624, y: 1.4474233, z: 0.07560503}
+  - index: 142
+    halfEdge: 481
+    position: {x: -0.14330128, y: 1.4543889, z: 0.06554263}
+  - index: 143
+    halfEdge: 477
+    position: {x: -0.1438547, y: 1.4530433, z: 0.06786001}
+  - index: 144
+    halfEdge: 475
+    position: {x: -0.1487145, y: 1.4593955, z: 0.056410693}
+  - index: 145
+    halfEdge: 572
+    position: {x: -0.14933366, y: 1.4581863, z: 0.058456477}
+  - index: 146
+    halfEdge: 476
+    position: {x: -0.15571624, y: 1.4617637, z: 0.049354}
+  - index: 147
+    halfEdge: 607
+    position: {x: -0.1550139, y: 1.4628738, z: 0.047593262}
+  - index: 148
+    halfEdge: 552
+    position: {x: -0.16417885, y: 1.463132, z: 0.040348843}
+  - index: 149
+    halfEdge: 473
+    position: {x: -0.16337606, y: 1.4641688, z: 0.038875837}
+  - index: 150
+    halfEdge: 474
+    position: {x: -0.1758979, y: 1.461647, z: 0.031237246}
+  - index: 151
+    halfEdge: 472
+    position: {x: -0.17497754, y: 1.462626, z: 0.030043874}
+  - index: 152
+    halfEdge: 586
+    position: {x: -0.18716171, y: 1.4587816, z: 0.023833489}
+  - index: 153
+    halfEdge: 471
+    position: {x: -0.18614714, y: 1.4597107, z: 0.02286025}
+  - index: 154
+    halfEdge: 469
+    position: {x: -0.19321367, y: 1.4568887, z: 0.019087836}
+  - index: 155
+    halfEdge: 470
+    position: {x: -0.19425869, y: 1.456008, z: 0.019951848}
+  - index: 156
+    halfEdge: 468
+    position: {x: -0.19822867, y: 1.4541132, z: 0.017021026}
+  - index: 157
+    halfEdge: 618
+    position: {x: -0.19927225, y: 1.45328, z: 0.017831266}
+  heOrientations:
+  - {x: -0.5630922, y: 0.119922236, z: -0.7421041, w: -0.34325975}
+  - {x: -0.7436893, y: -0.3313237, z: 0.5644902, w: -0.13602044}
+  - {x: -0.74259377, y: -0.368092, z: 0.549138, w: -0.10728519}
+  - {x: -0.5270765, y: 0.104596145, z: -0.75802517, w: -0.36965904}
+  - {x: -0.75829685, y: -0.37798643, z: 0.52225214, w: -0.09677206}
+  - {x: -0.4690198, y: 0.11263975, z: -0.79768264, w: -0.36198762}
+  - {x: -0.7997243, y: -0.34985954, z: 0.47599322, w: -0.1070973}
+  - {x: -0.4138096, y: 0.12409415, z: -0.8430533, w: -0.32034877}
+  - {x: -0.8483505, y: -0.2806036, z: 0.4327285, w: -0.11962059}
+  - {x: -0.3684845, y: 0.13127604, z: -0.8916595, w: -0.22787979}
+  - {x: -0.8980796, y: -0.12635595, z: 0.4010173, w: -0.12912135}
+  - {x: -0.3708762, y: 0.12686881, z: -0.91896164, w: -0.04317978}
+  - {x: -0.9005614, y: 0.106891334, z: 0.40103012, w: -0.12937616}
+  - {x: -0.43243495, y: 0.13186184, z: -0.8746913, w: 0.17472143}
+  - {x: -0.5817623, y: 0.1517897, z: -0.74018985, w: -0.3010507}
+  - {x: -0.7580326, y: -0.28274179, z: 0.56031406, w: -0.17745906}
+  - {x: -0.57972056, y: 0.19860287, z: -0.7514761, w: -0.24446766}
+  - {x: -0.7851575, y: -0.20997736, z: 0.53404427, w: -0.23288175}
+  - {x: -0.8329294, y: 0.30168945, z: 0.44226533, w: -0.14004804}
+  - {x: -0.50943035, y: 0.16920231, z: -0.76927674, w: 0.34650296}
+  - {x: -0.72012424, y: 0.44199038, z: 0.5029706, w: -0.18189579}
+  - {x: -0.5948972, y: 0.2522897, z: -0.61686313, w: 0.44936308}
+  - {x: -0.5809949, y: 0.51165825, z: 0.5750014, w: -0.26462084}
+  - {x: -0.6225209, y: 0.323342, z: -0.5008748, w: 0.506993}
+  - {x: 0.47317848, y: -0.5589168, z: -0.5952774, w: 0.33069447}
+  - {x: -0.61294335, y: 0.3751571, z: -0.41454798, w: 0.55830777}
+  - {x: 0.38918352, y: -0.60763586, z: -0.5800692, w: 0.37793472}
+  - {x: -0.5928357, y: 0.43174705, z: -0.3261697, w: 0.5964509}
+  - {x: 0.30066544, y: -0.64652425, z: -0.55400544, w: 0.42974952}
+  - {x: -0.5597273, y: 0.49716398, z: -0.22774719, w: 0.62262714}
+  - {x: 0.20473617, y: -0.6705835, z: -0.518258, w: 0.48970336}
+  - {x: -0.5167912, y: 0.5506742, z: -0.14210846, w: 0.63991404}
+  - {x: 0.122902766, y: -0.684499, z: -0.4792106, w: 0.53545606}
+  - {x: -0.4767448, y: 0.5906104, z: -0.060957953, w: 0.64821124}
+  - {x: 0.03554501, y: -0.6958084, z: -0.4409853, w: 0.5657908}
+  - {x: -0.4369604, y: 0.5993507, z: 0.023514314, w: 0.670292}
+  - {x: -0.060674492, y: -0.7155841, z: -0.40093824, w: 0.5687762}
+  - {x: -0.39461917, y: 0.578503, z: 0.111929, w: 0.70504016}
+  - {x: -0.14634347, y: -0.735016, z: -0.36653987, w: 0.5513469}
+  - {x: -0.36689943, y: 0.55383015, z: 0.18022291, w: 0.72538036}
+  - {x: -0.19785872, y: -0.7377289, z: -0.35808244, w: 0.53701466}
+  - {x: -0.36678925, y: 0.5304691, z: 0.21367468, w: 0.7337651}
+  - {x: -0.2150235, y: -0.7324207, z: -0.37531367, w: 0.5257989}
+  - {x: -0.390584, y: 0.5249849, z: 0.21932246, w: 0.7236938}
+  - {x: -0.20295942, y: -0.7094755, z: -0.4162805, w: 0.5311897}
+  - {x: -0.43887204, y: 0.53475136, z: 0.196208, w: 0.69493496}
+  - {x: -0.16199428, y: -0.66614854, z: -0.47904122, w: 0.5482}
+  - {x: -0.5157901, y: 0.5290489, z: 0.12159827, w: 0.66278327}
+  - {x: -0.026025858, y: -0.5824249, z: -0.5919783, w: 0.55647606}
+  - {x: -0.64324343, y: 0.5100554, z: -0.12949854, w: 0.5561576}
+  - {x: 0.3557535, y: -0.30718192, z: -0.7035086, w: 0.5330613}
+  - {x: -0.7152897, y: 0.5225065, z: -0.4329795, w: 0.16696179}
+  - {x: 0.545782, y: 0.027065609, z: -0.68060684, w: 0.48802012}
+  - {x: -0.6991954, y: 0.4624813, z: -0.530976, w: -0.123698846}
+  - {x: 0.56406075, y: 0.19135118, z: -0.670991, w: 0.4415781}
+  - {x: -0.66737133, y: 0.43527806, z: -0.5655333, w: -0.21288599}
+  - {x: 0.57409585, y: 0.22953956, z: -0.65616465, w: 0.4326355}
+  - {x: -0.6349607, y: 0.44244286, z: -0.59394634, w: -0.21976525}
+  - {x: 0.5949332, y: 0.22345752, z: -0.63108164, w: 0.4448112}
+  - {x: -0.5828801, y: 0.45975694, z: -0.6434088, w: -0.18681397}
+  - {x: -0.6436967, y: -0.17971845, z: 0.58847064, w: -0.45503646}
+  - {x: -0.51697177, y: 0.4473482, z: -0.7256784, w: -0.07752925}
+  - {x: -0.7189362, y: 0.00806016, z: 0.5664584, w: -0.402729}
+  - {x: -0.54573137, y: 0.30448312, z: -0.75720817, w: 0.19000778}
+  - {x: -0.636388, y: 0.44938478, z: 0.6091738, w: -0.14822543}
+  - {x: -0.582006, y: 0.07758759, z: -0.5991161, w: 0.5443427}
+  - {x: 0.45154208, y: -0.6947583, z: -0.5596107, w: -0.016009767}
+  - {x: -0.55107, y: 0.017652547, z: -0.42612404, w: 0.71723676}
+  - {x: 0.34998155, y: -0.78159124, z: -0.5163013, w: -0.007819126}
+  - {x: -0.5146643, y: 0.07335433, z: -0.32770848, w: 0.7888897}
+  - {x: 0.29852042, y: -0.8182591, z: -0.48582336, w: 0.07289067}
+  - {x: -0.4840095, y: 0.15721373, z: -0.28455794, w: 0.8124318}
+  - {x: 0.2709909, y: -0.8275113, z: -0.4642197, w: 0.1621389}
+  - {x: -0.46847802, y: 0.24101123, z: -0.24339668, w: 0.8143709}
+  - {x: 0.22893369, y: -0.82510763, z: -0.45572498, w: 0.24310789}
+  - {x: -0.47006723, y: 0.34093854, z: -0.17310609, w: 0.7955073}
+  - {x: 0.16214961, y: -0.80344117, z: -0.46152267, w: 0.33939108}
+  - {x: -0.47950214, y: 0.46539232, z: -0.08041395, w: 0.739609}
+  - {x: 0.06454443, y: -0.75404817, z: -0.4660174, w: 0.45833737}
+  - {x: -0.46445343, y: 0.5720229, z: 0.0278365, w: 0.67549825}
+  - {x: -0.05134728, y: -0.7006062, z: -0.43927446, w: 0.5599575}
+  - {x: -0.42381468, y: 0.6410574, z: 0.13025972, w: 0.6264652}
+  - {x: -0.14637905, y: -0.64798176, z: -0.4082055, w: 0.62614787}
+  - {x: -0.40365776, y: 0.67577034, z: 0.2030192, w: 0.58238983}
+  - {x: -0.20927623, y: -0.5934016, z: -0.4080836, w: 0.6614724}
+  - {x: -0.41162667, y: 0.6931641, z: 0.25376114, w: 0.5345017}
+  - {x: -0.25281745, y: -0.5374097, z: -0.4279831, w: 0.6812522}
+  - {x: 0.43993178, y: -0.69293123, z: -0.27924448, w: -0.498326}
+  - {x: -0.27192572, y: -0.49395356, z: -0.46381077, w: 0.6833344}
+  - {x: 0.47966287, y: -0.6844174, z: -0.28024578, w: -0.47218502}
+  - {x: -0.26428297, y: -0.4619792, z: -0.5053552, w: 0.67922443}
+  - {x: 0.52274114, y: -0.669066, z: -0.24069804, w: -0.47027326}
+  - {x: -0.20770848, y: -0.4506001, z: -0.5503395, w: 0.67152286}
+  - {x: -0.57098395, y: 0.6356938, z: 0.115340345, w: 0.50652474}
+  - {x: -0.04391746, y: -0.46000925, z: -0.60254383, w: 0.6506946}
+  - {x: -0.59649765, y: 0.60701567, z: -0.10729421, w: 0.51401407}
+  - {x: 0.27396476, y: -0.37398702, z: -0.6312885, w: 0.62173295}
+  - {x: -0.58595884, y: 0.5740163, z: -0.47222713, w: 0.32273692}
+  - {x: 0.6459444, y: -0.069285266, z: -0.5638762, w: 0.50990075}
+  - {x: -0.5603057, y: 0.4652971, z: -0.684955, w: -0.01981643}
+  - {x: -0.73344404, y: -0.13315724, z: 0.5288594, w: -0.4057545}
+  - {x: -0.52385634, y: 0.3875799, z: -0.7356648, w: -0.18480715}
+  - {x: -0.74665624, y: -0.24063204, z: 0.50073415, w: -0.36587718}
+  - {x: -0.47839364, y: 0.37220737, z: -0.7481598, w: -0.2699221}
+  - {x: -0.7486026, y: -0.30236796, z: 0.46518758, w: -0.36299878}
+  - {x: -0.417465, y: 0.37867874, z: -0.7694809, w: -0.3003737}
+  - {x: -0.76892775, y: -0.31619635, z: 0.41658694, w: -0.36772972}
+  - {x: -0.3306564, y: 0.39288932, z: -0.81555754, w: -0.26677707}
+  - {x: -0.8161009, y: -0.24498922, z: 0.34725603, w: -0.39162806}
+  - {x: -0.23016095, y: 0.413958, z: -0.8739525, w: -0.10895665}
+  - {x: -0.8470252, y: 0.10640176, z: 0.31518996, w: -0.41458666}
+  - {x: -0.35653603, y: 0.3481102, z: -0.7764556, w: 0.38576928}
+  - {x: 0.56842214, y: -0.64035493, z: -0.4235256, w: 0.2957497}
+  - {x: -0.48579088, y: 0.35944724, z: -0.45090365, w: 0.6568794}
+  - {x: 0.37696618, y: -0.7137868, z: -0.4703382, w: 0.35663286}
+  - {x: -0.5123327, y: 0.47063175, z: -0.27535143, w: 0.6634776}
+  - {x: 0.24468037, y: -0.69239783, z: -0.49061278, w: 0.46905836}
+  - {x: -0.51458555, y: 0.5747877, z: -0.15042737, w: 0.618217}
+  - {x: 0.13279535, y: -0.638698, z: -0.49860814, w: 0.5708067}
+  - {x: -0.51235473, y: 0.64939564, z: -0.049717724, w: 0.5597373}
+  - {x: 0.03823241, y: -0.57150733, z: -0.50676554, w: 0.64428747}
+  - {x: -0.517294, y: 0.6865044, z: 0.021956762, w: 0.5105255}
+  - {x: -0.028095352, y: -0.5148623, z: -0.520419, w: 0.6806553}
+  - {x: 0.53089356, y: -0.7004372, z: -0.068566486, w: -0.47205767}
+  - {x: -0.070163205, y: -0.4714959, z: -0.5384613, w: 0.6948584}
+  - {x: 0.5430276, y: -0.7152112, z: -0.105307765, w: -0.42720506}
+  - {x: -0.10299946, y: -0.42547384, z: -0.5482936, w: 0.7125568}
+  - {x: 0.5455722, y: -0.7253907, z: -0.118672736, w: -0.40258673}
+  - {x: -0.1164174, y: -0.40302113, z: -0.5464772, w: 0.7248334}
+  - {x: 0.46259043, y: -0.8248906, z: -0.30656713, w: -0.10761991}
+  - {x: -0.5273592, y: 0.32957092, z: -0.7825461, w: -0.029944927}
+  - {x: -0.8073027, y: 0.05358307, z: 0.46725655, w: -0.35645828}
+  - {x: -0.80524206, y: -0.11123942, z: 0.504227, w: -0.29148924}
+  - {x: -0.5548869, y: 0.2605074, z: -0.7741713, w: -0.15778218}
+  - {x: -0.48702875, y: 0.38827315, z: -0.7687587, w: 0.14511001}
+  - {x: -0.80502963, y: 0.2075551, z: 0.4046785, w: -0.38089833}
+  - {x: -0.40138605, y: 0.3785149, z: -0.810177, w: 0.19806288}
+  - {x: -0.87073845, y: 0.19376679, z: 0.28974262, w: -0.34686902}
+  - {x: -0.26903665, y: 0.3286882, z: -0.899026, w: 0.10646952}
+  - {x: -0.91779596, y: 0.08834403, z: 0.2269045, w: -0.3136242}
+  - {x: -0.21168165, y: 0.29245368, z: -0.9321148, w: 0.028698476}
+  - {x: -0.9307371, y: 0.028376741, z: 0.21927403, w: -0.29127666}
+  - {x: -0.9333147, y: -0.030652141, z: 0.23625374, w: -0.26864165}
+  - {x: -0.19764465, y: 0.25923422, z: -0.944352, w: -0.04397138}
+  - {x: -0.92776513, y: -0.12441813, z: 0.2714603, w: -0.22378878}
+  - {x: -0.21189536, y: 0.23002459, z: -0.94341797, w: -0.110233925}
+  - {x: -0.2526868, y: 0.19391043, z: -0.931864, w: -0.17371659}
+  - {x: -0.89747113, y: -0.21426915, z: 0.35083616, w: -0.15983859}
+  - {x: -0.3355465, y: 0.13460389, z: -0.9007737, w: -0.2406182}
+  - {x: -0.8512522, y: -0.26670134, z: 0.44269606, w: -0.09088492}
+  - {x: -0.43160483, y: 0.074212484, z: -0.8552165, w: -0.27715418}
+  - {x: -0.8245337, y: -0.28466004, z: 0.48668337, w: -0.047456488}
+  - {x: -0.47601798, y: 0.02783914, z: -0.8303392, w: -0.2883894}
+  - {x: -0.79465663, y: -0.29027322, z: 0.53311867, w: -0.0068410137}
+  - {x: -0.7612074, y: -0.28752804, z: 0.5792833, w: 0.04818442}
+  - {x: -0.51504195, y: -0.043829184, z: -0.8066085, w: -0.28669414}
+  - {x: 0.4423259, y: 0.214061, z: -0.847292, w: -0.20154922}
+  - {x: -0.56404155, y: -0.087872416, z: -0.7730178, w: -0.27672893}
+  normals: []
+  tangents: []
+  visualMap: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000100000001100000012000000130000001400000015000000160000001700000018000000190000001a0000001b0000001c0000001d0000001e0000001f000000200000002100000022000000230000002400000025000000260000002700000028000000290000002a0000002b0000002c0000002d0000002e0000002f000000300000003100000032000000330000003400000035000000360000003700000038000000390000003a0000003b0000003c0000003d0000003e0000003f000000400000004100000042000000430000004400000045000000460000004700000048000000490000004a0000004b0000004c0000004d0000004e0000004f000000500000005100000052000000530000005400000055000000560000005700000058000000590000005a0000005b0000005c0000005d0000005e0000005f000000600000006100000062000000630000006400000065000000660000006700000068000000690000006a0000006b0000006c0000006d0000006e0000006f000000700000007100000072000000730000007400000075000000760000007700000078000000790000007a0000007b0000007c0000007d0000007e0000007f000000800000008100000082000000830000008400000085000000860000008700000088000000890000008a0000008b0000008c0000008d0000008e0000008f000000900000009100000092000000930000009400000095000000960000009700000098000000990000009a0000009b0000009c0000009d000000
+  meshInfo:
+    volume: 0.000015257204
+    area: 0.0044833994
+    borderEdgeCount: 158
+    closed: 0
+    nonManifold: 0
