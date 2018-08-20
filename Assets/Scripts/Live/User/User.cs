@@ -52,11 +52,6 @@ public class User : MonoBehaviour {
         return inventorySlot;
     }
 
-    public int getMaxSlots()
-    {
-        return maxSlots;
-    }
-
     public Vector3 getGenderIconPosition()
     {
         return genderIconPosition;
