@@ -98,6 +98,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         avatarController.verticalMovement = true;
         avatarController.smoothFactor = 0;
         avatarController.playerIndex = playerIndex;
+        avatarController.hipWidthFactor = 0f;
+        avatarController.shoulderWidthFactor = 0f;
         avatarController.Awake();
 
         //// Initialize avatar scalar

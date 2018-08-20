@@ -13,8 +13,8 @@ class AvatarControllerEntry
     public float shoulderCenterVerticalOffset = 0f; //Compensate for when shoulderCenter is not actually (vertically) at same height as left and right arm sockets.
     public float neckVerticalOffset = 0f;
     public float headVerticalOffset = 0f; //Compensate for head is not actually
-    public float hipWidthFactor = 1.0f;
-    public float shoulderWidthFactor = 1.0f;
+    public float hipAdjustWidthFactor = 1.0f;
+    public float shoulderAdjustWidthFactor = 1.0f;
 
     public static AvatarControllerEntry ParseJson(string json)
     {
@@ -39,8 +39,8 @@ class AvatarControllerEntry
         this.shoulderCenterVerticalOffset = avatarController.shoulderCenterVerticalOffset;
         this.neckVerticalOffset = avatarController.neckVerticalOffset;
         this.headVerticalOffset = avatarController.headVerticalOffset;
-        //this.hipWidthFactor = avatarController.hipWidthFactor;
-        //this.shoulderWidthFactor = avatarController.shoulderWidthFactor;
+        this.hipAdjustWidthFactor = avatarController.hipAdjustWidthFactor;
+        this.shoulderAdjustWidthFactor = avatarController.shoulderAdjustWidthFactor;
     }
 
     public void PopulateTo(AvatarController avatarController)
@@ -53,8 +53,8 @@ class AvatarControllerEntry
         avatarController.shoulderCenterVerticalOffset = this.shoulderCenterVerticalOffset;
         avatarController.neckVerticalOffset = this.neckVerticalOffset;
         avatarController.headVerticalOffset = this.headVerticalOffset;
-        //avatarController.hipWidthFactor = this.hipWidthFactor;
-        //avatarController.shoulderWidthFactor = this.shoulderWidthFactor;
+        avatarController.hipAdjustWidthFactor = this.hipAdjustWidthFactor;
+        avatarController.shoulderAdjustWidthFactor = this.shoulderAdjustWidthFactor;
     }
 
     public string ToJSON()

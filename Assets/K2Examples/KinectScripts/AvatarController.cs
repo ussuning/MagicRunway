@@ -123,15 +123,22 @@ public class AvatarController : MonoBehaviour
     [Range(-0.25f, 0.25f)]
     public float headVerticalOffset = 0f; //Compensate for head is not actually
     [Range(0.5f, 2.0f)]
-    public float hipWidthFactor = 1.0f;
+    public float hipWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
     [Range(0.5f, 2.0f)]
-    public float shoulderWidthFactor = 1.0f;
+    public float shoulderWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
+    [Range(0.5f, 2.0f)]
+    public float shoulderAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
+    [Range(0.5f, 2.0f)]
+    public float hipAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
 
-    public float shoulderAngleRange = 1f;
+    //public float shoulderAngleRange = 1f;
 
     float initialShoulderWidth = 0;
     float initialHipWidth = 0;
     float initialTorsoHeight = 0;
+
+    float lastShoulderAdjustWidthFactor = 0.0f;
+    float lastHipAdjustWidthFactor = 0.0f;
 
     // Calibration Offset Variables for Character Position.
     [NonSerialized]
@@ -547,27 +554,46 @@ public class AvatarController : MonoBehaviour
 		}
 
         // Determine hipWidthFactor, shoulderWidthFactor, torseHeightFactor
+        if (hipAdjustWidthFactor != lastHipAdjustWidthFactor)
+        {
+            lastHipAdjustWidthFactor = hipAdjustWidthFactor;
+            hipWidthFactor = 0.0f; // reset hipWidthFactor for compute
+        }
+
+        if (shoulderAdjustWidthFactor != lastShoulderAdjustWidthFactor)
+        {
+            lastShoulderAdjustWidthFactor = shoulderAdjustWidthFactor;
+            shoulderWidthFactor = 0.0f; // reset shoulderWidthFactor for compute.
+        }
 
         Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
         Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
         float hipWidth = (hipLeft - hipRight).magnitude;
         float currHipWidthFactor = hipWidth / initialHipWidth;
-        Debug.Log("hipWidth = " + hipWidth);
-        Debug.Log("hipWidthFactor = " + currHipWidthFactor);
+        //Debug.Log("hipWidth = " + hipWidth);
+        //Debug.Log("hipWidthFactor = " + currHipWidthFactor);
         Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
         Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
+        Vector3 elbowLeft = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
+        Vector3 elbowRight = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight);
+        Transform spineTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]];
+        bool armsRaised =
+            spineTransform.InverseTransformPoint(elbowLeft).y > spineTransform.InverseTransformPoint(shoulderLeft).y ||
+            spineTransform.InverseTransformPoint(elbowRight).y > spineTransform.InverseTransformPoint(shoulderRight).y;
+        if (armsRaised)
+            Debug.Log("Arms Raised @ " + Time.time);
         float shoulderWidth = (shoulderLeft - shoulderRight).magnitude;
         float currShoulderWidthFactor = shoulderWidth / initialShoulderWidth;
-        Debug.Log("shoulderWidth = " + shoulderWidth);
-        Debug.Log("shoulderWidthFactor = " + shoulderWidth / initialShoulderWidth);
+        //Debug.Log("shoulderWidth = " + shoulderWidth);
+        //Debug.Log("shoulderWidthFactor = " + shoulderWidth / initialShoulderWidth);
         float torsoHeight = (Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f) - Vector3.Lerp(hipLeft, hipRight, 0.5f)).magnitude;
         Debug.Log("torsoHeight = " + torsoHeight);
         Debug.Log("torsoHeightFactor = " + torsoHeight / initialTorsoHeight);
 
         if (currHipWidthFactor > hipWidthFactor)
-            hipWidthFactor = currHipWidthFactor;
-        if (currShoulderWidthFactor > shoulderWidthFactor)
-            shoulderWidthFactor = currShoulderWidthFactor;
+            hipWidthFactor = currHipWidthFactor * hipAdjustWidthFactor;
+        if (armsRaised == false && currShoulderWidthFactor > shoulderWidthFactor)
+            shoulderWidthFactor = currShoulderWidthFactor * shoulderAdjustWidthFactor;
 
         // rotate the avatar bones
         for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
@@ -845,23 +871,23 @@ public class AvatarController : MonoBehaviour
         }
     }
 
-    protected void CheckLimitShoulderAngle(Transform bone)
-    {
-        float angle = bone.localEulerAngles.y % 360f;
-        if (angle > 180f) {
-            if (angle < (360f - shoulderAngleRange))
-                angle = 360f - shoulderAngleRange;
-        }
-        else if (angle < 180f)
-        {
-            if (angle > shoulderAngleRange)
-                angle = shoulderAngleRange;
-        }
+    //protected void CheckLimitShoulderAngle(Transform bone)
+    //{
+    //    float angle = bone.localEulerAngles.y % 360f;
+    //    if (angle > 180f) {
+    //        if (angle < (360f - shoulderAngleRange))
+    //            angle = 360f - shoulderAngleRange;
+    //    }
+    //    else if (angle < 180f)
+    //    {
+    //        if (angle > shoulderAngleRange)
+    //            angle = shoulderAngleRange;
+    //    }
 
-        if (angle != bone.localEulerAngles.y)
-            bone.localEulerAngles = new Vector3(bone.localEulerAngles.x, angle, bone.localEulerAngles.z);
+    //    if (angle != bone.localEulerAngles.y)
+    //        bone.localEulerAngles = new Vector3(bone.localEulerAngles.x, angle, bone.localEulerAngles.z);
 
-    }
+    //}
 
     // Apply the rotations tracked by kinect to a special joint
     // Clavicle left and right are boneIndex 25 and 26 respectively
