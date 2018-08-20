@@ -244,6 +244,7 @@ public class UserManager : Singleton<UserManager>
 
         Debug.Log("Prefab = " + prefabRef.name);
         prefabRef.Load(userLookup[userId].getUserIndex());
+        userLookup[userId].setOutfit(prefabRef.instance);
     }
 
     protected void addUserScoreUI(long uid)

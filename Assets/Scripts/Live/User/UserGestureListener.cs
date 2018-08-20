@@ -118,6 +118,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
             Debug.Log("current slot = " + currentSlot + "next slot = " + nextSlot);
 
+            Destroy(UserManager.Instance.getUserById(userId).getOutfit());
             UserManager.Instance.renderOutfit(userId, nextSlot);
             Debug.Log("Swipe Right Finished");
          //   KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
