@@ -8,7 +8,7 @@ public class User : MonoBehaviour {
     public long uid;
     public string ugender;    // switch to enum later
     public long outfitId = 1;
-    public int inventorySlot = 1;
+    public int inventorySlot = 0;
     public Vector3 uposition;
     public Vector3 genderIconPosition;
     private GameObject userSkeletonGO;
@@ -52,6 +52,11 @@ public class User : MonoBehaviour {
         return inventorySlot;
     }
 
+    public int getMaxSlots()
+    {
+        return maxSlots;
+    }
+
     public Vector3 getGenderIconPosition()
     {
         return genderIconPosition;
@@ -80,6 +85,11 @@ public class User : MonoBehaviour {
     public void setOutfitMenuStatus(bool status)
     {
         isOutfitMenuOn = status;
+    }
+
+    public void setInventorySlot(int slot)
+    {
+        inventorySlot = slot;
     }
 
     protected Vector3 getCurrentPosition(int iJointIndex)

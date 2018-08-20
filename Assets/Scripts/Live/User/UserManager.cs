@@ -71,12 +71,12 @@ public class UserManager : Singleton<UserManager>
         }
       
         // listening for these gestures for this user  
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
+    //    kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
+    //    kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);       // move icons left
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);      // move icons right
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
+     //   kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
+     //   kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
 
         StartCoroutine(addUser(userId, userIndex));
 
@@ -212,7 +212,7 @@ public class UserManager : Singleton<UserManager>
     }
 
     // need to clean up later - move to UI
-    public void showOutfitMenu(long userId)
+  /*  public void showOutfitMenu(long userId)
     {
         string outfitMenuName = "OutFitMenu_" + userId;
         GameObject outfitMenuGO = GameObject.Find(outfitMenuName);
@@ -228,15 +228,21 @@ public class UserManager : Singleton<UserManager>
         outfitMenuGO.SetActive(false);
         userLookup[userId].setOutfitMenuStatus(false);
     }
+   */
 
     public void renderOutfit(long userId, int slot)
     {
-        Debug.Log("User Manager slot = " + slot + " " + userId);
-        string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex() + 1);
+        Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
+        string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex());
         Debug.Log("Inventory Menu Name = " + inventoryMenuName);
+        
         GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
         GameObject slotGO = inventoryMenuGO.transform.Find("slot_" + slot).gameObject;
+
+        Debug.Log("Slot = " + slot);
         PrefabReference prefabRef = slotGO.GetComponent<PrefabReference>();
+
+        Debug.Log("Prefab = " + prefabRef.name);
         prefabRef.Load(userLookup[userId].getUserIndex());
     }
 
@@ -344,6 +350,17 @@ public class UserManager : Singleton<UserManager>
         Debug.Log("UserManager COROUTINE- Show Start Menu!!");
         yield return new WaitForSeconds(5);
         UIManager.Instance.ShowStartMenu(true);
+    }
+
+    public IEnumerator renderOutfitsforAllUsers()
+    {
+        yield return new WaitForSeconds(4);
+
+        Dictionary<long, User> currentUsers = getCurrentUsers();
+        foreach (KeyValuePair<long, User> user in currentUsers)
+        {
+            renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
+        }
     }
 
     IEnumerator addUser(long userId, int userIndex)

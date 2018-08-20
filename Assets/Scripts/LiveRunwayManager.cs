@@ -45,14 +45,7 @@ public class LiveRunwayManager : MonoBehaviour {
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.ShowUpNext(curCollection);
         UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);
-
-        Dictionary<long, User> currentUsers = UserManager.Instance.getCurrentUsers();
-        int i = 1;
-        foreach (KeyValuePair<long, User> user in currentUsers)
-        {
-            UserManager.Instance.renderOutfit(user.Value.getUserId(), i);
-            i += 5;   //hardcoded, will make dynamic later
-        }
+        StartCoroutine(UserManager.Instance.renderOutfitsforAllUsers());
     }
 
     public void StopLiveRunway()
