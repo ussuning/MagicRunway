@@ -99,6 +99,8 @@ public class AvatarController : MonoBehaviour
 	protected Quaternion[] initialRotations;
 	protected Quaternion[] localRotations;
 	protected bool[] isBoneDisabled;
+    protected Vector3[] initialPositions;
+    protected Vector3[] initialLocalPositions;
 
 	// Local rotations of finger bones
 	protected Dictionary<HumanBodyBones, Quaternion> fingerBoneLocalRotations = new Dictionary<HumanBodyBones, Quaternion>();
@@ -109,6 +111,7 @@ public class AvatarController : MonoBehaviour
 	protected Quaternion initialRotation;
 	protected Vector3 initialHipsPosition;
 	protected Quaternion initialHipsRotation;
+    protected Vector3 initialKneeLeftPosition;
 
 	protected Vector3 offsetNodePos;
 	protected Quaternion offsetNodeRot;
@@ -414,9 +417,11 @@ public class AvatarController : MonoBehaviour
 		initialRotations = new Quaternion[bones.Length];
 		localRotations = new Quaternion[bones.Length];
 		isBoneDisabled = new bool[bones.Length];
+        initialPositions = new Vector3[bones.Length];
+        initialLocalPositions = new Vector3[bones.Length];
 
-		// Get initial bone rotations
-		GetInitialRotations();
+        // Get initial bone rotations
+        GetInitialRotations();
 
 		// enable all bones
 		for(int i = 0; i < bones.Length; i++)
@@ -643,7 +648,7 @@ public class AvatarController : MonoBehaviour
         lastArmsRaised = armsRaised;
 
         float facingCamera = Vector3.Dot(spineTransform.forward.normalized, -posRelativeToCamera.transform.forward.normalized);
-        Debug.Log("facingCamera = " + facingCamera);
+        //Debug.Log("facingCamera = " + facingCamera);
 
         Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
         Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
@@ -663,8 +668,8 @@ public class AvatarController : MonoBehaviour
         float maxDistSqrd = 16f; // 4 meters
 
         if ((leftArmRaised && rightArmRaised) == false &&// Raised arms creates distortion
-            facingCamera > 0.9f &&
-            (camToUserDistSqrd > minDistSqrd && camToUserDistSqrd < maxDistSqrd)) // rotating shoulders away from camera creates distortion also
+            facingCamera > 0.9f && // rotating shoulders away from camera creates distortion also
+            (camToUserDistSqrd > minDistSqrd && camToUserDistSqrd < maxDistSqrd)) // distance can create inaccurate measurements
         {
             if (debugTuningObj != null)
             {
@@ -922,6 +927,24 @@ public class AvatarController : MonoBehaviour
                 break;
 
         }
+
+        // Correct scaling
+        switch (joint)
+        {
+            case KinectInterop.JointType.HipLeft:
+                float thighLength = (boneTransform.position - GetRawJointWorldPos(KinectInterop.JointType.KneeLeft)).magnitude;
+                float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] - 
+                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
+                boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
+                break;
+            case KinectInterop.JointType.HipRight:
+                thighLength = (boneTransform.position - GetRawJointWorldPos(KinectInterop.JointType.KneeRight)).magnitude;
+                origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipRight]] -
+                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeRight]]).magnitude;
+                boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
+                break;
+        }
+
     }
 
     //protected void CheckLimitShoulderAngle(Transform bone)
@@ -1516,6 +1539,8 @@ public class AvatarController : MonoBehaviour
 			{
 				initialRotations[i] = bones[i].rotation;
 				localRotations[i] = bones[i].localRotation;
+                initialPositions[i] = bones[i].position;
+                initialLocalPositions[i] = bones[i].localPosition;
 			}
 		}
 
