@@ -15,6 +15,7 @@ class AvatarControllerEntry
     public float headVerticalOffset = 0f; //Compensate for head is not actually
     public float hipAdjustWidthFactor = 1.0f;
     public float shoulderAdjustWidthFactor = 1.0f;
+    public float hipUpwardsFactor = 0.0f; // Make legs longer.
 
     public static AvatarControllerEntry ParseJson(string json)
     {
@@ -41,6 +42,7 @@ class AvatarControllerEntry
         this.headVerticalOffset = avatarController.headVerticalOffset;
         this.hipAdjustWidthFactor = avatarController.hipAdjustWidthFactor;
         this.shoulderAdjustWidthFactor = avatarController.shoulderAdjustWidthFactor;
+        this.hipUpwardsFactor = avatarController.hipUpwardsFactor;
     }
 
     public void PopulateTo(AvatarController avatarController)
@@ -55,6 +57,9 @@ class AvatarControllerEntry
         avatarController.headVerticalOffset = this.headVerticalOffset;
         avatarController.hipAdjustWidthFactor = this.hipAdjustWidthFactor;
         avatarController.shoulderAdjustWidthFactor = this.shoulderAdjustWidthFactor;
+        avatarController.hipUpwardsFactor = this.hipUpwardsFactor;
+
+        Debug.LogWarning("Applied tuning values for " + this.avatarControllerName);
     }
 
     public string ToJSON()

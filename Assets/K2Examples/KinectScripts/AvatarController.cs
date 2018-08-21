@@ -130,7 +130,8 @@ public class AvatarController : MonoBehaviour
     public float shoulderAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
     [Range(0.5f, 2.0f)]
     public float hipAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
-
+    [Range(0f, 1.0f)]
+    public float hipUpwardsFactor = 0.1f;
     //public float shoulderAngleRange = 1f;
 
     float initialShoulderWidth = 0;
@@ -139,6 +140,11 @@ public class AvatarController : MonoBehaviour
 
     float lastShoulderAdjustWidthFactor = 0.0f;
     float lastHipAdjustWidthFactor = 0.0f;
+
+    bool lastArmsRaised = false;
+    bool needTuningReset = false;
+
+    public MeshRenderer debugTuningObj = null;
 
     // Calibration Offset Variables for Character Position.
     [NonSerialized]
@@ -441,6 +447,8 @@ public class AvatarController : MonoBehaviour
 		}
 
         avatarScaler = GetComponent<AvatarScaler>();
+
+        debugTuningObj = GameObject.Find("DebugTuningObj").GetComponent<MeshRenderer>();
 	}
 
 
@@ -553,47 +561,7 @@ public class AvatarController : MonoBehaviour
 			}
 		}
 
-        // Determine hipWidthFactor, shoulderWidthFactor, torseHeightFactor
-        if (hipAdjustWidthFactor != lastHipAdjustWidthFactor)
-        {
-            lastHipAdjustWidthFactor = hipAdjustWidthFactor;
-            hipWidthFactor = 0.0f; // reset hipWidthFactor for compute
-        }
-
-        if (shoulderAdjustWidthFactor != lastShoulderAdjustWidthFactor)
-        {
-            lastShoulderAdjustWidthFactor = shoulderAdjustWidthFactor;
-            shoulderWidthFactor = 0.0f; // reset shoulderWidthFactor for compute.
-        }
-
-        Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
-        Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
-        float hipWidth = (hipLeft - hipRight).magnitude;
-        float currHipWidthFactor = hipWidth / initialHipWidth;
-        //Debug.Log("hipWidth = " + hipWidth);
-        //Debug.Log("hipWidthFactor = " + currHipWidthFactor);
-        Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
-        Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
-        Vector3 elbowLeft = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
-        Vector3 elbowRight = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight);
-        Transform spineTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]];
-        bool armsRaised =
-            spineTransform.InverseTransformPoint(elbowLeft).y > spineTransform.InverseTransformPoint(shoulderLeft).y ||
-            spineTransform.InverseTransformPoint(elbowRight).y > spineTransform.InverseTransformPoint(shoulderRight).y;
-        if (armsRaised)
-            Debug.Log("Arms Raised @ " + Time.time);
-        float shoulderWidth = (shoulderLeft - shoulderRight).magnitude;
-        float currShoulderWidthFactor = shoulderWidth / initialShoulderWidth;
-        //Debug.Log("shoulderWidth = " + shoulderWidth);
-        //Debug.Log("shoulderWidthFactor = " + shoulderWidth / initialShoulderWidth);
-        float torsoHeight = (Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f) - Vector3.Lerp(hipLeft, hipRight, 0.5f)).magnitude;
-        Debug.Log("torsoHeight = " + torsoHeight);
-        Debug.Log("torsoHeightFactor = " + torsoHeight / initialTorsoHeight);
-
-        if (currHipWidthFactor > hipWidthFactor)
-            hipWidthFactor = currHipWidthFactor * hipAdjustWidthFactor;
-        if (armsRaised == false && currShoulderWidthFactor > shoulderWidthFactor)
-            shoulderWidthFactor = currShoulderWidthFactor * shoulderAdjustWidthFactor;
+        CalibrateHipShoulders();
 
         // rotate the avatar bones
         for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
@@ -643,6 +611,85 @@ public class AvatarController : MonoBehaviour
 		//	CheckMuscleLimits();
 		//}
 	}
+
+    protected void CalibrateHipShoulders()
+    {
+        // Determine hipWidthFactor, shoulderWidthFactor, torseHeightFactor
+        if (hipAdjustWidthFactor != lastHipAdjustWidthFactor)
+        {
+            lastHipAdjustWidthFactor = hipAdjustWidthFactor;
+            hipWidthFactor = 0.0f; // reset hipWidthFactor for compute
+        }
+
+        if (shoulderAdjustWidthFactor != lastShoulderAdjustWidthFactor)
+        {
+            lastShoulderAdjustWidthFactor = shoulderAdjustWidthFactor;
+            shoulderWidthFactor = 0.0f; // reset shoulderWidthFactor for compute.
+        }
+
+        Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
+        Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
+        Vector3 elbowLeft = GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft);
+        Vector3 elbowRight = GetRawJointWorldPos(KinectInterop.JointType.ElbowRight);
+        Transform spineTransform = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]];
+        bool leftArmRaised = spineTransform.InverseTransformPoint(elbowLeft).y > spineTransform.InverseTransformPoint(shoulderLeft).y;
+        bool rightArmRaised = spineTransform.InverseTransformPoint(elbowRight).y > spineTransform.InverseTransformPoint(shoulderRight).y;
+        bool armsRaised = leftArmRaised || rightArmRaised;
+        //if (armsRaised)
+        //    Debug.Log("Arms Raised @ " + Time.time);
+        if (armsRaised == false && lastArmsRaised == true)
+            needTuningReset = true;
+
+        lastArmsRaised = armsRaised;
+
+        float facingCamera = Vector3.Dot(spineTransform.forward.normalized, -posRelativeToCamera.transform.forward.normalized);
+        Debug.Log("facingCamera = " + facingCamera);
+
+        Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
+        Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
+        float hipWidth = (hipLeft - hipRight).magnitude;
+        float currHipWidthFactor = hipWidth / initialHipWidth;
+        //Debug.Log("hipWidth = " + hipWidth);
+        //Debug.Log("hipWidthFactor = " + currHipWidthFactor);
+        float shoulderWidth = (shoulderLeft - shoulderRight).magnitude;
+        float currShoulderWidthFactor = shoulderWidth / initialShoulderWidth;
+        //Debug.Log("shoulderWidth = " + shoulderWidth);
+        //Debug.Log("shoulderWidthFactor = " + shoulderWidth / initialShoulderWidth);
+        float torsoHeight = (Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f) - Vector3.Lerp(hipLeft, hipRight, 0.5f)).magnitude;
+        //Debug.Log("torsoHeight = " + torsoHeight);
+        //Debug.Log("torsoHeightFactor = " + torsoHeight / initialTorsoHeight);
+        float camToUserDistSqrd = (spineTransform.position - posRelativeToCamera.transform.position).sqrMagnitude;
+        float minDistSqrd = 1f; //1 meter
+        float maxDistSqrd = 16f; // 4 meters
+
+        if ((leftArmRaised && rightArmRaised) == false &&// Raised arms creates distortion
+            facingCamera > 0.9f &&
+            (camToUserDistSqrd > minDistSqrd && camToUserDistSqrd < maxDistSqrd)) // rotating shoulders away from camera creates distortion also
+        {
+            if (debugTuningObj != null)
+            {
+                debugTuningObj.material.color = Color.green;
+            }
+            // Only reset tuning values when we get good values with which to replace.
+            if (needTuningReset)
+            {
+                hipWidthFactor = 0.0f; // reset hipWidthFactor for compute
+                shoulderWidthFactor = 0.0f; // reset shoulderWidthFactor for compute.
+                needTuningReset = false;
+            }
+            if (currHipWidthFactor > hipWidthFactor)
+                hipWidthFactor = currHipWidthFactor * hipAdjustWidthFactor;
+            if (currShoulderWidthFactor > shoulderWidthFactor)
+                shoulderWidthFactor = currShoulderWidthFactor * shoulderAdjustWidthFactor;
+        }
+        else
+        {
+            if (debugTuningObj != null)
+            {
+                debugTuningObj.material.color = Color.red;
+            }
+        }
+    }
 
     protected virtual void ScaleTorso()
     {
@@ -795,9 +842,20 @@ public class AvatarController : MonoBehaviour
 
         boneTransform.position = GetRawJointWorldPos(joint);
 
-        // Compensate for joint mapping differences
+        Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
+        Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
+        Vector3 shoulderCenter = Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f);
+        Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
+        Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
+        Vector3 hipCenter = Vector3.Lerp(hipLeft, hipRight, 0.5f);
+        float hipUpwardOffset = (shoulderCenter - hipCenter).magnitude * hipUpwardsFactor;
+
+        // Compensate for joint mapping differences and apply hip/shoulder tuning adjustments
         switch (joint)
         {
+            case KinectInterop.JointType.SpineBase:
+                boneTransform.localPosition += new Vector3(0, hipUpwardOffset, 0);
+                break;
             case KinectInterop.JointType.SpineShoulder:
                 boneTransform.localPosition += new Vector3(0, shoulderCenterVerticalOffset, 0);
                 break;
@@ -812,17 +870,12 @@ public class AvatarController : MonoBehaviour
                 break;
             case KinectInterop.JointType.HipLeft:
             case KinectInterop.JointType.HipRight:
-                Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
-                Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
-                Vector3 hipCenter = Vector3.Lerp(hipLeft, hipRight, 0.5f);
                 Vector3 dirHipFromCenter = (joint == KinectInterop.JointType.HipLeft) ? hipLeft - hipCenter : hipRight - hipCenter;
+                hipCenter = hipCenter + bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].up * hipUpwardOffset;
                 boneTransform.position = hipCenter + dirHipFromCenter * hipWidthFactor;
                 break;
             case KinectInterop.JointType.ShoulderLeft:
             case KinectInterop.JointType.ShoulderRight:
-                Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
-                Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
-                Vector3 shoulderCenter = Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f);
                 Vector3 dirShoulderFromCenter = (joint == KinectInterop.JointType.ShoulderLeft) ? shoulderLeft - shoulderCenter : shoulderRight - shoulderCenter;
                 boneTransform.position = shoulderCenter + dirShoulderFromCenter * shoulderWidthFactor;
                 boneTransform.position += GetShoulderVerticalOffset(joint);
@@ -989,21 +1042,21 @@ public class AvatarController : MonoBehaviour
         // Get left shoulder and elbow positions relative to spine, so it's easy to check height value (Y)
         KinectInterop.JointType elbowJoint = joint == KinectInterop.JointType.ShoulderLeft ? KinectInterop.JointType.ElbowLeft : KinectInterop.JointType.ElbowRight;
         KinectInterop.JointType shoulderJoint = joint == KinectInterop.JointType.ShoulderLeft ? KinectInterop.JointType.ShoulderLeft : KinectInterop.JointType.ShoulderRight;
-        Vector3 shoulderLeftLocalPos = spineTransform.InverseTransformPoint(GetRawJointWorldPos(shoulderJoint));
-        Vector3 elbowLeftLocalPos = spineTransform.InverseTransformPoint(GetRawJointWorldPos(elbowJoint));
+        Vector3 shoulderLocalPos = spineTransform.InverseTransformPoint(GetRawJointWorldPos(shoulderJoint));
+        Vector3 elbowLocalPos = spineTransform.InverseTransformPoint(GetRawJointWorldPos(elbowJoint));
 
         //Debug.Log("shoulder.y" + shoulderLeftLocalPos.y);
         //Debug.Log("elbow.y" + elbowLeftLocalPos.y);
         //boneTransform.rotation = initialRotations[boneIndex];
         //boneTransform.localRotation = localRotations[boneIndex];
-        if (elbowLeftLocalPos.y > shoulderLeftLocalPos.y)
+        if (elbowLocalPos.y > shoulderLocalPos.y)
         {
             //boneTransform.localEulerAngles += new Vector3(-30, 0, 0);
             // 
             //Vector3 spineUp = spineTransform.up;
-            Vector3 elbowLeftFlatPos = elbowLeftLocalPos;
-            elbowLeftFlatPos.y = shoulderLeftLocalPos.y;
-            float angle = Vector3.Angle(elbowLeftFlatPos, elbowLeftLocalPos);
+            Vector3 elbowFlatPos = elbowLocalPos;
+            elbowFlatPos.y = shoulderLocalPos.y;
+            float angle = Vector3.Angle(elbowFlatPos, elbowLocalPos);
          //   Debug.Log(joint + " Angle = " + angle);
             //boneTransform.Rotate(boneTransform.right, angle);
             return angle;
@@ -1962,6 +2015,10 @@ public class AvatarController : MonoBehaviour
         {
             AvatarControllerEntry data = acConfigData.entries[this.name];
             data.PopulateTo(this);
+        }
+        else
+        {
+            Debug.LogError("Unable to find tuning values for " + this.name);
         }
     }
 }
