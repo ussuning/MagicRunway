@@ -31,8 +31,7 @@ public class AppManager : Singleton<AppManager>
         MRData.Instance.LoadEverything();
 
         autoRunwayManager.HideAllLevels();
-        UIManager.Instance.HideHandCursor();
-
+       
         if (curMode == Mode.LIVE)
         {
             PlayLiveRunway();

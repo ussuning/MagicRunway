@@ -13,6 +13,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiUpNext;
     public GameObject uiGestureGender;
     public GameObject uiHandCursor;
+    public GameObject uiHandCursor2;
     public GameObject uiStickMan;
 
     protected GameObject uiMaleGender;
@@ -156,11 +157,13 @@ public class UIManager : Singleton<UIManager>
     public void ShowHandCursor()
     {
         uiHandCursor.SetActive(true);
+        uiHandCursor2.SetActive(true);
     }
 
     public void HideHandCursor()
     {
         uiHandCursor.SetActive(false);
+        uiHandCursor2.SetActive(false);
     }
 
     public void HideAll()
