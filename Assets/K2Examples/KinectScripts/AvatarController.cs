@@ -887,7 +887,7 @@ public class AvatarController : MonoBehaviour
                 break;
         }
 
-        // Correct orientation for Shoulders
+        // Correct orientation for Shoulders and Thighs
         switch (joint)
         {
             case KinectInterop.JointType.ShoulderLeft:
@@ -914,14 +914,33 @@ public class AvatarController : MonoBehaviour
             case KinectInterop.JointType.HipLeft:
                 Vector3 hipLeftForward = GetRawJointWorldPos(KinectInterop.JointType.KneeLeft) - boneTransform.position;
                 Vector3 kneeLeftForward = GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft) - GetRawJointWorldPos(KinectInterop.JointType.KneeLeft);
-                Vector3 kneeOut = Vector3.Cross(hipLeftForward, kneeLeftForward);
+                Vector3 spineToHipForward =  GetRawJointWorldPos(KinectInterop.JointType.SpineBase) - GetRawJointWorldPos(KinectInterop.JointType.SpineMid);
+                float legStraightness = Vector3.Dot(hipLeftForward.normalized, kneeLeftForward.normalized);
+                float hipStraightness = Vector3.Dot(hipLeftForward.normalized, spineToHipForward.normalized);
+                //Debug.Log("legStraigtness = " + legStraigtness);
+                //Debug.Log("hipStraightness = " + hipStraightness);
+                // Use the most reliable kneeOut (if knee is bent, use that, if hips are bent, use that, otherwise, just use spine out)
+                Vector3 kneeOut = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].right;
+                if (legStraightness < 0.95f)
+                    kneeOut = Vector3.Cross(hipLeftForward, kneeLeftForward);
+                else if (hipStraightness < 0.95f)
+                    kneeOut = Vector3.Cross(spineToHipForward, hipLeftForward);
                 Vector3 hipLeftDown = Vector3.Cross(hipLeftForward, kneeOut);
+                float origYRot = boneTransform.localEulerAngles.y;
                 boneTransform.rotation = Quaternion.LookRotation(hipLeftDown, hipLeftForward);
                 break;
             case KinectInterop.JointType.HipRight:
                 Vector3 hipRightForward = GetRawJointWorldPos(KinectInterop.JointType.KneeRight) - boneTransform.position;
                 Vector3 kneeRightForward = GetRawJointWorldPos(KinectInterop.JointType.AnkleRight) - GetRawJointWorldPos(KinectInterop.JointType.KneeRight);
-                kneeOut = Vector3.Cross(hipRightForward, kneeRightForward);
+                spineToHipForward = GetRawJointWorldPos(KinectInterop.JointType.SpineBase) - GetRawJointWorldPos(KinectInterop.JointType.SpineMid);
+                legStraightness = Vector3.Dot(hipRightForward.normalized, kneeRightForward.normalized);
+                hipStraightness = Vector3.Dot(hipRightForward.normalized, spineToHipForward.normalized);
+                // Use the most reliable kneeOut (if knee is bent, use that, if hips are bent, use that, otherwise, just use spine out)
+                kneeOut = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].right * -1.0f;
+                if (legStraightness < 0.95f)
+                    kneeOut = Vector3.Cross(hipRightForward, kneeRightForward);
+                else if (hipStraightness < 0.95f)
+                    kneeOut = Vector3.Cross(spineToHipForward, hipRightForward);
                 Vector3 hipRightDown = Vector3.Cross(hipRightForward, kneeOut);
                 boneTransform.rotation = Quaternion.LookRotation(hipRightDown, hipRightForward);
                 break;

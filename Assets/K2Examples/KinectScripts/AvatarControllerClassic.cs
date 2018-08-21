@@ -125,6 +125,9 @@ public class AvatarControllerClassic : AvatarController
 
     protected override void ScaleTorso()
     {
+        if (hipWidthFactor == 0f || shoulderWidthFactor == 0f)
+            return;
+
         float hipScaleX = hipWidthFactor;
         HipCenter.localScale = new Vector3(hipScaleX, 1, 1);
         HipLeft.localScale = HipRight.localScale = new Vector3(1f / hipScaleX, 1, 1);
