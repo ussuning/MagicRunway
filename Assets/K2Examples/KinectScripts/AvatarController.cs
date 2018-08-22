@@ -991,6 +991,7 @@ public class AvatarController : MonoBehaviour
                 float thighLength = (boneTransform.position - GetRawJointWorldPos(KinectInterop.JointType.KneeLeft)).magnitude;
                 float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] -
                     initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
+                //Debug.Log("hipLeftY scale = " + (thighLength / origThighLength));
                 boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
                 break;
             case KinectInterop.JointType.HipRight:

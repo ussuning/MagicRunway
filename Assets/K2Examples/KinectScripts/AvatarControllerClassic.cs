@@ -129,14 +129,18 @@ public class AvatarControllerClassic : AvatarController
             return;
 
         float hipScaleX = hipWidthFactor;
-        HipCenter.localScale = new Vector3(hipScaleX, 1, 1);
-        HipLeft.localScale = HipRight.localScale = new Vector3(1f / hipScaleX, 1, 1);
+        HipCenter.localScale = new Vector3(hipScaleX, HipCenter.localScale.y, hipScaleX);
+        HipLeft.localScale = HipRight.localScale = new Vector3(1f / hipScaleX, HipRight.localScale.y, hipScaleX);
+
+        // Unscale so that knee/ankles are normal (Vector3.one)
+        KneeLeft.localScale = new Vector3(1f / HipLeft.localScale.x, 1f / HipLeft.localScale.y, 1f / HipLeft.localScale.z);
+        KneeRight.localScale = new Vector3(1f / HipRight.localScale.x, 1f / HipRight.localScale.y, 1f / HipRight.localScale.z);
         
         //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
         float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
-        SpineMid.localScale = new Vector3(1f / hipScaleX * midScaleX, 1, 1);
+        SpineMid.localScale = new Vector3(1f / hipScaleX * midScaleX, SpineMid.localScale.y, SpineMid.localScale.z);
         float shoulderScaleX = shoulderWidthFactor;
-        ShoulderCenter.localScale = new Vector3(1f / midScaleX * shoulderScaleX, 1, 1);
+        ShoulderCenter.localScale = new Vector3(1f / midScaleX * shoulderScaleX, ShoulderCenter.localScale.y, ShoulderCenter.localScale.z);
     }
 	
 }
