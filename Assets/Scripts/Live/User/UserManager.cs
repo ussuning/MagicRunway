@@ -71,12 +71,12 @@ public class UserManager : Singleton<UserManager>
         }
       
         // listening for these gestures for this user  
-    //    kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
-    //    kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);       // move icons left
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);      // move icons right
-     //   kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
-     //   kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
 
         StartCoroutine(addUser(userId, userIndex));
 

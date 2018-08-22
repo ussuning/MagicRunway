@@ -103,37 +103,32 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             // show outfit menu for males
             //UserManager.Instance.addOutfitMenu(userId, "male");   //testing
         }
-        else if (gesture == KinectGestures.Gestures.SwipeRight)
+        else if (gesture == KinectGestures.Gestures.SwipeRight || gesture == KinectGestures.Gestures.SwipeDown)
         {
             Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeRight);
+           // KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeRight);
             int currentSlot = UserManager.Instance.getUserById(userId).getInventorySlot();
             int nextSlot = (currentSlot + 1) % maxSlots;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-            Debug.Log("current slot = " + currentSlot + "next slot = " + nextSlot);
-
             Destroy(UserManager.Instance.getUserById(userId).getOutfit());
             UserManager.Instance.renderOutfit(userId, nextSlot);
-            Debug.Log("Swipe Right Finished");
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
+           // KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
+
+            StartCoroutine(UIManager.Instance.scrollInventory(userIndex, "down"));
         }
-        else if (gesture == KinectGestures.Gestures.SwipeLeft)
+        else if (gesture == KinectGestures.Gestures.SwipeLeft || gesture == KinectGestures.Gestures.SwipeUp)
         {
             Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeLeft);
+           // KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeLeft);
             int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
             nextSlot = Math.Abs(nextSlot) % maxSlots;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-            Debug.Log("next slot = " + nextSlot);
             Destroy(UserManager.Instance.getUserById(userId).getOutfit());
             UserManager.Instance.renderOutfit(userId, nextSlot);
-            
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
-            Debug.Log("Swipe Left Finished");
+           // KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
+
+            StartCoroutine(UIManager.Instance.scrollInventory(userIndex, "up"));
         }
-
-
-
         return true;
     }
 

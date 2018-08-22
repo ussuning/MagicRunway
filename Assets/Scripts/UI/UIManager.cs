@@ -16,6 +16,13 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiHandCursor2;
     public GameObject uiStickMan;
 
+    // Inventory Menu
+    public float inventoryScrollSize = 424;
+    public GameObject scrollRectGO;
+    public GameObject contentPanelGO;
+    public GameObject scrollRectGO2;
+    public GameObject contentPanelGO2;
+   
     protected GameObject uiMaleGender;
     protected GameObject uiFemaleGender;
     protected Button uiJoinInButton;
@@ -111,6 +118,43 @@ public class UIManager : Singleton<UIManager>
         {
             uiInventory.SetActive(false);
         }
+    }
+
+    public IEnumerator scrollInventory(int userIndex, string dir)
+    {
+        Debug.Log("scrollInventory " + userIndex + " " + dir);
+
+        RectTransform rt;
+        ScrollRect scrollRect;
+        RectTransform contentPanel;
+
+        if (userIndex == 0 )
+        {
+            rt = scrollRectGO.GetComponent<RectTransform>();
+            scrollRect = scrollRectGO.GetComponent<ScrollRect>();
+            contentPanel = contentPanelGO.GetComponent<RectTransform>();
+        }
+        else
+        {
+            rt = scrollRectGO2.GetComponent<RectTransform>();
+            scrollRect = scrollRectGO2.GetComponent<ScrollRect>();
+            contentPanel = contentPanelGO2.GetComponent<RectTransform>();
+        }
+               
+        Vector3 pos = rt.position;
+        Canvas.ForceUpdateCanvases();
+        if (dir == "up")
+        {
+            contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
+
+        }
+        else if(dir == "down")
+        {
+            contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
+        }
+           
+
+        yield return null;
     }
 
     public void ClickStartMenu()
