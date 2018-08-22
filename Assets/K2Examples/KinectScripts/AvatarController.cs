@@ -933,15 +933,7 @@ public class AvatarController : MonoBehaviour
                 //Debug.Log("hipStraightness = " + hipStraightness);
                 // Use the most reliable kneeOut (if knee is bent, use that, if hips are bent, use that, otherwise, just use spine out)
                 Vector3 spineLeft = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].right;
-                Vector3 kneeOut = spineLeft;
-                if (legStraightness < 0.95f)
-                    kneeOut = Vector3.Cross(hipLeftForward, kneeLeftForward);
-                else if (hipStraightness < 0.95f)
-                {
-                    kneeOut = Vector3.Cross(spineToHipForward, hipLeftForward);
-                    if (Vector3.Dot(kneeOut, spineLeft) < 0) // if kneeout is facing inward, invert it.
-                        kneeOut *= -1.0f;
-                }
+                Vector3 kneeOut = GetKneeOut(legStraightness, hipStraightness, hipLeftForward, kneeLeftForward, spineToHipForward);
                 Vector3 hipLeftDown = Vector3.Cross(hipLeftForward, kneeOut);
                 boneTransform.rotation = Quaternion.LookRotation(hipLeftDown, hipLeftForward);
                 break;
@@ -953,15 +945,7 @@ public class AvatarController : MonoBehaviour
                 hipStraightness = Vector3.Dot(hipRightForward.normalized, spineToHipForward.normalized);
                 // Use the most reliable kneeOut (if knee is bent, use that, if hips are bent, use that, otherwise, just use spine out)
                 Vector3 spineRight = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].right;
-                kneeOut = spineRight;
-                if (legStraightness < 0.95f)
-                    kneeOut = Vector3.Cross(hipRightForward, kneeRightForward);
-                else if (hipStraightness < 0.95f)
-                {
-                    kneeOut = Vector3.Cross(spineToHipForward, hipRightForward);
-                    if (Vector3.Dot(kneeOut, spineRight) < 0) // if kneeout is facing inward, invert it.
-                        kneeOut *= -1.0f;
-                }
+                kneeOut = GetKneeOut(legStraightness, hipStraightness, hipRightForward, kneeRightForward, spineToHipForward);
                 Vector3 hipRightDown = Vector3.Cross(hipRightForward, kneeOut);
                 boneTransform.rotation = Quaternion.LookRotation(hipRightDown, hipRightForward);
                 break;
@@ -1002,6 +986,40 @@ public class AvatarController : MonoBehaviour
                 break;
         }
 
+    }
+
+    protected Vector3 GetKneeOut(float legStraightness, float hipStraightness, Vector3 hipForward, Vector3 kneeForward, Vector3 spineToHipForward)
+    {
+        // Use the most reliable kneeOut (if knee is bent, use that, if hips are bent, use that, otherwise, just use spine out)
+        Vector3 spineOut = bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].right;
+
+        float kneeInterp = 0;
+        float hipInterp = 0;
+        Vector3 kneeOut = spineOut;
+        Vector3 hipOut = spineOut;
+
+        if (legStraightness < 0.95f)
+        {
+            kneeOut = Vector3.Cross(hipForward, kneeForward);
+            kneeInterp = (0.95f - legStraightness) / 10f;
+        }
+
+        if (hipStraightness < 0.95f)
+        {
+            hipOut = Vector3.Cross(spineToHipForward, hipForward);
+            if (Vector3.Dot(hipOut, spineOut) < 0) // if kneeout is facing inward, invert it.
+                hipOut *= -1.0f;
+            hipInterp = (0.95f - hipStraightness) / 10f;
+        }
+
+        // interpolate between spineRight
+        Vector3 finalKneeOut = spineOut;
+        if (kneeInterp > 0 || hipInterp > 0)
+            finalKneeOut = Vector3.Lerp(
+                Vector3.Lerp(kneeOut, spineOut, kneeInterp), 
+                Vector3.Lerp(hipOut, spineOut, hipInterp), kneeInterp / (kneeInterp + hipInterp));
+
+        return finalKneeOut;
     }
 
     //protected void CheckLimitShoulderAngle(Transform bone)
