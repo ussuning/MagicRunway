@@ -89,7 +89,7 @@ public class BrainDataManager : MonoBehaviour
         {
             for (int i = 0; i < brains.Length; i++)
             {
-                brains[i].brainParameters.vectorObservationSize = posesData.poses[i].num_joint_detections * 3;
+                brains[i].brainParameters.vectorObservationSize = posesData.poses[i].num_joint_detections * 4;
                 TextAsset trained_data = Resources.Load<TextAsset>(trainedDataFolderPath + (i + 1).ToString());
                 ((CoreBrain)brains[i].CoreBrains[(int)BrainType.Internal]).SetBrainData(trained_data);
             }

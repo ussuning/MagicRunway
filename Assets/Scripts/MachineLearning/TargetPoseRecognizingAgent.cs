@@ -54,16 +54,15 @@ public class TargetPoseRecognizingAgent : Agent {
                 int JointIdx = pose.joint_ids[i];
                 if (kinectMgr.IsJointTracked(KinectUserId, JointIdx))
                 {
-                    Vector3 JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx).eulerAngles;
-                    JointOrientation = NormalizeAngles(JointOrientation);
-                    AddVectorObs(JointOrientation);
-
-                    //Vector3 JointDirection = kinectMgr.GetJointDirection(KinectUserId, JointIdx);
+                    //Vector3 JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx).eulerAngles;
+                    //JointOrientation = NormalizeAngles(JointOrientation);
                     //AddVectorObs(JointOrientation);
 
-                    //KinectInterop.JointData Joint = kinectMgr.GetJointData(KinectUserId, JointIdx);
-                    //Vector3 JointRot = Joint.normalRotation.eulerAngles;
-                    //AddVectorObs(JointRot);
+                    //Vector3 JointDirection = kinectMgr.GetJointDirection(KinectUserId, JointIdx);
+                    //AddVectorObs(JointDirection);
+
+                    Quaternion JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx);
+                    AddVectorObs(JointOrientation);
                 }
             }
         }
@@ -71,7 +70,8 @@ public class TargetPoseRecognizingAgent : Agent {
         {
             for (int i = 0; i < pose.num_joint_detections; i++)
             {
-                AddVectorObs(Vector3.zero);
+                //AddVectorObs(Vector3.zero);
+                AddVectorObs(Quaternion.identity);
             }
         }
     }
@@ -79,7 +79,7 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         poseConfidence = vectorAction[0];
-        //Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
+        Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
     }
 
     public override void AgentOnDone()
