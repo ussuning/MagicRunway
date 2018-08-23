@@ -18,6 +18,7 @@ public class UIManager : Singleton<UIManager>
 
     // Inventory Menu
     public float inventoryScrollSize = 424;
+    public GameObject controls;
     public GameObject scrollRectGO;
     public GameObject contentPanelGO;
     public GameObject scrollRectGO2;
@@ -143,13 +144,21 @@ public class UIManager : Singleton<UIManager>
                
         Vector3 pos = rt.position;
         Canvas.ForceUpdateCanvases();
+        string controlName;
+        GameObject control;
         if (dir == "up")
         {
+            controlName = "Menu_Up_" + userIndex;
+            control = controls.transform.Find(controlName).gameObject;
+            InventoryControlSelected(control);
             contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
 
         }
         else if(dir == "down")
-        {
+        { 
+            controlName = "Menu_Down_" + userIndex;
+            control = controls.transform.Find(controlName).gameObject;
+            InventoryControlSelected(control);
             contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
         }
            
@@ -308,6 +317,23 @@ public class UIManager : Singleton<UIManager>
         uiMaleGender.SetActive(false);
         uiFemaleGender.SetActive(true);
     }
+
+    public void InventoryControlSelected(GameObject control)
+    {
+        GameObject selected = control.transform.Find("Selected").gameObject;
+        selected.SetActive(true);
+        StartCoroutine(InventoryControlUnselected(selected));
+    }
+
+    IEnumerator InventoryControlUnselected(GameObject selected)
+    {
+        yield return new WaitForSeconds(0.75f);
+
+        selected.SetActive(false);
+
+        yield return null;
+    }
+
 
     IEnumerator WaitToCloseGender(float delay)
     {
