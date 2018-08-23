@@ -21,7 +21,7 @@ public class TimeManager {
         get { return Time.timeScale; }
         set
         {
-            Debug.Log("TimeManager.timeScale = " + value);
+           // Debug.Log("TimeManager.timeScale = " + value);
             Time.timeScale = value;
         }
     }

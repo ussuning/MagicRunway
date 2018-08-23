@@ -3931,7 +3931,7 @@ public class KinectManager : MonoBehaviour
 					return;
 				}
 				
-				Debug.Log("Adding user " + uidIndex + ", ID: " + userId + ", Body: " + bodyIndex + ", Time: " + Time.realtimeSinceStartup);
+			//	Debug.Log("Adding user " + uidIndex + ", ID: " + userId + ", Body: " + bodyIndex + ", Time: " + Time.realtimeSinceStartup);
                 UserEvents.NewUserDetected(userId, uidIndex);
 				dictUserIdToIndex[userId] = bodyIndex;
 				dictUserIdToTime[userId] = Time.time;

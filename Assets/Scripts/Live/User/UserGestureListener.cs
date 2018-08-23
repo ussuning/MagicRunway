@@ -21,7 +21,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
   
     public void Initialize(long userId, int userIndex)
     {
-        Debug.Log("User Gesture Listener initialized");
+        //Debug.Log("User Gesture Listener initialized");
         uindex = userIndex;
         uid = userId;
     }
@@ -106,28 +106,38 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         else if (gesture == KinectGestures.Gestures.SwipeRight || gesture == KinectGestures.Gestures.SwipeDown)
         {
             Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-           // KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeRight);
-            int currentSlot = UserManager.Instance.getUserById(userId).getInventorySlot();
-            int nextSlot = (currentSlot + 1) % maxSlots;
+          
+            int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
+
+            
+
+            //int nextSlot = (currentSlot + 1) % maxSlots;
+            if (nextSlot > maxSlots)
+            {
+                return false;
+            }
+
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
             Destroy(UserManager.Instance.getUserById(userId).getOutfit());
-            UserManager.Instance.renderOutfit(userId, nextSlot);
-           // KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
-
             StartCoroutine(UIManager.Instance.scrollInventory(userIndex, "down"));
+            UserManager.Instance.renderOutfit(userId, nextSlot);
         }
         else if (gesture == KinectGestures.Gestures.SwipeLeft || gesture == KinectGestures.Gestures.SwipeUp)
         {
             Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-           // KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeLeft);
+       
             int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
-            nextSlot = Math.Abs(nextSlot) % maxSlots;
+            //nextSlot = Math.Abs(nextSlot) % maxSlots;
+
+            if(nextSlot < 1)
+            {
+                return false;
+            }
+
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
             Destroy(UserManager.Instance.getUserById(userId).getOutfit());
-            UserManager.Instance.renderOutfit(userId, nextSlot);
-           // KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
-
             StartCoroutine(UIManager.Instance.scrollInventory(userIndex, "up"));
+            UserManager.Instance.renderOutfit(userId, nextSlot);
         }
         return true;
     }
