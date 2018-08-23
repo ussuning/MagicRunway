@@ -1,10 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class CutoutTextureSwapper : MonoBehaviour {
 
     public Texture2D alphaMap;
+
+    internal Material originalMaterial;
+    internal Material cutoutMaterial;
+
 	// Use this for initialization
 	void Start () {
         /* Take the original material, copy it, take its texture and make a 
@@ -13,6 +20,7 @@ public class CutoutTextureSwapper : MonoBehaviour {
          * Swap original material with new material 
         */
         Material mat = GetComponent<Renderer>().sharedMaterial;
+        originalMaterial = mat;
         Texture2D srcTex = mat.mainTexture as Texture2D;
         if (srcTex == null) {
             // Material had no texture, so we will just create one;
@@ -49,8 +57,8 @@ public class CutoutTextureSwapper : MonoBehaviour {
 
         neoMat.mainTexture = neoTex;
         GetComponent<Renderer>().sharedMaterial = neoMat;
-
-	}
+        cutoutMaterial = neoMat;
+    }
 
     // From https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
     Texture2D GetReadableTexture(Texture2D texture) {
@@ -87,4 +95,41 @@ public class CutoutTextureSwapper : MonoBehaviour {
         // "myTexture2D" now has the same pixels from "texture" and it's readable.
         return myTexture2D;
     }
+
+    public void Original()
+    {
+        if (originalMaterial != null)
+            GetComponent<Renderer>().sharedMaterial = originalMaterial;
+        else
+            Debug.LogError("No originalMaterial!");
+    }
+
+    public void Cutout()
+    {
+        if (cutoutMaterial != null)
+            GetComponent<Renderer>().sharedMaterial = cutoutMaterial;
+        else
+            Debug.LogError("No cutoutMaterial!");
+    }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(CutoutTextureSwapper))]
+public class CutoutTextureSwapperEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        CutoutTextureSwapper myScript = (CutoutTextureSwapper)target;
+        if (GUILayout.Button("Original"))
+        {
+            myScript.Original();
+        }
+        if (GUILayout.Button("Cutout"))
+        {
+            myScript.Cutout();
+        }
+    }
+}
+#endif

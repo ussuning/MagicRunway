@@ -56,6 +56,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         transform.localEulerAngles = new Vector3(0f, 180f, 0f);
         transform.FindDeepChild("body")?.gameObject.SetActive(false);
+        transform.FindDeepChild("shoes")?.gameObject.SetActive(false);
 
         // Initialize avatar controller classic
         avatarController = GetComponent<AvatarControllerClassic>();
