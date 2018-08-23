@@ -64,7 +64,7 @@ public class UserManager : Singleton<UserManager>
     // New User detected, instantiate user skeleton and attach gesture listener
     void UserManager_NewUserDetected(long userId, int userIndex)
     {
-        Debug.Log("UserManager: New User Event Callback invoked.");
+        //Debug.Log("UserManager: New User Event Callback invoked.");
 
         // add user if not already exists, sometimes same user is detected as new user multiple times
         if(userLookup.ContainsKey(userId)) 
@@ -108,7 +108,7 @@ public class UserManager : Singleton<UserManager>
             Mode mode = AppManager.Instance.getMode();
             if (mode == Mode.LIVE)
             {
-                Debug.Log("User count = 0 cries. Going back to Auto Runway");
+              //  Debug.Log("User count = 0 cries. Going back to Auto Runway");
                 // AppManager.Instance.LiveToAuto();
                 StartCoroutine(AppManager.Instance.ShouldRestartScene());
             }
@@ -235,23 +235,23 @@ public class UserManager : Singleton<UserManager>
 
     public void renderOutfit(long userId, int slot)
     {
-        Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
+      //  Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
         string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex());
-        Debug.Log("Inventory Menu Name = " + inventoryMenuName);
+      //  Debug.Log("Inventory Menu Name = " + inventoryMenuName);
         
         GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
         GameObject slotGO = inventoryMenuGO.transform.Find("slot_" + slot).gameObject;
 
-        Debug.Log("Slot = " + slot);
+     //   Debug.Log("Slot = " + slot);
         PrefabReference prefabRef = slotGO.GetComponent<PrefabReference>();
 
-        Debug.Log("Prefab = " + prefabRef.name);
+     //   Debug.Log("Prefab = " + prefabRef.name);
         prefabRef.Load(userLookup[userId].getUserIndex());
         userLookup[userId].setOutfit(prefabRef.instance);
 
         //GameObject outfitGO = UserManager.Instance.getUserById(userId).getOutfit();
-        Image img = slotGO.GetComponent<Image>();
-        img.color = new Color32(255, 255, 255, 100);
+        //Image img = slotGO.GetComponent<Image>();
+        //img.color = new Color32(255, 255, 255, 100);
     }
 
     protected void addUserScoreUI(long uid)

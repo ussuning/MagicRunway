@@ -186,7 +186,7 @@ public class AppManager : Singleton<AppManager>
     public IEnumerator ShouldRestartScene()
     {
         Debug.Log("No Users, wait another 10 seconds for new user or else go back to AutoRunway");
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(30);
 
         StartCoroutine(UserManager.Instance.getNumberofUsers(RestartScene));
     }
