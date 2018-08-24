@@ -140,8 +140,9 @@ public class UIManager : Singleton<UIManager>
             scrollRect = scrollRectGO2.GetComponent<ScrollRect>();
             contentPanel = contentPanelGO2.GetComponent<RectTransform>();
         }
-        SetInventorySlotBorder(userIndex, UserManager.Instance.getUserById(userId).getInventorySlot(), false);
 
+        int currentSlot = UserManager.Instance.getUserById(userId).getInventorySlot();
+       
         Debug.Log("Current Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
 
         Vector3 pos = rt.position;
@@ -153,20 +154,28 @@ public class UIManager : Singleton<UIManager>
         {
             nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-            SetInventorySlotBorder(userIndex, nextSlot, true);
+           // SetInventorySlotBorderOff(userIndex, currentSlot);
+           // SetInventorySlotBorderOn(userIndex, nextSlot);
             controlName = "Menu_Up_" + userIndex;
             control = controls.transform.Find(controlName).gameObject;
             InventoryControlSelected(control);
+
+            yield return null;
+
             contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
         }
         else if(dir == "down")
         {
             nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-            SetInventorySlotBorder(userIndex, nextSlot, true);
+          //  SetInventorySlotBorderOff(userIndex, currentSlot);
+          //  SetInventorySlotBorderOn(userIndex, nextSlot);
             controlName = "Menu_Down_" + userIndex;
             control = controls.transform.Find(controlName).gameObject;
             InventoryControlSelected(control);
+
+            yield return null;
+
             contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
         }
 
@@ -337,19 +346,34 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(InventoryControlUnselected(selected));
     }
 
-    public void SetInventorySlotBorder(int userIndex, int slot, bool status)
+    public void SetInventorySlotBorderOff(int userIndex, int slot)
     {
         string inventoryMenuName = "InventoryMenu_" + userIndex;
         string slotName = "slot_" + slot;
 
         Debug.Log("inventory menu name = " + inventoryMenuName);
         Debug.Log("slot name = " + slotName);
-        Debug.Log("status = " + status);
+      //  Debug.Log("status = " + status);
 
         GameObject inventoryGO = GameObject.Find(inventoryMenuName);
         GameObject slotGO = inventoryGO.transform.Find(slotName).gameObject;
         GameObject selected = slotGO.transform.Find("Selected").gameObject;
-        selected.SetActive(status);
+        selected.SetActive(false);
+    }
+
+    public void SetInventorySlotBorderOn(int userIndex, int slot)
+    {
+        string inventoryMenuName = "InventoryMenu_" + userIndex;
+        string slotName = "slot_" + slot;
+
+        Debug.Log("inventory menu name = " + inventoryMenuName);
+        Debug.Log("slot name = " + slotName);
+     //   Debug.Log("status = " + status);
+
+        GameObject inventoryGO = GameObject.Find(inventoryMenuName);
+        GameObject slotGO = inventoryGO.transform.Find(slotName).gameObject;
+        GameObject selected = slotGO.transform.Find("Selected").gameObject;
+        selected.SetActive(true);
     }
 
     IEnumerator InventoryControlUnselected(GameObject selected)
