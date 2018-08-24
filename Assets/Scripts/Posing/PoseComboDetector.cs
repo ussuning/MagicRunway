@@ -5,19 +5,18 @@ using UnityEngine.UI;
 
 public class PoseComboDetector : MonoBehaviour {
 
-    private int combo = 0;
+    private List<int> comboIDs = new List<int>();
     public int ComboNum
     {
         get
         {
-            if (combo > PoseMgr.Instance.ComboCount - 1)
-                return PoseMgr.Instance.ComboCount - 1;
-            return combo;
+            return comboIDs.Count;
         }
     }
 
     private float poseTimeEllapsed = 0f;
     private long lastComboOwner = 0L;
+    private int lastMatchedPose = 0;
 
     void OnEnable()
     {
@@ -32,18 +31,20 @@ public class PoseComboDetector : MonoBehaviour {
     public void OnUserPoseMatched(object param, object paramEx, object paramEx2)
     {
         lastComboOwner = (long)param;
+        lastMatchedPose = (int)paramEx2;
 
         if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).combo_time)
         {
-            combo++;
-            if (combo > 1)
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, lastComboOwner, combo);
-            if (combo > 4)
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.High_Combo_Detected, combo);
+            comboIDs.Add(lastMatchedPose);
+            if (comboIDs.Count > 1)
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, lastComboOwner, comboIDs.Count);
+            if (comboIDs.Count > 4)
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.High_Combo_Detected, comboIDs.Count);
         }
         else
         {
-            combo = 1;
+            comboIDs.Clear();
+            comboIDs.Add(lastMatchedPose);
         }
         GenerateNewPose();
 
@@ -53,7 +54,7 @@ public class PoseComboDetector : MonoBehaviour {
 
     void Start()
     {
-        combo = 0;
+        comboIDs.Clear();
         poseTimeEllapsed = 0f;
 
         GenerateNewPose();
@@ -76,7 +77,7 @@ public class PoseComboDetector : MonoBehaviour {
 
     void ClearCombo()
     {
-        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Broken_Detected, lastComboOwner, combo);
-        combo = 0;
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Broken_Detected, lastComboOwner, comboIDs);
+        comboIDs.Clear();
     }
 }

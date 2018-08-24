@@ -58,7 +58,9 @@ public class UserScore : MonoBehaviour {
     public void OnComboScored(object param, object paramEx, object paramEx2)
     {
         long lastComboOwner = (long)param;
-        int combo = (int)paramEx;
+        List<int> comboIDs = (List<int>)paramEx;
+
+        int combo = comboIDs.Count;
         if (lastComboOwner == userID)
         {
             AddScore(ScoreMgr.Instance.GetComboScore(combo));
