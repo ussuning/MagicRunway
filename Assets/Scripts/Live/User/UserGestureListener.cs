@@ -100,7 +100,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         {
            // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
             int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
-            if (nextSlot > maxSlots - 1)
+            if (nextSlot > maxSlots)
             {
                 return false;
             }
