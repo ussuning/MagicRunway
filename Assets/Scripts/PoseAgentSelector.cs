@@ -40,7 +40,7 @@ public class PoseAgentSelector : MonoBehaviour
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.New_Pose_Generated, OnNewPoseGenerated);
     }
 
-    public void OnNewPoseGenerated(object param, object paramEx)
+    public void OnNewPoseGenerated(object param, object paramEx, object paramEx2)
     {
         if (!isUserTracked())
         {

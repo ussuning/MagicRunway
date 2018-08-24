@@ -23,7 +23,7 @@ public class PoseFX : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnPoseDetected);
     }
 
-    public void OnPoseDetected(object param, object paramEx)
+    public void OnPoseDetected(object param, object paramEx, object paramEx2)
     {
         long matched_userID = (long)param;
         float pose_confidence = (float)paramEx;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void HandleEvent(object param, object paramEx);
+public delegate void HandleEvent(object param, object paramEx, object paramEx2);
 
 public class EventMsgDispatcher
 {
@@ -67,19 +67,19 @@ public class EventMsgDispatcher
         }
     }
 
-    public void TriggerEvent(int msgID, object param=null, object paramEx=null)
+    public void TriggerEvent(int msgID, object param=null, object paramEx=null, object paramEx2=null)
     {
-        DispatchMsg(msgID, param, paramEx);
+        DispatchMsg(msgID, param, paramEx, paramEx2);
     }
 
-    private void DispatchMsg(int msgID, object param, object paramEx)
+    private void DispatchMsg(int msgID, object param, object paramEx, object paramEx2)
     {
         List<HandleEvent> obList;
         if (msgHandlerDic.TryGetValue(msgID, out obList))
         {
             for (int i = 0; i < obList.Count; i++)
             {
-                obList[i](param, paramEx);
+                obList[i](param, paramEx, paramEx2);
             }
         }
     }

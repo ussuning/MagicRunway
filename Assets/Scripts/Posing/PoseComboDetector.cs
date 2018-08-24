@@ -29,7 +29,7 @@ public class PoseComboDetector : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
     }
 
-    public void OnUserPoseMatched(object param, object paramEx)
+    public void OnUserPoseMatched(object param, object paramEx, object paramEx2)
     {
         lastComboOwner = (long)param;
 
