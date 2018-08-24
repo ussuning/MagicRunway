@@ -367,6 +367,7 @@ public class UserManager : Singleton<UserManager>
         Dictionary<long, User> currentUsers = getCurrentUsers();
         foreach (KeyValuePair<long, User> user in currentUsers)
         {
+            UserManager.Instance.getUserById(user.Value.getUserId()).setInventorySlot(1);
             renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
         }
     }
