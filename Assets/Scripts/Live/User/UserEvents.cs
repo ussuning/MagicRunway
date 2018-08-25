@@ -12,7 +12,7 @@ public class UserEvents : MonoBehaviour {
     {
         if (OnNewUserDetectedCallback != null)
         {
-            Debug.Log("UserEvents: New User, invoking callbacks");
+          //  Debug.Log("UserEvents: New User, invoking callbacks");
             OnNewUserDetectedCallback(userId, userIndex);            
         }
     }
@@ -25,7 +25,7 @@ public class UserEvents : MonoBehaviour {
     {
         if (OnUserLostCallback != null)
         {
-            Debug.Log("UserEvents: UserLost, invoking callbacks");
+         //   Debug.Log("UserEvents: UserLost, invoking callbacks");
             OnUserLostCallback(userId, userIndex);
         }
     }
@@ -38,7 +38,7 @@ public class UserEvents : MonoBehaviour {
     {
         if (OnUserLostCallback != null)
         {
-            Debug.Log("UserEvents: UserGenderComplete, invoking callbacks");
+        //    Debug.Log("UserEvents: UserGenderComplete, invoking callbacks");
             OnUserGenderCompleteCallback(userId, userIndex);
         }
     }

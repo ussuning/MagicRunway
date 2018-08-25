@@ -182,6 +182,24 @@ public class AppManager : Singleton<AppManager>
         music.clip = clip;
         music.Play();
     }
+
+    public IEnumerator ShouldRestartScene()
+    {
+        Debug.Log("No Users, wait another 10 seconds for new user or else go back to AutoRunway");
+        yield return new WaitForSeconds(30);
+
+        StartCoroutine(UserManager.Instance.getNumberofUsers(RestartScene));
+    }
+
+    public void RestartScene(int numUsers)
+    {
+        if (numUsers == 0)
+        {
+            Debug.Log("Restarting Scene: Going back to AutoRunway!!");
+            Scene loadedLevel = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(loadedLevel.buildIndex);
+        }
+    }
 }
 
 

@@ -35,7 +35,7 @@ public class TargetPoseRecognizingAgent : Agent {
 
         if (isPoseMatched)
         {
-            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId, poseConfidence);
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, KinectUserId, poseConfidence, poseID);
             isPoseMatched = false;
             //Debug.Log(string.Format("User {0} : Agent {1}: action = {2} @ {3}", this.name, poseID, poseConfidence, poseCDTimeEllapsed));
         }
@@ -79,7 +79,7 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         poseConfidence = vectorAction[0];
-        Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
+       // Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
     }
 
     public override void AgentOnDone()

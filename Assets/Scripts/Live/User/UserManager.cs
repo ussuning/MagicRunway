@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.UI;
 
 public class UserManager : Singleton<UserManager>
 {
@@ -62,7 +64,7 @@ public class UserManager : Singleton<UserManager>
     // New User detected, instantiate user skeleton and attach gesture listener
     void UserManager_NewUserDetected(long userId, int userIndex)
     {
-        Debug.Log("UserManager: New User Event Callback invoked.");
+        //Debug.Log("UserManager: New User Event Callback invoked.");
 
         // add user if not already exists, sometimes same user is detected as new user multiple times
         if(userLookup.ContainsKey(userId)) 
@@ -106,8 +108,9 @@ public class UserManager : Singleton<UserManager>
             Mode mode = AppManager.Instance.getMode();
             if (mode == Mode.LIVE)
             {
-                Debug.Log("User count = 0 cries. Going back to Auto Runway");
-                AppManager.Instance.LiveToAuto();
+              //  Debug.Log("User count = 0 cries. Going back to Auto Runway");
+                // AppManager.Instance.LiveToAuto();
+                StartCoroutine(AppManager.Instance.ShouldRestartScene());
             }
             if (mode == Mode.AUTO)
             {
@@ -232,19 +235,23 @@ public class UserManager : Singleton<UserManager>
 
     public void renderOutfit(long userId, int slot)
     {
-        Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
+      //  Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
         string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex());
-        Debug.Log("Inventory Menu Name = " + inventoryMenuName);
+      //  Debug.Log("Inventory Menu Name = " + inventoryMenuName);
         
         GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
         GameObject slotGO = inventoryMenuGO.transform.Find("slot_" + slot).gameObject;
 
-        Debug.Log("Slot = " + slot);
+     //   Debug.Log("Slot = " + slot);
         PrefabReference prefabRef = slotGO.GetComponent<PrefabReference>();
 
-        Debug.Log("Prefab = " + prefabRef.name);
+     //   Debug.Log("Prefab = " + prefabRef.name);
         prefabRef.Load(userLookup[userId].getUserIndex());
         userLookup[userId].setOutfit(prefabRef.instance);
+
+        //GameObject outfitGO = UserManager.Instance.getUserById(userId).getOutfit();
+        //Image img = slotGO.GetComponent<Image>();
+        //img.color = new Color32(255, 255, 255, 100);
     }
 
     protected void addUserScoreUI(long uid)
@@ -271,7 +278,7 @@ public class UserManager : Singleton<UserManager>
     {
         foreach (var component in kinectController.GetComponents<UserGestureListener>())
         {
-            Debug.Log("addgesturelistener  " + userId + " " + userIndex);
+            //Debug.Log("addgesturelistener  " + userId + " " + userIndex);
 
             if (component.uindex == userIndex)
             {
@@ -348,7 +355,7 @@ public class UserManager : Singleton<UserManager>
 
     IEnumerator joinLivePrompt()
     {
-        Debug.Log("UserManager COROUTINE- Show Start Menu!!");
+        //Debug.Log("UserManager COROUTINE- Show Start Menu!!");
         yield return new WaitForSeconds(5);
         UIManager.Instance.ShowStartMenu(true);
     }
@@ -360,13 +367,14 @@ public class UserManager : Singleton<UserManager>
         Dictionary<long, User> currentUsers = getCurrentUsers();
         foreach (KeyValuePair<long, User> user in currentUsers)
         {
+            UserManager.Instance.getUserById(user.Value.getUserId()).setInventorySlot(1);
             renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
         }
     }
 
     IEnumerator addUser(long userId, int userIndex)
     {
-        Debug.Log("UserManager COROUTINE- Setup");
+       // Debug.Log("UserManager COROUTINE- Setup");
         // add user to scene
         setup(userId, userIndex);
 
@@ -392,20 +400,25 @@ public class UserManager : Singleton<UserManager>
             renderOutfit(userId, 1);   // remove hard code later
         }
 
-        Debug.Log("UserManager COROUTINE- ALL DONE!!!!!!");
+        yield return null;
+    }
+
+    public IEnumerator getNumberofUsers(Action<int> callback)
+    {
+        callback(userLookup.Count);
         yield return null;
     }
 
     void Update()
     {
         // display gender icon next to each user on every tick
-        if (AppManager.Instance.getMode() == Mode.LIVE)
+      /*  if (AppManager.Instance.getMode() == Mode.LIVE)
         {
             foreach (KeyValuePair<long, User> user in userLookup)
             {
                 // render gender icon
                 updateGenderIconPos(user.Value.getUserId(), user.Value.getGenderIconPosition());
             }
-        }
+        }*/
     }
 }
