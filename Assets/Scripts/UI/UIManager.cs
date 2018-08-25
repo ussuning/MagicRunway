@@ -154,32 +154,22 @@ public class UIManager : Singleton<UIManager>
         {
             nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-           // SetInventorySlotBorderOff(userIndex, currentSlot);
-           // SetInventorySlotBorderOn(userIndex, nextSlot);
             controlName = "Menu_Up_" + userIndex;
             control = controls.transform.Find(controlName).gameObject;
             InventoryControlSelected(control);
-
-            yield return null;
-
             contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
         }
         else if(dir == "down")
         {
             nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-          //  SetInventorySlotBorderOff(userIndex, currentSlot);
-          //  SetInventorySlotBorderOn(userIndex, nextSlot);
             controlName = "Menu_Down_" + userIndex;
             control = controls.transform.Find(controlName).gameObject;
             InventoryControlSelected(control);
-
-            yield return null;
-
             contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
         }
 
-        Debug.Log("Next Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
+        //Debug.Log("Next Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
 
         yield return null;
     }
@@ -351,29 +341,10 @@ public class UIManager : Singleton<UIManager>
         string inventoryMenuName = "InventoryMenu_" + userIndex;
         string slotName = "slot_" + slot;
 
-        Debug.Log("inventory menu name = " + inventoryMenuName);
-        Debug.Log("slot name = " + slotName);
-      //  Debug.Log("status = " + status);
-
         GameObject inventoryGO = GameObject.Find(inventoryMenuName);
         GameObject slotGO = inventoryGO.transform.Find(slotName).gameObject;
         GameObject selected = slotGO.transform.Find("Selected").gameObject;
         selected.SetActive(false);
-    }
-
-    public void SetInventorySlotBorderOn(int userIndex, int slot)
-    {
-        string inventoryMenuName = "InventoryMenu_" + userIndex;
-        string slotName = "slot_" + slot;
-
-        Debug.Log("inventory menu name = " + inventoryMenuName);
-        Debug.Log("slot name = " + slotName);
-     //   Debug.Log("status = " + status);
-
-        GameObject inventoryGO = GameObject.Find(inventoryMenuName);
-        GameObject slotGO = inventoryGO.transform.Find(slotName).gameObject;
-        GameObject selected = slotGO.transform.Find("Selected").gameObject;
-        selected.SetActive(true);
     }
 
     IEnumerator InventoryControlUnselected(GameObject selected)
@@ -384,7 +355,6 @@ public class UIManager : Singleton<UIManager>
 
         yield return null;
     }
-
 
     IEnumerator WaitToCloseGender(float delay)
     {

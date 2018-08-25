@@ -21,7 +21,6 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
   
     public void Initialize(long userId, int userIndex)
     {
-        //Debug.Log("User Gesture Listener initialized");
         uindex = userIndex;
         uid = userId;
     }
