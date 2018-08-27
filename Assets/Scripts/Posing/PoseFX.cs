@@ -26,7 +26,8 @@ public class PoseFX : MonoBehaviour {
     public void OnPoseDetected(object [] param)
     {
         long matched_userID = (long)param[0];
-        float pose_confidence = (float)param[1];
+        int poseID = (int)param[1];
+        float pose_confidence = (float)param[2];
         if(matched_userID == userID)
             UpdateComboParticles(pose_confidence);
     }

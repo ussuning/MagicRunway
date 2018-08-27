@@ -35,7 +35,7 @@ public class TargetPoseRecognizingAgent : Agent {
 
         if (isPoseMatched)
         {
-            object[] param = { KinectUserId, poseConfidence, poseID };
+            object[] param = { KinectUserId, poseID, poseConfidence};
             EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, param);
             isPoseMatched = false;
             //Debug.Log(string.Format("User {0} : Agent {1}: action = {2} @ {3}", this.name, poseID, poseConfidence, poseCDTimeEllapsed));

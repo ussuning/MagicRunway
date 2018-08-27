@@ -31,7 +31,7 @@ public class PoseComboDetector : MonoBehaviour {
     public void OnUserPoseMatched(object [] param)
     {
         lastComboOwner = (long)param[0];
-        lastMatchedPose = (int)param[2];
+        lastMatchedPose = (int)param[1];
 
         if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).combo_time)
         {

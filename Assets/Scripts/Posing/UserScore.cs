@@ -47,7 +47,8 @@ public class UserScore : MonoBehaviour {
     public void OnUserPoseMatched(object [] param)
     {
         long matchedUserID = (long)param[0];
-        float poseConfidence = (float)param[1];
+        int poseID = (int)param[1];
+        float poseConfidence = (float)param[2];
         if (matchedUserID == userID)
         {
             AddScore(ScoreMgr.Instance.SinglePoseScore);
