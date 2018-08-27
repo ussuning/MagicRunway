@@ -66,9 +66,9 @@ public class CutoutTextureSwapper : MonoBehaviour {
         RenderTexture tmp = RenderTexture.GetTemporary(
                             texture.width,
                             texture.height,
-                            0,
+                            16,
                             RenderTextureFormat.Default,
-                            RenderTextureReadWrite.Linear);
+                            RenderTextureReadWrite.sRGB);
 
         // Blit the pixels on texture to the RenderTexture
         Graphics.Blit(texture, tmp);
