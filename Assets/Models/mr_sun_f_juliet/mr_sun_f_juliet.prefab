@@ -460,7 +460,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4285986346154692}
-  - component: {fileID: 136062498657850468}
+  - component: {fileID: 136313842405439736}
   m_Layer: 13
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -649,7 +649,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1523016177984542
 GameObject:
   m_ObjectHideFlags: 1
@@ -1160,6 +1160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4906143919442866}
   - component: {fileID: 137560400820029694}
+  - component: {fileID: 114067758624128090}
   m_Layer: 13
   m_Name: body
   m_TagString: Untagged
@@ -2428,7 +2429,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!136 &136062498657850468
+--- !u!114 &114067758624128090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1923482940558906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33b4f02e8bf6f4bb88c720bcc618e4d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alphaMap: {fileID: 2800000, guid: 9beb0351e74ea334eb88066c17feb0dc, type: 3}
+--- !u!136 &136313842405439736
 CapsuleCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2833,7 +2846,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 5deae86580cea46448494b195a0ba479, type: 2}
+  - {fileID: 2100000, guid: b52dda2086d6c444cb9c987dcf680956, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2888,7 +2901,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: b66d0e4bab76a472a9ac75a6fe490de5, type: 2}
+  - {fileID: 2100000, guid: 36303566be29c124289f462c9bc4469e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2987,7 +3000,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 3c08bcfa54049436aa3ab2d1b5f90e81, type: 2}
+  - {fileID: 2100000, guid: 82c214a48715aa24ca2d11c0edf608b8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
