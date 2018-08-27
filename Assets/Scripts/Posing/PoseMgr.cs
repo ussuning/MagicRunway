@@ -75,7 +75,8 @@ public class PoseMgr : MonoBehaviour {
 
         StartCoroutine(SetNewPoseCooldown());
 
-        EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, curPose);
+        object[] param = { curPose };
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
     }
 
     IEnumerator SetNewPoseCooldown()

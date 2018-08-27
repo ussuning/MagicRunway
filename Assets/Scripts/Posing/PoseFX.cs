@@ -23,10 +23,10 @@ public class PoseFX : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnPoseDetected);
     }
 
-    public void OnPoseDetected(object param, object paramEx, object paramEx2)
+    public void OnPoseDetected(object [] param)
     {
-        long matched_userID = (long)param;
-        float pose_confidence = (float)paramEx;
+        long matched_userID = (long)param[0];
+        float pose_confidence = (float)param[1];
         if(matched_userID == userID)
             UpdateComboParticles(pose_confidence);
     }

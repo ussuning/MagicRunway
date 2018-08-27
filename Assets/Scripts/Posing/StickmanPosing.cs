@@ -21,9 +21,9 @@ public class StickmanPosing : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.New_Pose_Generated, OnNewPoseGenerated);
     }
 
-    public void OnNewPoseGenerated(object param, object paramEx, object paramEx2)
+    public void OnNewPoseGenerated(object [] param)
     {
-        int poseID = (int)param;
+        int poseID = (int)param[0];
         if (anim)
             anim.SetInteger("pose", poseID);
     }

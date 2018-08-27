@@ -44,10 +44,10 @@ public class UserScore : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboScored);
     }
 
-    public void OnUserPoseMatched(object param, object paramEx, object paramEx2)
+    public void OnUserPoseMatched(object [] param)
     {
-        long matchedUserID = (long)param;
-        float poseConfidence = (float)paramEx;
+        long matchedUserID = (long)param[0];
+        float poseConfidence = (float)param[1];
         if (matchedUserID == userID)
         {
             AddScore(ScoreMgr.Instance.SinglePoseScore);
@@ -55,10 +55,10 @@ public class UserScore : MonoBehaviour {
         }
     }
 
-    public void OnComboScored(object param, object paramEx, object paramEx2)
+    public void OnComboScored(object [] param)
     {
-        long lastComboOwner = (long)param;
-        List<int> comboIDs = (List<int>)paramEx;
+        long lastComboOwner = (long)param[0];
+        List<int> comboIDs = (List<int>)param[1];
 
         int combo = comboIDs.Count;
         if (lastComboOwner == userID)

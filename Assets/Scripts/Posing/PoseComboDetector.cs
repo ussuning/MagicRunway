@@ -28,18 +28,24 @@ public class PoseComboDetector : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
     }
 
-    public void OnUserPoseMatched(object param, object paramEx, object paramEx2)
+    public void OnUserPoseMatched(object [] param)
     {
-        lastComboOwner = (long)param;
-        lastMatchedPose = (int)paramEx2;
+        lastComboOwner = (long)param[0];
+        lastMatchedPose = (int)param[2];
 
         if (poseTimeEllapsed <= PoseMgr.Instance.GetComboInfo(ComboNum).combo_time)
         {
             comboIDs.Add(lastMatchedPose);
             if (comboIDs.Count > 1)
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, lastComboOwner, comboIDs.Count);
+            {
+                object[] combo_param = { lastComboOwner, comboIDs.Count};
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Combo_Detected, combo_param);
+            }
             if (comboIDs.Count > 4)
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.High_Combo_Detected, comboIDs.Count);
+            {
+                object[] highCombo_param = { comboIDs.Count };
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.High_Combo_Detected, highCombo_param);
+            }
         }
         else
         {
@@ -77,7 +83,8 @@ public class PoseComboDetector : MonoBehaviour {
 
     void ClearCombo()
     {
-        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Broken_Detected, lastComboOwner, comboIDs);
+        object[] param = { lastComboOwner, comboIDs };
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Broken_Detected, param);
         comboIDs.Clear();
     }
 }

@@ -79,9 +79,9 @@ public class CameraShaderMgr : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
     }
 
-    public void OnHighComboDetected(object param, object paramEx, object paramEx2)
+    public void OnHighComboDetected(object [] param)
     {
-        int comboNum = (int)param;
+        int comboNum = (int)param[0];
 
         for (int i = 0; i < shaderControllers.Length; i++)
         {
@@ -92,7 +92,7 @@ public class CameraShaderMgr : MonoBehaviour {
         }
     }
 
-    public void OnComboBroken(object param, object paramEx, object paramEx2)
+    public void OnComboBroken(object [] param)
     {
         for (int i = 0; i < shaderControllers.Length; i++)
         {

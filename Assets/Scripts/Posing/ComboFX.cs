@@ -37,15 +37,15 @@ public class ComboFX : MonoBehaviour {
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
     }
 
-    public void OnUserComboDetected(object param, object paramEx, object paramEx2)
+    public void OnUserComboDetected(object [] param)
     {
-        long userID = (long)param;
-        int comboNum = (int)paramEx;
+        long userID = (long)param[0];
+        int comboNum = (int)param[1];
 
         SetComboText(userID, comboNum);
     }
 
-    public void OnComboBroken(object param, object paramEx, object paramEx2)
+    public void OnComboBroken(object[] param)
     {
         ClearComboText();
     }
