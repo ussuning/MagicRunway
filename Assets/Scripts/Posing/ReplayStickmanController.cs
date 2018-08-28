@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ReplayStickmanController : MonoBehaviour {
 
@@ -63,7 +62,7 @@ public class ReplayStickmanController : MonoBehaviour {
     void ResetStickman()
     {
         rendTrans.anchoredPosition = initAnchoredPos;
-        initScale = rendTrans.localScale;
+        rendTrans.localScale = initScale;
 
         anim.SetInteger("pose", 0);
     }
@@ -103,3 +102,4 @@ public class ReplayStickmanController : MonoBehaviour {
     }
 
 }
+
