@@ -1038,7 +1038,7 @@ public class InteractionManager : MonoBehaviour
         {
             if (result.gameObject.name == "JoinInButton")
             {
-                if (handClickProgress > 0.9)
+                if (handClickProgress > 0.8)
                 {
                     hitJoin = false;
                     guiHandCursor.rectTransform.position = new Vector3(-1, -1, 0);
