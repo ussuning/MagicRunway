@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class ReplayStickmanController : MonoBehaviour {
 
+    public int replayMin = 3;
     public float walkingTranslationSpeed = 1f;
     public float walkingScalingSpeed = 0.005f;
     public float poseDuration = 0.5f;
 
     public RectTransform rendTrans;
-    public RawImage rendImage;
+    public GameObject replayPanel;
 
     private Animator anim;
 
@@ -38,22 +39,23 @@ public class ReplayStickmanController : MonoBehaviour {
 
     public void ReplayCombo(object[] param)
     {
-        comboBuffer.Clear();
-        comboBuffer = (List<int>)param[1];
-        StartReplay();
+        List<int> comboPoses = (List<int>)param[1];
+        if (comboPoses.Count >= replayMin)
+        {
+            comboBuffer = new List<int>(comboPoses);
+            StartReplay();
+        }   
     }
 
     void Start()
     {
         initAnchoredPos = rendTrans.anchoredPosition;
         initScale = rendTrans.localScale;
-
-        StartReplay();
     }
 
     void StartReplay()
     {
-        ResetStickman();
+        //ResetStickman();
         ShowRender();
         StartCoroutine(MoveTowardsScreen());
     }
@@ -91,12 +93,13 @@ public class ReplayStickmanController : MonoBehaviour {
 
     void ShowRender()
     {
-        rendImage.enabled = true;
+        replayPanel.SetActive(true);
     }
 
     void HideRender()
     {
-        rendImage.enabled = false;
+        ResetStickman();
+        replayPanel.SetActive(false);
     }
 
 }
