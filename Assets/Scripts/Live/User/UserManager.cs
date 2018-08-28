@@ -158,6 +158,12 @@ public class UserManager : Singleton<UserManager>
         // remove listener
         removeGestureListener(userId, userIndex);
 
+        // remove outfit
+        Destroy(UserManager.Instance.getUserById(userId).getOutfit());
+
+        // remove inventory
+        UIManager.Instance.HideControlPanel(userIndex);
+
         // remove user data from scene
         removeUserModel(userId);
 
@@ -367,7 +373,7 @@ public class UserManager : Singleton<UserManager>
         Dictionary<long, User> currentUsers = getCurrentUsers();
         foreach (KeyValuePair<long, User> user in currentUsers)
         {
-            UserManager.Instance.getUserById(user.Value.getUserId()).setInventorySlot(1);
+            UserManager.Instance.getUserById(user.Value.getUserId()).setInventorySlot(6);
             renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
         }
     }

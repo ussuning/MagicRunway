@@ -18,18 +18,21 @@ public class UIManager : Singleton<UIManager>
 
     // Inventory Menu
     public float inventoryScrollSize = 424;
-    public GameObject controls;
     public GameObject scrollRectGO;
     public GameObject contentPanelGO;
+    public GameObject controlPanelGO;
     public GameObject scrollRectGO2;
     public GameObject contentPanelGO2;
-   
+    public GameObject controlPanelGO2;
+
     protected GameObject uiMaleGender;
     protected GameObject uiFemaleGender;
     protected Button uiJoinInButton;
 
     private CanvasFader faderStartMenu;
     private CanvasFader faderInventory;
+    private CanvasFader faderControl;
+    private CanvasFader faderControl2;
     private CanvasFader faderStickMan;
     private IEnumerator gestureGenderCoroutine;
     private IEnumerator stickManCoroutine;
@@ -52,6 +55,8 @@ public class UIManager : Singleton<UIManager>
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
         faderInventory = uiInventory.GetComponent<CanvasFader>();
         faderStickMan = uiStickMan.GetComponent<CanvasFader>();
+        faderControl = controlPanelGO.GetComponent<CanvasFader>();
+        faderControl2 = controlPanelGO2.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
     }
@@ -121,24 +126,57 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void ShowControlPanel(int index)
+    {
+        if(index == 0)
+        {
+            controlPanelGO.SetActive(true);
+            faderControl.StartFading(CanvasFade.IN);
+        }
+        else if(index == 1)
+        {
+            controlPanelGO2.SetActive(true);
+            faderControl2.StartFading(CanvasFade.IN);
+        }
+    }
+
+    public void HideControlPanel(int index)
+    {
+        if (index == 0)
+        {
+            controlPanelGO.SetActive(false);
+            faderControl.StartFading(CanvasFade.OUT);
+        }
+        else if (index == 1)
+        {
+            controlPanelGO2.SetActive(false);
+            faderControl2.StartFading(CanvasFade.OUT);
+        }
+    }
+
+
     public IEnumerator scrollInventory(int userIndex, long userId, string dir)
     {
         Debug.Log("scrollInventory " + userIndex + " " + dir);
         RectTransform rt;
         ScrollRect scrollRect;
         RectTransform contentPanel;
+        GameObject controlGO;
+        GameObject control;
 
         if (userIndex == 0 )
         {
             rt = scrollRectGO.GetComponent<RectTransform>();
             scrollRect = scrollRectGO.GetComponent<ScrollRect>();
             contentPanel = contentPanelGO.GetComponent<RectTransform>();
+            controlGO = controlPanelGO;
         }
         else
         {
             rt = scrollRectGO2.GetComponent<RectTransform>();
             scrollRect = scrollRectGO2.GetComponent<ScrollRect>();
             contentPanel = contentPanelGO2.GetComponent<RectTransform>();
+            controlGO = controlPanelGO2;
         }
 
         int currentSlot = UserManager.Instance.getUserById(userId).getInventorySlot();
@@ -148,14 +186,13 @@ public class UIManager : Singleton<UIManager>
         Vector3 pos = rt.position;
         Canvas.ForceUpdateCanvases();
         string controlName;
-        GameObject control;
         int nextSlot;
         if (dir == "up")
         {
             nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
             controlName = "Menu_Up_" + userIndex;
-            control = controls.transform.Find(controlName).gameObject;
+            control = controlGO.transform.Find(controlName).gameObject;
             InventoryControlSelected(control);
             contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
         }
@@ -164,7 +201,7 @@ public class UIManager : Singleton<UIManager>
             nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
             UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
             controlName = "Menu_Down_" + userIndex;
-            control = controls.transform.Find(controlName).gameObject;
+            control = controlGO.transform.Find(controlName).gameObject;
             InventoryControlSelected(control);
             contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
         }

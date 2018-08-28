@@ -45,7 +45,7 @@ public class LiveRunwayManager : MonoBehaviour {
         UIManager.Instance.ShowCollection(curCollection);
         UIManager.Instance.ShowUpNext(curCollection);
         UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);
-        StartCoroutine(UserManager.Instance.renderOutfitsforAllUsers());
+    //    StartCoroutine(UserManager.Instance.renderOutfitsforAllUsers());
     }
 
     public void StopLiveRunway()

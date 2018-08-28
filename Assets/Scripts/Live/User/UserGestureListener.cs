@@ -72,7 +72,9 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             UserManager.Instance.addGenderIcon(userId, "female");
             UserManager.Instance.setGender(userId, "female");
             UIManager.Instance.ShowFemaleGender();
-            UIManager.Instance.ShowStickManDelay(2.0f);
+            UIManager.Instance.ShowControlPanel(userIndex);
+            UIManager.Instance.ShowStickManDelay(10.0f);
+            UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
         }
         else if (gesture == KinectGestures.Gestures.RaiseRightHand)
@@ -92,7 +94,9 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             UserManager.Instance.addGenderIcon(userId, "male");
             UserManager.Instance.setGender(userId, "male");
             UIManager.Instance.ShowMaleGender();
-            UIManager.Instance.ShowStickManDelay(2.0f);
+            UIManager.Instance.ShowControlPanel(userIndex);
+            UIManager.Instance.ShowStickManDelay(10.0f);
+            UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
         }
         else if (gesture == KinectGestures.Gestures.SwipeRight || gesture == KinectGestures.Gestures.SwipeDown)
