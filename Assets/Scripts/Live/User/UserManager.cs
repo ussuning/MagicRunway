@@ -241,7 +241,7 @@ public class UserManager : Singleton<UserManager>
 
     public void renderOutfit(long userId, int slot)
     {
-      //  Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
+        Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
         string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex());
       //  Debug.Log("Inventory Menu Name = " + inventoryMenuName);
         
@@ -366,7 +366,7 @@ public class UserManager : Singleton<UserManager>
         UIManager.Instance.ShowStartMenu(true);
     }
 
-    public IEnumerator renderOutfitsforAllUsers()
+   /* public IEnumerator renderOutfitsforAllUsers()
     {
         yield return new WaitForSeconds(4);
 
@@ -377,6 +377,7 @@ public class UserManager : Singleton<UserManager>
             renderOutfit(user.Value.getUserId(), user.Value.getInventorySlot());
         }
     }
+    */
 
     IEnumerator addUser(long userId, int userIndex)
     {
@@ -401,11 +402,7 @@ public class UserManager : Singleton<UserManager>
         {
             StartCoroutine(joinLivePrompt());
         }
-        else
-        {
-            renderOutfit(userId, 1);   // remove hard code later
-        }
-
+      
         yield return null;
     }
 

@@ -8,7 +8,7 @@ public class User : MonoBehaviour {
     public long uid;
     public string ugender;    // switch to enum later
     public GameObject outfitGO;
-    public int inventorySlot = 1;
+    public int inventorySlot;
     public Vector3 uposition;
     public Vector3 genderIconPosition;
     private GameObject userSkeletonGO;
@@ -19,14 +19,13 @@ public class User : MonoBehaviour {
     {
         uid = id;
         uindex = index;
-        setInventorySlot(inventorySlot);
     }
 
     public void initialize(long id, int index)
     {
         uid = id;
         uindex = index;
-        setInventorySlot(inventorySlot);
+        inventorySlot = 1;
     }
 
     public long getUserId()
