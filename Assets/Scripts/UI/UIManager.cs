@@ -24,6 +24,10 @@ public class UIManager : Singleton<UIManager>
     public GameObject scrollRectGO2;
     public GameObject contentPanelGO2;
     public GameObject controlPanelGO2;
+    public GameObject inventoryMaleGO;
+    public GameObject inventoryMaleGO2;
+    public GameObject inventoryFemaleGO;
+    public GameObject inventoryFemaleGO2;
 
     protected GameObject uiMaleGender;
     protected GameObject uiFemaleGender;
@@ -351,16 +355,30 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(gestureGenderCoroutine);
     }
 
-    public void ShowMaleGender(float time = 30.0f)
+    public void ShowMaleGender(int index)
     {
-        uiMaleGender.SetActive(true);
-        uiFemaleGender.SetActive(false);
+        if(index == 0)
+        {
+            inventoryMaleGO.SetActive(true);
+        }
+        else if(index == 1)
+        {
+            inventoryMaleGO2.SetActive(true);
+        }
+        ShowControlPanel(index);
     }
 
-    public void ShowFemaleGender(float time = 30.0f)
+    public void ShowFemaleGender(int index)
     {
-        uiMaleGender.SetActive(false);
-        uiFemaleGender.SetActive(true);
+        if (index == 0)
+        {
+            inventoryFemaleGO.SetActive(true);
+        }
+        else if (index == 1)
+        {
+            inventoryFemaleGO2.SetActive(true);
+        }
+        ShowControlPanel(index);
     }
 
     //----------------------------------------
