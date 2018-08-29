@@ -247,7 +247,17 @@ public class UserManager : Singleton<UserManager>
       //  Debug.Log("Inventory Menu Name = " + inventoryMenuName);
         
         GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
-        GameObject slotGO = inventoryMenuGO.transform.Find("slot_" + slot).gameObject;
+        GameObject inventoryGenderGO;
+        string inventoryGenderName;
+        if (UserManager.Instance.getUserById(userId).getGender() == "female")
+        {
+            inventoryGenderName = "Inventory_Female_" + userLookup[userId].getUserIndex();
+        } else
+        {
+            inventoryGenderName = "Inventory_Male_" + userLookup[userId].getUserIndex();
+        }
+        inventoryGenderGO = inventoryMenuGO.transform.Find(inventoryGenderName).gameObject;
+        GameObject slotGO = inventoryGenderGO.transform.Find("slot_" + slot).gameObject;
 
      //   Debug.Log("Slot = " + slot);
         PrefabReference prefabRef = slotGO.GetComponent<PrefabReference>();
