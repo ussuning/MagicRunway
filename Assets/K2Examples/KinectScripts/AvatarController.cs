@@ -1017,7 +1017,7 @@ public class AvatarController : MonoBehaviour
 
         // Is the shoulder not too straight with spine down? If so, we can calculate a better shoulderDown
         float shoulderStraightness = Vector3.Dot(spineDown.normalized, shoulderForward.normalized);
-        Debug.Log("shoulderStraightness = " + shoulderStraightness);
+        //Debug.Log("shoulderStraightness = " + shoulderStraightness);
         if (shoulderStraightness < 0.99f)
         {
             Vector3 shoulderOut = Vector3.Cross(spineDown, shoulderForward);
@@ -1034,8 +1034,8 @@ public class AvatarController : MonoBehaviour
             elbowInterp = Mathf.Clamp((0.95f - elbowStraightness) / .1f, 0, 1);
         }
 
-        Debug.Log("elbowInterp = " + elbowInterp);
-        Debug.Log("shoulderInterp = " + shoulderInterp);
+        //Debug.Log("elbowInterp = " + elbowInterp);
+        //Debug.Log("shoulderInterp = " + shoulderInterp);
         // interpolate between spineRight
         Vector3 finalShoulderDown = spineIn;
         if (shoulderInterp > 0 || elbowInterp > 0)
@@ -2146,15 +2146,39 @@ public class AvatarController : MonoBehaviour
     public void LoadConfigData()
     {
         AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
+        string acName = this.name;
+
+        // Clean up the name in case this is a (Clone) object.
+        string cloneStr = "(Clone)";
+        int cloneIdx = acName.IndexOf(cloneStr);
+        if (cloneIdx >= 0)
+            acName.Remove(cloneIdx);
+
+        AvatarControllerEntry data = null;
         if (acConfigData.entries.ContainsKey(this.name))
         {
-            AvatarControllerEntry data = acConfigData.entries[this.name];
-            data.PopulateTo(this);
+            data = acConfigData.entries[this.name];
         }
         else
         {
             Debug.LogError("Unable to find tuning values for " + this.name);
+            // Load default male or female tuning values.
+            string[] parts = this.name.Split('_');
+            string gender = parts[2].ToLower();
+            if (gender.StartsWith("f"))
+            {
+                Debug.LogError("Loading default female tuning values");
+                data = acConfigData.entries["mr_sun_f_nina"];
+            }
+            else if (gender.StartsWith("m"))
+            {
+                Debug.LogError("Loading default male tuning values");
+                data = acConfigData.entries["mr_sun_m_anthony"];
+            }
         }
+
+        if (data != null)
+            data.PopulateTo(this);
     }
 }
 
