@@ -11,6 +11,7 @@ public class TargetPoseRecognizingAgent : Agent {
     private int poseID;
 
     private bool isPoseMatched = false;
+    private bool isInCooldown = false;
 
     private float poseConfidence;
 
@@ -29,16 +30,23 @@ public class TargetPoseRecognizingAgent : Agent {
             agentParameters = new AgentParameters();
     }
 
-    void Update()
+    void OnDisable()
     {
-        isPoseMatched = !PoseMgr.Instance.IsInNewPoseCooldown && poseConfidence >= pose.min_confidence;
+        isInCooldown = false;
+    }
 
-        if (isPoseMatched)
+    void Update()
+    { 
+        if (!PoseMgr.Instance.IsInNewPoseCooldown && !isInCooldown)
         {
-            object[] param = { KinectUserId, poseID, poseConfidence};
-            EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, param);
-            isPoseMatched = false;
-            //Debug.Log(string.Format("User {0} : Agent {1}: action = {2} @ {3}", this.name, poseID, poseConfidence, poseCDTimeEllapsed));
+            isPoseMatched = poseConfidence >= pose.min_confidence;
+            if (isPoseMatched)
+            {
+                object[] param = { KinectUserId, poseID, poseConfidence };
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, param);
+                isPoseMatched = false;
+                isInCooldown = true;
+            }
         }
     }
 

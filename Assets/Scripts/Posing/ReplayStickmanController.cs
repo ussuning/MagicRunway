@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ReplayStickmanController : MonoBehaviour {
 
+    public static ReplayStickmanController Instance;
+
     public int replayMin = 3;
     public float walkingTranslationSpeed = 1f;
     public float walkingScalingSpeed = 0.005f;
@@ -20,30 +22,35 @@ public class ReplayStickmanController : MonoBehaviour {
     private List<int> comboBuffer = new List<int>();
     private int replayIdx = 0;
 
+    private bool isReplaying = false;
+    public bool IsReplaying
+    {
+        get
+        {
+            return isReplaying;
+        }
+    }
 
     void Awake()
     {
+        Instance = this;
         anim = GetComponent<Animator>();
     }
 
     void OnEnable()
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Broken_Detected, ReplayCombo);
+        EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Replay_Start, ReplayCombo);
     }
 
     void OnDisable()
     {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, ReplayCombo);
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Replay_Start, ReplayCombo);
     }
 
     public void ReplayCombo(object[] param)
     {
-        List<int> comboPoses = (List<int>)param[1];
-        if (comboPoses.Count >= replayMin)
-        {
-            comboBuffer = new List<int>(comboPoses);
-            StartReplay();
-        }   
+        comboBuffer = new List<int>((List<int>)param[1]);
+        StartReplay();   
     }
 
     void Start()
@@ -54,6 +61,7 @@ public class ReplayStickmanController : MonoBehaviour {
 
     void StartReplay()
     {
+        isReplaying = true;
         //ResetStickman();
         ShowRender();
         StartCoroutine(MoveTowardsScreen());
@@ -82,7 +90,7 @@ public class ReplayStickmanController : MonoBehaviour {
 
     void PlayComboPoses()
     {
-        anim.SetInteger("pose", comboBuffer[replayIdx]);
+        anim.SetInteger("pose", comboBuffer[replayIdx] + 1);
         replayIdx++;
         if (replayIdx < comboBuffer.Count)
             Invoke("PlayComboPoses", poseDuration);
@@ -99,6 +107,9 @@ public class ReplayStickmanController : MonoBehaviour {
     {
         ResetStickman();
         replayPanel.SetActive(false);
+
+        isReplaying = false;
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Combo_Replay_End);
     }
 
 }
