@@ -79,6 +79,7 @@ public class UserManager : Singleton<UserManager>
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);      // move icons right
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.Wave);       // hide menu
 
         StartCoroutine(addUser(userId, userIndex));
 
