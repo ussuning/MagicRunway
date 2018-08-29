@@ -69,10 +69,9 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             UIManager.Instance.HideGestureGender(true);
 
           //  Debug.Log("User " + userId + " is female");
-            UserManager.Instance.addGenderIcon(userId, "female");
+          //  UserManager.Instance.addGenderIcon(userId, "female");
             UserManager.Instance.setGender(userId, "female");
-            UIManager.Instance.ShowFemaleGender();
-            UIManager.Instance.ShowControlPanel(userIndex);
+            UIManager.Instance.ShowFemaleGender(userIndex);
             UIManager.Instance.ShowStickManDelay(10.0f);
             UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
@@ -91,10 +90,9 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             UIManager.Instance.HideGestureGender(true);
 
            // Debug.Log("User " + userId + " is male");
-            UserManager.Instance.addGenderIcon(userId, "male");
+           // UserManager.Instance.addGenderIcon(userId, "male");
             UserManager.Instance.setGender(userId, "male");
-            UIManager.Instance.ShowMaleGender();
-            UIManager.Instance.ShowControlPanel(userIndex);
+            UIManager.Instance.ShowMaleGender(userIndex);
             UIManager.Instance.ShowStickManDelay(10.0f);
             UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
