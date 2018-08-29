@@ -4939,7 +4939,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1314250646}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a669d15f0035bbf4889c8092b5bcd201, type: 3}
   m_Name: 
@@ -5545,49 +5545,6 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734390986844448, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224396333085796712, guid: b89244c5b2d458b47baba6cf2ab960ce,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -642.5001
-      objectReference: {fileID: 0}
-    - target: {fileID: 224396333085796712, guid: b89244c5b2d458b47baba6cf2ab960ce,
-        type: 2}
-      propertyPath: m_SizeDelta.y
-      value: 5528
-      objectReference: {fileID: 0}
-    - target: {fileID: 1140495889117866, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421537724589304, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 224763148828597708, guid: b89244c5b2d458b47baba6cf2ab960ce,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -8310
-      objectReference: {fileID: 0}
-    - target: {fileID: 1140495889117866, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_Name
-      value: Inventory_Female_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1421537724589304, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_Name
-      value: Inventory_Male_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1965500653311674, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_Name
-      value: Inventory_Female_0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1034300157741842, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
-      propertyPath: m_Name
-      value: Inventory_Male_0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b89244c5b2d458b47baba6cf2ab960ce, type: 2}
@@ -6974,7 +6931,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1915517782
 RectTransform:
   m_ObjectHideFlags: 0

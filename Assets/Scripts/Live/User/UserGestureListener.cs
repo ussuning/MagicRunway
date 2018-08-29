@@ -48,6 +48,11 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 
         if(AppManager.Instance.getMode() == Mode.AUTO)
         {
+            if(gesture == KinectGestures.Gestures.RaiseRightHand)
+            {
+                UIManager.Instance.ClickStartMenu();
+            }
+
             return false;
         }
     
