@@ -453,7 +453,7 @@ public class AvatarController : MonoBehaviour
 
         avatarScaler = GetComponent<AvatarScaler>();
 
-        debugTuningObj = GameObject.Find("DebugTuningObj").GetComponent<MeshRenderer>();
+        debugTuningObj = GameObject.Find("DebugTuningObj")?.GetComponent<MeshRenderer>();
 	}
 
 
@@ -2161,18 +2161,18 @@ public class AvatarController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Unable to find tuning values for " + this.name);
+            Debug.LogWarning("Unable to find tuning values for " + this.name);
             // Load default male or female tuning values.
             string[] parts = this.name.Split('_');
             string gender = parts[2].ToLower();
             if (gender.StartsWith("f"))
             {
-                Debug.LogError("Loading default female tuning values");
+                Debug.LogWarning("Loading default female tuning values");
                 data = acConfigData.entries["mr_sun_f_nina"];
             }
             else if (gender.StartsWith("m"))
             {
-                Debug.LogError("Loading default male tuning values");
+                Debug.LogWarning("Loading default male tuning values");
                 data = acConfigData.entries["mr_sun_m_anthony"];
             }
         }
