@@ -45,6 +45,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
     public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture,
                                   KinectInterop.JointType joint, Vector3 screenPos)
     {
+        Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
         // the gestures are allowed for the primary user only
         if (userIndex != uindex)
             return false;
@@ -55,9 +56,14 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             {
                 UIManager.Instance.ClickStartMenu();
             }
+        }
 
+        if (AppManager.Instance.getMode() == Mode.AUTO)
+        {
             return false;
         }
+
+
 
         if (gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
