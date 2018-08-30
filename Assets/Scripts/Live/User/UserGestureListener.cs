@@ -45,15 +45,13 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
     public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture,
                                   KinectInterop.JointType joint, Vector3 screenPos)
     {
-        Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
         // the gestures are allowed for the primary user only
         if (userIndex != uindex)
             return false;
-
-        if (AppManager.Instance.getMode() == Mode.AUTO)
+        if (AppManager.Instance.getMode() == Mode.AUTO && gesture == KinectGestures.Gestures.RaiseRightHand)
         {
             UIManager.Instance.ClickStartMenu();
-            StartCoroutine(UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot()));
+            return true;
         }
 
         if (AppManager.Instance.getMode() == Mode.LIVE)
@@ -83,12 +81,6 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             {
                 //   Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
                 // return if gender already set
-                if (AppManager.Instance.getMode() == Mode.AUTO)
-                {
-                    UIManager.Instance.ClickStartMenu();
-                    return true;
-                }
-
                 if (UserManager.Instance.getUserById(userId).getGender() != null)
                 {
                     //  Debug.Log("Gender already set");
@@ -106,9 +98,10 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                 StartCoroutine(UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot()));
                 KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             }
-            else if (gesture == KinectGestures.Gestures.SwipeRight || gesture == KinectGestures.Gestures.SwipeDown)
+            else if (gesture == KinectGestures.Gestures.SwipeRight)
             {
-                // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeRight);
                 int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
                 if (nextSlot > maxSlots)
                 {
@@ -117,10 +110,12 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                 Destroy(UserManager.Instance.getUserById(userId).getOutfit());
                 StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "down"));
                 StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
+                KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
             }
-            else if (gesture == KinectGestures.Gestures.SwipeLeft || gesture == KinectGestures.Gestures.SwipeUp)
+            else if (gesture == KinectGestures.Gestures.SwipeLeft)
             {
-                // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeLeft);
                 int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
 
                 if (nextSlot < 1)
@@ -130,6 +125,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                 Destroy(UserManager.Instance.getUserById(userId).getOutfit());
                 StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "up"));
                 StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
+                KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
             }
         }
         return true;
