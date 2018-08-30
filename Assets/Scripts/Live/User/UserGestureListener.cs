@@ -105,6 +105,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                 int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
                 if (nextSlot > maxSlots)
                 {
+                    KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
                     return false;
                 }
                 Destroy(UserManager.Instance.getUserById(userId).getOutfit());
@@ -120,6 +121,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 
                 if (nextSlot < 1)
                 {
+                    KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
                     return false;
                 }
                 Destroy(UserManager.Instance.getUserById(userId).getOutfit());
