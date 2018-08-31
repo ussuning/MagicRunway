@@ -584,7 +584,7 @@ GameObject:
   - component: {fileID: 4141134360365308}
   - component: {fileID: 137686251784753088}
   m_Layer: 13
-  m_Name: men_simple_loafers
+  m_Name: shoes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,6 +598,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4285439146216144}
+  - component: {fileID: 136798139521876872}
   m_Layer: 13
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -620,7 +621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1502127606341408
 GameObject:
   m_ObjectHideFlags: 1
@@ -2230,6 +2231,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alphaMap: {fileID: 2800000, guid: 19070f992e081e94e8859237b65c0182, type: 3}
+--- !u!136 &136798139521876872
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489856609915414}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.26
+  m_Height: 1.94
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.12, z: 0}
 --- !u!137 &137149576361470716
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
