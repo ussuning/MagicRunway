@@ -71,16 +71,15 @@ public class UserManager : Singleton<UserManager>
         {
             return;
         }
-      
+
         // listening for these gestures for this user  
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);       // move icons left
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);      // move icons right
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
-        kinectManager.DetectGesture(userId, KinectGestures.Gestures.Wave);       // hide menu
-
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);   //female
+        kinectManager.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);  // male
+     //   kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeUp);       // display menu
+     //   kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeDown);       // hide menu
+     
         StartCoroutine(addUser(userId, userIndex));
 
         // show gender icons 
@@ -240,7 +239,7 @@ public class UserManager : Singleton<UserManager>
     }
    */
 
-    public void renderOutfit(long userId, int slot)
+    public IEnumerator renderOutfit(long userId, int slot)
     {
         Debug.Log("User Manager slot = " + slot + " " + userId + " index = " + userLookup[userId].getUserIndex());
         string inventoryMenuName = "InventoryMenu_" +  (userLookup[userId].getUserIndex());
@@ -266,6 +265,7 @@ public class UserManager : Singleton<UserManager>
         prefabRef.Load(userLookup[userId].getUserIndex());
         userLookup[userId].setOutfit(prefabRef.instance);
 
+        yield return null;
         //GameObject outfitGO = UserManager.Instance.getUserById(userId).getOutfit();
         //Image img = slotGO.GetComponent<Image>();
         //img.color = new Color32(255, 255, 255, 100);

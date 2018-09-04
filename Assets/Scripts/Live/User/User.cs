@@ -100,38 +100,39 @@ public class User : MonoBehaviour {
 
     protected Vector3 getCurrentPosition(int iJointIndex)
     {
-        KinectManager manager = KinectManager.Instance;
+        /*  KinectManager manager = KinectManager.Instance;
 
-        if (manager && manager.IsInitialized())
-        {
-            // get the background rectangle (use the portrait background, if available)
-            Camera foregroundCamera = Camera.main;
-            Rect backgroundRect = foregroundCamera.pixelRect;
-            PortraitBackground portraitBack = PortraitBackground.Instance;
+          if (manager && manager.IsInitialized())
+          {
+              // get the background rectangle (use the portrait background, if available)
+              Camera foregroundCamera = Camera.main;
+              Rect backgroundRect = foregroundCamera.pixelRect;
+              PortraitBackground portraitBack = PortraitBackground.Instance;
 
-            if (portraitBack && portraitBack.enabled)
-            {
-                backgroundRect = portraitBack.GetBackgroundRect();
-            }
+              if (portraitBack && portraitBack.enabled)
+              {
+                  backgroundRect = portraitBack.GetBackgroundRect();
+              }
 
-            //int iJointIndex = (int)KinectInterop.JointType.SpineMid;
-            if (manager.IsJointTracked(uid, iJointIndex))
-            {
-                return manager.GetJointPosColorOverlay(uid, iJointIndex, foregroundCamera, backgroundRect);
-            }
-        }
-
-        return Vector3.zero;
+              //int iJointIndex = (int)KinectInterop.JointType.SpineMid;
+              if (manager.IsJointTracked(uid, iJointIndex))
+              {
+                  return manager.GetJointPosColorOverlay(uid, iJointIndex, foregroundCamera, backgroundRect);
+              }
+          }
+          */
+          return Vector3.zero;
     }
 
     void Update()
     {
         // get this user's pos on every tick
-        uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
+       /* uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
         genderIconPosition = getCurrentPosition((int)KinectInterop.JointType.ShoulderLeft);
 
         //update gameObject pos 
         gameObject.transform.position = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
+        */
     }
 
 }

@@ -6,7 +6,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 {
     public long uid;
     public int uindex;
-    const int maxSlots = 12;
+    const int maxSlots = 13;
    
     // singleton instance of the class
     private static UserGestureListener instance = null;
@@ -48,83 +48,87 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
         // the gestures are allowed for the primary user only
         if (userIndex != uindex)
             return false;
-
-        if (AppManager.Instance.getMode() == Mode.AUTO)
+        if (AppManager.Instance.getMode() == Mode.AUTO && gesture == KinectGestures.Gestures.RaiseRightHand)
         {
-            if (gesture == KinectGestures.Gestures.Wave)
-            {
-                UIManager.Instance.ClickStartMenu();
-            }
-
-            return false;
+            UIManager.Instance.ClickStartMenu();
+            return true;
         }
 
-        if (gesture == KinectGestures.Gestures.RaiseLeftHand)
+        if (AppManager.Instance.getMode() == Mode.LIVE)
         {
-        //    Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-            // return if gender already set
-            if (UserManager.Instance.getUserById(userId).getGender() != null)
+            if (gesture == KinectGestures.Gestures.RaiseLeftHand)
             {
-              //  Debug.Log("Gender already set");
-                return false;
+                //    Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                // return if gender already set
+                if (UserManager.Instance.getUserById(userId).getGender() != null)
+                {
+                    //  Debug.Log("Gender already set");
+                    return false;
+                }
+
+                // store gender
+                UIManager.Instance.HideGestureGender(true);
+
+                //  Debug.Log("User " + userId + " is female");
+                //  UserManager.Instance.addGenderIcon(userId, "female");
+                UserManager.Instance.setGender(userId, "female");
+                UIManager.Instance.ShowFemaleGender(userIndex);
+                UIManager.Instance.ShowStickManDelay(10.0f);
+                StartCoroutine(UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot()));
+                KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             }
-
-            // store gender
-            UIManager.Instance.HideGestureGender(true);
-
-          //  Debug.Log("User " + userId + " is female");
-          //  UserManager.Instance.addGenderIcon(userId, "female");
-            UserManager.Instance.setGender(userId, "female");
-            UIManager.Instance.ShowFemaleGender(userIndex);
-            UIManager.Instance.ShowStickManDelay(10.0f);
-            UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-        }
-        else if (gesture == KinectGestures.Gestures.RaiseRightHand)
-        {
-         //   Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-            // return if gender already set
-            if (UserManager.Instance.getUserById(userId).getGender() != null)
+            else if (gesture == KinectGestures.Gestures.RaiseRightHand)
             {
-              //  Debug.Log("Gender already set");
-                return false;
-            }
+                //   Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                // return if gender already set
+                if (UserManager.Instance.getUserById(userId).getGender() != null)
+                {
+                    //  Debug.Log("Gender already set");
+                    return false;
+                }
 
-            // store gender
-            UIManager.Instance.HideGestureGender(true);
+                // store gender
+                UIManager.Instance.HideGestureGender(true);
 
-           // Debug.Log("User " + userId + " is male");
-           // UserManager.Instance.addGenderIcon(userId, "male");
-            UserManager.Instance.setGender(userId, "male");
-            UIManager.Instance.ShowMaleGender(userIndex);
-            UIManager.Instance.ShowStickManDelay(10.0f);
-            UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
-        }
-        else if (gesture == KinectGestures.Gestures.SwipeRight)
-        {
-           // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-            int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
-            if (nextSlot >= maxSlots)
-            {
-                return false;
+                // Debug.Log("User " + userId + " is male");
+                // UserManager.Instance.addGenderIcon(userId, "male");
+                UserManager.Instance.setGender(userId, "male");
+                UIManager.Instance.ShowMaleGender(userIndex);
+                UIManager.Instance.ShowStickManDelay(10.0f);
+                StartCoroutine(UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot()));
+                KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             }
-            Destroy(UserManager.Instance.getUserById(userId).getOutfit());
-            StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "down"));
-            UserManager.Instance.renderOutfit(userId, nextSlot);
-        }
-        else if (gesture == KinectGestures.Gestures.SwipeLeft)
-        {
-           // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
-            int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
-         
-            if(nextSlot < 1)
+            else if (gesture == KinectGestures.Gestures.SwipeRight)
             {
-                return false;
+                Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeRight);
+                int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
+                if (nextSlot > maxSlots)
+                {
+                    KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
+                    return false;
+                }
+                Destroy(UserManager.Instance.getUserById(userId).getOutfit());
+                StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "down"));
+                StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
+                KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
             }
-            Destroy(UserManager.Instance.getUserById(userId).getOutfit());
-            StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "up"));
-            UserManager.Instance.renderOutfit(userId, nextSlot);
+            else if (gesture == KinectGestures.Gestures.SwipeLeft)
+            {
+                Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
+                KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeLeft);
+                int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
+
+                if (nextSlot < 1)
+                {
+                    KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
+                    return false;
+                }
+                Destroy(UserManager.Instance.getUserById(userId).getOutfit());
+                StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "up"));
+                StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
+                KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
+            }
         }
         return true;
     }
