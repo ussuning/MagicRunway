@@ -6,7 +6,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 {
     public long uid;
     public int uindex;
-    const int maxSlots = 13;
+    const int maxSlots = 12;
    
     // singleton instance of the class
     private static UserGestureListener instance = null;
@@ -101,11 +101,11 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot());
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
         }
-        else if (gesture == KinectGestures.Gestures.SwipeRight || gesture == KinectGestures.Gestures.SwipeDown)
+        else if (gesture == KinectGestures.Gestures.SwipeRight)
         {
            // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
             int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
-            if (nextSlot > maxSlots)
+            if (nextSlot >= maxSlots)
             {
                 return false;
             }
@@ -113,7 +113,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "down"));
             UserManager.Instance.renderOutfit(userId, nextSlot);
         }
-        else if (gesture == KinectGestures.Gestures.SwipeLeft || gesture == KinectGestures.Gestures.SwipeUp)
+        else if (gesture == KinectGestures.Gestures.SwipeLeft)
         {
            // Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
             int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
