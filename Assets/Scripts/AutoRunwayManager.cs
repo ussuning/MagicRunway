@@ -205,6 +205,7 @@ public class AutoRunwayManager : MonoBehaviour
         ClearModels();
         DetachOutfits();
         UIManager.Instance.HideAll();
+        Destroy(autoRunwayContainer);
     }
 
     public void AttachOutfits()
