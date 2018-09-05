@@ -6,7 +6,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 {
     public long uid;
     public int uindex;
-    const int maxSlots = 13;
+    const int maxSlots = 12;
    
     // singleton instance of the class
     private static UserGestureListener instance = null;
@@ -103,15 +103,18 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                 Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
                 KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.SwipeRight);
                 int nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
-                if (nextSlot > maxSlots)
+                if (nextSlot >= maxSlots)
                 {
                     KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
                     return false;
                 }
-                Destroy(UserManager.Instance.getUserById(userId).getOutfit());
-                StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "down"));
-                StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
-                KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
+                else
+                {
+                    Destroy(UserManager.Instance.getUserById(userId).getOutfit());
+                    StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "down"));
+                    StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
+                    KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);
+                }
             }
             else if (gesture == KinectGestures.Gestures.SwipeLeft)
             {
@@ -124,10 +127,13 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
                     KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
                     return false;
                 }
-                Destroy(UserManager.Instance.getUserById(userId).getOutfit());
-                StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "up"));
-                StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
-                KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
+                else
+                {
+                    Destroy(UserManager.Instance.getUserById(userId).getOutfit());
+                    StartCoroutine(UIManager.Instance.scrollInventory(userIndex, userId, "up"));
+                    StartCoroutine(UserManager.Instance.renderOutfit(userId, nextSlot));
+                    KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);
+                }
             }
         }
         return true;
