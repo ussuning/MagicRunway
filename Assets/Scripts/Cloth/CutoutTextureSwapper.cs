@@ -8,12 +8,37 @@ using UnityEditor;
 public class CutoutTextureSwapper : MonoBehaviour {
 
     public Texture2D alphaMap;
+    public Texture2D alphaMap2;
+    public Texture2D alphaMap3;
+    public Texture2D alphaMap4;
+    public Texture2D alphaMap5;
 
     internal Material originalMaterial;
     internal Material cutoutMaterial;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
+
+        if (cutoutMaterial == null)
+            GenerateCutoutMaterial();
+    }
+
+    void GenerateCutoutMaterial() {
+#if UNITY_EDITOR
+        if (EditorApplication.isPlaying == false)
+        {
+            Debug.LogError("Can not Generate Cutout Material while not playing!");
+            return;
+        }
+#endif
+            Texture2D[] alphaMaps = new Texture2D[] { alphaMap, alphaMap2, alphaMap3, alphaMap4, alphaMap5 };
+        Vector2Int alphaMapSize = Vector2Int.zero;
+        if (validateAlphaMaps(alphaMaps, out alphaMapSize) == false)
+        {
+            Debug.LogError("AlphaMap arrays are not valid! Aborting!");
+            return;
+        }
+        
         /* Take the original material, copy it, take its texture and make a 
          * new one that combines it with the alphaMap.
          * Apply alpha map to new (copied) material.
@@ -24,22 +49,35 @@ public class CutoutTextureSwapper : MonoBehaviour {
         Texture2D srcTex = mat.mainTexture as Texture2D;
         if (srcTex == null) {
             // Material had no texture, so we will just create one;
-            srcTex = new Texture2D(alphaMap.width, alphaMap.height);
+            srcTex = new Texture2D(alphaMapSize.x, alphaMapSize.y);
         }
         Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
-        Color[] alphaPixels = GetReadableTexture(alphaMap).GetPixels();
 
-        if (alphaPixels.Length != srcPixels.Length) {
-            Debug.LogError("Mismatching texture sizes! This won't work!");
-            return;
-        }
-
-        for (int i = 0; i < srcPixels.Length; i++)
+        // Combine alpha maps, using the most transparent value for each pixel.
+        for (int i = 0; i < alphaMaps.Length; i++)
         {
-            srcPixels[i].a = alphaPixels[i].r;
-        }
+            Texture2D alphaMap = alphaMaps[i];
+            // skip if null.
+            if (alphaMap == null)
+                continue;
 
-        Texture2D neoTex = new Texture2D(alphaMap.width, alphaMap.height);
+            Color[] alphaPixels = GetReadableTexture(alphaMap).GetPixels();
+
+            if (alphaPixels.Length != srcPixels.Length)
+            {
+                Debug.LogError("Mismatching texture sizes! This won't work! Aborting!");
+                return;
+            }
+
+            for (int j = 0; j < srcPixels.Length; j++)
+            {
+                // if incoming alphapixels are more transparent (closer to 0), then use it.
+                if (alphaPixels[j].r < srcPixels[j].a)
+                    srcPixels[j].a = alphaPixels[j].r;
+            }
+
+        }
+        Texture2D neoTex = new Texture2D(alphaMapSize.x, alphaMapSize.y);
         neoTex.SetPixels(srcPixels);
         neoTex.Apply();
 
@@ -58,6 +96,43 @@ public class CutoutTextureSwapper : MonoBehaviour {
         neoMat.mainTexture = neoTex;
         GetComponent<Renderer>().sharedMaterial = neoMat;
         cutoutMaterial = neoMat;
+    }
+
+    bool validateAlphaMaps(Texture2D [] alphaMaps, out Vector2Int alphaMapSize)
+    {
+        alphaMapSize = Vector2Int.zero;
+        if (alphaMaps == null || alphaMaps.Length == 0)
+        {
+            Debug.LogError("AlphaMap array is empty!");
+            return false;
+        }
+
+        for (int i = 0; i < alphaMaps.Length; i++)
+        {
+            // Skip if null
+            if (alphaMaps[i] == null)
+                continue;
+
+            // set alphaMapSize if not set
+            if (alphaMapSize == Vector2.zero)
+            {
+                alphaMapSize = new Vector2Int(alphaMaps[i].width, alphaMaps[i].height);
+                continue;
+            }
+
+            // If alphaMapSize is set, ensure alphaMap[i] is same size.
+            if (alphaMapSize != Vector2.zero)
+            {
+                if (alphaMaps[i].width != alphaMapSize.x ||
+                    alphaMaps[i].height != alphaMapSize.y)
+                {
+                    Debug.LogError("Inconsistent pixel width and height between alpha maps!");
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     // From https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
@@ -96,7 +171,7 @@ public class CutoutTextureSwapper : MonoBehaviour {
         return myTexture2D;
     }
 
-    public void Original()
+    public void UseOriginal()
     {
         if (originalMaterial != null)
             GetComponent<Renderer>().sharedMaterial = originalMaterial;
@@ -104,12 +179,20 @@ public class CutoutTextureSwapper : MonoBehaviour {
             Debug.LogError("No originalMaterial!");
     }
 
-    public void Cutout()
+    public void UseCutout()
     {
         if (cutoutMaterial != null)
             GetComponent<Renderer>().sharedMaterial = cutoutMaterial;
         else
             Debug.LogError("No cutoutMaterial!");
+    }
+
+    public void Generate()
+    {
+        // Restore originalMaterial, discard old cutoutMaterial, generate new cutoutMaterial
+        UseOriginal();
+        cutoutMaterial = null;
+        GenerateCutoutMaterial();
     }
 }
 
@@ -124,11 +207,15 @@ public class CutoutTextureSwapperEditor : Editor
         CutoutTextureSwapper myScript = (CutoutTextureSwapper)target;
         if (GUILayout.Button("Original"))
         {
-            myScript.Original();
+            myScript.UseOriginal();
         }
         if (GUILayout.Button("Cutout"))
         {
-            myScript.Cutout();
+            myScript.UseCutout();
+        }
+        if (GUILayout.Button("Generate Cutout"))
+        {
+            myScript.Generate();
         }
     }
 }
