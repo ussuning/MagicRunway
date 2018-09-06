@@ -13,6 +13,22 @@ public class TransformDeepCopy : MonoBehaviour {
         public Vector3 localPosition;
         public Quaternion localRotation;
         public Vector3 localScale;
+
+        public static bool operator ==(TransformValues c1, TransformValues c2)
+        {
+            return c1.Equals(c2);
+        }
+        public static bool operator !=(TransformValues c1, TransformValues c2)
+        {
+            return !c1.Equals(c2);
+        }
+
+        public bool Equals(TransformValues t2)
+        {
+            return localPosition == t2.localPosition &&
+                localRotation == t2.localRotation &&
+                localScale == t2.localScale;
+        }
     }
 
     Dictionary<string, TransformValues> valuesByName = new Dictionary<string, TransformValues>();
