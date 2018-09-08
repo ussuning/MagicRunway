@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using MR;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,6 +14,10 @@ public class EquipableWearablesManager : MonoBehaviour {
 
     public Dictionary<EquipableSlot, Dictionary<string, Wearable>> wearablesBySlot; // wearables by slot
     public Dictionary<string, Wearable> wearables; // wearables by id
+
+    protected bool needGenerateBodyAlphaMap = false;
+    protected float timeUntilGenerateBodyAlphaMap = regeneratePeriod;
+    protected const float regeneratePeriod = 0.25f;
 
     // Use this for initialization
     void Start () {
@@ -47,6 +52,42 @@ public class EquipableWearablesManager : MonoBehaviour {
             }
         }
 	}
+
+    private void Update()
+    {
+        timeUntilGenerateBodyAlphaMap -= Time.unscaledDeltaTime;
+        if (timeUntilGenerateBodyAlphaMap <= 0)
+        {
+            timeUntilGenerateBodyAlphaMap = regeneratePeriod;
+            if (needGenerateBodyAlphaMap)
+            {
+                needGenerateBodyAlphaMap = false;
+                Debug.LogWarning("Regenerating body alpha map.");
+                GameObject body = EquipableMannequin.slots[EquipableSlot.body]?.transform.FindDeepChild("body").gameObject;
+                if (body != null)
+                {
+                    CutoutTextureSwapper cutoutTextureSwapper = body.GetComponent<CutoutTextureSwapper>();
+                    if (cutoutTextureSwapper == null)
+                        cutoutTextureSwapper = body.AddComponent<CutoutTextureSwapper>();
+
+                    cutoutTextureSwapper.ClearAlphaMaps();
+
+                    // Gather all cutout Texture references
+                    foreach (EquipableSlot slot in EquipableSlotIterator.nonBodySlots)
+                    {
+                        // Get the CutoutTextureReference if available
+                        CutoutTextureReference texRef = EquipableMannequin.slots[slot]?.GetComponent<CutoutTextureReference>();
+
+                        // Add it to the cutoutTextureSwapper
+                        if (texRef != null && texRef.alphaMap != null)
+                            cutoutTextureSwapper.AddAlphaMap(texRef.alphaMap);
+                    }
+
+                    cutoutTextureSwapper.Generate();
+                }
+            }
+        }
+    }
 
     public void LoadEquipableSlotsWithWearableId(EquipableSlots equipableSlots, string wearableId)
     {
@@ -93,6 +134,8 @@ public class EquipableWearablesManager : MonoBehaviour {
 
         // Assign wearable instance into target slot
         equipableSlots.Equip(slot, go);
+
+        needGenerateBodyAlphaMap = true;
     }
 
     internal void EquipRandom()

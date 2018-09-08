@@ -64,7 +64,7 @@ public enum EquipableSlot
 public class EquipableSlotIterator
 {
     static List<EquipableSlot> _allSlots = null;
-    public static EquipableSlot [] allSlots
+    public static EquipableSlot[] allSlots
     {
         get
         {
@@ -77,6 +77,20 @@ public class EquipableSlotIterator
                     EquipableSlot slot = (EquipableSlot)System.Enum.Parse(typeof(EquipableSlot), slotName);
                     _allSlots.Add(slot);
                 }
+            }
+            return _allSlots.ToArray();
+        }
+    }
+
+    static List<EquipableSlot> _nonBodySlots = null;
+    public static EquipableSlot[] nonBodySlots
+    {
+        get
+        {
+            if (_nonBodySlots == null)
+            {
+                _nonBodySlots = new List<EquipableSlot>(allSlots);
+                _nonBodySlots.Remove(EquipableSlot.body);
             }
             return _allSlots.ToArray();
         }

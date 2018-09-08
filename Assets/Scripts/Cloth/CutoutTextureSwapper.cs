@@ -23,6 +23,31 @@ public class CutoutTextureSwapper : MonoBehaviour {
             GenerateCutoutMaterial();
     }
 
+    public void ClearAlphaMaps()
+    {
+        alphaMap = alphaMap2 = alphaMap3 = alphaMap4 = alphaMap5 = null;
+    }
+
+    public void AddAlphaMap(Texture2D neoAlphaMap)
+    {
+        if (alphaMap == null)
+            alphaMap = neoAlphaMap;
+        else
+        if (alphaMap2 == null)
+            alphaMap2 = neoAlphaMap;
+        else
+        if (alphaMap3 == null)
+            alphaMap3 = neoAlphaMap;
+        else
+        if (alphaMap4 == null)
+            alphaMap4 = neoAlphaMap;
+        else
+        if (alphaMap5 == null)
+            alphaMap5 = neoAlphaMap;
+        else
+            Debug.LogError("Ran out of alphaMap slots!");
+    }
+
     void GenerateCutoutMaterial() {
 #if UNITY_EDITOR
         if (EditorApplication.isPlaying == false)

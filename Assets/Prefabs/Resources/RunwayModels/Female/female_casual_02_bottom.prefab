@@ -170,6 +170,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4231548047470248}
   - component: {fileID: 95832728500644892}
+  - component: {fileID: 114461816332090216}
   m_Layer: 0
   m_Name: female_casual_02_bottom
   m_TagString: Untagged
@@ -2002,6 +2003,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114461816332090216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1196400057923940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e211a9e6772cda4d87f78a03b98a483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alphaMap: {fileID: 2800000, guid: dac0e04faf6688942bf052db6cef0844, type: 3}
 --- !u!137 &137639088519332678
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
