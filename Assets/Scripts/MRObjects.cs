@@ -104,4 +104,6 @@ public class Wearable : System.Object
     public string name;
     public string img;
     public string sex;
+    public string prefab;
+    public string slot;
 }
