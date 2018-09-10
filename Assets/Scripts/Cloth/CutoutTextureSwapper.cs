@@ -22,7 +22,6 @@ public class CutoutTextureSwapper : MonoBehaviour {
         if (cutoutMaterial == null)
             GenerateCutoutMaterial();
     }
-
     public void ClearAlphaMaps()
     {
         alphaMap = alphaMap2 = alphaMap3 = alphaMap4 = alphaMap5 = null;
@@ -160,15 +159,28 @@ public class CutoutTextureSwapper : MonoBehaviour {
         return true;
     }
 
+    static Dictionary<string, RenderTexture> renderTexturesBySize = new Dictionary<string, RenderTexture>();
+
+    static RenderTexture GetRenderTexture(int width, int height)
+    {
+        string key = "" + width + height;
+        if (renderTexturesBySize.ContainsKey(key) == false)
+        {
+            RenderTexture tmp = RenderTexture.GetTemporary(
+                                width,
+                                height,
+                                16,
+                                RenderTextureFormat.Default,
+                                RenderTextureReadWrite.sRGB);
+            renderTexturesBySize.Add(key, tmp);
+        }
+        return renderTexturesBySize[key];
+    }
+
     // From https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
     Texture2D GetReadableTexture(Texture2D texture) {
         // Create a temporary RenderTexture of the same size as the texture
-        RenderTexture tmp = RenderTexture.GetTemporary(
-                            texture.width,
-                            texture.height,
-                            16,
-                            RenderTextureFormat.Default,
-                            RenderTextureReadWrite.sRGB);
+        RenderTexture tmp = GetRenderTexture(texture.width, texture.height);
 
         // Blit the pixels on texture to the RenderTexture
         Graphics.Blit(texture, tmp);
@@ -190,7 +202,7 @@ public class CutoutTextureSwapper : MonoBehaviour {
         RenderTexture.active = previous;
 
         // Release the temporary RenderTexture
-        RenderTexture.ReleaseTemporary(tmp);
+        //RenderTexture.ReleaseTemporary(tmp);
 
         // "myTexture2D" now has the same pixels from "texture" and it's readable.
         return myTexture2D;
