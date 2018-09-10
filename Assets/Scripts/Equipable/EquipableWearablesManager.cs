@@ -10,10 +10,18 @@ using UnityEditor;
 
 public class EquipableWearablesManager : MonoBehaviour {
 
-    public EquipableSlots EquipableMannequin;
+    public EquipableSlots mannequin;
 
-    public Dictionary<EquipableSlot, Dictionary<string, Wearable>> wearablesBySlot; // wearables by slot
-    public Dictionary<string, Wearable> wearables; // wearables by id
+    public enum MannequinGender
+    {
+        female,
+        male
+    }
+
+    public MannequinGender gender;
+
+    public static Dictionary<EquipableSlot, Dictionary<string, Wearable>> wearablesBySlot; // wearables by slot
+    public static Dictionary<string, Wearable> wearables; // wearables by id
 
     protected bool needGenerateBodyAlphaMap = false;
     protected float timeUntilGenerateBodyAlphaMap = regeneratePeriod;
@@ -21,37 +29,45 @@ public class EquipableWearablesManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        wearables = new Dictionary<string, Wearable>();
-        wearablesBySlot = new Dictionary<EquipableSlot, Dictionary<string, Wearable>>();
-
-        // Initialize dictionaries for each slot.
-        foreach (EquipableSlot slot in EquipableSlotIterator.allSlots)
+        if (wearables == null)
         {
-            wearablesBySlot[slot] = new Dictionary<string, Wearable>();
-        }
+            wearables = new Dictionary<string, Wearable>();
+            wearablesBySlot = new Dictionary<EquipableSlot, Dictionary<string, Wearable>>();
 
-        // Initialize MRData if necessary
-        if (MRData.Instance.wearables == null || MRData.Instance.wearables.wearables == null || MRData.Instance.wearables.wearables.Count == 0)
-            MRData.Instance.LoadEverything();
-
-        // Put each wearable in the corresponding slot.
-        foreach (Wearable wearable in MRData.Instance.wearables.wearables)
-        {
-            string slotStr = wearable.slot;
-            if (slotStr != null && slotStr.Length > 0)
+            // Initialize dictionaries for each slot.
+            foreach (EquipableSlot slot in EquipableSlotIterator.allSlots)
             {
-                EquipableSlot slot;
-                if (System.Enum.TryParse(slotStr, out slot))
+                wearablesBySlot[slot] = new Dictionary<string, Wearable>();
+            }
+
+            // Initialize MRData if necessary
+            if (MRData.Instance.wearables == null || MRData.Instance.wearables.wearables == null || MRData.Instance.wearables.wearables.Count == 0)
+                MRData.Instance.LoadEverything();
+
+            // Put each wearable in the corresponding slot.
+            foreach (Wearable wearable in MRData.Instance.wearables.wearables)
+            {
+                string slotStr = wearable.slot;
+                if (slotStr != null && slotStr.Length > 0)
                 {
-                    wearablesBySlot[slot].Add(wearable.id, wearable);
-                    wearables.Add(wearable.id, wearable);
-                } else
-                {
-                    Debug.LogError("Failed to parse slotStr = " + slotStr);
+                    EquipableSlot slot;
+                    if (System.Enum.TryParse(slotStr, out slot))
+                    {
+                        wearablesBySlot[slot].Add(wearable.id, wearable);
+                        wearables.Add(wearable.id, wearable);
+                    }
+                    else
+                    {
+                        Debug.LogError("Failed to parse slotStr = " + slotStr);
+                    }
                 }
             }
         }
-	}
+
+        if (mannequin == null)
+            mannequin = GetComponent<EquipableSlots>();
+
+    }
 
     private void Update()
     {
@@ -63,7 +79,7 @@ public class EquipableWearablesManager : MonoBehaviour {
             {
                 needGenerateBodyAlphaMap = false;
                 Debug.LogWarning("Regenerating body alpha map.");
-                GameObject body = EquipableMannequin.slots[EquipableSlot.body]?.transform.FindDeepChild("body").gameObject;
+                GameObject body = mannequin.slots[EquipableSlot.body]?.transform.FindDeepChild("body").gameObject;
                 if (body != null)
                 {
                     CutoutTextureSwapper cutoutTextureSwapper = body.GetComponent<CutoutTextureSwapper>();
@@ -76,7 +92,7 @@ public class EquipableWearablesManager : MonoBehaviour {
                     foreach (EquipableSlot slot in EquipableSlotIterator.nonBodySlots)
                     {
                         // Get the CutoutTextureReference if available
-                        CutoutTextureReference texRef = EquipableMannequin.slots[slot]?.GetComponent<CutoutTextureReference>();
+                        CutoutTextureReference texRef = mannequin.slots[slot]?.GetComponent<CutoutTextureReference>();
 
                         // Add it to the cutoutTextureSwapper
                         if (texRef != null && texRef.alphaMap != null)
@@ -145,33 +161,58 @@ public class EquipableWearablesManager : MonoBehaviour {
         foreach (EquipableSlot slot in EquipableSlotIterator.allSlots)
         {
             List<Wearable> wearables = wearablesBySlot[slot].Values.ToList<Wearable>();
-            if (wearables != null && wearables.Count > 0)
+            List<Wearable> genderedWearables = GetGenderedWearables(gender, wearables);
+                    
+            if (genderedWearables != null && genderedWearables.Count > 0)
             {
-                int idx = rnd.Next(0, wearables.Count); // creates a number between 0 and wearablesIds.Count-1
-                LoadEquipableSlotsWithWearableId(EquipableMannequin, wearables[idx].id);
+                int idx = rnd.Next(0, genderedWearables.Count); // creates a number between 0 and wearablesIds.Count-1
+                LoadEquipableSlotsWithWearableId(mannequin, genderedWearables[idx].id);
             }
         }
     }
 
+    internal List<Wearable> GetGenderedWearables(MannequinGender gender, List<Wearable> wearables)
+    {
+        List<Wearable> genderedWearables = new List<Wearable>();
+        foreach (Wearable w in wearables)
+        {
+            if (w.sex.StartsWith("f"))
+            {
+                if (gender == MannequinGender.female)
+                    genderedWearables.Add(w);
+            }
+            else
+            {
+                if (gender == MannequinGender.male)
+                    genderedWearables.Add(w);
+            }
+        }
+        return genderedWearables;
+    }
+
+
+
     internal void LoadPrevWearableForSlot(EquipableSlot slot)
     {
-        List<Wearable> wearables = wearablesBySlot[slot].Values.ToList<Wearable>();
+        List<Wearable> rawWearables = wearablesBySlot[slot].Values.ToList<Wearable>();
+        List<Wearable> wearables = GetGenderedWearables(gender, rawWearables);
         if (wearables != null && wearables.Count > 0)
         {
             int currentIdx = FindCurrentIndex(slot, wearables);
             int prevIdx = (currentIdx - 1 + wearables.Count) % wearables.Count;
-            LoadEquipableSlotsWithWearableId(EquipableMannequin, wearables[prevIdx].id);
+            LoadEquipableSlotsWithWearableId(mannequin, wearables[prevIdx].id);
         }
     }
 
     internal void LoadNextWearableForSlot(EquipableSlot slot)
     {
-        List<Wearable> wearables = wearablesBySlot[slot].Values.ToList<Wearable>();
+        List<Wearable> rawWearables = wearablesBySlot[slot].Values.ToList<Wearable>();
+        List<Wearable> wearables = GetGenderedWearables(gender, rawWearables);
         if (wearables != null && wearables.Count > 0)
         {
             int currentIdx = FindCurrentIndex(slot, wearables);
             int nextIdx = (currentIdx + 1) % wearables.Count;
-            LoadEquipableSlotsWithWearableId(EquipableMannequin, wearables[nextIdx].id);
+            LoadEquipableSlotsWithWearableId(mannequin, wearables[nextIdx].id);
         }
     }
 
@@ -179,7 +220,7 @@ public class EquipableWearablesManager : MonoBehaviour {
     int FindCurrentIndex(EquipableSlot slot, List<Wearable> wearables)
     {
         int foundIdx = -1;
-        WearableInfo wInfo = EquipableMannequin.slots[slot]?.GetComponent<WearableInfo>();
+        WearableInfo wInfo = mannequin.slots[slot]?.GetComponent<WearableInfo>();
 
         if (wInfo != null)
         {

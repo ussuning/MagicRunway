@@ -29,6 +29,16 @@ public class TransformDeepCopy : MonoBehaviour {
                 localRotation == t2.localRotation &&
                 localScale == t2.localScale;
         }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
     Dictionary<string, TransformValues> valuesByName = new Dictionary<string, TransformValues>();

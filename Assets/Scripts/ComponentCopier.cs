@@ -50,7 +50,7 @@ public class ComponentCopier : MonoBehaviour {
         Component[] components = source.GetComponents(typeof(Component));
         foreach (Component component in components)
         {
-            System.Type type = component.GetType();
+            //System.Type type = component.GetType();
             string typeString = component.GetType().ToString();
             Debug.Log(component.GetType());
             //if (component is ObiCloth)

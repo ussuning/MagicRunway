@@ -102,7 +102,7 @@ public class ShoulderFixer {
             ;
         Vector3 posHipCenter = (hipLeft + hipRight) / 2f;
         Vector3 posShoulderCenter = (shoulderLeft + shoulderRight) / 2f;
-        Vector3 posAnkleCenter = (ankleLeft + ankleRight) / 2f;
+        //Vector3 posAnkleCenter = (ankleLeft + ankleRight) / 2f;
         value = (posShoulderCenter - posHipCenter).magnitude;
         BodyHeight.Update(confidence, value);
         //Debug.Log("BodyHeight confidence=" + confidence + "val=" + value);
