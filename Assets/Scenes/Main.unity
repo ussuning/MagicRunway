@@ -1142,6 +1142,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1113270167628988, guid: 44cd027c45fb6ba4586a2e437f60399a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891639805441968, guid: 44cd027c45fb6ba4586a2e437f60399a, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44cd027c45fb6ba4586a2e437f60399a, type: 2}
   m_IsPrefabAsset: 0
@@ -3758,7 +3766,6 @@ MonoBehaviour:
   music: {fileID: 1023743742}
   stickman: {fileID: 1406623629}
   poseAcademy: {fileID: 1266401910}
-  autoRunway: {fileID: 279447203}
 --- !u!114 &1023743741
 MonoBehaviour:
   m_ObjectHideFlags: 0
