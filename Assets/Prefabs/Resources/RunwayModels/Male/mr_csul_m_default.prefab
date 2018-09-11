@@ -282,7 +282,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1381105215829684
 GameObject:
   m_ObjectHideFlags: 1
@@ -562,6 +562,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4887715223516616}
+  - component: {fileID: 136582791998877898}
   m_Layer: 13
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -2107,9 +2108,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   alphaMap: {fileID: 2800000, guid: 3d117431540c0451d84d84a6177a1b32, type: 3}
   alphaMap2: {fileID: 2800000, guid: 7f7601d1c55494634ad0ed8b4e2f5ceb, type: 3}
-  alphaMap3: {fileID: 0}
+  alphaMap3: {fileID: 2800000, guid: 6ab29c41ce7bc4ac5b53025099c624f9, type: 3}
   alphaMap4: {fileID: 0}
   alphaMap5: {fileID: 0}
+--- !u!136 &136582791998877898
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1582263988635868}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.26
+  m_Height: 1.94
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.12, z: 0}
 --- !u!136 &136996435704277766
 CapsuleCollider:
   m_ObjectHideFlags: 1
