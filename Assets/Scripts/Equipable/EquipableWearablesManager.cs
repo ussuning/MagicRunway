@@ -105,6 +105,7 @@ public class EquipableWearablesManager : MonoBehaviour {
         }
     }
 
+
     public void LoadEquipableSlotsWithWearableId(EquipableSlots equipableSlots, string wearableId)
     {
         Wearable wearable = wearables[wearableId];
@@ -133,14 +134,9 @@ public class EquipableWearablesManager : MonoBehaviour {
 
         // Unload previous wearable if it is occupying target slot
         EquipableSlot slot;
-        if (System.Enum.TryParse(wearable.slot, out slot))
+        if (Enum.TryParse(wearable.slot, out slot))
         {
-           GameObject lastEquipped = equipableSlots.UnEquip(slot);
-            if (lastEquipped != null)
-            {
-                lastEquipped.transform.parent = null;
-                GameObject.Destroy(lastEquipped);
-            }
+            UnloadEquipableSlot(equipableSlots, slot);
         }
         else
         {
@@ -154,14 +150,23 @@ public class EquipableWearablesManager : MonoBehaviour {
         needGenerateBodyAlphaMap = true;
     }
 
+    public void UnloadEquipableSlot(EquipableSlots equipableSlots, EquipableSlot slot)
+    {
+        GameObject lastEquipped = equipableSlots.UnEquip(slot);
+        if (lastEquipped != null)
+        {
+            lastEquipped.transform.parent = null;
+            GameObject.Destroy(lastEquipped);
+        }
+    }
+
     internal void EquipRandom()
     {
         System.Random rnd = new System.Random();
 
         foreach (EquipableSlot slot in EquipableSlotIterator.allSlots)
         {
-            List<Wearable> wearables = wearablesBySlot[slot].Values.ToList<Wearable>();
-            List<Wearable> genderedWearables = GetGenderedWearables(gender, wearables);
+            List<Wearable> genderedWearables = GetWearablesFor(gender, slot);
                     
             if (genderedWearables != null && genderedWearables.Count > 0)
             {
@@ -171,10 +176,11 @@ public class EquipableWearablesManager : MonoBehaviour {
         }
     }
 
-    internal List<Wearable> GetGenderedWearables(MannequinGender gender, List<Wearable> wearables)
+    internal List<Wearable> GetWearablesFor(MannequinGender gender, EquipableSlot slot)
     {
+        List<Wearable> rawWearables = wearablesBySlot[slot].Values.ToList<Wearable>();
         List<Wearable> genderedWearables = new List<Wearable>();
-        foreach (Wearable w in wearables)
+        foreach (Wearable w in rawWearables)
         {
             if (w.sex.StartsWith("f"))
             {
@@ -190,12 +196,21 @@ public class EquipableWearablesManager : MonoBehaviour {
         return genderedWearables;
     }
 
+    internal void LoadDefaultBody()
+    {
+        foreach (EquipableSlot slot in EquipableSlotIterator.allSlots)
+            UnloadEquipableSlot(mannequin, slot);
 
+        List<Wearable> wearables = GetWearablesFor(gender, EquipableSlot.body);
+        if (wearables != null && wearables.Count > 0)
+        {
+            LoadEquipableSlotsWithWearableId(mannequin, wearables[0].id);
+        }
+    }
 
     internal void LoadPrevWearableForSlot(EquipableSlot slot)
     {
-        List<Wearable> rawWearables = wearablesBySlot[slot].Values.ToList<Wearable>();
-        List<Wearable> wearables = GetGenderedWearables(gender, rawWearables);
+        List<Wearable> wearables = GetWearablesFor(gender, slot);
         if (wearables != null && wearables.Count > 0)
         {
             int currentIdx = FindCurrentIndex(slot, wearables);
@@ -206,8 +221,7 @@ public class EquipableWearablesManager : MonoBehaviour {
 
     internal void LoadNextWearableForSlot(EquipableSlot slot)
     {
-        List<Wearable> rawWearables = wearablesBySlot[slot].Values.ToList<Wearable>();
-        List<Wearable> wearables = GetGenderedWearables(gender, rawWearables);
+        List<Wearable> wearables = GetWearablesFor(gender, slot);
         if (wearables != null && wearables.Count > 0)
         {
             int currentIdx = FindCurrentIndex(slot, wearables);
@@ -250,11 +264,14 @@ public class EquipableWearablesManagerEditor : Editor
 
 
         EquipableWearablesManager myScript = (EquipableWearablesManager)target;
+        if (GUILayout.Button("Load Default Body"))
+        {
+            myScript.LoadDefaultBody();
+        }
         if (GUILayout.Button("Equip Random") && CheckIsPlaying())
         {
             myScript.EquipRandom();
         }
-
         GUILayout.BeginHorizontal();
         GUILayout.Label("Body:   ");
         if (GUILayout.Button("Prev") && CheckIsPlaying())
