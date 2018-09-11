@@ -50,16 +50,9 @@ public class EquipableWearablesManager : MonoBehaviour {
                 string slotStr = wearable.slot;
                 if (slotStr != null && slotStr.Length > 0)
                 {
-                    EquipableSlot slot;
-                    if (System.Enum.TryParse(slotStr, out slot))
-                    {
-                        wearablesBySlot[slot].Add(wearable.id, wearable);
-                        wearables.Add(wearable.id, wearable);
-                    }
-                    else
-                    {
-                        Debug.LogError("Failed to parse slotStr = " + slotStr);
-                    }
+                    EquipableSlot slot = (EquipableSlot)Enum.Parse(typeof(EquipableSlot), slotStr);
+                    wearablesBySlot[slot].Add(wearable.id, wearable);
+                    wearables.Add(wearable.id, wearable);
                 }
             }
         }
@@ -79,7 +72,7 @@ public class EquipableWearablesManager : MonoBehaviour {
             {
                 needGenerateBodyAlphaMap = false;
                 Debug.LogWarning("Regenerating body alpha map.");
-                GameObject body = mannequin.slots[EquipableSlot.body]?.transform.FindDeepChild("body").gameObject;
+                GameObject body = mannequin.slots[EquipableSlot.body] != null ? mannequin.slots[EquipableSlot.body].transform.FindDeepChild("body").gameObject : null;
                 if (body != null)
                 {
                     CutoutTextureSwapper cutoutTextureSwapper = body.GetComponent<CutoutTextureSwapper>();
@@ -92,7 +85,7 @@ public class EquipableWearablesManager : MonoBehaviour {
                     foreach (EquipableSlot slot in EquipableSlotIterator.nonBodySlots)
                     {
                         // Get the CutoutTextureReference if available
-                        CutoutTextureReference texRef = mannequin.slots[slot]?.GetComponent<CutoutTextureReference>();
+                        CutoutTextureReference texRef = mannequin.slots[slot] != null ? mannequin.slots[slot].GetComponent<CutoutTextureReference>() : null;
 
                         // Add it to the cutoutTextureSwapper
                         if (texRef != null && texRef.alphaMap != null)
@@ -133,16 +126,9 @@ public class EquipableWearablesManager : MonoBehaviour {
         go.transform.localScale = Vector3.one;
 
         // Unload previous wearable if it is occupying target slot
-        EquipableSlot slot;
-        if (Enum.TryParse(wearable.slot, out slot))
-        {
-            UnloadEquipableSlot(equipableSlots, slot);
-        }
-        else
-        {
-            Debug.LogError("Unable to parse slot wearable.slot = " + wearable.slot + " for ID = " + wearable.id + ". Aborting Equipping!");
-            return;
-        }
+
+        EquipableSlot slot = (EquipableSlot)Enum.Parse(typeof(EquipableSlot), wearable.slot);
+        UnloadEquipableSlot(equipableSlots, slot);
 
         // Assign wearable instance into target slot
         equipableSlots.Equip(slot, go);
@@ -234,7 +220,7 @@ public class EquipableWearablesManager : MonoBehaviour {
     int FindCurrentIndex(EquipableSlot slot, List<Wearable> wearables)
     {
         int foundIdx = -1;
-        WearableInfo wInfo = mannequin.slots[slot]?.GetComponent<WearableInfo>();
+        WearableInfo wInfo = mannequin.slots[slot] != null ? mannequin.slots[slot].GetComponent<WearableInfo>() : null;
 
         if (wInfo != null)
         {
