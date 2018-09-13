@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-public class CutoutTextureSwapper : MonoBehaviour {
+public class CutoutTextureSwapper : MonoBehaviour
+{
 
     public Texture2D alphaMap;
     public Texture2D alphaMap2;
@@ -17,13 +18,40 @@ public class CutoutTextureSwapper : MonoBehaviour {
     internal Material cutoutMaterial;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
 
         if (cutoutMaterial == null)
             GenerateCutoutMaterial();
     }
 
-    void GenerateCutoutMaterial() {
+    public void ClearAlphaMaps()
+    {
+        alphaMap = alphaMap2 = alphaMap3 = alphaMap4 = alphaMap5 = null;
+    }
+
+    public void AddAlphaMap(Texture2D neoAlphaMap)
+    {
+        if (alphaMap == null)
+            alphaMap = neoAlphaMap;
+        else
+        if (alphaMap2 == null)
+            alphaMap2 = neoAlphaMap;
+        else
+        if (alphaMap3 == null)
+            alphaMap3 = neoAlphaMap;
+        else
+        if (alphaMap4 == null)
+            alphaMap4 = neoAlphaMap;
+        else
+        if (alphaMap5 == null)
+            alphaMap5 = neoAlphaMap;
+        else
+            Debug.LogError("Ran out of alphaMap slots!");
+    }
+
+    void GenerateCutoutMaterial()
+    {
 #if UNITY_EDITOR
         if (EditorApplication.isPlaying == false)
         {
@@ -31,14 +59,14 @@ public class CutoutTextureSwapper : MonoBehaviour {
             return;
         }
 #endif
-            Texture2D[] alphaMaps = new Texture2D[] { alphaMap, alphaMap2, alphaMap3, alphaMap4, alphaMap5 };
-        Vector2Int alphaMapSize = Vector2Int.zero;
+        Texture2D[] alphaMaps = new Texture2D[] { alphaMap, alphaMap2, alphaMap3, alphaMap4, alphaMap5 };
+        Vector2Int alphaMapSize = Vector2Int.one;
         if (validateAlphaMaps(alphaMaps, out alphaMapSize) == false)
         {
             Debug.LogError("AlphaMap arrays are not valid! Aborting!");
             return;
         }
-        
+
         /* Take the original material, copy it, take its texture and make a 
          * new one that combines it with the alphaMap.
          * Apply alpha map to new (copied) material.
@@ -47,11 +75,12 @@ public class CutoutTextureSwapper : MonoBehaviour {
         Material mat = GetComponent<Renderer>().sharedMaterial;
         originalMaterial = mat;
         Texture2D srcTex = mat.mainTexture as Texture2D;
-        if (srcTex == null) {
+        if (srcTex == null)
+        {
             // Material had no texture, so we will just create one;
             srcTex = new Texture2D(alphaMapSize.x, alphaMapSize.y);
         }
-        Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
+        Color[] srcPixels = GetReadableTexture(srcTex).GetPixels();
 
         // Combine alpha maps, using the most transparent value for each pixel.
         for (int i = 0; i < alphaMaps.Length; i++)
@@ -98,9 +127,9 @@ public class CutoutTextureSwapper : MonoBehaviour {
         cutoutMaterial = neoMat;
     }
 
-    bool validateAlphaMaps(Texture2D [] alphaMaps, out Vector2Int alphaMapSize)
+    bool validateAlphaMaps(Texture2D[] alphaMaps, out Vector2Int alphaMapSize)
     {
-        alphaMapSize = Vector2Int.zero;
+        alphaMapSize = Vector2Int.one;
         if (alphaMaps == null || alphaMaps.Length == 0)
         {
             Debug.LogError("AlphaMap array is empty!");
@@ -114,14 +143,14 @@ public class CutoutTextureSwapper : MonoBehaviour {
                 continue;
 
             // set alphaMapSize if not set
-            if (alphaMapSize == Vector2.zero)
+            if (alphaMapSize == Vector2.one && alphaMaps[i].width > 0 && alphaMaps[i].height > 0)
             {
                 alphaMapSize = new Vector2Int(alphaMaps[i].width, alphaMaps[i].height);
                 continue;
             }
 
             // If alphaMapSize is set, ensure alphaMap[i] is same size.
-            if (alphaMapSize != Vector2.zero)
+            if (alphaMapSize != Vector2.one)
             {
                 if (alphaMaps[i].width != alphaMapSize.x ||
                     alphaMaps[i].height != alphaMapSize.y)
@@ -135,15 +164,29 @@ public class CutoutTextureSwapper : MonoBehaviour {
         return true;
     }
 
+    static Dictionary<string, RenderTexture> renderTexturesBySize = new Dictionary<string, RenderTexture>();
+
+    static RenderTexture GetRenderTexture(int width, int height)
+    {
+        string key = "" + width + height;
+        if (renderTexturesBySize.ContainsKey(key) == false)
+        {
+            RenderTexture tmp = RenderTexture.GetTemporary(
+                                width,
+                                height,
+                                16,
+                                RenderTextureFormat.Default,
+                                RenderTextureReadWrite.sRGB);
+            renderTexturesBySize.Add(key, tmp);
+        }
+        return renderTexturesBySize[key];
+    }
+
     // From https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
-    Texture2D GetReadableTexture(Texture2D texture) {
+    Texture2D GetReadableTexture(Texture2D texture)
+    {
         // Create a temporary RenderTexture of the same size as the texture
-        RenderTexture tmp = RenderTexture.GetTemporary(
-                            texture.width,
-                            texture.height,
-                            16,
-                            RenderTextureFormat.Default,
-                            RenderTextureReadWrite.sRGB);
+        RenderTexture tmp = GetRenderTexture(texture.width, texture.height);
 
         // Blit the pixels on texture to the RenderTexture
         Graphics.Blit(texture, tmp);
@@ -165,7 +208,7 @@ public class CutoutTextureSwapper : MonoBehaviour {
         RenderTexture.active = previous;
 
         // Release the temporary RenderTexture
-        RenderTexture.ReleaseTemporary(tmp);
+        //RenderTexture.ReleaseTemporary(tmp);
 
         // "myTexture2D" now has the same pixels from "texture" and it's readable.
         return myTexture2D;

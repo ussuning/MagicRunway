@@ -41,7 +41,7 @@ public class AutoRunwayManager : MonoBehaviour
     private Collection curCollection;
 
     private List<GameObject> models = new List<GameObject>();
-    private Vector3 startingPoint = new Vector3(5.7f, 0.04f, -5.0f);
+    private Vector3 startingPoint = new Vector3(5.7f, 0.1f, -5.0f);
     //private Vector3 startingPoint = new Vector3(6, 0, -2.4f);
     private byte videoFadeState;
     private float videoFadeStartTime;
@@ -314,6 +314,7 @@ public class AutoRunwayManager : MonoBehaviour
         {
             curCollectionIndex = 0;
         }
+        Resources.UnloadUnusedAssets();
 
         PrepareCollectionRunwayModelPrefabs();
 

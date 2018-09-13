@@ -21,8 +21,20 @@ public class SkeletonTransformDeepCopy : MonoBehaviour {
 
     void RecursiveCopy(Transform node)
     {
+        TransformDeepCopy.TransformValues tValues = node.ToTransformValues();
         Transform destNode = dest.FindDeepChild(node.name);
-        destNode.transform.ApplyTransformValues(node.transform.ToTransformValues());
+        if (destNode == null)
+        {
+            Debug.LogError("node.name could not be found = " + node.name);
+            return;
+        }
+        else
+        {
+            // Compare and log any mismatching values.
+            if (destNode.ToTransformValues() != tValues)
+                Debug.LogWarning("destNode values do not match node values, where node.name = " + node.name);
+        }
+        destNode.transform.ApplyTransformValues(tValues);
 
         if (node.childCount > 0)
             foreach (Transform child in node)

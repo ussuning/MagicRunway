@@ -122,8 +122,7 @@ public class LiveRunwayManager : MonoBehaviour {
 
         foreach (Outfit outfit in curCollection.outfits)
         {
-            string sex = (outfit.sex == "f") ? "Female" : "Male";
-            string path = "RunwayModels/" + sex + "/" + outfit.prefab;
+            string path = GetPathForOutfitPrefab(outfit.prefab, outfit.sex);
             GameObject go = RunwayModelsPrefabManager.InstantiateGameObject(path, outfits.transform);
             //go.SetActive(false);
             models.Add(go);
@@ -167,5 +166,13 @@ public class LiveRunwayManager : MonoBehaviour {
     void UIEvents_OnUpNextComplete()
     {
         PrepareNextCollection();
+    }
+
+    public static string GetPathForOutfitPrefab(string prefabName, string gender)
+    {
+        string sex = (gender == "f") ? "Female" : "Male";
+        string path = "RunwayModels/" + sex + "/" + prefabName;
+
+        return path;
     }
 }

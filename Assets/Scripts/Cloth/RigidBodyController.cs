@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RigidBodyController : MonoBehaviour {
-    Rigidbody rigidbody;
+    Rigidbody target;
     Vector3 force = Vector3.zero;
 	// Use this for initialization
 	void Start () {
-        rigidbody = GetComponent<Rigidbody>();
+        target = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -23,13 +23,13 @@ public class RigidBodyController : MonoBehaviour {
         else if (Input.GetKeyUp(KeyCode.LeftArrow)) {
             force = Vector3.zero;
             transform.localPosition = Vector3.zero;
-            rigidbody.isKinematic = true;
-            rigidbody.isKinematic = false;
+            target.isKinematic = true;
+            target.isKinematic = false;
         }
 	}
 
 	private void FixedUpdate()
 	{
-        rigidbody.AddForce(force);
+        target.AddForce(force);
 	}
 }

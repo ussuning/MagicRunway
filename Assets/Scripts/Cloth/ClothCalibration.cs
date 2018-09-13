@@ -72,7 +72,7 @@ public class ClothCalibration : MonoBehaviour
             for (int i = 0; i < batch.skinIndices.Count; i++)
             {
                 int skinRadiusIdx = i * 3;
-                int collisionRadiusIdx = skinRadiusIdx + 1;
+                //int collisionRadiusIdx = skinRadiusIdx + 1;
                 int backstopIdx = skinRadiusIdx + 2;
 
                 Vector3 pos = batch.skinPoints[i];
