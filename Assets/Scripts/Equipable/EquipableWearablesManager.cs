@@ -8,7 +8,8 @@ using MR;
 using UnityEditor;
 #endif
 
-public class EquipableWearablesManager : MonoBehaviour {
+public class EquipableWearablesManager : MonoBehaviour
+{
 
     public EquipableSlots mannequin;
 
@@ -28,7 +29,8 @@ public class EquipableWearablesManager : MonoBehaviour {
     protected const float regeneratePeriod = 0.25f;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         if (wearables == null)
         {
             wearables = new Dictionary<string, Wearable>();
@@ -70,8 +72,6 @@ public class EquipableWearablesManager : MonoBehaviour {
             timeUntilGenerateBodyAlphaMap = regeneratePeriod;
             if (needGenerateBodyAlphaMap)
             {
-                needGenerateBodyAlphaMap = false;
-                Debug.LogWarning("Regenerating body alpha map.");
                 GameObject body = mannequin.slots[EquipableSlot.body] != null ? mannequin.slots[EquipableSlot.body].transform.FindDeepChild("body").gameObject : null;
                 if (body != null)
                 {
@@ -79,20 +79,25 @@ public class EquipableWearablesManager : MonoBehaviour {
                     if (cutoutTextureSwapper == null)
                         cutoutTextureSwapper = body.AddComponent<CutoutTextureSwapper>();
 
-                    cutoutTextureSwapper.ClearAlphaMaps();
-
-                    // Gather all cutout Texture references
-                    foreach (EquipableSlot slot in EquipableSlotIterator.nonBodySlots)
+                    if (cutoutTextureSwapper.isGeneratingCutoutMaterial == false)
                     {
-                        // Get the CutoutTextureReference if available
-                        CutoutTextureReference texRef = mannequin.slots[slot] != null ? mannequin.slots[slot].GetComponent<CutoutTextureReference>() : null;
+                        needGenerateBodyAlphaMap = false;
+                        Debug.Log("Regenerating body alpha map.");
+                        cutoutTextureSwapper.ClearAlphaMaps();
 
-                        // Add it to the cutoutTextureSwapper
-                        if (texRef != null && texRef.alphaMap != null)
-                            cutoutTextureSwapper.AddAlphaMap(texRef.alphaMap);
+                        // Gather all cutout Texture references
+                        foreach (EquipableSlot slot in EquipableSlotIterator.nonBodySlots)
+                        {
+                            // Get the CutoutTextureReference if available
+                            CutoutTextureReference texRef = mannequin.slots[slot] != null ? mannequin.slots[slot].GetComponent<CutoutTextureReference>() : null;
+
+                            // Add it to the cutoutTextureSwapper
+                            if (texRef != null && texRef.alphaMap != null)
+                                cutoutTextureSwapper.AddAlphaMap(texRef.alphaMap);
+                        }
+
+                        cutoutTextureSwapper.Generate();
                     }
-
-                    cutoutTextureSwapper.Generate();
                 }
             }
         }
@@ -104,7 +109,7 @@ public class EquipableWearablesManager : MonoBehaviour {
         Wearable wearable = wearables[wearableId];
 
         // Load wearable's prefab
-        string path = LiveRunwayManager.GetPathForOutfitPrefab(wearable.prefab, wearable.sex);
+        string path = GetPathForOutfitPrefab(wearable.prefab, wearable.sex);
         GameObject asset = Resources.Load<GameObject>(path);
         GameObject go;
         if (asset != null)
@@ -144,6 +149,8 @@ public class EquipableWearablesManager : MonoBehaviour {
             lastEquipped.transform.parent = null;
             GameObject.Destroy(lastEquipped);
         }
+
+        Resources.UnloadUnusedAssets();
     }
 
     internal void EquipRandom()
@@ -153,7 +160,7 @@ public class EquipableWearablesManager : MonoBehaviour {
         foreach (EquipableSlot slot in EquipableSlotIterator.allSlots)
         {
             List<Wearable> genderedWearables = GetWearablesFor(gender, slot);
-                    
+
             if (genderedWearables != null && genderedWearables.Count > 0)
             {
                 int idx = rnd.Next(0, genderedWearables.Count); // creates a number between 0 and wearablesIds.Count-1
@@ -236,6 +243,14 @@ public class EquipableWearablesManager : MonoBehaviour {
         }
 
         return foundIdx;
+    }
+
+    public static string GetPathForOutfitPrefab(string prefabName, string gender)
+    {
+        string sex = (gender == "f") ? "Female" : "Male";
+        string path = "RunwayModels/" + sex + "/" + prefabName;
+
+        return path;
     }
 }
 
