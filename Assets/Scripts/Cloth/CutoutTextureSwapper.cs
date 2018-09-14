@@ -54,8 +54,9 @@ public class CutoutTextureSwapper : MonoBehaviour
     void Start()
     {
 
-        if (cutoutMaterial == null)
-            GenerateCutoutMaterial();
+        //if (cutoutMaterial == null)
+        //    GenerateCutoutMaterial();
+        //Generate();
     }
 
     public void ClearAlphaMaps()
@@ -205,10 +206,6 @@ public class CutoutTextureSwapper : MonoBehaviour
         neoMat.mainTexture = neoTex;
         GetComponent<Renderer>().sharedMaterial = neoMat;
         // Cleanup old cutoutMaterial
-        if (cutoutMaterial != null)
-        {
-            Destroy(cutoutMaterial.mainTexture);
-        }
         cutoutMaterial = neoMat;
 
         // Cleanup
