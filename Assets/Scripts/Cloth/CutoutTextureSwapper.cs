@@ -96,6 +96,8 @@ public class CutoutTextureSwapper : MonoBehaviour
     Material mat;
     Texture2D alphaMapsTexture;
     RenderTexture tmpRenderTex;
+    RenderTexture lastRenderTex;
+    const float timeBetweenSteps = 0.05f;
 
     IEnumerator DoGenerateCutoutMaterial()
     {
@@ -114,6 +116,7 @@ public class CutoutTextureSwapper : MonoBehaviour
 
         yield return StartCoroutine(Step1());
         yield return StartCoroutine(Step2());
+        yield return StartCoroutine(Step2b());
         yield return StartCoroutine(Step3());
         yield return StartCoroutine(Step4());
 
@@ -149,9 +152,10 @@ public class CutoutTextureSwapper : MonoBehaviour
         Debug.Log("DONE Step1()");
     }
 
+    // Create a combined alphaMap with the array of alphaMaps.
     IEnumerator Step2()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(timeBetweenSteps);
         // Combine alpha maps, using the most transparent value for each pixel.
         alphaMapsTexture = GetReadableTexture(alphaMaps, 1);
         if (alphaMapsTexture == null)
@@ -159,12 +163,19 @@ public class CutoutTextureSwapper : MonoBehaviour
             Debug.Log("Invalid alpha maps. Aborting.");
             yield break;
         }
-        Debug.Log("DONE Step2()");
+        Debug.Log("DONE Step2a()");
+    }
+
+    IEnumerator Step2b()
+    {
+        yield return new WaitForSeconds(timeBetweenSteps);
+        InvertTexture(ref alphaMapsTexture);
+        Debug.Log("DONE Step2b()");
     }
 
     IEnumerator Step3()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(timeBetweenSteps);
         // Create temporary render texture and set the alphaMapsTexture as the alphaMask
         tmpRenderTex = RenderTexture.GetTemporary(
                     alphaMapSize.x,
@@ -179,7 +190,7 @@ public class CutoutTextureSwapper : MonoBehaviour
 
     IEnumerator Step4()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(timeBetweenSteps);
         // Backup the currently set RenderTexture
         RenderTexture previous = RenderTexture.active;
         RenderTexture.active = tmpRenderTex;
@@ -307,7 +318,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         if (textures.Count == 0)
             return null;
 
-        // Create a temporary RenderTexture of the same size as the texture
+        // Get a temporary RenderTexture of the same size as the texture
         RenderTexture tmp = GetRenderTexture(textures[0].width, textures[0].height);
 
         // Clear the renderTexture to black
@@ -334,19 +345,6 @@ public class CutoutTextureSwapper : MonoBehaviour
         myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
         myTexture2D.Apply();
 
-
-        if (layer == 1)
-        {
-            // Clear the renderTexture to black
-            Graphics.Blit(blackTexture1x1, tmp, new Vector2(tmp.width, tmp.height), Vector2.zero);
-            // Invert the 
-            Graphics.Blit(myTexture2D, tmp, invertedAdditiveMaterial);
-
-            // Copy the pixels from the RenderTexture to the new Texture
-            myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
-            myTexture2D.Apply();
-        }
-
         // Reset the active RenderTexture
         RenderTexture.active = previous;
 
@@ -355,6 +353,34 @@ public class CutoutTextureSwapper : MonoBehaviour
 
         // "myTexture2D" now has the same pixels from "texture" and it's readable.
         return myTexture2D;
+    }
+
+    void InvertTexture(ref Texture2D myTexture2D)
+    {
+        if (myTexture2D == null)
+            return; //nothing to do here.
+
+        // Get a temporary RenderTexture of the same size as the texture.
+        // This should be the same RenderTexture from GetReadableTexture, as we are using the same dimensions.
+        RenderTexture tmp = GetRenderTexture(myTexture2D.width, myTexture2D.height);
+
+        // Backup the currently set RenderTexture
+        RenderTexture previous = RenderTexture.active;
+
+        // Set the current RenderTexture to the temporary one we created
+        RenderTexture.active = tmp;
+
+        // Clear the renderTexture to black
+        Graphics.Blit(blackTexture1x1, tmp, new Vector2(tmp.width, tmp.height), Vector2.zero);
+        // Invert the 
+        Graphics.Blit(myTexture2D, tmp, invertedAdditiveMaterial);
+
+        // Copy the pixels from the RenderTexture to the new Texture
+        myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
+        myTexture2D.Apply();
+
+        // Reset the active RenderTexture
+        RenderTexture.active = previous;
     }
 
     public void UseOriginal()
