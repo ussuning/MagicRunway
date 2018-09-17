@@ -14,6 +14,7 @@ public class AppManager : Singleton<AppManager>
     public Animator blackoutAnimator;
     public AudioSource audioSource;
 
+    //depricated
     private Mode curMode = Mode.AUTO;
 
     private IRunwayMode currentMode;

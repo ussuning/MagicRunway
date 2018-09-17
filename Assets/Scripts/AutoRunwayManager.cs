@@ -13,7 +13,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     [SerializeField]
     private VideoWall videoWall;
 
-    private KinectManager kinectManager;
     private ShowcaseManager showcaseManager;
     private GameObject runwayModels;
     private AudioSource audioSource;
@@ -23,11 +22,11 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private bool isCollectionEnding = false;
     private Vector3 startingPoint = new Vector3(5.7f, 0.1f, -5.0f);
 
+    private bool isModeActive = false;
+
     void Awake()
     {
         autoRunwayContainer.SetActive(false);
-
-        kinectManager = KinectManager.Instance;
 
         runwayModels = new GameObject("RunwayModels");
         runwayModels.transform.parent = autoRunwayContainer.transform;
@@ -262,15 +261,10 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void OnRunwayEndExit(Collider other) { UIManager.Instance.HideOutfit(); }
 
-    private void UserManager_UserLostDetected(long userId, int userIndex)
-    {
-        Debug.Log("PLAYER LEFT THE AREA!");
-        
-    }
-
     private void AddRunwayEventListeners()
     {
         RemoveRunwayEventListeners();
+        isModeActive = true;
 
         runwayEventManager.RunwayEnterEvents.OnTriggerEnterEvt += OnRunwayEnter;
         runwayEventManager.RunwayMidExit.OnTriggerEnterEvt += OnRunwayMidExit;
@@ -281,13 +275,14 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void RemoveRunwayEventListeners()
     {
+        isModeActive = false;
+
         runwayEventManager.RunwayMidExit.OnTriggerEnterEvt -= OnRunwayMidExit;
         runwayEventManager.RunwayFinish.OnTriggerEnterEvt -= OnRunwayFinish;
         runwayEventManager.RunwayEnd.OnTriggerEnterEvt -= OnRunwayEndEnter;
         runwayEventManager.RunwayEnd.OnTriggerExitEvt -= OnRunwayEndExit;
         runwayEventManager.RunwayEnterEvents.OnTriggerEnterEvt -= OnRunwayEnter;
     }
-
 
     private void ValidateModel()
     {
@@ -296,15 +291,19 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void UserDetected(long userId, int userIndex)
     {
-        UIManager.Instance.ShowStartMenu(true);
+        if (isModeActive == false)
+            return;
 
+        UIManager.Instance.ShowStartMenu(true);
         KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
     }
 
     public void UserLost(long userId, int userIndex)
     {
-        UIManager.Instance.HideStartMenu(true);
+        if (isModeActive == false)
+            return;
 
+        UIManager.Instance.HideStartMenu(true);
         KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
     }
 
@@ -315,9 +314,16 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint, Vector3 screenPos)
     {
-        if(gesture == KinectGestures.Gestures.Wave)
+        if (gesture == KinectGestures.Gestures.Wave)
         {
+            if (isModeActive == false)
+                return true;
+
+            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
+            UIManager.Instance.HideStartMenu(false);
             AppManager.Instance.TransitionToLive();
+
+            return false;
         }
         return true;
     }
