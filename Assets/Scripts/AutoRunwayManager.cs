@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Obi;
 
-public class AutoRunwayManager : MonoBehaviour, IRunwayMode
+public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.GestureListenerInterface
 {
     public GameObject autoRunwayContainer;
 
@@ -13,6 +13,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode
     [SerializeField]
     private VideoWall videoWall;
 
+    private KinectManager kinectManager;
     private ShowcaseManager showcaseManager;
     private GameObject runwayModels;
     private AudioSource audioSource;
@@ -26,10 +27,17 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode
     {
         autoRunwayContainer.SetActive(false);
 
+        kinectManager = KinectManager.Instance;
+
         runwayModels = new GameObject("RunwayModels");
         runwayModels.transform.parent = autoRunwayContainer.transform;
 
         audioSource = GetComponent<AudioSource>();
+    }
+
+    public Mode GetMode()
+    {
+        return Mode.AUTO;
     }
 
     public void SetUp()
@@ -254,6 +262,12 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode
 
     private void OnRunwayEndExit(Collider other) { UIManager.Instance.HideOutfit(); }
 
+    private void UserManager_UserLostDetected(long userId, int userIndex)
+    {
+        Debug.Log("PLAYER LEFT THE AREA!");
+        
+    }
+
     private void AddRunwayEventListeners()
     {
         RemoveRunwayEventListeners();
@@ -278,5 +292,38 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode
     private void ValidateModel()
     {
         //make sure if the model is correctly made OR ELSE!!
+    }
+
+    public void UserDetected(long userId, int userIndex)
+    {
+        UIManager.Instance.ShowStartMenu(true);
+
+        KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
+    }
+
+    public void UserLost(long userId, int userIndex)
+    {
+        UIManager.Instance.HideStartMenu(true);
+
+        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
+    }
+
+    public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint, Vector3 screenPos)
+    {
+        if(gesture == KinectGestures.Gestures.Wave)
+        {
+            AppManager.Instance.TransitionToLive();
+        }
+        return true;
+    }
+
+    public bool GestureCancelled(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint)
+    {
+        return true;
     }
 }

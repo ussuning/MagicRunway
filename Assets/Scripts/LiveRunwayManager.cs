@@ -29,6 +29,11 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode {
         liveRunwayContainer.SetActive(false);
     }
 
+    public Mode GetMode()
+    {
+        return Mode.LIVE;
+    }
+
     public void Begin()
     {
         throw new System.NotImplementedException();

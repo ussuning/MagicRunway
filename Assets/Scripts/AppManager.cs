@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Mode { AUTO,LIVE };
+public enum Mode { AUTO,LIVE,NONE };
 
 public class AppManager : Singleton<AppManager>
 {
@@ -31,7 +31,16 @@ public class AppManager : Singleton<AppManager>
         MRData.Instance.LoadEverything();
         
         currentMode = autoRunwayManager;
+
         SetUp();
+    }
+
+    public Mode GetRunwayMode()
+    {
+        if (currentMode != null)
+            return currentMode.GetMode();
+        else
+            return Mode.NONE;
     }
 
     private void SetUp()

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public interface IRunwayMode
 {
+    Mode GetMode();
     void Begin();
     void SetUp();
     void End();

@@ -74,6 +74,9 @@ public class UserManager : Singleton<UserManager>
             return;
         }
 
+        if (kinectManager == null)
+            return;
+
         // listening for these gestures for this user  
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeLeft);       // move icons left
         kinectManager.DetectGesture(userId, KinectGestures.Gestures.SwipeRight);      // move icons right
