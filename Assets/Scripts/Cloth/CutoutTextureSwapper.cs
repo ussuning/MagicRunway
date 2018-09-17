@@ -17,12 +17,46 @@ public class CutoutTextureSwapper : MonoBehaviour
     internal Material originalMaterial;
     internal Material cutoutMaterial;
 
+    static Material additiveMaterial;
+    static Material invertedAdditiveMaterial;
+    static Texture2D blackTexture1x1;
+    static Material alphaMaskMat;
+
+    public bool isGeneratingCutoutMaterial = false;
+
+    private void Awake()
+    {
+        if (additiveMaterial == null)
+        {
+            additiveMaterial = Resources.Load<Material>("Materials/BodyAlphaBlitter");
+            if (additiveMaterial == null)
+                Debug.LogError("Unabled to load blitter material at Materials/BodyAlphaBlitter");
+        }
+        if (invertedAdditiveMaterial == null)
+        {
+            invertedAdditiveMaterial = Resources.Load<Material>("Materials/InvertColors");
+            if (invertedAdditiveMaterial == null)
+                Debug.LogError("Unabled to load invertColorsMaterial at Materials/InvertColors");
+        }
+        if (blackTexture1x1 == null)
+        {
+            blackTexture1x1 = Resources.Load<Texture2D>("Textures/blackTexture1x1");
+            if (blackTexture1x1 == null)
+                Debug.LogError("Unabled to load blackTexture1x1 at Textures/blackTexture1x1");
+        }
+        if (alphaMaskMat == null)
+        {
+            alphaMaskMat = new Material(Shader.Find("Unlit/AlphaMask"));
+        }
+    }
+
     // Use this for initialization
     void Start()
     {
 
-        if (cutoutMaterial == null)
-            GenerateCutoutMaterial();
+        //if (cutoutMaterial == null)
+        //    GenerateCutoutMaterial();
+        //Generate();
     }
 
     public void ClearAlphaMaps()
@@ -52,19 +86,52 @@ public class CutoutTextureSwapper : MonoBehaviour
 
     void GenerateCutoutMaterial()
     {
+        StartCoroutine(DoGenerateCutoutMaterial());
+    }
+
+    // Variables for GenerateCoutoutMaterial()
+    Texture2D[] alphaMaps;
+    Vector2Int alphaMapSize;
+    Texture2D srcTex;
+    Material mat;
+    Texture2D alphaMapsTexture;
+    RenderTexture tmpRenderTex;
+    RenderTexture lastRenderTex;
+    const float timeBetweenSteps = 0.05f;
+
+    IEnumerator DoGenerateCutoutMaterial()
+    {
 #if UNITY_EDITOR
         if (EditorApplication.isPlaying == false)
         {
             Debug.LogError("Can not Generate Cutout Material while not playing!");
-            return;
+            yield break;
         }
 #endif
-        Texture2D[] alphaMaps = new Texture2D[] { alphaMap, alphaMap2, alphaMap3, alphaMap4, alphaMap5 };
-        Vector2Int alphaMapSize = Vector2Int.one;
+        // Check if already started.
+        if (isGeneratingCutoutMaterial)
+            yield break;
+
+        isGeneratingCutoutMaterial = true;
+
+        yield return StartCoroutine(Step1());
+        yield return StartCoroutine(Step2());
+        yield return StartCoroutine(Step2b());
+        yield return StartCoroutine(Step3());
+        yield return StartCoroutine(Step4());
+
+        isGeneratingCutoutMaterial = false;
+        Debug.Log("DONE DoGenerateCutoutMaterial()");
+    }
+
+    IEnumerator Step1()
+    {
+        alphaMaps = new Texture2D[] { alphaMap, alphaMap2, alphaMap3, alphaMap4, alphaMap5 };
+        alphaMapSize = Vector2Int.one;
         if (validateAlphaMaps(alphaMaps, out alphaMapSize) == false)
         {
             Debug.LogError("AlphaMap arrays are not valid! Aborting!");
-            return;
+            yield break;
         }
 
         /* Take the original material, copy it, take its texture and make a 
@@ -72,43 +139,68 @@ public class CutoutTextureSwapper : MonoBehaviour
          * Apply alpha map to new (copied) material.
          * Swap original material with new material 
         */
-        Material mat = GetComponent<Renderer>().sharedMaterial;
+        mat = GetComponent<Renderer>().sharedMaterial;
         originalMaterial = mat;
-        Texture2D srcTex = mat.mainTexture as Texture2D;
+        srcTex = mat.mainTexture as Texture2D;
         if (srcTex == null)
         {
             // Material had no texture, so we will just create one;
-            srcTex = new Texture2D(alphaMapSize.x, alphaMapSize.y);
+            srcTex = GetReusableTexture(alphaMapSize.x, alphaMapSize.y, 0);
         }
-        Color[] srcPixels = GetReadableTexture(srcTex).GetPixels();
+        //Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
 
+        Debug.Log("DONE Step1()");
+    }
+
+    // Create a combined alphaMap with the array of alphaMaps.
+    IEnumerator Step2()
+    {
+        yield return new WaitForSeconds(timeBetweenSteps);
         // Combine alpha maps, using the most transparent value for each pixel.
-        for (int i = 0; i < alphaMaps.Length; i++)
+        alphaMapsTexture = GetReadableTexture(alphaMaps, 1);
+        if (alphaMapsTexture == null)
         {
-            Texture2D alphaMap = alphaMaps[i];
-            // skip if null.
-            if (alphaMap == null)
-                continue;
-
-            Color[] alphaPixels = GetReadableTexture(alphaMap).GetPixels();
-
-            if (alphaPixels.Length != srcPixels.Length)
-            {
-                Debug.LogError("Mismatching texture sizes! This won't work! Aborting!");
-                return;
-            }
-
-            for (int j = 0; j < srcPixels.Length; j++)
-            {
-                // if incoming alphapixels are more transparent (closer to 0), then use it.
-                if (alphaPixels[j].r < srcPixels[j].a)
-                    srcPixels[j].a = alphaPixels[j].r;
-            }
-
+            Debug.Log("Invalid alpha maps. Aborting.");
+            yield break;
         }
-        Texture2D neoTex = new Texture2D(alphaMapSize.x, alphaMapSize.y);
-        neoTex.SetPixels(srcPixels);
+        Debug.Log("DONE Step2a()");
+    }
+
+    IEnumerator Step2b()
+    {
+        yield return new WaitForSeconds(timeBetweenSteps);
+        InvertTexture(ref alphaMapsTexture);
+        Debug.Log("DONE Step2b()");
+    }
+
+    IEnumerator Step3()
+    {
+        yield return new WaitForSeconds(timeBetweenSteps);
+        // Create temporary render texture and set the alphaMapsTexture as the alphaMask
+        tmpRenderTex = RenderTexture.GetTemporary(
+                    alphaMapSize.x,
+                    alphaMapSize.y,
+                    16,
+                    RenderTextureFormat.Default,
+                    RenderTextureReadWrite.sRGB);
+        alphaMaskMat.SetTexture("_AlphaTex", alphaMapsTexture);
+        Graphics.Blit(srcTex, tmpRenderTex, alphaMaskMat);
+
+    }
+
+    IEnumerator Step4()
+    {
+        yield return new WaitForSeconds(timeBetweenSteps);
+        // Backup the currently set RenderTexture
+        RenderTexture previous = RenderTexture.active;
+        RenderTexture.active = tmpRenderTex;
+
+        Texture2D neoTex = new Texture2D(tmpRenderTex.width, tmpRenderTex.height);
+        neoTex.ReadPixels(new Rect(0, 0, tmpRenderTex.width, tmpRenderTex.height), 0, 0);
         neoTex.Apply();
+
+        RenderTexture.active = previous;
+
 
         Material neoMat = new Material(mat);
         neoMat.name += "(Copy)";
@@ -124,7 +216,14 @@ public class CutoutTextureSwapper : MonoBehaviour
 
         neoMat.mainTexture = neoTex;
         GetComponent<Renderer>().sharedMaterial = neoMat;
+        // Cleanup old cutoutMaterial
         cutoutMaterial = neoMat;
+
+        // Cleanup
+        RenderTexture.ReleaseTemporary(tmpRenderTex);
+        Resources.UnloadUnusedAssets();
+
+        Debug.Log("DONE Step4()");
     }
 
     bool validateAlphaMaps(Texture2D[] alphaMaps, out Vector2Int alphaMapSize)
@@ -164,11 +263,11 @@ public class CutoutTextureSwapper : MonoBehaviour
         return true;
     }
 
-    static Dictionary<string, RenderTexture> renderTexturesBySize = new Dictionary<string, RenderTexture>();
+    internal static Dictionary<string, RenderTexture> renderTexturesBySize = new Dictionary<string, RenderTexture>();
 
     static RenderTexture GetRenderTexture(int width, int height)
     {
-        string key = "" + width + height;
+        string key = "" + width + "_" + height;
         if (renderTexturesBySize.ContainsKey(key) == false)
         {
             RenderTexture tmp = RenderTexture.GetTemporary(
@@ -177,19 +276,61 @@ public class CutoutTextureSwapper : MonoBehaviour
                                 16,
                                 RenderTextureFormat.Default,
                                 RenderTextureReadWrite.sRGB);
+            tmp.name = "tmpRender_" + key;
             renderTexturesBySize.Add(key, tmp);
         }
         return renderTexturesBySize[key];
     }
 
-    // From https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
-    Texture2D GetReadableTexture(Texture2D texture)
+    internal static Dictionary<int, Dictionary<string, Texture2D>> readableTexturesBySizeAndLayer = new Dictionary<int, Dictionary<string, Texture2D>>();
+
+    static Texture2D GetReusableTexture(int width, int height, int layer = 0)
     {
-        // Create a temporary RenderTexture of the same size as the texture
-        RenderTexture tmp = GetRenderTexture(texture.width, texture.height);
+        // Ensure layer is initialized
+        if (readableTexturesBySizeAndLayer.ContainsKey(layer) == false)
+            readableTexturesBySizeAndLayer.Add(layer, new Dictionary<string, Texture2D>());
+
+        // search for key.
+        string key = "" + width + "_" + height;
+        if (readableTexturesBySizeAndLayer[layer].ContainsKey(key) == false)
+        {
+            Texture2D tmp = new Texture2D(width, height, TextureFormat.ARGB32, false);
+            tmp.name = "reusable_" + key;
+            readableTexturesBySizeAndLayer[layer].Add(key, tmp);
+        }
+        return readableTexturesBySizeAndLayer[layer][key];
+    }
+
+    Texture2D GetReadableTexture(Texture2D texture, int layer = 0)
+    {
+        return GetReadableTexture(new Texture2D[] { texture }, layer);
+    }
+
+    // From https://support.unity3d.com/hc/en-us/articles/206486626-How-can-I-get-pixels-from-unreadable-textures-
+    Texture2D GetReadableTexture(Texture2D[] texturesIn, int layer = 0)
+    {
+        // Filter out null textures.
+        List<Texture2D> textures = new List<Texture2D>();
+        foreach (Texture2D tex in texturesIn)
+            if (tex != null)
+                textures.Add(tex);
+
+        if (textures.Count == 0)
+            return null;
+
+        // Get a temporary RenderTexture of the same size as the texture
+        RenderTexture tmp = GetRenderTexture(textures[0].width, textures[0].height);
+
+        // Clear the renderTexture to black
+        Graphics.Blit(blackTexture1x1, tmp, new Vector2(tmp.width, tmp.height), Vector2.zero);
 
         // Blit the pixels on texture to the RenderTexture
-        Graphics.Blit(texture, tmp);
+        foreach (Texture2D texture in textures)
+        {
+            // layer 1 is for alpha maps, which actually need to be inverted during the additive blitting process because
+            // the black regions are the ones that we want to add up, so we will invert the colors before blitting additively.
+            Graphics.Blit(texture, tmp, layer == 1 ? invertedAdditiveMaterial : additiveMaterial);
+        }
 
         // Backup the currently set RenderTexture
         RenderTexture previous = RenderTexture.active;
@@ -198,7 +339,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         RenderTexture.active = tmp;
 
         // Create a new readable Texture2D to copy the pixels to it
-        Texture2D myTexture2D = new Texture2D(texture.width, texture.height);
+        Texture2D myTexture2D = GetReusableTexture(textures[0].width, textures[0].height, layer);
 
         // Copy the pixels from the RenderTexture to the new Texture
         myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
@@ -214,12 +355,40 @@ public class CutoutTextureSwapper : MonoBehaviour
         return myTexture2D;
     }
 
+    void InvertTexture(ref Texture2D myTexture2D)
+    {
+        if (myTexture2D == null)
+            return; //nothing to do here.
+
+        // Get a temporary RenderTexture of the same size as the texture.
+        // This should be the same RenderTexture from GetReadableTexture, as we are using the same dimensions.
+        RenderTexture tmp = GetRenderTexture(myTexture2D.width, myTexture2D.height);
+
+        // Backup the currently set RenderTexture
+        RenderTexture previous = RenderTexture.active;
+
+        // Set the current RenderTexture to the temporary one we created
+        RenderTexture.active = tmp;
+
+        // Clear the renderTexture to black
+        Graphics.Blit(blackTexture1x1, tmp, new Vector2(tmp.width, tmp.height), Vector2.zero);
+        // Invert the 
+        Graphics.Blit(myTexture2D, tmp, invertedAdditiveMaterial);
+
+        // Copy the pixels from the RenderTexture to the new Texture
+        myTexture2D.ReadPixels(new Rect(0, 0, tmp.width, tmp.height), 0, 0);
+        myTexture2D.Apply();
+
+        // Reset the active RenderTexture
+        RenderTexture.active = previous;
+    }
+
     public void UseOriginal()
     {
         if (originalMaterial != null)
             GetComponent<Renderer>().sharedMaterial = originalMaterial;
         else
-            Debug.LogError("No originalMaterial!");
+            Debug.LogWarning("No originalMaterial!");
     }
 
     public void UseCutout()
@@ -227,7 +396,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         if (cutoutMaterial != null)
             GetComponent<Renderer>().sharedMaterial = cutoutMaterial;
         else
-            Debug.LogError("No cutoutMaterial!");
+            Debug.LogWarning("No cutoutMaterial!");
     }
 
     public void Generate()
