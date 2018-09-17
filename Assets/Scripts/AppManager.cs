@@ -6,181 +6,100 @@ using System.Collections.Generic;
 
 public enum Mode { AUTO,LIVE };
 
-//[RequireComponent(typeof(AudioSource))]
 public class AppManager : Singleton<AppManager>
 {
     public AutoRunwayManager autoRunwayManager;
     public LiveRunwayManager liveRunwayManager;
     public Image blackout;
     public Animator blackoutAnimator;
-    public AudioSource music;
-    public GameObject stickman;
-    public GameObject poseAcademy;
+    public AudioSource audioSource;
 
     private Mode curMode = Mode.AUTO;
 
+    private IRunwayMode currentMode;
+    private IRunwayMode nextMode;
+
     private List<string> playList = new List<string>(new string[] { "dream", "5min" });
     private int curSong = 0;
+    private float maxSongVolume = 0.8f;
+    private float minSongVolume = 0.2f;
+    private float reduceSongVolumeTime = 1.0f;
+    private byte songVolumeState;
 
     void Start()
     {
-        stickman.SetActive(false);
-        blackoutAnimator.SetBool("FadeIn", false);
-        blackoutAnimator.SetBool("FadeOut", false);
-
         MRData.Instance.LoadEverything();
-
-        autoRunwayManager.HideAllLevels();
-       
-        if (curMode == Mode.LIVE)
-        {
-            PlayLiveRunway();
-        } else
-        {
-            PlayAutoRunway();
-        }
         
+        currentMode = autoRunwayManager;
+        SetUp();
+    }
+
+    private void SetUp()
+    {
+        currentMode.SetUp();
+        StartCoroutine(FadeIn());
+    }
+
+    private void Begin()
+    {
+        songVolumeState = 1;
+        currentMode.Begin();
+    }
+
+    public void End()
+    {
+        Debug.Log("Ready to End Auto Runway");
+        currentMode.End();
+        currentMode = nextMode;
+        SetUp();
+    }
+
+    public void TransitionToAuto()
+    {
+        Debug.Log("Start Transition to Auto Runway");
+        nextMode = autoRunwayManager;
+
+        Transition();
+    }
+
+    public void TransitionToLive()
+    {
+        Debug.Log("Start Transition to Live Runway");
+        nextMode = liveRunwayManager;
+
+        Transition();
+    }
+
+    private void Transition()
+    {
+        songVolumeState = 2;
+
+        blackoutAnimator.ResetTrigger("In");
+        blackoutAnimator.SetTrigger("Out");
+
+        StartCoroutine(FadeOut());
+    }
+
+    IEnumerator FadeIn()
+    {
+        blackoutAnimator.ResetTrigger("Out");
+        blackoutAnimator.SetTrigger("In");
+        //yield return new WaitUntil(() => blackout.color.a == 0);
+        yield return new WaitForSeconds(1);
+        Begin();
+    }
+
+    IEnumerator FadeOut()
+    {
+        blackoutAnimator.ResetTrigger("In");
+        blackoutAnimator.SetTrigger("Out");
+        yield return new WaitForSeconds(1);
+        End();
     }
 
     public Mode getMode()
     {
         return curMode;
-    }
-
-    public void PlayLiveRunway()
-    {
-        poseAcademy.SetActive(true);
-        UserManager.Instance.initPoseDetection();
-        stickman.SetActive(true);
-        autoRunwayManager.StopAutoRunway();
-        autoRunwayManager.HideAllLevels();
-        liveRunwayManager.ReadyLiveRunway();
-        StartCoroutine(FadeInLive());
-    }
-
-    public void StopLiveRunway()
-    {
-        //DO hard stop without any transition
-        liveRunwayManager.StopLiveRunway();
-    }
-
-    public void PlayAutoRunway()
-    {
-        //    liveRunwayManager.StopLiveRunway();
-        StartCoroutine(ContinuousPlayMusic());
-
-        //Debug.Log("started");
-        poseAcademy.SetActive(false);
-        stickman.SetActive(false);
-        autoRunwayManager.ReadyAutoRunway(PickRandomLevel());
-        StartCoroutine(FadeInLevel());
-    }
-
-    public void StopAutoRunway()
-    {
-        //DO hard stop without any transition
-        autoRunwayManager.StopAutoRunway();
-    }
-
-    public void LiveToAuto()
-    {
-        Debug.Log("AppManager: Live to Auto");
-        if(curMode == Mode.AUTO) { return; }
-
-        curMode = Mode.AUTO;
-
-        StartCoroutine(FadeOutLive());
-    }
-
-    public void AutoToLive()
-    {
-        if (curMode == Mode.LIVE) { return; }
-
-        curMode = Mode.LIVE;
-        //music.Stop();
-        IEnumerator fader = AudioFader.FadeOut(music, 3.0f);
-        StartCoroutine(fader);
-
-        StartCoroutine(FadeOutLevelToLive());
-    }
-
-    public void ChangeLevel()
-    {
-
-    }
-
-    private void RunLiveRunway()
-    {
-        Debug.Log("Run live mode after fade in");
-        liveRunwayManager.PlayLiveRunway();
-    }
-
-    private void RunAutoRunway()
-    {
-        autoRunwayManager.PlayAutoRunway();
-    }
-
-    private GameObject PickRandomLevel()
-    {
-        int index = Random.Range(0, autoRunwayManager.levels.Count);
-        return autoRunwayManager.levels[index];
-    }
-
-    IEnumerator FadeInLevel()
-    {
-        blackoutAnimator.SetBool("FadeIn", true);
-        yield return new WaitUntil(() => blackout.color.a == 0);
-        blackoutAnimator.SetBool("FadeIn", false);
-        RunAutoRunway();
-    }
-
-    IEnumerator FadeOutLevelToLive()
-    {
-        blackoutAnimator.SetBool("FadeOut", true);
-        yield return new WaitUntil(() => blackout.color.a == 1);
-        blackoutAnimator.SetBool("FadeOut", false);
-        PlayLiveRunway();
-    }
-
-    IEnumerator FadeOutLevelToLevel()
-    {
-        blackoutAnimator.SetBool("FadeOut", true);
-        yield return new WaitUntil(() => blackout.color.a == 1);
-        blackoutAnimator.SetBool("FadeOut", false);
-        PlayAutoRunway();
-    }
-
-    IEnumerator FadeInLive()
-    {
-        blackoutAnimator.SetBool("FadeIn", true);
-        yield return new WaitUntil(() => blackout.color.a == 0);
-        blackoutAnimator.SetBool("FadeIn", false);
-        RunLiveRunway();
-    }
-
-    IEnumerator FadeOutLive()
-    {
-        blackoutAnimator.SetBool("FadeOut", true);
-        yield return new WaitUntil(() => blackout.color.a == 1);
-        blackoutAnimator.SetBool("FadeOut", false);
-        PlayAutoRunway();
-    }
-
-    IEnumerator ContinuousPlayMusic()
-    {
-        AudioClip clip = SfxManager.LoadClip(playList[curSong]);
-        music.volume = 0.8f;
-        music.clip = clip;
-        music.Play();
-        yield return new WaitForSeconds(music.clip.length);
-        curSong++;
-        if(curSong == playList.Count)
-        {
-            curSong = 0;
-        }
-        AudioClip nextClip = SfxManager.LoadClip(playList[curSong]);
-        music.clip = clip;
-        music.Play();
     }
 
     public IEnumerator ShouldRestartScene()
@@ -198,6 +117,38 @@ public class AppManager : Singleton<AppManager>
             Debug.Log("Restarting Scene: Going back to AutoRunway!!");
             Scene loadedLevel = SceneManager.GetActiveScene();
             SceneManager.LoadScene(loadedLevel.buildIndex);
+        }
+    }
+
+    void Update()
+    {
+        if(audioSource.time >= audioSource.clip.length)
+        {
+            curSong++;
+            if (curSong == playList.Count)
+                curSong = 0;
+            AudioClip clip = Resources.Load<AudioClip>(playList[curSong]);
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+
+        if (songVolumeState == 1)
+        {
+            float startVolume = audioSource.volume;
+
+            if (audioSource.volume < maxSongVolume)
+            {
+                audioSource.volume += startVolume * Time.deltaTime / reduceSongVolumeTime;
+            }
+        }
+
+        if (songVolumeState == 2) {
+            float startVolume = audioSource.volume;
+
+            if (audioSource.volume > minSongVolume)
+            {
+                audioSource.volume -= startVolume * Time.deltaTime / reduceSongVolumeTime;
+            }
         }
     }
 }

@@ -2,110 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LiveRunwayManager : MonoBehaviour {
+public class LiveRunwayManager : MonoBehaviour, IRunwayMode {
+    public GameObject stickman;
+    public GameObject poseAcademy;
+    public GameObject liveRunwayContainer;
     public GameObject outfits;
    // public GameObject canvas;
     public GameObject fittingRoom;
     //public GameObject userModel;
 
-    private Collection curCollection;
-    private Collection nextCollection;
-    private List<GameObject> models = new List<GameObject>();
+    //private Collection curCollection;
+    //private Collection nextCollection;
+    //private List<GameObject> models = new List<GameObject>();
 
-    private float collectionShowTime = 20.0f;
-    private float collectionWarningTime = 10.0f;
-    private int curCollectionIndex = 0;
-    private int totalCollections = 0;
-    private int totalOutfits = 0;
+    //private float collectionShowTime = 20.0f;
+    //private float collectionWarningTime = 10.0f;
+    //private int curCollectionIndex = 0;
+    //private int totalCollections = 0;
+    //private int totalOutfits = 0;
 
     private float gestureGenderShowLength = 3.0f;
 
-    private bool isCollectionEnding = false;
-
+    //private bool isCollectionEnding = false;
     void Awake()
     {
-        UIEvents.OnUpNextCompleteCallback += UIEvents_OnUpNextComplete;
+        liveRunwayContainer.SetActive(false);
     }
 
-    //Setup before starting live mode -- happens before fading in
-    public void ReadyLiveRunway()
+    public void Begin()
     {
-        AttachFittingRoom();
-      //  AttachCanvas();
-        //AttachUserModel();
-        Setup();
+        throw new System.NotImplementedException();
     }
 
-    //play live mode after fading in
-    public void PlayLiveRunway()
+    public void SetUp()
     {
-        // AutoRunwayEvents.CollectionStart(curCollection);
-        UIManager.Instance.HideStartMenu(false);
-        UIManager.Instance.ShowInventory(true);
-        UIManager.Instance.ShowCollection(curCollection);
-        UIManager.Instance.ShowUpNext(curCollection);
-        UIManager.Instance.RunUpNextTimer(nextCollection.name, collectionShowTime, collectionWarningTime);
-    //    StartCoroutine(UserManager.Instance.renderOutfitsforAllUsers());
+        liveRunwayContainer.SetActive(true);
+        fittingRoom.SetActive(true);
+
+        UIManager.Instance.ShowGestureGender(10.0f);
+        UIManager.Instance.ShowStickManDelay(11.0f);
     }
 
-    public void StopLiveRunway()
+    public void End()
     {
-        ClearModels();
-        
         UIManager.Instance.HideAll();
-     //   DetachCanvas();
-        DetachFittingRoom();
-        //DetachUserModel();
+        
+        fittingRoom.SetActive(false);
+        liveRunwayContainer.SetActive(false);
     }
 
     public void ShowGestureGender()
     {
         UIManager.Instance.ShowGestureGender(gestureGenderShowLength);
     }
+
     /*
-    public void AttachCanvas()
-    {
-        canvas.SetActive(true);
-    }
-
-    public void DetachCanvas()
-    {
-        canvas.SetActive(false);
-    }
-    */
-    public void AttachFittingRoom()
-    {
-        fittingRoom.SetActive(true);
-    }
-
-    public void DetachFittingRoom()
-    {
-        fittingRoom.SetActive(false);
-    }
-    /*
-    public void AttachUserModel()
-    {
-        userModel.SetActive(true);
-    }
-
-    public void DetachUserModel()
-    {
-        userModel.SetActive(false);
-    }
-    */
-    private void Setup()
-    {
-        curCollectionIndex = 0;
-
-        totalCollections = MRData.Instance.collections.collections.Count;
-
-        PrepareCollectionLiveModelPrefabs();
-
-        UIManager.Instance.ShowGestureGender(10.0f);
-
-        UIManager.Instance.ShowStickManDelay(11.0f);
-    }
-
     private void PrepareCollectionLiveModelPrefabs()
     {
         if (models.Count > 0)
@@ -137,7 +88,8 @@ public class LiveRunwayManager : MonoBehaviour {
 
         nextCollection = MRData.Instance.collections.collections[nextCollectionIndex];
     }
-
+    */
+    /*
     private void PrepareNextCollection()
     {
         UIManager.Instance.HideCollection();
@@ -152,21 +104,7 @@ public class LiveRunwayManager : MonoBehaviour {
         PrepareCollectionLiveModelPrefabs();
         PlayLiveRunway();
     }
-
-    private void ClearModels()
-    {
-        foreach (GameObject go in models)
-        {
-            Destroy(go);
-        }
-
-        models = new List<GameObject>();
-    }
-
-    void UIEvents_OnUpNextComplete()
-    {
-        PrepareNextCollection();
-    }
+    */
 
     public static string GetPathForOutfitPrefab(string prefabName, string gender)
     {

@@ -77,6 +77,14 @@ public class UIManager : Singleton<UIManager>
         faderStartMenu.StartFading(CanvasFade.OUT);
     }
 
+    public void HideForNextCollection()
+    {
+        HideUpNext();
+        HideStartMenu(false);
+        HideGestureGender(false);
+        HideInventory(false);
+    }
+        
     //----------------------------------------
     // Start Menu
     //----------------------------------------

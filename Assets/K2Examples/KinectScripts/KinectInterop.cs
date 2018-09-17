@@ -835,6 +835,9 @@ public class KinectInterop
     // invoked periodically to update sensor data, if needed
     public static bool UpdateSensorData(SensorData sensorData)
 	{
+        if (sensorData == null)
+            return false;
+
 		bool bResult = false;
 
 		if(sensorData.sensorInterface != null)

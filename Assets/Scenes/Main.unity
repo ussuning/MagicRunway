@@ -442,7 +442,7 @@ RectTransform:
   m_Children:
   - {fileID: 254573553}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1171,7 +1171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &202438897
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1185,7 +1185,7 @@ RectTransform:
   m_Children:
   - {fileID: 1700650692}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 4
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1233,7 +1233,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1023743740}
-        m_MethodName: LiveToAuto
+        m_MethodName: TransitionToAuto
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1338,7 +1338,7 @@ Prefab:
     - target: {fileID: 224215444776213096, guid: b89244c5b2d458b47baba6cf2ab960ce,
         type: 2}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 224215444776213096, guid: b89244c5b2d458b47baba6cf2ab960ce,
         type: 2}
@@ -1693,6 +1693,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 279447204}
+  - component: {fileID: 279447205}
   m_Layer: 0
   m_Name: Auto Runway
   m_TagString: Untagged
@@ -1717,6 +1718,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &279447205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 279447203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c2c5a0f7c2de64408ab4ee90df187fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoWall: {fileID: 1200700109}
 --- !u!1 &290499945
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,7 +2156,7 @@ RectTransform:
   - {fileID: 1287664629}
   - {fileID: 1120042661}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -2521,7 +2534,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.25}
@@ -3679,7 +3692,7 @@ RectTransform:
   m_Children:
   - {fileID: 1864279342}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3729,7 +3742,6 @@ GameObject:
   - component: {fileID: 1023743739}
   - component: {fileID: 1023743741}
   - component: {fileID: 1023743742}
-  - component: {fileID: 1023743743}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -3765,19 +3777,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81424788e3f3bd43952161e6ac3f10c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runway: {fileID: 1828891565}
-  cameraGroup: {fileID: 1793980282}
-  outfits: {fileID: 1132182471}
   autoRunwayContainer: {fileID: 279447203}
-  videoWall: {fileID: 1200700109}
-  sfx: {fileID: 1023743743}
-  RunwayMidExit: {fileID: 1828891568}
-  RunwayFinish: {fileID: 1828891566}
-  RunwayEnd: {fileID: 1828891569}
-  RunwayEnterEvents: {fileID: 377779369}
-  levels:
-  - {fileID: 2056356148}
-  curLevel: {fileID: 2056356148}
+  runwayEventManager: {fileID: 1828891570}
+  videoWall: {fileID: 279447205}
 --- !u!4 &1023743738
 Transform:
   m_ObjectHideFlags: 0
@@ -3825,9 +3827,7 @@ MonoBehaviour:
   liveRunwayManager: {fileID: 1023743741}
   blackout: {fileID: 907981100}
   blackoutAnimator: {fileID: 907981099}
-  music: {fileID: 1023743742}
-  stickman: {fileID: 1406623629}
-  poseAcademy: {fileID: 1266401910}
+  audioSource: {fileID: 1023743742}
 --- !u!114 &1023743741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3839,6 +3839,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a801b7815fc664fb07fd753a269c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stickman: {fileID: 1406623629}
+  poseAcademy: {fileID: 1266401910}
+  liveRunwayContainer: {fileID: 2146909477}
   outfits: {fileID: 1132182471}
   fittingRoom: {fileID: 86555557}
 --- !u!82 &1023743742
@@ -3851,103 +3854,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4565de848383b354c87c0680fe593f58, type: 3}
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_Volume: 0.8
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!82 &1023743743
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1023743735}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4176,7 +4084,6 @@ RectTransform:
   - {fileID: 130351040}
   - {fileID: 19704393}
   - {fileID: 71191219}
-  - {fileID: 202438897}
   - {fileID: 1825619607}
   - {fileID: 47236281}
   - {fileID: 337323602}
@@ -4187,6 +4094,7 @@ RectTransform:
   - {fileID: 1605998276}
   - {fileID: 992683523}
   - {fileID: 1335476406}
+  - {fileID: 202438897}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4771,7 +4679,7 @@ RectTransform:
   - {fileID: 751945567}
   - {fileID: 147944705}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5108,7 +5016,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5517,7 +5425,7 @@ RectTransform:
   m_Children:
   - {fileID: 152399738}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6110,7 +6018,7 @@ RectTransform:
   m_Children:
   - {fileID: 1840354913}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -6391,7 +6299,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4222439391037034, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 4.1
+      value: 3.48
       objectReference: {fileID: 0}
     - target: {fileID: 4596825864567438, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalScale.x
@@ -6549,6 +6457,21 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1828891564}
   m_Script: {fileID: 11500000, guid: f69b0b524b28744cd98234bc25d6e2f9, type: 3}
+--- !u!114 &1828891570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1828891565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d98178d2e8f170c4aaff90c51cebd181, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RunwayMidExit: {fileID: 1828891568}
+  RunwayFinish: {fileID: 1828891566}
+  RunwayEnd: {fileID: 1828891569}
+  RunwayEnterEvents: {fileID: 377779369}
 --- !u!1 &1840354912
 GameObject:
   m_ObjectHideFlags: 0
@@ -7341,11 +7264,6 @@ MonoBehaviour:
   ActionPlaceholderName: action
   PreviousActionPlaceholderName: prev_action
   brain: {fileID: 78728595}
---- !u!1 &2056356148 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1896491606951502, guid: 44cd027c45fb6ba4586a2e437f60399a,
-    type: 2}
-  m_PrefabInternal: {fileID: 179425254}
 --- !u!114 &2069810968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7509,7 +7427,7 @@ RectTransform:
   m_Children:
   - {fileID: 2000149336}
   m_Father: {fileID: 1066975418}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -7593,7 +7511,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2145322424
 RectTransform:
   m_ObjectHideFlags: 0

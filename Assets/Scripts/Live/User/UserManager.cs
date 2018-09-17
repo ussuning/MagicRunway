@@ -16,8 +16,10 @@ public class UserManager : Singleton<UserManager>
     private Dictionary<long, GameObject> userScoreBoxes = new Dictionary<long, GameObject>();
     private KinectManager kinectManager;
 
-    public void Start()
+    override protected void Awake()
     {
+        base.Awake();
+
         kinectManager = KinectManager.Instance;
         UserEvents.OnNewUserDetectedCallback += UserManager_NewUserDetected;
         UserEvents.OnUserLostCallback += UserManager_UserLostDetected;

@@ -359,7 +359,7 @@ public class RunwayCameraController : MonoBehaviour {
         if (modelsInMidZone.history.ContainsKey(model))
             modelsInMidZone.history.Remove(model);
     }
-
+    /*
     private void OnFinaleStart(Collection collection)
     {
         //Debug.Log("****************************** FINALE START!!");
@@ -371,7 +371,7 @@ public class RunwayCameraController : MonoBehaviour {
         //Debug.Log("****************************** FINALE END!!");
         AddRunwayListeners();
     }
-
+    */
     //----------------------------------------
     // Event Listeners
     //----------------------------------------
@@ -398,7 +398,7 @@ public class RunwayCameraController : MonoBehaviour {
         RunwayEndEvents.OnTriggerEnterEvt += OnRunwayEndEnter;
         RunwayEndEvents.OnTriggerExitEvt += OnRunwayEndExit;
     }
-
+    /*
     private void AddAutoRunwayListeners()
     {
         RemoveAutoRunwayListeners();
@@ -406,7 +406,7 @@ public class RunwayCameraController : MonoBehaviour {
         AutoRunwayEvents.OnFinaleStartCallback += OnFinaleStart;
         AutoRunwayEvents.OnFinaleEndCallback += OnFinaleEnd;
     }
-
+    */
     private void RemoveRunwayListeners()
     {
         RunwayMidEvents.OnTriggerEnterEvt -= OnRunwayMidEnter;
@@ -418,23 +418,23 @@ public class RunwayCameraController : MonoBehaviour {
         RunwayEndEvents.OnTriggerEnterEvt -= OnRunwayEndEnter;
         RunwayEndEvents.OnTriggerExitEvt -= OnRunwayEndExit;
     }
-
+    /*
     private void RemoveAutoRunwayListeners()
     {
         AutoRunwayEvents.OnFinaleStartCallback -= OnFinaleStart;
         AutoRunwayEvents.OnFinaleEndCallback -= OnFinaleEnd;
     }
-
+    */
     private void AddAllListeners()
     {
         AddRunwayListeners();
-        AddAutoRunwayListeners();
+        //AddAutoRunwayListeners();
     }
 
     private void RemoveAllListeners()
     {
         RemoveRunwayListeners();
-        RemoveAutoRunwayListeners();
+        //RemoveAutoRunwayListeners();
     }
 }
 
