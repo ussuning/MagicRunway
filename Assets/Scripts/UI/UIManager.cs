@@ -11,7 +11,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiShowcase;
     public GameObject uiCollectionTitle;
     public GameObject uiUpNext;
-    public GameObject uiGestureGender;
+    //public GameObject uiGestureGender;
     public GameObject uiHandCursor;
     public GameObject uiHandCursor2;
     public GameObject uiStickMan;
@@ -29,8 +29,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject inventoryFemaleGO;
     public GameObject inventoryFemaleGO2;
 
-    protected GameObject uiMaleGender;
-    protected GameObject uiFemaleGender;
+    //protected GameObject uiMaleGender;
+    //protected GameObject uiFemaleGender;
     protected Button uiJoinInButton;
 
     private CanvasFader faderStartMenu;
@@ -52,11 +52,11 @@ public class UIManager : Singleton<UIManager>
     public void Start()
     {
         //uiShowcase.SetActive(false);
-        uiGestureGender.SetActive(false);
+        //uiGestureGender.SetActive(false);
         uiStartMenu.SetActive(false);
 
-        uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
-        uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
+        //uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
+        //uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
         faderInventory = uiInventory.GetComponent<CanvasFader>();
         faderStickMan = uiStickMan.GetComponent<CanvasFader>();
@@ -83,7 +83,7 @@ public class UIManager : Singleton<UIManager>
     {
         HideUpNext();
         HideStartMenu(false);
-        HideGestureGender(false);
+        //HideGestureGender(false);
         HideInventory(false);
     }
         
@@ -317,7 +317,7 @@ public class UIManager : Singleton<UIManager>
         //  HideCollection(false);    // turn off to use for player UI
         HideInventory(false);
         HideUpNext();
-        HideGestureGender(false);
+        //HideGestureGender(false);
         HideHandCursor();
         HideStartMenu(false);
         HideStickMan(false);
@@ -381,50 +381,50 @@ public class UIManager : Singleton<UIManager>
     // Gestures
     //----------------------------------------
 
-    public void ShowGestureGender(float time = 30.0f)
-    {
-        if(gestureGenderCoroutine != null)
-        {
-            StopCoroutine(gestureGenderCoroutine); 
-        }
+    //public void ShowGestureGender(float time = 30.0f)
+    //{
+    //    if(gestureGenderCoroutine != null)
+    //    {
+    //        StopCoroutine(gestureGenderCoroutine); 
+    //    }
 
-        CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
+    //    CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
 
-        uiGestureGender.SetActive(true);
-        uiMaleGender.SetActive(true);
-        uiFemaleGender.SetActive(true);
+    //    uiGestureGender.SetActive(true);
+    //    uiMaleGender.SetActive(true);
+    //    uiFemaleGender.SetActive(true);
 
-        cf.StartFading(CanvasFade.IN);
+    //    cf.StartFading(CanvasFade.IN);
 
-        gestureGenderCoroutine = WaitToCloseGender(time);
-        StartCoroutine(gestureGenderCoroutine);
-    }
+    //    gestureGenderCoroutine = WaitToCloseGender(time);
+    //    StartCoroutine(gestureGenderCoroutine);
+    //}
 
-    public void ShowMaleGender(int index)
-    {
-        if(index == 0)
-        {
-            inventoryMaleGO.SetActive(true);
-        }
-        else if(index == 1)
-        {
-            inventoryMaleGO2.SetActive(true);
-        }
-        ShowControlPanel(index);
-    }
+    //public void ShowMaleGender(int index)
+    //{
+    //    if(index == 0)
+    //    {
+    //        inventoryMaleGO.SetActive(true);
+    //    }
+    //    else if(index == 1)
+    //    {
+    //        inventoryMaleGO2.SetActive(true);
+    //    }
+    //    ShowControlPanel(index);
+    //}
 
-    public void ShowFemaleGender(int index)
-    {
-        if (index == 0)
-        {
-            inventoryFemaleGO.SetActive(true);
-        }
-        else if (index == 1)
-        {
-            inventoryFemaleGO2.SetActive(true);
-        }
-        ShowControlPanel(index);
-    }
+    //public void ShowFemaleGender(int index)
+    //{
+    //    if (index == 0)
+    //    {
+    //        inventoryFemaleGO.SetActive(true);
+    //    }
+    //    else if (index == 1)
+    //    {
+    //        inventoryFemaleGO2.SetActive(true);
+    //    }
+    //    ShowControlPanel(index);
+    //}
 
     //----------------------------------------
     // Inventory
@@ -456,11 +456,11 @@ public class UIManager : Singleton<UIManager>
         yield return null;
     }
 
-    IEnumerator WaitToCloseGender(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        HideGestureGender();
-    }
+    //IEnumerator WaitToCloseGender(float delay)
+    //{
+    //    yield return new WaitForSeconds(delay);
+    //    HideGestureGender();
+    //}
 
     IEnumerator WaitToShowStickMan(float delay)
     {
@@ -468,23 +468,23 @@ public class UIManager : Singleton<UIManager>
         ShowStickMan(true);
     }
 
-    public void HideGestureGender(bool animate = true)
-    {
-        if (gestureGenderCoroutine != null)
-        {
-            StopCoroutine(gestureGenderCoroutine);
-        }
+    //public void HideGestureGender(bool animate = true)
+    //{
+    //    if (gestureGenderCoroutine != null)
+    //    {
+    //        StopCoroutine(gestureGenderCoroutine);
+    //    }
 
-        if (animate == true)
-        {
-            CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
-            cf.StartFading(CanvasFade.OUT);
-        } else
-        {
-            uiGestureGender.SetActive(false);
-        }
-        gestureGenderCoroutine = null;
-    }
+    //    if (animate == true)
+    //    {
+    //        CanvasFader cf = uiGestureGender.GetComponent<CanvasFader>();
+    //        cf.StartFading(CanvasFade.OUT);
+    //    } else
+    //    {
+    //        uiGestureGender.SetActive(false);
+    //    }
+    //    gestureGenderCoroutine = null;
+    //}
 
     //----------------------------------------
 
@@ -500,10 +500,10 @@ public class UIManager : Singleton<UIManager>
             if (fade == CanvasFade.OUT) { uiCollectionTitle.SetActive(false); }
         }
 
-        if (go == uiGestureGender)
-        {
-            if (fade == CanvasFade.OUT) { uiGestureGender.SetActive(false); }
-        }
+        //if (go == uiGestureGender)
+        //{
+        //    if (fade == CanvasFade.OUT) { uiGestureGender.SetActive(false); }
+        //}
     }
 
     protected void UI_JoinInButtonCallBack(Button buttonPressed)

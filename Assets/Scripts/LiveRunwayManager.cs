@@ -58,7 +58,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         CreateUsersFromBuffer();
         isModeActive = true;
 
-        UIManager.Instance.ShowGestureGender(10.0f);
+        //UIManager.Instance.ShowGestureGender(10.0f);
         UIManager.Instance.ShowStickManDelay(11.0f);
     }
 
@@ -74,10 +74,10 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         isModeActive = false;
     }
 
-    public void ShowGestureGender()
-    {
-        UIManager.Instance.ShowGestureGender(gestureGenderShowLength);
-    }
+    //public void ShowGestureGender()
+    //{
+    //    UIManager.Instance.ShowGestureGender(gestureGenderShowLength);
+    //}
 
     /*
     private void PrepareCollectionLiveModelPrefabs()
