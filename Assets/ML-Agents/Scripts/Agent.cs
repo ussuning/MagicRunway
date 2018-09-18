@@ -299,22 +299,18 @@ public abstract class Agent : MonoBehaviour
     /// becomes disabled or inactive.
     void OnDisable()
     {
-        Debug.Log(string.Format("[Agent] OnDisable: desubscriping to listeners"));
-        if (!academy)
-            academy = Object.FindObjectOfType<Academy>() as Academy;
-        if (academy != null)
-        {
-            academy.AgentSetStatus -= SetStatus;
-            academy.AgentResetIfDone -= ResetIfDone;
-            academy.AgentSendState -= SendInfo;
-            academy.AgentAct -= AgentStep;
-            academy.AgentForceReset -= _AgentReset;
-        }
+        Debug.Log(string.Format("[Agent] OnDisable: unsubscriping to listeners"));
+        UnsubscriptToListeners();
     }
 
     void OnDestroy()
     {
-        Debug.Log(string.Format("[Agent] OnDistroy: desubscriping to listeners"));
+        Debug.Log(string.Format("[Agent] OnDistroy: unsubscriping to listeners"));
+        UnsubscriptToListeners();
+    }
+
+    void UnsubscriptToListeners()
+    {
         if (!academy)
             academy = Object.FindObjectOfType<Academy>() as Academy;
         if (academy != null)
@@ -544,7 +540,7 @@ public abstract class Agent : MonoBehaviour
                     info.vectorObservation.Count));*/
             }
             info.stackedVectorObservation.RemoveRange(
-                0, param.vectorObservationSize);
+                0, Mathf.Min(info.stackedVectorObservation.Count, param.vectorObservationSize));
             info.stackedVectorObservation.AddRange(info.vectorObservation);
         }
         else
@@ -847,6 +843,7 @@ public abstract class Agent : MonoBehaviour
         if (this == null)
         {
             Debug.Log(string.Format("[Agent] SendInfo(): Agent is null"));
+            UnsubscriptToListeners();
             return;
         }
         if (requestDecision)

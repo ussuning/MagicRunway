@@ -231,7 +231,13 @@ public class Brain : MonoBehaviour
         }
         else
         {
-            agentInfos.Add(agent, info);
+            if (agent != null)
+            {
+                if (agentInfos.ContainsKey(agent))
+                    agentInfos[agent] = info;
+                else
+                    agentInfos.Add(agent, info);
+            }
         }
 
     }

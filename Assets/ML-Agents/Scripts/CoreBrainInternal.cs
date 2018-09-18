@@ -199,6 +199,8 @@ public class CoreBrainInternal : ScriptableObject, CoreBrain
                 List<float> state_list = agentInfo[agent].stackedVectorObservation;
                 for (int j = 0; j < stateLength * brain.brainParameters.numStackedVectorObservations; j++)
                 {
+                    if (j >= state_list.Count)
+                        continue;
                     inputState[i, j] = state_list[j];
                 }
                 i++;
