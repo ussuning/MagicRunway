@@ -21,7 +21,7 @@ public class UITestAppManager : MonoBehaviour
 
     void RunCollection () {
         m_currentCollection = MRData.Instance.collections.collections[0];
-        UIManager.Instance.ShowCollection(m_currentCollection);
+        //UIManager.Instance.ShowCollection(m_currentCollection);
         UIManager.Instance.RunUpNextTimer("Billy Bob Hillbilly", 300.0f,120.0f);
     }
 
@@ -29,6 +29,6 @@ public class UITestAppManager : MonoBehaviour
     {
         Debug.Log("DO SOMETHING!");
         m_currentCollection = MRData.Instance.collections.collections[1];
-        UIManager.Instance.ShowCollection(m_currentCollection);
+        //UIManager.Instance.ShowCollection(m_currentCollection);
     }
 }

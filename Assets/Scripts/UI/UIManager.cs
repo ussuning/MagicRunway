@@ -9,7 +9,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiInventory;
     public GameObject uiJoinIn;
     public GameObject uiShowcase;
-    public GameObject uiCollection;
+    public GameObject uiCollectionTitle;
     public GameObject uiUpNext;
     public GameObject uiGestureGender;
     public GameObject uiHandCursor;
@@ -38,6 +38,7 @@ public class UIManager : Singleton<UIManager>
     private CanvasFader faderControl;
     private CanvasFader faderControl2;
     private CanvasFader faderStickMan;
+    private CanvasFader faderCollectionTitle;
     private IEnumerator gestureGenderCoroutine;
     private IEnumerator stickManCoroutine;
 
@@ -61,6 +62,7 @@ public class UIManager : Singleton<UIManager>
         faderStickMan = uiStickMan.GetComponent<CanvasFader>();
         faderControl = controlPanelGO.GetComponent<CanvasFader>();
         faderControl2 = controlPanelGO2.GetComponent<CanvasFader>();
+        faderCollectionTitle = uiCollectionTitle.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
     }
@@ -106,6 +108,39 @@ public class UIManager : Singleton<UIManager>
         else
         {
             uiStartMenu.SetActive(false);
+        }
+    }
+
+    //----------------------------------------
+    // Collection Title
+    //----------------------------------------
+
+    public void ShowCollectionTitle(string title, bool animate)
+    {
+        foreach (Text text in uiCollectionTitle.GetComponentsInChildren<Text>())
+        {
+            text.text = title;
+        }
+        if (animate == true)
+        {
+            uiCollectionTitle.SetActive(true);
+            faderCollectionTitle.StartFading(CanvasFade.IN);
+        }
+        else
+        {
+            uiCollectionTitle.SetActive(true);
+        }
+    }
+
+    public void HideCollectionTitle(bool animate)
+    {
+        if (animate == true)
+        {
+            faderCollectionTitle.StartFading(CanvasFade.OUT);
+        }
+        else
+        {
+            uiCollectionTitle.SetActive(false);
         }
     }
 
@@ -284,8 +319,9 @@ public class UIManager : Singleton<UIManager>
         HideUpNext();
         HideGestureGender(false);
         HideHandCursor();
-        HideStartMenu(true);
+        HideStartMenu(false);
         HideStickMan(false);
+        HideCollectionTitle(false);
     }
 
     //----------------------------------------
@@ -309,7 +345,7 @@ public class UIManager : Singleton<UIManager>
     //----------------------------------------
     // Collection
     //----------------------------------------
-
+    /*
     public void ShowCollection(Collection collection)
     {
         // turn off to use for player UI
@@ -322,7 +358,7 @@ public class UIManager : Singleton<UIManager>
           CollectionDisplay cd = uiCollection.GetComponent<CollectionDisplay>();
           cd.Hide(animate);
     }
-
+    */
     public void RunUpNextTimer(string collectionName, float totalTimeSeconds = 10.0f, float warningTimeSeconds = 5.0f) {
         uiUpNext.SetActive(true);
         UpNext un = uiUpNext.GetComponent<UpNext>();
@@ -457,6 +493,11 @@ public class UIManager : Singleton<UIManager>
         if (go == uiStartMenu)
         {
             if (fade == CanvasFade.OUT) { uiStartMenu.SetActive(false); }
+        }
+
+        if (go == uiCollectionTitle)
+        {
+            if (fade == CanvasFade.OUT) { uiCollectionTitle.SetActive(false); }
         }
 
         if (go == uiGestureGender)

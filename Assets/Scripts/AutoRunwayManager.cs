@@ -46,6 +46,9 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Application.targetFrameRate = 120;
 
         AddRunwayEventListeners();
+
+        KinectManager.Instance.ClearKinectUsers();
+        UIManager.Instance.HideAll();
         autoRunwayContainer.SetActive(true);
 
         showcaseManager = new ShowcaseManager(MRData.Instance.collections.collections);
@@ -67,6 +70,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         UIManager.Instance.HideAll();
         showcaseManager = null;
 
+        KinectManager.Instance.ClearKinectUsers();
+
         autoRunwayContainer.SetActive(false);
 
         Debug.Log("Auto Runway Has Ended");
@@ -78,11 +83,13 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     
     private void PrepareCollectionRunwayModelPrefabs()
     {
-        UIManager.Instance.ShowCollection(showcaseManager.currentCollection);
+        List<Outfit> outfits = showcaseManager.PrepareShow();
+        // UIManager.Instance.ShowCollection(showcaseManager.currentCollection);
+        UIManager.Instance.ShowCollectionTitle(showcaseManager.currentCollection.name + " Collection",true);
         UIManager.Instance.HideForNextCollection();
 
         DestroyAllCharacters();
-        List<Outfit> outfits = showcaseManager.PrepareShow();
+        
 
         resource = new List<string>();
 
@@ -101,6 +108,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         yield return StartCoroutine(LoadAndPrepareModels());
         videoWall.ChangeAndFadeIn(showcaseManager.currentCollection.splash);
         yield return new WaitForSeconds(waitToStart);
+        UIManager.Instance.HideCollectionTitle(true);
         PresentRunwayModel();
     }
 
@@ -174,7 +182,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         Resources.UnloadUnusedAssets();
 
-        UIManager.Instance.HideCollection();
+        //UIManager.Instance.HideCollection();
 
         videoWall.FadeOut();
 
@@ -232,13 +240,10 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void OnRunwayEnter(Collider model)
     {
-        List<string> crowd = new List<string>(new string[] { SfxManager.CROWD_SHORT, SfxManager.CROWD_MEN_SHORT, SfxManager.APPLAUSE_1, SfxManager.APPLAUSE_2 });
+        List<string> crowd = new List<string>(new string[] { SfxManager.APPLAUSE_1, SfxManager.APPLAUSE_2 });
         int index = Random.Range(0, crowd.Count);
 
         AudioClip clip = SfxManager.LoadClip(crowd[index]);
-
-        if (showcaseManager.curOutfit == 0)
-            clip = SfxManager.LoadClip(SfxManager.CROWD_LONG);
 
         audioSource.PlayOneShot(clip);
     }
