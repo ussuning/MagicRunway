@@ -4,9 +4,29 @@ using UnityEngine;
 
 public class User : MonoBehaviour {
 
+    public enum Gender
+    {
+        None = 0,
+        Female,
+        Male
+    };
+
     public int uindex;
     public long uid;
-    public string ugender;    // switch to enum later
+
+    private Gender ugender;
+    public Gender UserGender
+    {
+        set
+        {
+            ugender = value;
+        }
+        get
+        {
+            return ugender;
+        }
+    }
+
     public GameObject outfitGO;
     public int inventorySlot;
     public Vector3 uposition;
@@ -19,6 +39,12 @@ public class User : MonoBehaviour {
     {
         uid = id;
         uindex = index;
+    }
+
+    public void init(long id)
+    {
+        uid = id;
+        inventorySlot = 1;
     }
 
     public void initialize(long id, int index)
@@ -36,11 +62,6 @@ public class User : MonoBehaviour {
     public int getUserIndex()
     {
         return uindex;
-    }
-
-    public string getGender()
-    {
-        return ugender;
     }
 
     public GameObject getOutfit()
@@ -66,11 +87,6 @@ public class User : MonoBehaviour {
     public GameObject getUserSkeletonGO()
     {
         return userSkeletonGO;
-    }
-
-    public void setGender(string gender)
-    {
-        ugender = gender;
     }
 
     public void setUserSkeletonGO(GameObject go)

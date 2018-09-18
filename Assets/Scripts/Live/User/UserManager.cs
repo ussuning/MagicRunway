@@ -124,11 +124,12 @@ public class UserManager : Singleton<UserManager>
         }
     }
 
-    public void setGender(long userId, string gender)
+    public void setGender(long userId, User.Gender gender)
     {
         if (userLookup.ContainsKey(userId))
         {
-            userLookup[userId].setGender(gender);
+            //userLookup[userId].setGender(gender);
+            userLookup[userId].UserGender = gender;
         }
     }
 
@@ -253,7 +254,7 @@ public class UserManager : Singleton<UserManager>
         GameObject inventoryMenuGO = GameObject.Find(inventoryMenuName);
         GameObject inventoryGenderGO;
         string inventoryGenderName;
-        if (UserManager.Instance.getUserById(userId).getGender() == "female")
+        if (UserManager.Instance.getUserById(userId).UserGender == User.Gender.Female)
         {
             inventoryGenderName = "Inventory_Female_" + userLookup[userId].getUserIndex();
         } else
@@ -349,13 +350,13 @@ public class UserManager : Singleton<UserManager>
 
         if (userLookup.ContainsKey(userId))
         {
-            if (userLookup[userId].getGender() == "female")
+            if (userLookup[userId].UserGender == User.Gender.Female)
             {
 
                 GameObject gender = userContainer.transform.Find("Gender/Female").gameObject;
                 gender.transform.position = pos;
             }
-            else if (userLookup[userId].getGender() == "male")
+            else if (userLookup[userId].UserGender == User.Gender.Male)
             {
                 GameObject gender = userContainer.transform.Find("Gender/Male").gameObject;
                 gender.transform.position = pos;

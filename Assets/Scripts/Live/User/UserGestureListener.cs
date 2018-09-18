@@ -60,7 +60,8 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             {
                 //    Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
                 // return if gender already set
-                if (UserManager.Instance.getUserById(userId).getGender() != null)
+                //if (UserManager.Instance.getUserById(userId).getGender() != null)
+                if (UserManager.Instance.getUserById(userId).UserGender != User.Gender.None)
                 {
                     //  Debug.Log("Gender already set");
                     return false;
@@ -71,7 +72,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 
                 //  Debug.Log("User " + userId + " is female");
                 //  UserManager.Instance.addGenderIcon(userId, "female");
-                UserManager.Instance.setGender(userId, "female");
+                UserManager.Instance.setGender(userId, User.Gender.Female);
                 UIManager.Instance.ShowFemaleGender(userIndex);
                 UIManager.Instance.ShowStickManDelay(10.0f);
                 StartCoroutine(UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot()));
@@ -81,7 +82,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
             {
                 //   Debug.Log("Gesture Completed: " + gesture + " " + userIndex + " " + userId);
                 // return if gender already set
-                if (UserManager.Instance.getUserById(userId).getGender() != null)
+                if (UserManager.Instance.getUserById(userId).UserGender != User.Gender.None)
                 {
                     //  Debug.Log("Gender already set");
                     return false;
@@ -92,7 +93,7 @@ public class UserGestureListener : MonoBehaviour, KinectGestures.GestureListener
 
                 // Debug.Log("User " + userId + " is male");
                 // UserManager.Instance.addGenderIcon(userId, "male");
-                UserManager.Instance.setGender(userId, "male");
+                UserManager.Instance.setGender(userId, User.Gender.Male);
                 UIManager.Instance.ShowMaleGender(userIndex);
                 UIManager.Instance.ShowStickManDelay(10.0f);
                 StartCoroutine(UserManager.Instance.renderOutfit(userId, UserManager.Instance.getUserById(userId).getInventorySlot()));
