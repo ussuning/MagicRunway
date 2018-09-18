@@ -718,11 +718,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 568602815}
   m_Script: {fileID: 11500000, guid: c676a8ddf5a5f4f64b35e9ed5028679d, type: 3}
---- !u!1 &86555557 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1397753557676928, guid: 88b77abc855415b4e821200dd0bc69e0,
-    type: 2}
-  m_PrefabInternal: {fileID: 914276664}
 --- !u!114 &94977554 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114532265166659794, guid: 052f4c09e2574654a930df511157ed8d,
@@ -3065,7 +3060,7 @@ Prefab:
       objectReference: {fileID: 50772152}
     - target: {fileID: 1092431475659024, guid: 052f4c09e2574654a930df511157ed8d, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114809820202901922, guid: 052f4c09e2574654a930df511157ed8d,
         type: 2}
@@ -3839,11 +3834,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a801b7815fc664fb07fd753a269c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickman: {fileID: 1406623629}
-  poseAcademy: {fileID: 1266401910}
+  UserPrefab: {fileID: 1073119087643734, guid: c79782251b62a2644905e6eb286cbdd2, type: 2}
   liveRunwayContainer: {fileID: 2146909477}
-  outfits: {fileID: 1132182471}
-  fittingRoom: {fileID: 86555557}
+  userContainer: {fileID: 2017443957}
 --- !u!82 &1023743742
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4477,11 +4470,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 568602815}
   m_Script: {fileID: 11500000, guid: c676a8ddf5a5f4f64b35e9ed5028679d, type: 3}
---- !u!1 &1266401910 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1092431475659024, guid: 052f4c09e2574654a930df511157ed8d,
-    type: 2}
-  m_PrefabInternal: {fileID: 568602815}
 --- !u!1 &1269832363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1034300157741842, guid: b89244c5b2d458b47baba6cf2ab960ce,
@@ -5059,11 +5047,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   broadcast: 1
   brain: {fileID: 0}
---- !u!1 &1406623629 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1556940730421634, guid: 8bdf5da9a5b967149a4df3887b9816f2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1430691210}
 --- !u!4 &1406623632 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4705078941936674, guid: 8bdf5da9a5b967149a4df3887b9816f2,
