@@ -74,10 +74,10 @@ public class ComboFX : MonoBehaviour {
         GameObject userComboNum = Instantiate(ComboNumText.gameObject, this.transform);
         FlyingText ft = userComboNum.AddComponent<FlyingText>();
 
-        GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
-        if (userScoreBoxGO)
-            ft.ActivateFlying(userScoreBoxGO.transform.position);
-        else
-            Destroy(userComboNum);
+        //GameObject userScoreBoxGO = UserManager.Instance.getUserScoreBoxById(userID);
+        //if (userScoreBoxGO)
+        //    ft.ActivateFlying(userScoreBoxGO.transform.position);
+        //else
+        //    Destroy(userComboNum);
     }
 }

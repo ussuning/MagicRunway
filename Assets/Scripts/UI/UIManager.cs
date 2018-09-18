@@ -167,61 +167,61 @@ public class UIManager : Singleton<UIManager>
     }
 
 
-    public IEnumerator scrollInventory(int userIndex, long userId, string dir)
-    {
-        Debug.Log("scrollInventory " + userIndex + " " + dir);
-        RectTransform rt;
-        ScrollRect scrollRect;
-        RectTransform contentPanel;
-        GameObject controlGO;
-        GameObject control;
+    //public IEnumerator scrollInventory(int userIndex, long userId, string dir)
+    //{
+    //    Debug.Log("scrollInventory " + userIndex + " " + dir);
+    //    RectTransform rt;
+    //    ScrollRect scrollRect;
+    //    RectTransform contentPanel;
+    //    GameObject controlGO;
+    //    GameObject control;
 
-        if (userIndex == 0 )
-        {
-            rt = scrollRectGO.GetComponent<RectTransform>();
-            scrollRect = scrollRectGO.GetComponent<ScrollRect>();
-            contentPanel = contentPanelGO.GetComponent<RectTransform>();
-            controlGO = controlPanelGO;
-        }
-        else
-        {
-            rt = scrollRectGO2.GetComponent<RectTransform>();
-            scrollRect = scrollRectGO2.GetComponent<ScrollRect>();
-            contentPanel = contentPanelGO2.GetComponent<RectTransform>();
-            controlGO = controlPanelGO2;
-        }
+    //    if (userIndex == 0 )
+    //    {
+    //        rt = scrollRectGO.GetComponent<RectTransform>();
+    //        scrollRect = scrollRectGO.GetComponent<ScrollRect>();
+    //        contentPanel = contentPanelGO.GetComponent<RectTransform>();
+    //        controlGO = controlPanelGO;
+    //    }
+    //    else
+    //    {
+    //        rt = scrollRectGO2.GetComponent<RectTransform>();
+    //        scrollRect = scrollRectGO2.GetComponent<ScrollRect>();
+    //        contentPanel = contentPanelGO2.GetComponent<RectTransform>();
+    //        controlGO = controlPanelGO2;
+    //    }
 
-        int currentSlot = UserManager.Instance.getUserById(userId).getInventorySlot();
+    //    int currentSlot = UserManager.Instance.getUserById(userId).getInventorySlot();
        
-        Debug.Log("Current Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
+    //    Debug.Log("Current Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
 
-        Vector3 pos = rt.position;
-        Canvas.ForceUpdateCanvases();
-        string controlName;
-        int nextSlot;
-        if (dir == "up")
-        {
-            nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
-            UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-            controlName = "Menu_Up_" + userIndex;
-            control = controlGO.transform.Find(controlName).gameObject;
-            InventoryControlSelected(control);
-            contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
-        }
-        else if(dir == "down")
-        {
-            nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
-            UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
-            controlName = "Menu_Down_" + userIndex;
-            control = controlGO.transform.Find(controlName).gameObject;
-            InventoryControlSelected(control);
-            contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
-        }
+    //    Vector3 pos = rt.position;
+    //    Canvas.ForceUpdateCanvases();
+    //    string controlName;
+    //    int nextSlot;
+    //    if (dir == "up")
+    //    {
+    //        nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() - 1;
+    //        UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
+    //        controlName = "Menu_Up_" + userIndex;
+    //        control = controlGO.transform.Find(controlName).gameObject;
+    //        InventoryControlSelected(control);
+    //        contentPanel.anchoredPosition = contentPanel.anchoredPosition - new Vector2(0, inventoryScrollSize);
+    //    }
+    //    else if(dir == "down")
+    //    {
+    //        nextSlot = UserManager.Instance.getUserById(userId).getInventorySlot() + 1;
+    //        UserManager.Instance.getUserById(userId).setInventorySlot(nextSlot);
+    //        controlName = "Menu_Down_" + userIndex;
+    //        control = controlGO.transform.Find(controlName).gameObject;
+    //        InventoryControlSelected(control);
+    //        contentPanel.anchoredPosition = contentPanel.anchoredPosition + new Vector2(0, inventoryScrollSize);
+    //    }
 
-        //Debug.Log("Next Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
+    //    //Debug.Log("Next Slot = " + UserManager.Instance.getUserById(userId).getInventorySlot());
 
-        yield return null;
-    }
+    //    yield return null;
+    //}
 
     public void ClickStartMenu()
     {
