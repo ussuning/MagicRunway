@@ -248,12 +248,15 @@ public abstract class Agent : MonoBehaviour
     /// to separate between different agents in the environment.
     int id;
 
+    Academy academy;
+
     /// Monobehavior function that is called when the attached GameObject
     /// becomes enabled or active.
     void OnEnable()
     {
         id = gameObject.GetInstanceID();
-        Academy academy = Object.FindObjectOfType<Academy>() as Academy;
+        if(!academy)
+            academy = Object.FindObjectOfType<Academy>() as Academy;
         OnEnableHelper(academy);
     }
 
@@ -296,7 +299,8 @@ public abstract class Agent : MonoBehaviour
     /// becomes disabled or inactive.
     void OnDisable()
     {
-        Academy academy = Object.FindObjectOfType<Academy>() as Academy;
+        if (!academy)
+            academy = Object.FindObjectOfType<Academy>() as Academy;
         if (academy != null)
         {
             academy.AgentSetStatus -= SetStatus;
@@ -309,7 +313,8 @@ public abstract class Agent : MonoBehaviour
 
     void OnDestroy()
     {
-        Academy academy = Object.FindObjectOfType<Academy>() as Academy;
+        if (!academy)
+            academy = Object.FindObjectOfType<Academy>() as Academy;
         if (academy != null)
         {
             academy.AgentSetStatus -= SetStatus;
