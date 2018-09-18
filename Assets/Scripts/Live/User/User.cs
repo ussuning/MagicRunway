@@ -11,8 +11,7 @@ public class User : MonoBehaviour {
         Male
     };
 
-    public int uindex;
-    public long uid;
+    private long uid;
 
     private Gender ugender;
     public Gender UserGender
@@ -27,92 +26,83 @@ public class User : MonoBehaviour {
         }
     }
 
-    public GameObject outfitGO;
-    public int inventorySlot;
-    public Vector3 uposition;
-    public Vector3 genderIconPosition;
-    private GameObject userSkeletonGO;
-    private bool isOutfitMenuOn = false;
+    //public GameObject outfitGO;
+    //public int inventorySlot;
+    //public Vector3 uposition;
+    //public Vector3 genderIconPosition;
+    //private GameObject userSkeletonGO;
+    //private bool isOutfitMenuOn = false;
+
+    PoseAgentSelector poseAgentSelector;
+
+    void Awake ()
+    {
+        poseAgentSelector = GetComponent<PoseAgentSelector>();
+    }
 
     // Use this for initialization
     public User(long id, int index)
     {
         uid = id;
-        uindex = index;
     }
 
-    public void init(long id)
+    public void initialize(long id)
     {
         uid = id;
-        inventorySlot = 1;
+        //inventorySlot = 1;
+
+        poseAgentSelector.Init(id);
     }
 
-    public void initialize(long id, int index)
-    {
-        uid = id;
-        uindex = index;
-        inventorySlot = 1;
-    }
+    //public GameObject getOutfit()
+    //{
+    //    return outfitGO;
+    //}
 
-    public long getUserId()
-    {
-        return uid;
-    }
+    //public Vector3 getPosition()
+    //{
+    //    return uposition;
+    //}
 
-    public int getUserIndex()
-    {
-        return uindex;
-    }
+    //public int getInventorySlot()
+    //{
+    //    return inventorySlot;
+    //}
 
-    public GameObject getOutfit()
-    {
-        return outfitGO;
-    }
+    //public Vector3 getGenderIconPosition()
+    //{
+    //    return genderIconPosition;
+    //}
 
-    public Vector3 getPosition()
-    {
-        return uposition;
-    }
+    //public GameObject getUserSkeletonGO()
+    //{
+    //    return userSkeletonGO;
+    //}
 
-    public int getInventorySlot()
-    {
-        return inventorySlot;
-    }
+    //public void setUserSkeletonGO(GameObject go)
+    //{
+    //    userSkeletonGO = go;
+    //}
 
-    public Vector3 getGenderIconPosition()
-    {
-        return genderIconPosition;
-    }
+    //public void setOutfit(GameObject outfit)
+    //{
+    //    outfitGO = outfit;
+    //}
 
-    public GameObject getUserSkeletonGO()
-    {
-        return userSkeletonGO;
-    }
+    //public bool isOutfitMenuDisplayed()
+    //{
+    //    return isOutfitMenuOn;
+    //}
 
-    public void setUserSkeletonGO(GameObject go)
-    {
-        userSkeletonGO = go;
-    }
+    //public void setOutfitMenuStatus(bool status)
+    //{
+    //    isOutfitMenuOn = status;
+    //}
 
-    public void setOutfit(GameObject outfit)
-    {
-        outfitGO = outfit;
-    }
-
-    public bool isOutfitMenuDisplayed()
-    {
-        return isOutfitMenuOn;
-    }
-
-    public void setOutfitMenuStatus(bool status)
-    {
-        isOutfitMenuOn = status;
-    }
-
-    public void setInventorySlot(int slot)
-    {
-        inventorySlot = slot;
-    }
+    //public void setInventorySlot(int slot)
+    //{
+    //    inventorySlot = slot;
+    //}
 
     protected Vector3 getCurrentPosition(int iJointIndex)
     {

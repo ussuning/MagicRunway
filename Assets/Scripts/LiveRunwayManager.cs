@@ -253,7 +253,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         User user = userGO.GetComponent<User>();
         if (user == null)
             user = userGO.AddComponent<User>();
-        user.init(userId);
+        user.initialize(userId);
 
         users.Add(userId, user);
 
