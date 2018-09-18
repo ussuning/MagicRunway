@@ -307,6 +307,19 @@ public abstract class Agent : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        Academy academy = Object.FindObjectOfType<Academy>() as Academy;
+        if (academy != null)
+        {
+            academy.AgentSetStatus -= SetStatus;
+            academy.AgentResetIfDone -= ResetIfDone;
+            academy.AgentSendState -= SendInfo;
+            academy.AgentAct -= AgentStep;
+            academy.AgentForceReset -= _AgentReset;
+        }
+    }
+
     /// <summary>
     /// Updates the Brain for the agent. Any brain currently assigned to the
     /// agent will be replaced with the provided one.
