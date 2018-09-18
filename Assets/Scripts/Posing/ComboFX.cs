@@ -42,12 +42,12 @@ public class ComboFX : MonoBehaviour {
         long userID = (long)param[0];
         int comboNum = (int)param[1];
 
-        SetComboText(userID, comboNum);
+        //SetComboText(userID, comboNum);
     }
 
     public void OnComboBroken(object[] param)
     {
-        ClearComboText();
+        //ClearComboText();
     }
 
     void SetComboText(long userID, int comboNum)
