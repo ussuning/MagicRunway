@@ -299,6 +299,7 @@ public abstract class Agent : MonoBehaviour
     /// becomes disabled or inactive.
     void OnDisable()
     {
+        Debug.Log(string.Format("[Agent] OnDisable: desubscriping to listeners"));
         if (!academy)
             academy = Object.FindObjectOfType<Academy>() as Academy;
         if (academy != null)
@@ -313,6 +314,7 @@ public abstract class Agent : MonoBehaviour
 
     void OnDestroy()
     {
+        Debug.Log(string.Format("[Agent] OnDistroy: desubscriping to listeners"));
         if (!academy)
             academy = Object.FindObjectOfType<Academy>() as Academy;
         if (academy != null)
@@ -842,6 +844,11 @@ public abstract class Agent : MonoBehaviour
     /// </summary>
     void SendInfo()
     {
+        if (this == null)
+        {
+            Debug.Log(string.Format("[Agent] SendInfo(): Agent is null"));
+            return;
+        }
         if (requestDecision)
         {
             SendInfoToBrain();

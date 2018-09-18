@@ -45,11 +45,13 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void Begin()
     {
-        
+        Debug.Log(string.Format("[LiveRunwayManager] Begin:"));
     }
 
     public void SetUp()
     {
+        Debug.Log(string.Format("[LiveRunwayManager] SetUp:"));
+
         liveRunwayContainer.SetActive(true);
         //fittingRoom.SetActive(true);
 
@@ -62,6 +64,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void End()
     {
+        Debug.Log(string.Format("[LiveRunwayManager] End:"));
+
         UIManager.Instance.HideAll();
         
         //fittingRoom.SetActive(false);
