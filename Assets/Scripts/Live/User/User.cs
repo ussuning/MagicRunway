@@ -187,7 +187,7 @@ public class User : MonoBehaviour {
             int iJointIndex = (int)KinectInterop.JointType.Head;
             if (manager.IsJointTracked(uid, iJointIndex))
             {
-                return manager.GetJointPosColorOverlay(uid, iJointIndex, foregroundCamera, backgroundRect);
+                return manager.GetJointPosColorOverlay(uid, iJointIndex, uiCamera, backgroundRect);
             }
         }
 
