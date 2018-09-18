@@ -259,7 +259,7 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            uiStartMenu.SetActive(false);
+            uiStickMan.SetActive(false);
         }
     }
 
@@ -285,6 +285,7 @@ public class UIManager : Singleton<UIManager>
         HideGestureGender(false);
         HideHandCursor();
         HideStartMenu(true);
+        HideStickMan(false);
     }
 
     //----------------------------------------
