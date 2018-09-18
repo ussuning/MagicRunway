@@ -1,0 +1,52 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(SpriteRenderer))]
+public class SpriteFader : MonoBehaviour {
+
+    private float cur_alpha = 1f;
+    private bool m_isFading = false;
+
+    [SerializeField]
+    private float fadingDuration = 1.0f;    //Time for fading
+    private float fadeSpeed = 1.0f;
+
+    private SpriteRenderer renderer;
+
+    void Awake ()
+    {
+        renderer = GetComponent<SpriteRenderer>();
+	}
+
+    void Start()
+    {
+        cur_alpha = 1f;
+        m_isFading = false;
+
+        if (fadingDuration > 0)
+            fadeSpeed = 1 / fadingDuration;
+    }
+	
+	void Update ()
+    {
+		if(m_isFading)
+        {
+            cur_alpha -= Time.deltaTime * fadeSpeed;
+            if (cur_alpha < 0f) 
+                cur_alpha = 0f;
+            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, cur_alpha);
+
+            if (cur_alpha == 0f)
+            {
+                m_isFading = false;
+                gameObject.SetActive(false);
+            }
+        }
+	}
+
+    public void StartFadingOut()
+    {
+        m_isFading = true;
+    }
+}

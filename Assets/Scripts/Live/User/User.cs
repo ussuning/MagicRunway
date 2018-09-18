@@ -11,6 +11,8 @@ public class User : MonoBehaviour {
         Male
     };
 
+    public SpriteFader GenderSelectionUI;
+
     private long uid;
 
     private Gender ugender;
@@ -19,6 +21,8 @@ public class User : MonoBehaviour {
         set
         {
             ugender = value;
+            if (ugender != Gender.None)
+                GenderSelectionUI.StartFadingOut();
         }
         get
         {
@@ -33,11 +37,28 @@ public class User : MonoBehaviour {
     //private GameObject userSkeletonGO;
     //private bool isOutfitMenuOn = false;
 
-    PoseAgentSelector poseAgentSelector;
+    private PoseAgentSelector poseAgentSelector;
+
+    Camera uiCamera;
+    KinectManager manager;
 
     void Awake ()
     {
         poseAgentSelector = GetComponent<PoseAgentSelector>();
+    }
+
+    void OnEnable()
+    {
+        if(!uiCamera)
+        {
+            GameObject cameraGO = GameObject.Find("/Live runway/FittingRoom/Camera");
+            uiCamera = cameraGO.GetComponent<Camera>();
+        }
+
+        if(!manager)
+        {
+            manager = KinectManager.Instance;
+        }
     }
 
     // Use this for initialization
@@ -133,12 +154,43 @@ public class User : MonoBehaviour {
     void Update()
     {
         // get this user's pos on every tick
-       /* uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
-        genderIconPosition = getCurrentPosition((int)KinectInterop.JointType.ShoulderLeft);
+        /* uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
+         genderIconPosition = getCurrentPosition((int)KinectInterop.JointType.ShoulderLeft);
 
-        //update gameObject pos 
-        gameObject.transform.position = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
-        */
+         //update gameObject pos 
+         gameObject.transform.position = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
+         */
+
+        
+        if(ugender == Gender.None)
+        {
+            if (GenderSelectionUI)
+            {
+                GenderSelectionUI.transform.position = GetUserScreenPos() + new Vector3(0f, 160f, 0f);
+            }
+        }
     }
 
+    Vector3 GetUserScreenPos()
+    {
+        if (manager && manager.IsInitialized())
+        {
+            // get the background rectangle (use the portrait background, if available)
+            Rect backgroundRect = uiCamera.pixelRect;
+            PortraitBackground portraitBack = PortraitBackground.Instance;
+
+            if (portraitBack && portraitBack.enabled)
+            {
+                backgroundRect = portraitBack.GetBackgroundRect();
+            }
+
+            int iJointIndex = (int)KinectInterop.JointType.Head;
+            if (manager.IsJointTracked(uid, iJointIndex))
+            {
+                return manager.GetJointPosColorOverlay(uid, iJointIndex, foregroundCamera, backgroundRect);
+            }
+        }
+
+        return Vector3.zero;
+    }
 }
