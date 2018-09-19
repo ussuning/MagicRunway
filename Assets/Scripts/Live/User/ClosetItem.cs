@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Image))]
 public class ClosetItem : MonoBehaviour {
 
     public float HoverToSelectTime = 1.25f;
@@ -13,16 +12,11 @@ public class ClosetItem : MonoBehaviour {
 
     public Image ItemImage;
 
-    private Color HoverToSelectTransitionSpeed;
-    private bool isSelected = false;
-    private bool isHover = false;
+    protected bool isSelected = false;
+    protected bool isHover = false;
     private float hoverDuration = 0f;
-
-    void Awake ()
-    {
-        ItemImage = GetComponent<Image>();
-    }
-
+    private Color HoverToSelectTransitionSpeed;
+    
     void Start ()
     {
         HoverToSelectTransitionSpeed = (SelectedColor - HoverColor) / HoverToSelectTime; 
@@ -31,7 +25,7 @@ public class ClosetItem : MonoBehaviour {
 
     void Update ()
     {
-        if(isHover)
+        if(isHover && !isSelected)
         {
             hoverDuration += Time.deltaTime;
 

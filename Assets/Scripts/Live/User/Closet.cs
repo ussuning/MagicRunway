@@ -5,6 +5,14 @@ using UnityEngine.UI;
 
 public class Closet : MonoBehaviour {
 
+    public enum Side
+    {
+        Left = 0,
+        Right,
+    };
+
+    public Side ClosetSide;
+
     private bool isActive = false;
     public bool IsActive
     {
@@ -14,9 +22,8 @@ public class Closet : MonoBehaviour {
         }
     }
 
-
     private ClosetArrowItem topArrow, bottomArrow;
-    private ClosetOutfitItem[] OutfitItem = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
+    private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
 	void Awake ()
     {
@@ -32,16 +39,16 @@ public class Closet : MonoBehaviour {
             }
             else
             {
-                OutfitItem[i-1] = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
+                OutfitItems[i-1] = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
             }
         }
     }
 
     public void SetCloset(List<Outfit> outfits)
     {
-        for(int i=0; i<OutfitItem.Length; i++)
+        for(int i=0; i<OutfitItems.Length; i++)
         {
-            OutfitItem[i].SetOutfit(outfits[i]);
+            OutfitItems[i].SetOutfit(outfits[i]);
         }
 
         topArrow.ShowItem();
@@ -51,13 +58,60 @@ public class Closet : MonoBehaviour {
 
     public void ClearCloset()
     {
-        for (int i = 0; i < OutfitItem.Length; i++)
+        for (int i = 0; i < OutfitItems.Length; i++)
         {
-            OutfitItem[i].ClearOutfit();
+            OutfitItems[i].ClearOutfit();
         }
         topArrow.HideItem();
         bottomArrow.HideItem();
         isActive = false;
+    }
+
+    public void OnTopArrowHover()
+    {
+        topArrow.OnItemHover();
+        bottomArrow.OnItemUnselected();
+        foreach(ClosetOutfitItem outfitItem in OutfitItems)
+        {
+            outfitItem.OnItemUnselected();
+        }
+    }
+
+    public void OnBottomArrowHover()
+    {
+        topArrow.OnItemUnselected();
+        bottomArrow.OnItemHover();
+        foreach (ClosetOutfitItem outfitItem in OutfitItems)
+        {
+            outfitItem.OnItemUnselected();
+        }
+    }
+
+    public void OnOutfitItemHover(int idx)
+    {
+        topArrow.OnItemUnselected();
+        bottomArrow.OnItemUnselected();
+        for(int i=0; i< ClosetManager.NUMBER_CLOSET_ITEMS; i++)
+        {
+            if(i == idx)
+            {
+                OutfitItems[i].OnItemHover();
+            }
+            else
+            {
+                OutfitItems[i].OnItemUnselected();
+            }
+        }
+    }
+
+    public void OnUnselectAll()
+    {
+        topArrow.OnItemUnselected();
+        bottomArrow.OnItemUnselected();
+        foreach (ClosetOutfitItem outfitItem in OutfitItems)
+        {
+            outfitItem.OnItemUnselected();
+        }
     }
 
 }
