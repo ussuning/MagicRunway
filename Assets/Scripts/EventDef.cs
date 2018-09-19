@@ -5,6 +5,10 @@ using UnityEngine;
 public class EventDef
 {
     public const int Kinect_User_ID_Added = 10;
+    public const int Kinect_User_Lost = Kinect_User_ID_Added + 1;
+    public const int User_Gender_Selected = Kinect_User_Lost + 1;
+
+    public const int Live_Mode_Set_Up = User_Gender_Selected + 1;
 
     //Posing
     public const int New_Pose_Generated = 100;
