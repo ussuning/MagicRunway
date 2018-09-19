@@ -99,7 +99,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         DestroyAllCharacters();
         
-
         resource = new List<string>();
 
         foreach (Outfit outfit in outfits)
@@ -143,12 +142,15 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             go.transform.localPosition = Vector3.zero;
             
             Animator animator = go.GetComponent<Animator>();
+            animator.runtimeAnimatorController = null;
             animator.enabled = false;
 
             EnableObiCloth(go, false);
             EnableRenderers(go, false);
            
             go.transform.localPosition = startingPoint;
+
+            ModelValidator.ValidateModel(go);
 
             models.Add(go);
 
@@ -257,6 +259,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void OnRunwayFinish(Collider other)
     {
+        GameObject go = other.gameObject.transform.parent.gameObject;
+        Debug.LogError(go.name);
         Destroy(other.gameObject.transform.parent.gameObject);
         if (isCollectionEnding == false) { return; }
         StartCoroutine(NextCollection());
@@ -294,11 +298,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         runwayEventManager.RunwayEnd.OnTriggerEnterEvt -= OnRunwayEndEnter;
         runwayEventManager.RunwayEnd.OnTriggerExitEvt -= OnRunwayEndExit;
         runwayEventManager.RunwayEnterEvents.OnTriggerEnterEvt -= OnRunwayEnter;
-    }
-
-    private void ValidateModel()
-    {
-        //make sure if the model is correctly made OR ELSE!!
     }
 
     public void UserDetected(long userId, int userIndex)

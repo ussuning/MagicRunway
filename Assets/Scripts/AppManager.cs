@@ -105,9 +105,6 @@ public class AppManager : Singleton<AppManager>
     {
         songVolumeState = 2;
 
-        blackoutAnimator.ResetTrigger("In");
-        blackoutAnimator.SetTrigger("Out");
-
         StartCoroutine(FadeOut());
     }
 

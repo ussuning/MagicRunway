@@ -22233,6 +22233,9 @@ MonoBehaviour:
   blackout: {fileID: 907981100}
   blackoutAnimator: {fileID: 907981099}
   audioSource: {fileID: 1023743742}
+  currentAutoLevel: 0
+  currentLiveLevel: 0
+  level: 0
 --- !u!114 &1023743741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40198,11 +40201,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4033106123909578, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4033106123909578, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -1.19
       objectReference: {fileID: 0}
     - target: {fileID: 4033106123909578, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalPosition.x
@@ -40222,7 +40225,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4167497911804362, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 1
+      value: 1.28
       objectReference: {fileID: 0}
     - target: {fileID: 4167497911804362, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalScale.x
@@ -40234,7 +40237,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4167497911804362, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalScale.z
-      value: 0.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4222439391037034, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalPosition.x
@@ -40254,7 +40257,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4222439391037034, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 3.48
+      value: 3.84
       objectReference: {fileID: 0}
     - target: {fileID: 4596825864567438, guid: 9d7383537d04c459986d92ec94f3fe10, type: 2}
       propertyPath: m_LocalScale.x
