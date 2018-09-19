@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum AutoRunwayCamera { MAIN, SLOW_MO };
 //public enum AutoRunwayCameraFollowState { FOLLOW, UNFOLLOW, NONE}
@@ -22,6 +23,8 @@ public class RunwayCameraController : MonoBehaviour {
     public Transform camLookAt;
     public Transform camLookAtFinal;
     public AudioSource Flash;
+
+    public PostProcessVolume profile;
 
     protected Vector3 lastCamLookAtFinalPos = Vector3.zero;
 
@@ -67,6 +70,8 @@ public class RunwayCameraController : MonoBehaviour {
     private ParticleSystem flashFrontParticle;
     private int midFlashParticles = 0;
     private int frontFlashParticles = 0;
+
+    private DepthOfField depthOfField;
     //----------------------------------------
     // MonoBehaviour Overrides
     //----------------------------------------
@@ -80,6 +85,9 @@ public class RunwayCameraController : MonoBehaviour {
 
         flashMidParticle = FlashMid.GetComponent<ParticleSystem>();
         flashFrontParticle = FlashFront.GetComponent<ParticleSystem>();
+
+        profile.profile.TryGetSettings<DepthOfField>(out depthOfField);
+         
     }
 
     void OnEnable()
@@ -287,12 +295,14 @@ public class RunwayCameraController : MonoBehaviour {
             MainCamera.enabled = false;
             SlowMoCamera.enabled = true;
             activeCam = SlowMoCamera;
+            depthOfField.enabled.value = true;
         }
         else
         {
             MainCamera.enabled = true;
             SlowMoCamera.enabled = false;
             activeCam = MainCamera;
+            depthOfField.enabled.value = false;
         }
     }
 
