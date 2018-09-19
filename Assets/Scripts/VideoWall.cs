@@ -8,7 +8,7 @@ public class VideoWall : MonoBehaviour {
     private byte videoFadeState;
     private float videoFadeStartTime;
     private float videoFadeDeltaTime;
-    private float videoFadeDuration = 3.0f;
+    private float videoFadeDuration = 1.5f;
     private float videoColor = 0;
 
     private Material videoMaterial;

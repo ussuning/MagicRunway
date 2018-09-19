@@ -27,6 +27,10 @@ public class AppManager : Singleton<AppManager>
     private float reduceSongVolumeTime = 1.0f;
     private byte songVolumeState;
 
+    private byte fadeState = 0;
+    private float fadeTime = 1.0f;
+    private float fadeCounter = 0;
+
     public int currentAutoLevel = 0;
     public int currentLiveLevel = 0;
     public int level = 0;
@@ -34,7 +38,8 @@ public class AppManager : Singleton<AppManager>
     void Start()
     {
         MRData.Instance.LoadEverything();
-        
+
+        fadeState = 0;
         currentMode = autoRunwayManager;
 
         SetUp();
@@ -51,7 +56,13 @@ public class AppManager : Singleton<AppManager>
     private void SetUp()
     {
         currentMode.SetUp(level);
-        StartCoroutine(FadeIn());
+
+        blackoutAnimator.ResetTrigger("Out");
+        blackoutAnimator.SetTrigger("In");
+
+        fadeCounter = 0;
+        fadeState = 1;
+        //StartCoroutine(FadeIn());
     }
 
     private void Begin()
@@ -105,9 +116,15 @@ public class AppManager : Singleton<AppManager>
     {
         songVolumeState = 2;
 
-        StartCoroutine(FadeOut());
+        blackoutAnimator.ResetTrigger("In");
+        blackoutAnimator.SetTrigger("Out");
+
+        fadeCounter = 0;
+        fadeState = 2;
+        //StartCoroutine(FadeOut());
     }
 
+    /*
     IEnumerator FadeIn()
     {
         blackoutAnimator.ResetTrigger("Out");
@@ -124,7 +141,7 @@ public class AppManager : Singleton<AppManager>
         yield return new WaitForSeconds(1);
         End();
     }
-
+    */
     public Mode getMode()
     {
         return curMode;
@@ -186,6 +203,31 @@ public class AppManager : Singleton<AppManager>
             if (audioSource.volume > minSongVolume)
             {
                 audioSource.volume -= startVolume * Time.deltaTime / reduceSongVolumeTime;
+            }
+        }
+
+        if (fadeState == 1)
+        {
+            if (fadeCounter >= fadeTime) {
+                fadeState = 0;
+                Begin();
+            }
+            else
+            {
+                fadeCounter += Time.deltaTime;
+            }
+        }
+
+        if (fadeState == 2)
+        {
+            if (fadeCounter >= fadeTime)
+            {
+                fadeState = 0;
+                End();
+            }
+            else
+            {
+                fadeCounter += Time.deltaTime;
             }
         }
     }

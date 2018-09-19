@@ -751,7 +751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1679733817009412
 GameObject:
   m_ObjectHideFlags: 1
@@ -2086,7 +2086,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 128c47a12b40944248f0a4be69356024, type: 3}
   m_Controller: {fileID: 0}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -2106,6 +2106,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alphaMap: {fileID: 2800000, guid: f261bc0cd71ff417db39168486f3b2f9, type: 3}
+  alphaMap2: {fileID: 0}
+  alphaMap3: {fileID: 0}
+  alphaMap4: {fileID: 0}
+  alphaMap5: {fileID: 0}
+  isGeneratingCutoutMaterial: 0
 --- !u!136 &136001965957737630
 CapsuleCollider:
   m_ObjectHideFlags: 1
