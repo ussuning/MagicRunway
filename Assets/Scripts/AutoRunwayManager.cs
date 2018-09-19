@@ -112,6 +112,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     
     IEnumerator PrepareModelsAndBeginShow(float waitToStart = 3.0f)
     {
+        Debug.Log("PrepareModelsAndBeginShow");
         PrepareCollectionRunwayModelPrefabs();
         yield return StartCoroutine(LoadAndPrepareModels());
         videoWall.ChangeAndFadeIn(showcaseManager.currentCollection.splash);
@@ -122,6 +123,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     IEnumerator LoadAndPrepareModels()
     {
+        Debug.Log("LoadAndPrepareModels");
         int total = 0;
         bool notReady = true;
 
@@ -213,9 +215,9 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private void QueueUp()
     {
         bool isEnding = showcaseManager.NextOutfit();
+        isCollectionEnding = isEnding;
         if (isEnding)
         {
-            isCollectionEnding = true;
             UIManager.Instance.ShowUpNext(showcaseManager.nextCollection);
         } else
         {

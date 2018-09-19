@@ -151,7 +151,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         }
         //Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
 
-        Debug.Log("DONE Step1()");
+        Debug.Log("DONE Step1() - Verified alphaMapSize = " + alphaMapSize);
     }
 
     // Create a combined alphaMap with the array of alphaMaps.
@@ -165,14 +165,14 @@ public class CutoutTextureSwapper : MonoBehaviour
             Debug.Log("Invalid alpha maps. Aborting.");
             yield break;
         }
-        Debug.Log("DONE Step2a()");
+        Debug.Log("DONE Step2a() - alphaMaps combined.");
     }
 
     IEnumerator Step2b()
     {
         yield return new WaitForSeconds(timeBetweenSteps);
         yield return InvertTexture(alphaMapsTexture, result => alphaMapsTexture = result);
-        Debug.Log("DONE Step2b()");
+        Debug.Log("DONE Step2b() - inverted texture");
     }
 
     IEnumerator Step3()
@@ -188,7 +188,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         alphaMaskMat.SetTexture("_AlphaTex", alphaMapsTexture);
         Graphics.Blit(srcTex, tmpRenderTex, alphaMaskMat);
 
-        Debug.Log("DONE Step3");
+        Debug.Log("DONE Step3() - rendered alpha to tmpRenderTex");
     }
 
     IEnumerator Step4(System.Action<Texture2D> result)
@@ -207,7 +207,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         RenderTexture.active = previous;
 
         result(neoTex);
-        Debug.Log("DONE Step4()");
+        Debug.Log("DONE Step4() - created cutout texture.");
     }
 
     IEnumerator Step5(Texture2D neoTex)
@@ -234,7 +234,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         RenderTexture.ReleaseTemporary(tmpRenderTex);
         Resources.UnloadUnusedAssets();
 
-        Debug.Log("DONE Step5()");
+        Debug.Log("DONE Step5() - created cutout mat.");
     }
 
     bool validateAlphaMaps(Texture2D[] alphaMaps, out Vector2Int alphaMapSize)
