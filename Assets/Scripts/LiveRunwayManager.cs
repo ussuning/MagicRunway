@@ -48,7 +48,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Debug.Log(string.Format("[LiveRunwayManager] Begin:"));
     }
 
-    public void SetUp()
+    public void SetUp(int level = 0)
     {
         Debug.Log(string.Format("[LiveRunwayManager] SetUp:"));
 

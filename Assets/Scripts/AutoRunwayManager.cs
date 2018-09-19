@@ -39,7 +39,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         return Mode.AUTO;
     }
 
-    public void SetUp()
+    public void SetUp(int level = 0)
     {
         Debug.Log("SetUp Auto Runway");
 
@@ -48,10 +48,20 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         AddRunwayEventListeners();
 
         KinectManager.Instance.ClearKinectUsers();
+
         UIManager.Instance.HideAll();
+
+        if (KinectManager.Instance.GetAllUserIds().Count > 0)
+            UIManager.Instance.ShowStartMenu(false);
+
         autoRunwayContainer.SetActive(true);
 
-        showcaseManager = new ShowcaseManager(MRData.Instance.collections.collections);
+        showcaseManager = new ShowcaseManager();
+        showcaseManager.SetCollection(MRData.Instance.collections.collections);
+        if (level == 0)
+            showcaseManager.ReadyFirstShow();
+        else
+            showcaseManager.ReadyShowAt(level);
     }
 
     public void Begin() {
@@ -84,7 +94,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private void PrepareCollectionRunwayModelPrefabs()
     {
         List<Outfit> outfits = showcaseManager.PrepareShow();
-        // UIManager.Instance.ShowCollection(showcaseManager.currentCollection);
         UIManager.Instance.ShowCollectionTitle(showcaseManager.currentCollection.name + " Collection",true);
         UIManager.Instance.HideForNextCollection();
 
@@ -181,8 +190,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     IEnumerator NextCollection()
     {
         Resources.UnloadUnusedAssets();
-
-        //UIManager.Instance.HideCollection();
 
         videoWall.FadeOut();
 
@@ -301,6 +308,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         UIManager.Instance.ShowStartMenu(true);
         KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
+        KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Tpose);
     }
 
     public void UserLost(long userId, int userIndex)
@@ -310,6 +318,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         UIManager.Instance.HideStartMenu(true);
         KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
+        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Tpose);
     }
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
@@ -329,6 +338,16 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             AppManager.Instance.TransitionToLive();
 
             return false;
+        }
+        if (gesture == KinectGestures.Gestures.Tpose)
+        {
+            if (isModeActive == false)
+                return true;
+
+            UIManager.Instance.HideStartMenu(false);
+            AppManager.Instance.TransitionToNextAutoLevel();
+            
+            return true;
         }
         return true;
     }

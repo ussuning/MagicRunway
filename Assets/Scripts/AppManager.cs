@@ -27,6 +27,10 @@ public class AppManager : Singleton<AppManager>
     private float reduceSongVolumeTime = 1.0f;
     private byte songVolumeState;
 
+    public int currentAutoLevel = 0;
+    public int currentLiveLevel = 0;
+    public int level = 0;
+
     void Start()
     {
         MRData.Instance.LoadEverything();
@@ -46,7 +50,7 @@ public class AppManager : Singleton<AppManager>
 
     private void SetUp()
     {
-        currentMode.SetUp();
+        currentMode.SetUp(level);
         StartCoroutine(FadeIn());
     }
 
@@ -69,6 +73,9 @@ public class AppManager : Singleton<AppManager>
         Debug.Log("Start Transition to Auto Runway");
         nextMode = autoRunwayManager;
 
+        currentAutoLevel = 0;
+        level = 0;
+
         Transition();
     }
 
@@ -76,6 +83,20 @@ public class AppManager : Singleton<AppManager>
     {
         Debug.Log("Start Transition to Live Runway");
         nextMode = liveRunwayManager;
+
+        currentLiveLevel = 0;
+        level = 0;
+
+        Transition();
+    }
+
+    public void TransitionToNextAutoLevel()
+    {
+        Debug.Log("Start Transition to Auto Runway");
+        nextMode = autoRunwayManager;
+
+        currentAutoLevel = GetNextAutoLevel(currentAutoLevel);
+        level = currentAutoLevel;
 
         Transition();
     }
@@ -128,6 +149,16 @@ public class AppManager : Singleton<AppManager>
             Scene loadedLevel = SceneManager.GetActiveScene();
             SceneManager.LoadScene(loadedLevel.buildIndex);
         }
+    }
+
+    private int GetNextAutoLevel(int curLevel)
+    {
+        curLevel++;
+
+        if (curLevel == MRData.Instance.collections.collections.Count)
+            curLevel = 0;
+
+        return curLevel;
     }
 
     void Update()

@@ -13,11 +13,15 @@ public class ShowcaseManager {
     public int curOutfit = 0;
     private int _totalOutfits = 0;
 
-    public ShowcaseManager(List<Collection> collections)
+    public ShowcaseManager()
+    {
+        currentCollectionIndex = 0;
+    }
+
+    public void SetCollection(List<Collection> collections)
     {
         _collections = collections;
         _totalCollections = collections.Count;
-        currentCollectionIndex = 0;
     }
 
     public List<Outfit> PrepareShow()
@@ -50,12 +54,25 @@ public class ShowcaseManager {
         return false;
     }
 
+    public void ReadyFirstShow()
+    {
+        currentCollectionIndex = 0;
+        AppManager.Instance.currentAutoLevel = currentCollectionIndex;
+    }
+
     public void ReadyNextShow()
     {
         currentCollectionIndex++;
 
         if (currentCollectionIndex == _totalCollections)
             currentCollectionIndex = 0;
+
+        AppManager.Instance.currentAutoLevel = currentCollectionIndex;
+    }
+
+    public void ReadyShowAt(int level = 0)
+    {
+        currentCollectionIndex = level;
     }
 
     private Collection GetNextCollection()

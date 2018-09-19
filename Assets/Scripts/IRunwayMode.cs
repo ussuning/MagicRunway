@@ -6,6 +6,6 @@ public interface IRunwayMode
 {
     Mode GetMode();
     void Begin();
-    void SetUp();
+    void SetUp(int level = 0);
     void End();
 }

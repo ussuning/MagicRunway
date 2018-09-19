@@ -82,8 +82,7 @@ public class UIManager : Singleton<UIManager>
     public void HideForNextCollection()
     {
         HideUpNext();
-        HideStartMenu(false);
-        //HideGestureGender(false);
+        //HideStartMenu(false);
         HideInventory(false);
     }
         
