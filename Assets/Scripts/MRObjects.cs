@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,8 +38,32 @@ public class Collection : System.Object
 public class Outfits : System.Object
 {
     public List<Outfit> outfits;
-    protected List<Outfit> maleOutfits;
-    protected List<Outfit> femaleOutfits;
+    public List<Outfit> maleOutfits
+    {
+        get
+        {
+            string genderKey = "m";
+
+            List<Outfit> filteredList = outfits
+            .Where(row => row.sex == genderKey)
+            .ToList();
+
+            return filteredList;
+        }
+    }
+    public List<Outfit> femaleOutfits
+    {
+        get
+        {
+            string genderKey = "f";
+
+            List<Outfit> filteredList = outfits
+            .Where(row => row.sex == genderKey)
+            .ToList();
+
+            return filteredList;
+        }
+    }
 
     public Dictionary<string, Outfit> to_dict()
     {
@@ -52,6 +77,7 @@ public class Outfits : System.Object
         return dict;
     }
 
+    //Not used 
     public List<Outfit> filter_outfits(string gender)
     {
         if(gender == "m")
