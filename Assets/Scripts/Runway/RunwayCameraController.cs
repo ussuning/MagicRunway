@@ -23,12 +23,15 @@ public class RunwayCameraController : MonoBehaviour {
     public Transform camLookAtFinal;
     public AudioSource Flash;
 
+    protected Vector3 lastCamLookAtFinalPos = Vector3.zero;
+
     [Tooltip("Higher value increase camera responsiveness, but may have more jitter. Lower values increase smoothness, but lower lookAt responsiveness.")]
     [Range(0.1f, 10.0f)]
     public float camLerpFactor = 2.0f;
 
     public Camera MainCamera;
     public Camera SlowMoCamera;
+    public Camera VideoCamera;
 
     public AutoRunwayCamera curCam = AutoRunwayCamera.MAIN;
     //public AutoRunwayCameraFollowState curCamFollowState = AutoRunwayCameraFollowState.NONE;
@@ -49,8 +52,9 @@ public class RunwayCameraController : MonoBehaviour {
 
     private float mainCamOriginFOV = 60f;
     private float slowMoCamOriginFOV = 13f;
-    private Vector3 mainCamOriginRot;
-    private Vector3 slowMoCamOriginRot;
+    private float videoCamOriginFOV = 13f;
+    private Quaternion mainCamOriginRot;
+    private Quaternion slowMoCamOriginRot;
 
     //private float panStartY = 0.8f;
     private float panStartY = 0.4f;
@@ -68,10 +72,8 @@ public class RunwayCameraController : MonoBehaviour {
     //----------------------------------------
 
     void Awake() {
-        mainCamOriginRot = new Vector3(MainCamera.transform.eulerAngles.x, MainCamera.transform.eulerAngles.y,
-            MainCamera.transform.eulerAngles.z);
-        slowMoCamOriginRot = new Vector3(SlowMoCamera.transform.eulerAngles.x, SlowMoCamera.transform.eulerAngles.y,
-            SlowMoCamera.transform.eulerAngles.z);
+        mainCamOriginRot = MainCamera.transform.rotation;
+        slowMoCamOriginRot = SlowMoCamera.transform.rotation;
 
         mainCamOriginFOV = MainCamera.fieldOfView;
         slowMoCamOriginFOV = SlowMoCamera.fieldOfView;
@@ -112,14 +114,36 @@ public class RunwayCameraController : MonoBehaviour {
 
     void Update()
     {
+        ClearNullRefsInActiveMaps();
+        UpdateCamLookAt();
+
         if (curCamState == AutoRunwayCameraState.DEFAULT) { UpdateToOrigin(); }
         else if (curCamState == AutoRunwayCameraState.CLOSE_UP) { UpdateCloseUp(); }
         else if (curCamState == AutoRunwayCameraState.CLOSE_UP_PAN) { UpdateCloseUpPan(); }
         else if (curCamState == AutoRunwayCameraState.ZOOM) { UpdateZoomUp(); }
 
         UpdateFlashSound();
+        UpdateVideoCam();
     }
- 
+
+    private void ClearNullRefsInActiveMaps()
+    {
+        ColliderInfoMap[] colliderInfoMaps = new ColliderInfoMap[] { modelsInMidZone, modelsOnRunway };
+        foreach (ColliderInfoMap colliderMapInfo in colliderInfoMaps)
+        {
+            List<Collider> nonNullColliders = new List<Collider>();
+            foreach (Collider collider in colliderMapInfo.active)
+                if (collider != null)
+                    nonNullColliders.Add(collider);
+            colliderMapInfo.active = nonNullColliders;
+        }
+    }
+
+    private void UpdateVideoCam()
+    {
+        VideoCamera.transform.LookAt(camLookAt);
+    }
+
     private void UpdateFlashSound()
     {
         int count = flashMidParticle.particleCount;
@@ -147,6 +171,13 @@ public class RunwayCameraController : MonoBehaviour {
 
         activeCam.fieldOfView = 6.7f;
 
+        activeCam.transform.LookAt(camLookAt);
+    }
+
+    private void UpdateCamLookAt()
+    {
+        if (modelsOnRunway.active.Count == 0) { return; }
+
         Bounds b = modelsOnRunway.active[0].bounds;
 
         if (curCam == AutoRunwayCamera.SLOW_MO)
@@ -167,8 +198,20 @@ public class RunwayCameraController : MonoBehaviour {
             camLookAtFinal.position = b.center;
         }
 
+
+        Vector3 currPos = camLookAtFinal.position;
+
+        // Position Prediction. This is used to compensate for positional lag of camLookAt's lerping (to smooth camera).
+        if (lastCamLookAtFinalPos != Vector3.zero)
+        {
+            Vector3 delta = camLookAtFinal.position - lastCamLookAtFinalPos;
+            //delta.y = 0;
+            camLookAtFinal.position += delta.normalized * 0.5f;
+        }
+
+        lastCamLookAtFinalPos = currPos;
+
         camLookAt.transform.position = Vector3.Lerp(camLookAt.transform.position, camLookAtFinal.transform.position, Time.deltaTime * camLerpFactor);
-        activeCam.transform.LookAt(camLookAt);    
     }
    
     private void UpdateMainCameraZoom(Bounds b) {
@@ -187,12 +230,12 @@ public class RunwayCameraController : MonoBehaviour {
     {
         if (curCamTransition == AutoRunwayCameraTransition.SMOOTH)
         {
-            activeCam.transform.eulerAngles = Vector3.Lerp(activeCam.transform.eulerAngles, mainCamOriginRot, 3.0f * Time.deltaTime);
+            activeCam.transform.eulerAngles = Vector3.Lerp(activeCam.transform.eulerAngles, mainCamOriginRot.eulerAngles, 3.0f * Time.deltaTime);
             activeCam.fieldOfView = Mathf.Lerp(activeCam.fieldOfView, mainCamOriginFOV, 2.0f * Time.deltaTime);
         }
         else
         {
-            activeCam.transform.eulerAngles = mainCamOriginRot;
+            activeCam.transform.rotation = mainCamOriginRot;
             activeCam.fieldOfView = mainCamOriginFOV;
         }
     }
@@ -231,8 +274,8 @@ public class RunwayCameraController : MonoBehaviour {
     private void CamerasReset()
     {
         MainCamera.fieldOfView = mainCamOriginFOV;
-        MainCamera.transform.eulerAngles = new Vector3(mainCamOriginRot.x, mainCamOriginRot.y, mainCamOriginRot.z);
-        SlowMoCamera.transform.eulerAngles = new Vector3(slowMoCamOriginRot.x, slowMoCamOriginRot.y, slowMoCamOriginRot.z);
+        MainCamera.transform.rotation = mainCamOriginRot;
+        SlowMoCamera.transform.rotation = slowMoCamOriginRot;
     }
 
     private void SelectCamera(AutoRunwayCamera arc)
