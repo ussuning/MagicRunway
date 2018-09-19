@@ -59,7 +59,9 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         isModeActive = true;
 
         //UIManager.Instance.ShowGestureGender(10.0f);
-        UIManager.Instance.ShowStickManDelay(11.0f);
+        UIManager.Instance.ShowStickManDelay(11.0f); //Remove/Fix later
+
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.Live_Mode_Set_Up);
     }
 
     public void End()
@@ -180,6 +182,9 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             Debug.Log(string.Format("[LiveRunwayManager] UserLost: User {0} is removed from the Dictionary users", userId));
+
+            object[] param = { userId };
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.Kinect_User_Lost, param);
 
             if (users.Count <= 0)
                 AppManager.Instance.TransitionToAuto();

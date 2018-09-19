@@ -22,7 +22,12 @@ public class User : MonoBehaviour {
         {
             ugender = value;
             if (ugender != Gender.None)
+            {
                 GenderSelectionUI.StartFadingOut();
+
+                object[] param = { uid, ugender };
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Gender_Selected, param);
+            }
         }
         get
         {
@@ -124,32 +129,6 @@ public class User : MonoBehaviour {
     //{
     //    inventorySlot = slot;
     //}
-
-    protected Vector3 getCurrentPosition(int iJointIndex)
-    {
-        /*  KinectManager manager = KinectManager.Instance;
-
-          if (manager && manager.IsInitialized())
-          {
-              // get the background rectangle (use the portrait background, if available)
-              Camera foregroundCamera = Camera.main;
-              Rect backgroundRect = foregroundCamera.pixelRect;
-              PortraitBackground portraitBack = PortraitBackground.Instance;
-
-              if (portraitBack && portraitBack.enabled)
-              {
-                  backgroundRect = portraitBack.GetBackgroundRect();
-              }
-
-              //int iJointIndex = (int)KinectInterop.JointType.SpineMid;
-              if (manager.IsJointTracked(uid, iJointIndex))
-              {
-                  return manager.GetJointPosColorOverlay(uid, iJointIndex, foregroundCamera, backgroundRect);
-              }
-          }
-          */
-          return Vector3.zero;
-    }
 
     void Update()
     {
