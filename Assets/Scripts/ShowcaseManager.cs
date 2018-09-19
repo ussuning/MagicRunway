@@ -37,6 +37,9 @@ public class ShowcaseManager {
 
     public Outfit GetCurrentOutfit()
     {
+        if (curOutfit > (_totalOutfits - 1))
+            return null;
+
         return currentCollection.outfits[curOutfit];
     }
 

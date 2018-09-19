@@ -22,6 +22,12 @@ public class ModelValidator
         {
             Debug.LogError(model.name + " did not pass collider checker. Model requires a capsule collider.");
         }
+        bool passAnimatorCheck = ValidateAnimator(model);
+        if (!passAnimatorCheck)
+        {
+            Debug.LogWarning(model.name + " did not pass animator checker. Culling Mode needs to be on 'Always Animate'.");
+        }
+        
     }
 
     public static bool ValidateLayer(GameObject go)
@@ -78,6 +84,18 @@ public class ModelValidator
         }
 
         return false;
+    }
+
+    public static bool ValidateAnimator(GameObject go)
+    {
+        Animator animator = go.GetComponent<Animator>();
+        if (animator == null)
+            return false;
+
+        if (animator.cullingMode != AnimatorCullingMode.AlwaysAnimate)
+            return false;
+
+        return true;
     }
 
     public static void SetLayerRecursively(GameObject go, int newLayer)

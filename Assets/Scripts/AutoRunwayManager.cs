@@ -93,6 +93,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     
     private void PrepareCollectionRunwayModelPrefabs()
     {
+        isCollectionEnding = false;
+
         List<Outfit> outfits = showcaseManager.PrepareShow();
         UIManager.Instance.ShowCollectionTitle(showcaseManager.currentCollection.name + " Collection",true);
         UIManager.Instance.HideForNextCollection();
@@ -110,10 +112,11 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         }
     }
     
-    IEnumerator PrepareModelsAndBeginShow(float waitToStart = 3.0f)
+    IEnumerator PrepareModelsAndBeginShow(float waitToStart = 1.5f)
     {
         Debug.Log("PrepareModelsAndBeginShow");
         PrepareCollectionRunwayModelPrefabs();
+        yield return new WaitForSeconds(1.0f); //wait till title show so it wont look choppy
         yield return StartCoroutine(LoadAndPrepareModels());
         videoWall.ChangeAndFadeIn(showcaseManager.currentCollection.splash);
         yield return new WaitForSeconds(waitToStart);
@@ -199,7 +202,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         showcaseManager.ReadyNextShow();
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(1.5f);
 
         StartCoroutine(PrepareModelsAndBeginShow());
     }
@@ -214,9 +217,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void QueueUp()
     {
-        bool isEnding = showcaseManager.NextOutfit();
-        isCollectionEnding = isEnding;
-        if (isEnding)
+        isCollectionEnding = showcaseManager.NextOutfit();
+        if (isCollectionEnding)
         {
             UIManager.Instance.ShowUpNext(showcaseManager.nextCollection);
         } else
@@ -228,6 +230,14 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private void PresentRunwayModel()
     {
         Outfit outfit = showcaseManager.GetCurrentOutfit();
+
+        if (outfit == null)
+        {
+            Debug.LogError("Something went wrong. Restarting AutoRunway");
+            AppManager.Instance.TransitionToAuto();
+            return;
+        }
+
         GameObject model = models[showcaseManager.curOutfit];
 
         Animator animator = model.GetComponent<Animator>();
@@ -236,6 +246,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         EnableRenderers(model, true);
         RuntimeAnimatorController ani = (RuntimeAnimatorController)Resources.Load(animation, typeof(RuntimeAnimatorController));
         animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(ani, model.transform);
+        animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         animator.enabled = true;
         EnableObiCloth(model, true);
         model.SetActive(true);
@@ -262,8 +273,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private void OnRunwayFinish(Collider other)
     {
         GameObject go = other.gameObject.transform.parent.gameObject;
-        Debug.LogError(go.name);
         Destroy(other.gameObject.transform.parent.gameObject);
+
         if (isCollectionEnding == false) { return; }
         StartCoroutine(NextCollection());
     }

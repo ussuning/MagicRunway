@@ -906,7 +906,10 @@ public class KinectInterop
 	// gets new multi source frame
 	public static bool GetMultiSourceFrame(SensorData sensorData)
 	{
-		bool bResult = false;
+        if (sensorData == null)
+            return false;
+
+        bool bResult = false;
 
 		if(sensorData.sensorInterface != null)
 		{
