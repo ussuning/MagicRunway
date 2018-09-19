@@ -13,6 +13,42 @@ public class Closet : MonoBehaviour {
 
     public Side ClosetSide;
 
+    private long ownerId;
+    public long OwnerID
+    {
+        get
+        {
+            return ownerId;
+        }
+    }
+
+    private User.Gender ownerGender;
+    public User.Gender OwnerGender
+    {
+        get
+        {
+            return ownerGender;
+        }
+    }
+
+    private List<Outfit> outfits;
+    public List<Outfit> Outfits
+    {
+        get
+        {
+            return outfits;
+        }
+    }
+
+    private int outfitPageIdx = 0;
+    public int OutfitPageIndex
+    {
+        get
+        {
+            return outfitPageIdx;
+        }
+    }
+
     private bool isActive = false;
     public bool IsActive
     {
@@ -23,9 +59,9 @@ public class Closet : MonoBehaviour {
     }
 
     private ClosetArrowItem topArrow, bottomArrow;
-    private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
+    private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];  
 
-	void Awake ()
+    void Awake ()
     {
         for(int i=0; i<transform.childCount; i++)
         {
@@ -43,8 +79,28 @@ public class Closet : MonoBehaviour {
             }
         }
     }
+    
+    public void SetCloset(long userID, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
+    {
+        this.ownerId = userID;
+        this.ownerGender = userGender;
+        this.outfits = outfits;
+        this.outfitPageIdx = pageIdx;
 
-    public void SetCloset(List<Outfit> outfits)
+        SetClosetImage(GetDisplayedOutfits());
+    }
+
+    public void Clear()
+    {
+        ClearCloset();
+        ownerId = 0L;
+        ownerGender = User.Gender.None;
+        if(outfits != null)
+            outfits.Clear();
+        outfitPageIdx = 0;
+    }
+
+    public void SetClosetImage(List<Outfit> outfits)
     {
         for(int i=0; i<OutfitItems.Length; i++)
         {
@@ -56,7 +112,7 @@ public class Closet : MonoBehaviour {
         isActive = true;
     }
 
-    public void ClearCloset()
+    private void ClearCloset()
     {
         for (int i = 0; i < OutfitItems.Length; i++)
         {
@@ -112,6 +168,17 @@ public class Closet : MonoBehaviour {
         {
             outfitItem.OnItemUnselected();
         }
+    }
+
+    private List<Outfit> GetDisplayedOutfits()
+    {
+        List<Outfit> dOutfits = new List<Outfit>();
+        for (int i = 0; i < ClosetManager.NUMBER_CLOSET_ITEMS; i++)
+        {
+            dOutfits.Add(outfits[(outfitPageIdx * ClosetManager.NUMBER_CLOSET_ITEMS + i) % outfits.Count]);
+        }
+
+        return dOutfits;
     }
 
 }
