@@ -134,6 +134,16 @@ public class RunwayCameraController : MonoBehaviour {
         UpdateVideoCam();
     }
 
+    void UpdateDepthOfField()
+    {
+        if (depthOfField == null) { return; }
+        if (modelsOnRunway.active.Count == 0) { return; }
+
+        Bounds b = modelsOnRunway.active[0].bounds;
+
+        depthOfField.focusDistance.value = (activeCam.transform.position - b.center).magnitude;
+    }
+
     private void ClearNullRefsInActiveMaps()
     {
         ColliderInfoMap[] colliderInfoMaps = new ColliderInfoMap[] { modelsInMidZone, modelsOnRunway };
@@ -180,6 +190,7 @@ public class RunwayCameraController : MonoBehaviour {
         activeCam.fieldOfView = 6.7f;
 
         activeCam.transform.LookAt(camLookAt);
+        UpdateDepthOfField();
     }
 
     private void UpdateCamLookAt()
@@ -277,6 +288,8 @@ public class RunwayCameraController : MonoBehaviour {
             activeCam.transform.eulerAngles = zoomRot1;
             activeCam.fieldOfView = zoomFOV1;
         }
+
+        UpdateDepthOfField();
     }
 
     private void CamerasReset()
@@ -295,14 +308,12 @@ public class RunwayCameraController : MonoBehaviour {
             MainCamera.enabled = false;
             SlowMoCamera.enabled = true;
             activeCam = SlowMoCamera;
-            depthOfField.enabled.value = true;
         }
         else
         {
             MainCamera.enabled = true;
             SlowMoCamera.enabled = false;
             activeCam = MainCamera;
-            depthOfField.enabled.value = false;
         }
     }
 
@@ -325,6 +336,18 @@ public class RunwayCameraController : MonoBehaviour {
         {
             SeekCameraToModel();
         }
+
+        switch (camState)
+        {
+            case AutoRunwayCameraState.ZOOM:
+            case AutoRunwayCameraState.CLOSE_UP_PAN:
+                depthOfField.enabled.value = true;
+                break;
+            default:
+                depthOfField.enabled.value = false;
+                break;
+        }
+
 
         if (camSpeed == AutoRunwayCameraSpeed.VERY_SLOW) { TimeManager.instance.timeScale = 0.5f; }
         else if (camSpeed == AutoRunwayCameraSpeed.SLOW) { TimeManager.instance.timeScale = 0.95f; }
