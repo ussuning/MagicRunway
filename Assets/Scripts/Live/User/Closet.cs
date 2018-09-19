@@ -15,8 +15,8 @@ public class Closet : MonoBehaviour {
     }
 
 
-    private Image topArrow, bottomArrow;
-    private Image[] OutfitItem = new Image[ClosetManager.NUMBER_CLOSET_ITEMS];
+    private ClosetArrowItem topArrow, bottomArrow;
+    private ClosetOutfitItem[] OutfitItem = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
 	void Awake ()
     {
@@ -24,15 +24,15 @@ public class Closet : MonoBehaviour {
         {
             if(i == 0)
             {
-                topArrow = transform.GetChild(i).GetComponent<Image>();
+                topArrow = transform.GetChild(i).GetComponent<ClosetArrowItem>();
             }
             else if(i == transform.childCount - 1)
             {
-                bottomArrow = transform.GetChild(i).GetComponent<Image>();
+                bottomArrow = transform.GetChild(i).GetComponent<ClosetArrowItem>();
             }
             else
             {
-                OutfitItem[i-1] = transform.GetChild(i).GetComponent<Image>();
+                OutfitItem[i-1] = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
             }
         }
     }
@@ -41,11 +41,11 @@ public class Closet : MonoBehaviour {
     {
         for(int i=0; i<OutfitItem.Length; i++)
         {
-            OutfitItem[i].enabled = true;
-            OutfitItem[i].sprite = GetOutfitThumb(outfits[i].icon);
+            OutfitItem[i].SetOutfit(outfits[i]);
         }
-        topArrow.enabled = true;
-        bottomArrow.enabled = true;
+
+        topArrow.ShowItem();
+        bottomArrow.ShowItem();
         isActive = true;
     }
 
@@ -53,22 +53,11 @@ public class Closet : MonoBehaviour {
     {
         for (int i = 0; i < OutfitItem.Length; i++)
         {
-            OutfitItem[i].sprite = null;
-            OutfitItem[i].enabled = false;
+            OutfitItem[i].ClearOutfit();
         }
-        topArrow.enabled = false;
-        bottomArrow.enabled = false;
+        topArrow.HideItem();
+        bottomArrow.HideItem();
         isActive = false;
-    }
-
-    private Sprite GetOutfitThumb(string icon)
-    {
-        if (icon.Contains("."))
-        {
-            icon = icon.Substring(0, icon.IndexOf("."));
-        }
-        string iconPath = "Thumbs/" + icon;
-        return Resources.Load<Sprite>(iconPath);
     }
 
 }

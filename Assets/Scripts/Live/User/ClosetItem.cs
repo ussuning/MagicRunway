@@ -1,0 +1,78 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+[RequireComponent(typeof(Image))]
+public class ClosetItem : MonoBehaviour {
+
+    public float HoverToSelectTime = 1.25f;
+    public Color UnselectedColor;
+    public Color HoverColor;
+    public Color SelectedColor;
+
+    public Image ItemImage;
+
+    private Color HoverToSelectTransitionSpeed;
+    private bool isSelected = false;
+    private bool isHover = false;
+    private float hoverDuration = 0f;
+
+    void Awake ()
+    {
+        ItemImage = GetComponent<Image>();
+    }
+
+    void Start ()
+    {
+        HoverToSelectTransitionSpeed = (SelectedColor - HoverColor) / HoverToSelectTime; 
+        OnItemUnselected();
+    }
+
+    void Update ()
+    {
+        if(isHover)
+        {
+            hoverDuration += Time.deltaTime;
+
+            ItemImage.color += Time.deltaTime * HoverToSelectTransitionSpeed;
+
+            if (hoverDuration >= HoverToSelectTime)
+            {
+                OnItemSelected();
+                hoverDuration = 0f;
+            }
+        }
+    }
+
+    public void ShowItem()
+    {
+        ItemImage.enabled = true;
+    }
+
+    public void HideItem()
+    {
+        ItemImage.enabled = false;
+    }
+
+    public void OnItemHover()
+    {
+        if (!isHover)
+            ItemImage.color = HoverColor;
+        isHover = true;
+    }
+
+    public void OnItemSelected()
+    {
+        ItemImage.color = SelectedColor;
+        isSelected = true;
+    }
+
+    public void OnItemUnselected ()
+    {
+        ItemImage.color = UnselectedColor;
+        isSelected = false;
+        isHover = false;
+        hoverDuration = 0f;
+    }
+}
