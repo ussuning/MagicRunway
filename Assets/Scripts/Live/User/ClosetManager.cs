@@ -54,7 +54,7 @@ public class ClosetInfo
                 break;
         }
 
-        outfitPageIdx = 2;
+        outfitPageIdx = 0;
     }
 
     public void Clear()
