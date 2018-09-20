@@ -13,9 +13,14 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     [SerializeField]
     private VideoWall videoWall;
 
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private ParticleSystem confetti;
+
     private ShowcaseManager showcaseManager;
     private GameObject runwayModels;
-    private AudioSource audioSource;
 
     private List<string> resource = new List<string>();
     private List<GameObject> models = new List<GameObject>();
@@ -30,8 +35,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         runwayModels = new GameObject("RunwayModels");
         runwayModels.transform.parent = autoRunwayContainer.transform;
-
-        audioSource = GetComponent<AudioSource>();
     }
 
     public Mode GetMode()
@@ -262,12 +265,14 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void OnRunwayEnter(Collider model)
     {
-        List<string> crowd = new List<string>(new string[] { SfxManager.APPLAUSE_1, SfxManager.APPLAUSE_2 });
+        /*
+        List<string> crowd = new List<string>(new string[] { SfxManager.CROWD_SHORT, SfxManager.CROWD_LONG,  SfxManager.APPLAUSE_1, SfxManager.APPLAUSE_2 });
         int index = Random.Range(0, crowd.Count);
 
         AudioClip clip = SfxManager.LoadClip(crowd[index]);
-
         audioSource.PlayOneShot(clip);
+        */
+        
     }
 
     private void OnRunwayFinish(Collider other)
@@ -288,7 +293,11 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         UIManager.Instance.ShowOutfit(showcaseManager.GetCurrentOutfit());
     }
 
-    private void OnRunwayEndExit(Collider other) { UIManager.Instance.HideOutfit(); }
+    private void OnRunwayEndExit(Collider other) {
+        UIManager.Instance.HideOutfit();
+        if (showcaseManager.curOutfit == (showcaseManager.totalOutfits - 1))
+            confetti.Play();
+    }
 
     private void AddRunwayEventListeners()
     {

@@ -20,10 +20,10 @@ public class AppManager : Singleton<AppManager>
     private IRunwayMode currentMode;
     private IRunwayMode nextMode;
 
-    private List<string> playList = new List<string>(new string[] { "dream", "5min" });
+    private List<string> playList = new List<string>(new string[] { "fast-forward", "fast-forward" });
     private int curSong = 0;
-    private float maxSongVolume = 0.8f;
-    private float minSongVolume = 0.2f;
+    private float maxSongVolume = 0.4f;
+    private float minSongVolume = 0.1f;
     private float reduceSongVolumeTime = 1.0f;
     private byte songVolumeState;
 
@@ -177,6 +177,7 @@ public class AppManager : Singleton<AppManager>
 
     void Update()
     {
+
         if(audioSource.time >= audioSource.clip.length)
         {
             curSong++;

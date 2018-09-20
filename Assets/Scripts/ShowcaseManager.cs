@@ -11,7 +11,7 @@ public class ShowcaseManager {
     private int _totalCollections = 0;
     public int currentCollectionIndex = 0;
     public int curOutfit = 0;
-    private int _totalOutfits = 0;
+    public int totalOutfits = 0;
 
     public ShowcaseManager()
     {
@@ -30,14 +30,14 @@ public class ShowcaseManager {
         nextCollection = GetNextCollection();
 
         curOutfit = 0;
-        _totalOutfits = currentCollection.outfits.Count;
+        totalOutfits = currentCollection.outfits.Count;
 
         return currentCollection.outfits;
     }
 
     public Outfit GetCurrentOutfit()
     {
-        if (curOutfit > (_totalOutfits - 1))
+        if (curOutfit > (totalOutfits - 1))
             return null;
 
         return currentCollection.outfits[curOutfit];
@@ -47,7 +47,7 @@ public class ShowcaseManager {
     {
         curOutfit++;
 
-        bool queueEnd = (curOutfit == _totalOutfits) ? true : false;
+        bool queueEnd = (curOutfit == totalOutfits) ? true : false;
 
         if (queueEnd == true)
         {
