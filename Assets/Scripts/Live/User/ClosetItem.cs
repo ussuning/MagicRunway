@@ -70,8 +70,8 @@ public class ClosetItem : MonoBehaviour {
 
     public void OnItemHover()
     {
-        if (!isHover)
-            ItemImage.color = HoverColor;
+        //if (!isHover)
+        //    ItemImage.color = HoverColor;
         isHover = true;
     }
 
