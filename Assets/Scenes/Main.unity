@@ -4134,7 +4134,7 @@ MonoBehaviour:
   runwayEventManager: {fileID: 1828891570}
   videoWall: {fileID: 279447205}
   audioSource: {fileID: 279447206}
-  confetti: {fileID: 0}
+  confetti: {fileID: 1327047293}
 --- !u!4 &1023743738
 Transform:
   m_ObjectHideFlags: 0
@@ -4869,6 +4869,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 198556092804080798, guid: db4ba7a405ede494eba94cc99215228b,
+        type: 2}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db4ba7a405ede494eba94cc99215228b, type: 2}
   m_IsPrefabAsset: 0
@@ -5518,6 +5523,11 @@ MonoBehaviour:
 --- !u!4 &1327047291 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4603321327656242, guid: db4ba7a405ede494eba94cc99215228b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1206487171}
+--- !u!198 &1327047293 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198556092804080798, guid: db4ba7a405ede494eba94cc99215228b,
     type: 2}
   m_PrefabInternal: {fileID: 1206487171}
 --- !u!1 &1335476404
