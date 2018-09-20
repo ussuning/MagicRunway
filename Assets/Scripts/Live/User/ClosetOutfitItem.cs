@@ -28,6 +28,7 @@ public class ClosetOutfitItem : ClosetItem {
     {
         base.OnItemSelected();
 
+        OutfitGameObjectsManager.Instance.GenerateOutfit(outfit, closet.OwnerID);
     }
 
     private Sprite GetOutfitThumb(string icon)
@@ -39,4 +40,9 @@ public class ClosetOutfitItem : ClosetItem {
         string iconPath = "Thumbs/" + icon;
         return Resources.Load<Sprite>(iconPath);
     }
+
+
+    
+
+    
 }
