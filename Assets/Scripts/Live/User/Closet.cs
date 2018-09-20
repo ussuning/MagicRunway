@@ -94,7 +94,18 @@ public class Closet : MonoBehaviour {
 
         numberPages = Mathf.CeilToInt((float)outfits.Count / ClosetManager.NUMBER_CLOSET_ITEMS);
 
-        SetClosetImage(GetDisplayedOutfits());
+        SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
+
+        isActive = true;
+    }
+
+    public void ResetCloset()
+    {
+        ClearClosetImage();
+        ownerId = 0L;
+        ownerGender = User.Gender.None;
+        outfits = null;
+        outfitPageIdx = 0;
     }
 
     public void Clear()
@@ -105,6 +116,7 @@ public class Closet : MonoBehaviour {
         if(outfits != null)
             outfits.Clear();
         outfitPageIdx = 0;
+        isActive = false;
     }
 
     public void PageUp()
@@ -113,7 +125,7 @@ public class Closet : MonoBehaviour {
         if (outfitPageIdx >= numberPages)
             outfitPageIdx = 0;
 
-        SetClosetImage(GetDisplayedOutfits());
+        SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
     }
 
     public void PageDown()
@@ -122,7 +134,7 @@ public class Closet : MonoBehaviour {
         if (outfitPageIdx < 0)
             outfitPageIdx = numberPages - 1;
 
-        SetClosetImage(GetDisplayedOutfits());
+        SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
     }
 
     private void SetClosetImage(List<Outfit> outfits)
@@ -134,7 +146,6 @@ public class Closet : MonoBehaviour {
 
         topArrow.ShowArrow();
         bottomArrow.ShowArrow();
-        isActive = true;
     }
 
     private void ClearClosetImage()
@@ -145,7 +156,6 @@ public class Closet : MonoBehaviour {
         }
         topArrow.HideArrow();
         bottomArrow.HideArrow();
-        isActive = false;
     }
 
     public void OnTopArrowHover()
@@ -195,12 +205,14 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    private List<Outfit> GetDisplayedOutfits()
+    private List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)
     {
+        if (displayedOutfits.Count == 0)
+            Debug.Log(string.Format("{0} [Closet] GetDisplayedOutfits(): displayedOutfits.Count = {1},  displayedPage = {2}", gameObject.name, displayedOutfits.Count, displayedPage));
         List<Outfit> dOutfits = new List<Outfit>();
         for (int i = 0; i < ClosetManager.NUMBER_CLOSET_ITEMS; i++)
         {
-            dOutfits.Add(outfits[(outfitPageIdx * ClosetManager.NUMBER_CLOSET_ITEMS + i) % outfits.Count]);
+            dOutfits.Add(displayedOutfits[(displayedPage * ClosetManager.NUMBER_CLOSET_ITEMS + i) % displayedOutfits.Count]);
         }
 
         return dOutfits;

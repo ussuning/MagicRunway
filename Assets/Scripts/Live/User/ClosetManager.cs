@@ -43,38 +43,17 @@ public class ClosetManager : MonoBehaviour {
         ClosetRight.Clear();
     }
 
-    public void OnUserGenderSelected(object [] param)
+    public void OnUserGenderSelected(object[] param)
     {
         long userID = (long)param[0];
         User.Gender userGender = (User.Gender)param[1];
 
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
-
         if (userClosets.Count == 0)
-        {
-            ClosetLeft.SetCloset(userID, userGender, userOutfits);
-            userClosets.Add(ClosetLeft);
-        }
-        else if(userClosets.Count == 1)
-        {
-            KinectManager kinect = KinectManager.Instance;
-            Vector3 user1Pos = kinect.GetUserPosition(userClosets[0].OwnerID);
-            Vector3 user2Pos = kinect.GetUserPosition(userID);
-            
-            if (user2Pos.x < user1Pos.x)
-            {   
-                ClosetRight.SetCloset(ClosetLeft.OwnerID, ClosetLeft.OwnerGender, ClosetLeft.Outfits, ClosetLeft.OutfitPageIndex);
-                userClosets[0] = ClosetRight;
-                ClosetLeft.Clear();
-                ClosetLeft.SetCloset(userID, userGender, userOutfits);
-                userClosets.Add(ClosetLeft);
-            }
-            else
-            {
-                ClosetRight.SetCloset(userID, userGender, userOutfits);
-                userClosets.Add(ClosetRight);
-            }
-        }
+            ClosetLeft.SetCloset(userID, userGender, userOutfits);  
+        else if (userClosets.Count == 1)
+             ClosetRight.SetCloset(userID, userGender, userOutfits);
+        userClosets.Add(ClosetLeft);
     }
 
     public void OnUserLost(object [] param)
@@ -102,10 +81,32 @@ public class ClosetManager : MonoBehaviour {
     {
         if (kinect && kinect)
         {
+            if(ClosetLeft.IsActive && ClosetRight.IsActive)
+            {
+                long userLID = ClosetLeft.OwnerID;
+                long userRID = ClosetRight.OwnerID;
+                if (kinect.IsUserTracked(userLID) && kinect.IsUserTracked(userRID))
+                {
+                    Vector3 userLPos = kinect.GetUserPosition(userLID);
+                    Vector3 userRPos = kinect.GetUserPosition(userRID);
+                    if(userRPos.x < userLPos.x)
+                    {
+                        long closetLOwnerID = ClosetLeft.OwnerID;
+                        User.Gender closetLGender = ClosetLeft.OwnerGender;
+                        List<Outfit> closetLOutfits = ClosetLeft.Outfits;
+                        int closetLOutfitPageIndex = ClosetLeft.OutfitPageIndex;
+                        ClosetLeft.ResetCloset();
+                        ClosetLeft.SetCloset(ClosetRight.OwnerID, ClosetRight.OwnerGender, ClosetRight.Outfits, ClosetRight.OutfitPageIndex);
+                        ClosetRight.ResetCloset();
+                        ClosetRight.SetCloset(closetLOwnerID, closetLGender, closetLOutfits, closetLOutfitPageIndex);
+                    }
+                }
+            }
+
             foreach (Closet closet in userClosets)
             {
                 long userID = closet.OwnerID;
-                if(kinect.IsUserInKinectView(userID))
+                if(kinect.IsUserTracked(userID))
                 {
                     if(closet.ClosetSide == Closet.Side.Left)
                     {
@@ -177,3 +178,6 @@ public class ClosetManager : MonoBehaviour {
         }
     }
 }
+
+
+
