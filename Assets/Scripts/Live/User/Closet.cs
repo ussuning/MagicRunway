@@ -59,7 +59,9 @@ public class Closet : MonoBehaviour {
     }
 
     private ClosetArrowItem topArrow, bottomArrow;
-    private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];  
+    private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
+
+    private int numberPages = 0;
 
     void Awake ()
     {
@@ -68,14 +70,17 @@ public class Closet : MonoBehaviour {
             if(i == 0)
             {
                 topArrow = transform.GetChild(i).GetComponent<ClosetArrowItem>();
+                topArrow.Closet = this;
             }
             else if(i == transform.childCount - 1)
             {
                 bottomArrow = transform.GetChild(i).GetComponent<ClosetArrowItem>();
+                bottomArrow.Closet = this;
             }
             else
             {
                 OutfitItems[i-1] = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
+                OutfitItems[i - 1].Closet = this;
             }
         }
     }
@@ -87,12 +92,14 @@ public class Closet : MonoBehaviour {
         this.outfits = outfits;
         this.outfitPageIdx = pageIdx;
 
+        numberPages = Mathf.CeilToInt((float)outfits.Count / ClosetManager.NUMBER_CLOSET_ITEMS);
+
         SetClosetImage(GetDisplayedOutfits());
     }
 
     public void Clear()
     {
-        ClearCloset();
+        ClearClosetImage();
         ownerId = 0L;
         ownerGender = User.Gender.None;
         if(outfits != null)
@@ -100,7 +107,23 @@ public class Closet : MonoBehaviour {
         outfitPageIdx = 0;
     }
 
-    public void SetClosetImage(List<Outfit> outfits)
+    public void PageUp()
+    {
+        outfitPageIdx++;
+        if (outfitPageIdx >= numberPages)
+            outfitPageIdx = 0;
+
+        SetClosetImage(GetDisplayedOutfits());
+    }
+
+    public void PageDown()
+    {
+        outfitPageIdx--;
+        if (outfitPageIdx < 0)
+            outfitPageIdx = numberPages - 1;
+    }
+
+    private void SetClosetImage(List<Outfit> outfits)
     {
         for(int i=0; i<OutfitItems.Length; i++)
         {
@@ -112,7 +135,7 @@ public class Closet : MonoBehaviour {
         isActive = true;
     }
 
-    private void ClearCloset()
+    private void ClearClosetImage()
     {
         for (int i = 0; i < OutfitItems.Length; i++)
         {

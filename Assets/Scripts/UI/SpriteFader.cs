@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class SpriteFader : MonoBehaviour {
 
     private float cur_alpha = 1f;
@@ -12,12 +11,7 @@ public class SpriteFader : MonoBehaviour {
     private float fadingDuration = 1.0f;    //Time for fading
     private float fadeSpeed = 1.0f;
 
-    private SpriteRenderer renderer;
-
-    void Awake ()
-    {
-        renderer = GetComponent<SpriteRenderer>();
-	}
+    public SpriteRenderer [] renderers;
 
     void Start()
     {
@@ -33,9 +27,13 @@ public class SpriteFader : MonoBehaviour {
 		if(m_isFading)
         {
             cur_alpha -= Time.deltaTime * fadeSpeed;
-            if (cur_alpha < 0f) 
+            if (cur_alpha < 0f)
                 cur_alpha = 0f;
-            renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, cur_alpha);
+
+            foreach (SpriteRenderer renderer in renderers)
+            {
+                renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, cur_alpha);
+            }
 
             if (cur_alpha == 0f)
             {

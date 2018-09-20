@@ -12,11 +12,20 @@ public class ClosetItem : MonoBehaviour {
 
     public Image ItemImage;
 
+    protected Closet closet;
+    public Closet Closet
+    {
+        set
+        {
+            closet = value;
+        }
+    }
+
     protected bool isSelected = false;
     protected bool isHover = false;
     private float hoverDuration = 0f;
     private Color HoverToSelectTransitionSpeed;
-    
+
     void Start ()
     {
         HoverToSelectTransitionSpeed = (SelectedColor - HoverColor) / HoverToSelectTime; 
@@ -56,7 +65,7 @@ public class ClosetItem : MonoBehaviour {
         isHover = true;
     }
 
-    public void OnItemSelected()
+    public virtual void OnItemSelected()
     {
         ItemImage.color = SelectedColor;
         isSelected = true;
