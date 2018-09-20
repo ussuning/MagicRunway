@@ -24,6 +24,12 @@ public class ClosetOutfitItem : ClosetItem {
         HideItem();
     }
 
+    public override void OnItemSelected()
+    {
+        base.OnItemSelected();
+
+    }
+
     private Sprite GetOutfitThumb(string icon)
     {
         if (icon.Contains("."))
