@@ -14,6 +14,25 @@ public class OutfitGameObjectsManager : MonoBehaviour {
         Instance = this;
     }
 
+    void OnEnable()
+    {
+        EventMsgDispatcher.Instance.registerEvent(EventDef.Kinect_User_Lost, OnUserLost);
+    }
+
+    void OnDisable()
+    {
+        foreach(Dictionary<string, GameObject> uOutfits in outfitGOs.Values)
+        {
+            foreach(GameObject outfit in uOutfits.Values)
+            {
+                Destroy(outfit);
+            }
+        }
+        outfitGOs.Clear();
+
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Kinect_User_Lost, OnUserLost);
+    }
+
     public void GenerateOutfit(Outfit outfit, long ownerID)
     {
         if(outfitGOs.ContainsKey(ownerID))
@@ -43,6 +62,20 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             userOutfits.Add(outfit.prefab, selectedOutfit);
 
             outfitGOs.Add(ownerID, userOutfits);
+        }
+    }
+
+    public void OnUserLost(object [] param)
+    {
+        long userID = (long)param[0];
+        if (outfitGOs.ContainsKey(userID))
+        {
+            Dictionary<string, GameObject> userOutfits = outfitGOs[userID];
+            foreach (GameObject outfit in userOutfits.Values)
+            {
+                Destroy(outfit);
+            }
+            outfitGOs.Remove(userID);
         }
     }
 
