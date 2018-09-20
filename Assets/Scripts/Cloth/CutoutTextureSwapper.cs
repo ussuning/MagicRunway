@@ -149,8 +149,16 @@ public class CutoutTextureSwapper : MonoBehaviour
             // Material had no texture, so we will just create one;
             srcTex = GetReusableTexture(alphaMapSize.x, alphaMapSize.y, 0);
         }
-        //Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
+        if (srcTex.width != alphaMapSize.x ||
+            srcTex.height != alphaMapSize.y)
+        {
+            Debug.LogError("Body Diffuse texture size (" +srcTex.name+","+ srcTex.width + ") doesn't match alphaMapSize! (" + alphaMapSize.x + ")");
+            yield break;
+        }
 
+        //Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
+        if (alphaMapSize.x > 2048 || alphaMapSize.y > 2048)
+            Debug.LogWarning("AlphaMapSize is very large - this might cause performance issues!");
         Debug.Log("DONE Step1() - Verified alphaMapSize = " + alphaMapSize);
     }
 
