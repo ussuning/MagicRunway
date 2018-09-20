@@ -11,6 +11,7 @@ public class ClosetItem : MonoBehaviour {
     public Color SelectedColor;
 
     public Image ItemImage;
+    public Image SelectedFillImage;
 
     protected Closet closet;
     public Closet Closet
@@ -24,11 +25,14 @@ public class ClosetItem : MonoBehaviour {
     protected bool isSelected = false;
     protected bool isHover = false;
     private float hoverDuration = 0f;
-    private Color HoverToSelectTransitionSpeed;
+    private float HoverToSelectTransitionSpeed;
 
     void Start ()
     {
-        HoverToSelectTransitionSpeed = (SelectedColor - HoverColor) / HoverToSelectTime; 
+        HoverToSelectTransitionSpeed = SelectedFillImage.rectTransform.sizeDelta.x / HoverToSelectTime;
+
+        SelectedFillImage.color = SelectedColor;
+
         OnItemUnselected();
     }
 
@@ -38,7 +42,10 @@ public class ClosetItem : MonoBehaviour {
         {
             hoverDuration += Time.deltaTime;
 
-            ItemImage.color += Time.deltaTime * HoverToSelectTransitionSpeed;
+            if (closet.ClosetSide == Closet.Side.Left)
+                SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
+            else if (closet.ClosetSide == Closet.Side.Right)
+                SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
 
             if (hoverDuration >= HoverToSelectTime)
             {
@@ -50,11 +57,14 @@ public class ClosetItem : MonoBehaviour {
 
     public void ShowItem()
     {
+        SelectedFillImage.enabled = true;
         ItemImage.enabled = true;
     }
 
     public void HideItem()
     {
+        OnItemUnselected();
+        SelectedFillImage.enabled = false;
         ItemImage.enabled = false;
     }
 
@@ -67,13 +77,17 @@ public class ClosetItem : MonoBehaviour {
 
     public virtual void OnItemSelected()
     {
-        ItemImage.color = SelectedColor;
+        SelectedFillImage.rectTransform.localPosition = Vector3.zero;
         isSelected = true;
     }
 
     public void OnItemUnselected ()
     {
         ItemImage.color = UnselectedColor;
+        if (closet.ClosetSide == Closet.Side.Left)
+            SelectedFillImage.rectTransform.localPosition = new Vector3(-SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
+        else if (closet.ClosetSide == Closet.Side.Right)
+            SelectedFillImage.rectTransform.localPosition = new Vector3(SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
         isSelected = false;
         isHover = false;
         hoverDuration = 0f;

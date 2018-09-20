@@ -40,9 +40,5 @@ public class ClosetOutfitItem : ClosetItem {
         string iconPath = "Thumbs/" + icon;
         return Resources.Load<Sprite>(iconPath);
     }
-
-
-    
-
     
 }

@@ -121,6 +121,8 @@ public class Closet : MonoBehaviour {
         outfitPageIdx--;
         if (outfitPageIdx < 0)
             outfitPageIdx = numberPages - 1;
+
+        SetClosetImage(GetDisplayedOutfits());
     }
 
     private void SetClosetImage(List<Outfit> outfits)
@@ -130,8 +132,8 @@ public class Closet : MonoBehaviour {
             OutfitItems[i].SetOutfit(outfits[i]);
         }
 
-        topArrow.ShowItem();
-        bottomArrow.ShowItem();
+        topArrow.ShowArrow();
+        bottomArrow.ShowArrow();
         isActive = true;
     }
 
@@ -141,8 +143,8 @@ public class Closet : MonoBehaviour {
         {
             OutfitItems[i].ClearOutfit();
         }
-        topArrow.HideItem();
-        bottomArrow.HideItem();
+        topArrow.HideArrow();
+        bottomArrow.HideArrow();
         isActive = false;
     }
 

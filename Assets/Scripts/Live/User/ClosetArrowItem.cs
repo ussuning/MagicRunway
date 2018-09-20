@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClosetArrowItem : ClosetItem {
 
@@ -10,7 +11,20 @@ public class ClosetArrowItem : ClosetItem {
         Dowm,
     };
 
+    public Image ArrowImage;
     public Direction ArrowDirection;
+    
+    public void ShowArrow()
+    {
+        ArrowImage.enabled = true;
+        ShowItem();
+    }
+
+    public void HideArrow()
+    {
+        ArrowImage.enabled = false;
+        HideItem();
+    }
 
     public override void OnItemSelected()
     {
