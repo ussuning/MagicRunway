@@ -1,36 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.IO;
-
-[Serializable]
-public class ComboData
-{
-    public int combo_num;
-    public float pose_time;
-    public float combo_time;
-}
-
-[Serializable]
-public class Combos
-{
-    public List<ComboData> combos;
-
-    public static Combos CreateFromJSON(string JsonPath)
-    {
-        string jsonString = File.ReadAllText(JsonPath);
-        Combos combo_data = JsonUtility.FromJson<Combos>(jsonString);
-        return combo_data;
-    }
-}
+using UnityEngine.UI;
 
 public class PoseMgr : MonoBehaviour {
 
     public static PoseMgr Instance;
 
-    public string comboDataFilePath = "/StreamingAssets/combo_data.json";
-    float PoseCD = 0.75f;
+    public RawImage PoseImage;
+
+    public float ImageFadeSpeed = 1f;
+
+    private bool isImageFadingIN;
+    private float imageAlpha;
+
+
+    public float PoseCD = 0.75f;
 
     private int curPose = 0;
     private int prevPose = 0;
@@ -43,23 +28,34 @@ public class PoseMgr : MonoBehaviour {
         }
     }
 
-    Combos ComboInfo;
-
-    public int ComboCount
+    void Awake()
     {
-        get
+        Instance = this;
+    }
+
+    void Start()
+    {
+        HidePoseImage();
+    }
+
+    void Update()
+    {
+        if(isImageFadingIN)
         {
-            if (ComboInfo == null)
-                return 0;
-            return ComboInfo.combos.Count;
+            imageAlpha += Time.deltaTime * ImageFadeSpeed;
+            PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
+            if (imageAlpha >= 1f) //Fade in completed
+            {
+                isImageFadingIN = false;
+                GenerateNewPose();
+            }
         }
     }
 
-    public ComboData GetComboInfo(int comboNum)
+    public void StartPosing()
     {
-        if (comboNum > ComboCount - 1)
-            return ComboInfo.combos[ComboCount - 1];
-        return ComboInfo.combos[comboNum];
+        PoseImage.enabled = true;
+        isImageFadingIN = true;
     }
 
     public void GenerateNewPose()
@@ -79,36 +75,18 @@ public class PoseMgr : MonoBehaviour {
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
     }
 
+    public void HidePoseImage()
+    {
+        isImageFadingIN = false;
+        imageAlpha = 0f;
+        PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
+        PoseImage.enabled = false;
+    }
+
     IEnumerator SetNewPoseCooldown()
     {
         isInNewPoseCD = true;
         yield return new WaitForSeconds(PoseCD);
         isInNewPoseCD = false;
-    }
-
-    void Awake ()
-    {
-        Instance = this;
-        LoadComboData();
-    }
-
-    //void Start()
-    //{
-    //    curPose = 0;
-    //    prevPose = 0;
-    //}
-
-    private void LoadComboData()
-    {
-        string filePath = Application.dataPath + comboDataFilePath;
-
-        if (File.Exists(filePath))
-        {
-            ComboInfo = Combos.CreateFromJSON(filePath);
-        }
-        else
-        {
-            Debug.Log("Pose Data doesn't exist!");
-        }
     }
 }

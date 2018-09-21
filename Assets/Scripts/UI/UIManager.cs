@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
     public GameObject uiStartMenu;
-    public GameObject uiInventory;
+    //public GameObject uiInventory;
     public GameObject uiJoinIn;
     public GameObject uiShowcase;
     public GameObject uiCollectionTitle;
@@ -14,20 +14,20 @@ public class UIManager : Singleton<UIManager>
     //public GameObject uiGestureGender;
     public GameObject uiHandCursor;
     public GameObject uiHandCursor2;
-    public GameObject uiStickMan;
+    //public GameObject uiStickMan;
 
     // Inventory Menu
-    public float inventoryScrollSize = 424;
-    public GameObject scrollRectGO;
-    public GameObject contentPanelGO;
-    public GameObject controlPanelGO;
-    public GameObject scrollRectGO2;
-    public GameObject contentPanelGO2;
-    public GameObject controlPanelGO2;
-    public GameObject inventoryMaleGO;
-    public GameObject inventoryMaleGO2;
-    public GameObject inventoryFemaleGO;
-    public GameObject inventoryFemaleGO2;
+    //public float inventoryScrollSize = 424;
+    //public GameObject scrollRectGO;
+    //public GameObject contentPanelGO;
+    //public GameObject controlPanelGO;
+    //public GameObject scrollRectGO2;
+    //public GameObject contentPanelGO2;
+    //public GameObject controlPanelGO2;
+    //public GameObject inventoryMaleGO;
+    //public GameObject inventoryMaleGO2;
+    //public GameObject inventoryFemaleGO;
+    //public GameObject inventoryFemaleGO2;
 
     //protected GameObject uiMaleGender;
     //protected GameObject uiFemaleGender;
@@ -58,10 +58,10 @@ public class UIManager : Singleton<UIManager>
         //uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
         //uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
-        faderInventory = uiInventory.GetComponent<CanvasFader>();
-        faderStickMan = uiStickMan.GetComponent<CanvasFader>();
-        faderControl = controlPanelGO.GetComponent<CanvasFader>();
-        faderControl2 = controlPanelGO2.GetComponent<CanvasFader>();
+        //faderInventory = uiInventory.GetComponent<CanvasFader>();
+        //faderStickMan = uiStickMan.GetComponent<CanvasFader>();
+        //faderControl = controlPanelGO.GetComponent<CanvasFader>();
+        //faderControl2 = controlPanelGO2.GetComponent<CanvasFader>();
         faderCollectionTitle = uiCollectionTitle.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
@@ -83,7 +83,7 @@ public class UIManager : Singleton<UIManager>
     {
         HideUpNext();
         //HideStartMenu(false);
-        HideInventory(false);
+        //HideInventory(false);
     }
         
     //----------------------------------------
@@ -147,58 +147,58 @@ public class UIManager : Singleton<UIManager>
     // Inventory 
     //----------------------------------------
 
-    public void ShowInventory(bool animate)
-    {
-        if (animate == true)
-        {
-            uiInventory.SetActive(true);
-            faderInventory.StartFading(CanvasFade.IN);
-        }
-        else
-        {
-            uiInventory.SetActive(true);
-        }
-    }
+    //public void ShowInventory(bool animate)
+    //{
+    //    if (animate == true)
+    //    {
+    //        uiInventory.SetActive(true);
+    //        faderInventory.StartFading(CanvasFade.IN);
+    //    }
+    //    else
+    //    {
+    //        uiInventory.SetActive(true);
+    //    }
+    //}
 
-    public void HideInventory(bool animate)
-    {
-        if (animate == true)
-        {
-            faderInventory.StartFading(CanvasFade.OUT);
-        }
-        else
-        {
-            uiInventory.SetActive(false);
-        }
-    }
+    //public void HideInventory(bool animate)
+    //{
+    //    if (animate == true)
+    //    {
+    //        faderInventory.StartFading(CanvasFade.OUT);
+    //    }
+    //    else
+    //    {
+    //        uiInventory.SetActive(false);
+    //    }
+    //}
 
-    public void ShowControlPanel(int index)
-    {
-        if(index == 0)
-        {
-            controlPanelGO.SetActive(true);
-            faderControl.StartFading(CanvasFade.IN);
-        }
-        else if(index == 1)
-        {
-            controlPanelGO2.SetActive(true);
-            faderControl2.StartFading(CanvasFade.IN);
-        }
-    }
+    //public void ShowControlPanel(int index)
+    //{
+    //    if(index == 0)
+    //    {
+    //        controlPanelGO.SetActive(true);
+    //        faderControl.StartFading(CanvasFade.IN);
+    //    }
+    //    else if(index == 1)
+    //    {
+    //        controlPanelGO2.SetActive(true);
+    //        faderControl2.StartFading(CanvasFade.IN);
+    //    }
+    //}
 
-    public void HideControlPanel(int index)
-    {
-        if (index == 0)
-        {
-            controlPanelGO.SetActive(false);
-            faderControl.StartFading(CanvasFade.OUT);
-        }
-        else if (index == 1)
-        {
-            controlPanelGO2.SetActive(false);
-            faderControl2.StartFading(CanvasFade.OUT);
-        }
-    }
+    //public void HideControlPanel(int index)
+    //{
+    //    if (index == 0)
+    //    {
+    //        controlPanelGO.SetActive(false);
+    //        faderControl.StartFading(CanvasFade.OUT);
+    //    }
+    //    else if (index == 1)
+    //    {
+    //        controlPanelGO2.SetActive(false);
+    //        faderControl2.StartFading(CanvasFade.OUT);
+    //    }
+    //}
 
 
     //public IEnumerator scrollInventory(int userIndex, long userId, string dir)
@@ -264,38 +264,38 @@ public class UIManager : Singleton<UIManager>
         StartMenuButton.onClick.Invoke();
     }
 
-    public void ShowStickManDelay(float time = 30.0f)
-    {
-        stickManCoroutine = WaitToShowStickMan(time);
-        StartCoroutine(stickManCoroutine);
-    }
+    //public void ShowStickManDelay(float time = 30.0f)
+    //{
+    //    stickManCoroutine = WaitToShowStickMan(time);
+    //    StartCoroutine(stickManCoroutine);
+    //}
 
-    public void ShowStickMan(bool animate)
-    {
-        if (animate == true)
-        {
-            uiStickMan.SetActive(true);
-            if(faderStickMan)
-                faderStickMan.StartFading(CanvasFade.IN);
-        }
-        else
-        {
-            uiStickMan.SetActive(true);
-        }
-    }
+    //public void ShowStickMan(bool animate)
+    //{
+    //    if (animate == true)
+    //    {
+    //        uiStickMan.SetActive(true);
+    //        if(faderStickMan)
+    //            faderStickMan.StartFading(CanvasFade.IN);
+    //    }
+    //    else
+    //    {
+    //        uiStickMan.SetActive(true);
+    //    }
+    //}
 
-    public void HideStickMan(bool animate)
-    {
-        if (animate == true)
-        {
-            if(faderStickMan)
-                faderStickMan.StartFading(CanvasFade.OUT);
-        }
-        else
-        {
-            uiStickMan.SetActive(false);
-        }
-    }
+    //public void HideStickMan(bool animate)
+    //{
+    //    if (animate == true)
+    //    {
+    //        if(faderStickMan)
+    //            faderStickMan.StartFading(CanvasFade.OUT);
+    //    }
+    //    else
+    //    {
+    //        uiStickMan.SetActive(false);
+    //    }
+    //}
 
 
     public void ShowHandCursor()
@@ -314,12 +314,12 @@ public class UIManager : Singleton<UIManager>
     {
         HideOutfit(false);
         //  HideCollection(false);    // turn off to use for player UI
-        HideInventory(false);
+        //HideInventory(false);
         HideUpNext();
         //HideGestureGender(false);
         HideHandCursor();
         HideStartMenu(false);
-        HideStickMan(false);
+        //HideStickMan(false);
         HideCollectionTitle(false);
     }
 
@@ -461,11 +461,11 @@ public class UIManager : Singleton<UIManager>
     //    HideGestureGender();
     //}
 
-    IEnumerator WaitToShowStickMan(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        ShowStickMan(true);
-    }
+    //IEnumerator WaitToShowStickMan(float delay)
+    //{
+    //    yield return new WaitForSeconds(delay);
+    //    ShowStickMan(true);
+    //}
 
     //public void HideGestureGender(bool animate = true)
     //{

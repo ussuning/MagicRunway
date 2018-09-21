@@ -46,8 +46,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         ClosetManager.Instance.OnEnterLiveMode();
 
-        UIManager.Instance.ShowStickManDelay(11.0f); //Remove/Fix later
-
+        PoseMgr.Instance.StartPosing();
     }
 
     public void End()
