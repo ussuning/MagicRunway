@@ -15,8 +15,8 @@ public class VideoWall : MonoBehaviour {
     private Texture2D videoSplash;
 
     void Awake () {
-        Material[] mats = videoWall.GetComponent<Renderer>().materials;
-        videoMaterial = mats[0];
+        Material[] mats = videoWall.GetComponent<Renderer>().sharedMaterials;
+        videoMaterial = mats[1];
     }
 
     private void OnEnable()
@@ -48,11 +48,18 @@ public class VideoWall : MonoBehaviour {
 
     public void FadeIn()
     {
+        Debug.Log("DO THIS!!");
+        //videoMaterial.color = Color.white;
+        //videoMaterial.SetColor("_EmissionColor", Color.white * 4f);
+        //DynamicGI.SetEmissive(videoWall.GetComponent<Renderer>(), new Color(1.0f, 1.0f, 1.0f, 1.0f) * 2.0f);
+        
         videoMaterial.SetColor("_EmissionColor", Color.black);
+        
         videoMaterial.color = Color.black;
         videoFadeStartTime = Time.realtimeSinceStartup;
         videoColor = 0;
         videoFadeState = 1;
+        
     }
 
     public void FadeOut(bool animate = true)
@@ -75,7 +82,7 @@ public class VideoWall : MonoBehaviour {
     void Update () {
         if (videoFadeState == 1)
         {
-            videoMaterial.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.white, videoColor));
+            videoMaterial.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.white * 2f, videoColor));
             videoMaterial.color = Color.Lerp(Color.black, Color.white, videoColor);
             if (videoColor < 1)
             {
@@ -83,7 +90,7 @@ public class VideoWall : MonoBehaviour {
             }
             else
             {
-                videoMaterial.SetColor("_EmissionColor", Color.white);
+                videoMaterial.SetColor("_EmissionColor", Color.white * 2f);
                 videoMaterial.color = Color.white;
 
                 videoFadeState = 0;
