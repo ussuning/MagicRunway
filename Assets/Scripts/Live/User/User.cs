@@ -35,14 +35,8 @@ public class User : MonoBehaviour {
         }
     }
 
-    //public GameObject outfitGO;
-    //public int inventorySlot;
-    //public Vector3 uposition;
-    //public Vector3 genderIconPosition;
-    //private GameObject userSkeletonGO;
-    //private bool isOutfitMenuOn = false;
-
     private PoseAgentSelector poseAgentSelector;
+    private UserScore uScore;
 
     Camera uiCamera;
     KinectManager manager;
@@ -66,87 +60,30 @@ public class User : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    public User(long id, int index)
+    public void initialize(long id, UserScore userScore)
     {
         uid = id;
-    }
-
-    public void initialize(long id)
-    {
-        uid = id;
-        //inventorySlot = 1;
+        uScore = userScore;
 
         poseAgentSelector.Init(id);
     }
 
-    //public GameObject getOutfit()
-    //{
-    //    return outfitGO;
-    //}
-
-    //public Vector3 getPosition()
-    //{
-    //    return uposition;
-    //}
-
-    //public int getInventorySlot()
-    //{
-    //    return inventorySlot;
-    //}
-
-    //public Vector3 getGenderIconPosition()
-    //{
-    //    return genderIconPosition;
-    //}
-
-    //public GameObject getUserSkeletonGO()
-    //{
-    //    return userSkeletonGO;
-    //}
-
-    //public void setUserSkeletonGO(GameObject go)
-    //{
-    //    userSkeletonGO = go;
-    //}
-
-    //public void setOutfit(GameObject outfit)
-    //{
-    //    outfitGO = outfit;
-    //}
-
-    //public bool isOutfitMenuDisplayed()
-    //{
-    //    return isOutfitMenuOn;
-    //}
-
-    //public void setOutfitMenuStatus(bool status)
-    //{
-    //    isOutfitMenuOn = status;
-    //}
-
-    //public void setInventorySlot(int slot)
-    //{
-    //    inventorySlot = slot;
-    //}
-
     void Update()
-    {
-        // get this user's pos on every tick
-        /* uposition = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
-         genderIconPosition = getCurrentPosition((int)KinectInterop.JointType.ShoulderLeft);
-
-         //update gameObject pos 
-         gameObject.transform.position = getCurrentPosition((int)KinectInterop.JointType.SpineMid);
-         */
-
-        
+    {  
         if(ugender == Gender.None)
         {
             if (GenderSelectionUI)
             {
                 GenderSelectionUI.transform.position = GetUserScreenPos() + new Vector3(0f, 160f, 0f);
             }
+        }
+    }
+
+    void OnDestroy()
+    {
+        if(uScore)
+        {
+            Destroy(uScore.gameObject);
         }
     }
 

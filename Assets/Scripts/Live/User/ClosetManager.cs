@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ClosetManager : MonoBehaviour {
 
+    public static ClosetManager Instance;
+
     public static int NUMBER_CLOSET_ITEMS = 4;
 
     public Closet ClosetLeft;
@@ -17,30 +19,19 @@ public class ClosetManager : MonoBehaviour {
     float Dir_lElbow;
     float Dir_rElbow;
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void OnEnable ()
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.Live_Mode_Set_Up, OnEnterLiveMode);
         EventMsgDispatcher.Instance.registerEvent(EventDef.User_Gender_Selected, OnUserGenderSelected);
-        EventMsgDispatcher.Instance.registerEvent(EventDef.Kinect_User_Lost, OnUserLost);
     }
 
     void OnDisable()
     {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Live_Mode_Set_Up, OnEnterLiveMode);
         EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Gender_Selected, OnUserGenderSelected);
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Kinect_User_Lost, OnUserLost);
-    }
-
-    public void OnEnterLiveMode(object [] param)
-    {
-        if (!kinect)
-            kinect = KinectManager.Instance;
-
-        if (outfits == null)
-            outfits = MRData.Instance.outfits;
-
-        ClosetLeft.Clear();
-        ClosetRight.Clear();
     }
 
     public void OnUserGenderSelected(object[] param)
@@ -56,10 +47,20 @@ public class ClosetManager : MonoBehaviour {
         userClosets.Add(ClosetLeft);
     }
 
-    public void OnUserLost(object [] param)
+    public void OnEnterLiveMode()
     {
-        long userID = (long)param[0];
+        if (!kinect)
+            kinect = KinectManager.Instance;
 
+        if (outfits == null)
+            outfits = MRData.Instance.outfits;
+
+        ClosetLeft.Clear();
+        ClosetRight.Clear();
+    }
+
+    public void OnUserLost(long userID)
+    {
         foreach(Closet c in userClosets)
         {
             if(c.OwnerID == userID)

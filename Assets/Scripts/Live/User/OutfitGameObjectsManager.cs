@@ -14,11 +14,6 @@ public class OutfitGameObjectsManager : MonoBehaviour {
         Instance = this;
     }
 
-    void OnEnable()
-    {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.Kinect_User_Lost, OnUserLost);
-    }
-
     void OnDisable()
     {
         foreach(Dictionary<string, GameObject> uOutfits in outfitGOs.Values)
@@ -29,8 +24,6 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             }
         }
         outfitGOs.Clear();
-
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Kinect_User_Lost, OnUserLost);
     }
 
     public void GenerateOutfit(Outfit outfit, long ownerID)
@@ -65,9 +58,8 @@ public class OutfitGameObjectsManager : MonoBehaviour {
         }
     }
 
-    public void OnUserLost(object [] param)
+    public void OnUserLost(long userID)
     {
-        long userID = (long)param[0];
         if (outfitGOs.ContainsKey(userID))
         {
             Dictionary<string, GameObject> userOutfits = outfitGOs[userID];
