@@ -9496,7 +9496,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 21a6701e330381c4fb229a5e8c3a75f9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 21a6701e330381c4fb229a5e8c3a75f9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -9568,7 +9568,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 21a6701e330381c4fb229a5e8c3a75f9, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9500000, guid: 21a6701e330381c4fb229a5e8c3a75f9, type: 3}
@@ -30048,6 +30048,11 @@ Prefab:
       propertyPath: profile
       value: 
       objectReference: {fileID: 1069180532}
+    - target: {fileID: 20465531991360344, guid: 3010a9d1c13e2416196d0b60a0845065,
+        type: 2}
+      propertyPath: far clip plane
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3010a9d1c13e2416196d0b60a0845065, type: 2}
   m_IsPrefabAsset: 0
@@ -32068,7 +32073,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1632677309}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1001721773}
@@ -35590,7 +35595,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 300
       minScalar: 10
       maxCurve:
         serializedVersion: 2
