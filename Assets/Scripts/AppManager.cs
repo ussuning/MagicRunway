@@ -177,7 +177,7 @@ public class AppManager : Singleton<AppManager>
 
     void Update()
     {
-
+        /*
         if(audioSource.time >= audioSource.clip.length)
         {
             curSong++;
@@ -206,7 +206,7 @@ public class AppManager : Singleton<AppManager>
                 audioSource.volume -= startVolume * Time.deltaTime / reduceSongVolumeTime;
             }
         }
-
+        */
         if (fadeState == 1)
         {
             if (fadeCounter >= fadeTime) {
