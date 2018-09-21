@@ -63,6 +63,10 @@ public class Closet : MonoBehaviour {
 
     private int numberPages = 0;
 
+    private float ownerPointDir;
+
+    KinectManager kinect;
+
     void Awake ()
     {
         for(int i=0; i<transform.childCount; i++)
@@ -84,7 +88,55 @@ public class Closet : MonoBehaviour {
             }
         }
     }
-    
+
+    void Start ()
+    {
+        if(!kinect)
+            kinect = KinectManager.Instance;
+    }
+
+    void Update()
+    {
+        if(isActive)
+        {
+            if (kinect && kinect.IsInitialized())
+            {
+                if (kinect.IsUserTracked(ownerId))
+                {
+                    ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, ownerId), 0.25f);
+                    if (ownerPointDir >= -0.75f && ownerPointDir < -0.5f)
+                    {
+                        OnBottomArrowHover();
+                    }
+                    else if (ownerPointDir >= -0.5f && ownerPointDir < -0.25f)
+                    {
+                        OnOutfitItemHover(3);
+                    }
+                    else if (ownerPointDir >= -0.25f && ownerPointDir < 0f)
+                    {
+                        OnOutfitItemHover(2);
+                    }
+                    else if (ownerPointDir >= 0f && ownerPointDir < 0.25f)
+                    {
+                        OnOutfitItemHover(1);
+                    }
+                    else if (ownerPointDir >= 0.25f && ownerPointDir < 0.5f)
+                    {
+                        OnOutfitItemHover(0);
+                    }
+                    else if (ownerPointDir >= 0.5f && ownerPointDir < 0.75f)
+                    {
+                        OnTopArrowHover();
+                    }
+                    else
+                    {
+                        OnUnselectAll();
+                    }
+                }
+            }
+        }
+    }
+
     public void SetCloset(long userID, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
     {
         this.ownerId = userID;
@@ -158,7 +210,7 @@ public class Closet : MonoBehaviour {
         bottomArrow.HideArrow();
     }
 
-    public void OnTopArrowHover()
+    private void OnTopArrowHover()
     {
         topArrow.OnItemHover();
         bottomArrow.OnItemUnselected();
@@ -168,7 +220,7 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    public void OnBottomArrowHover()
+    private void OnBottomArrowHover()
     {
         topArrow.OnItemUnselected();
         bottomArrow.OnItemHover();
@@ -178,7 +230,7 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    public void OnOutfitItemHover(int idx)
+    private void OnOutfitItemHover(int idx)
     {
         topArrow.OnItemUnselected();
         bottomArrow.OnItemUnselected();
@@ -195,7 +247,7 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    public void OnUnselectAll()
+    private void OnUnselectAll()
     {
         topArrow.OnItemUnselected();
         bottomArrow.OnItemUnselected();
@@ -205,7 +257,7 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    private List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)
+    List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)
     {
         if (displayedOutfits.Count == 0)
             Debug.Log(string.Format("{0} [Closet] GetDisplayedOutfits(): displayedOutfits.Count = {1},  displayedPage = {2}", gameObject.name, displayedOutfits.Count, displayedPage));
@@ -216,6 +268,24 @@ public class Closet : MonoBehaviour {
         }
 
         return dOutfits;
+    }
+
+    float GetPointDirection(Side closetSide, long ownerID)
+    {
+        if (closetSide == Closet.Side.Left)
+        {
+            Vector3 lHandPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.HandLeft);
+            Vector3 lShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ShoulderLeft);
+            return (lHandPos - lShoulderPos).normalized.y;
+        }
+        else if (closetSide == Closet.Side.Right)
+        {
+            Vector3 rHandPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.HandRight);
+            Vector3 rShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ShoulderRight);
+            return (rHandPos - rShoulderPos).normalized.y;
+        }
+
+        return -1f;
     }
 
 }
