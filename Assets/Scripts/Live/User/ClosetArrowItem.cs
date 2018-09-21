@@ -8,21 +8,21 @@ public class ClosetArrowItem : ClosetItem {
     public enum Direction
     {
         Up = 0,
-        Dowm,
+        Down,
     };
 
-    public Image ArrowImage;
+    //public Image ArrowImage;
     public Direction ArrowDirection;
     
     public void ShowArrow()
     {
-        ArrowImage.enabled = true;
+        //ArrowImage.enabled = true;
         ShowItem();
     }
 
     public void HideArrow()
     {
-        ArrowImage.enabled = false;
+        //ArrowImage.enabled = false;
         HideItem();
     }
 
@@ -34,7 +34,7 @@ public class ClosetArrowItem : ClosetItem {
             case Direction.Up:
                 closet.PageUp();
                 break;
-            case Direction.Dowm:
+            case Direction.Down:
                 closet.PageDown();
                 break;
         }
