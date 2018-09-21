@@ -103,75 +103,76 @@ public class ClosetManager : MonoBehaviour {
                 }
             }
 
-            foreach (Closet closet in userClosets)
+            if(ClosetLeft.IsActive)
             {
-                long userID = closet.OwnerID;
-                if(kinect.IsUserTracked(userID))
+                long userID = ClosetLeft.OwnerID;
+                if (kinect.IsUserTracked(userID))
                 {
-                    if(closet.ClosetSide == Closet.Side.Left)
+                    Dir_lElbow = Mathf.Lerp(Dir_lElbow, kinect.GetJointDirection(userID, (int)KinectInterop.JointType.ElbowLeft).y, 0.25f);
+                    if (Dir_lElbow >= -0.2f && Dir_lElbow < -0.15f)
                     {
-                        Dir_lElbow = Mathf.Lerp(Dir_lElbow, kinect.GetJointDirection(userID, (int)KinectInterop.JointType.ElbowLeft).y, 0.25f);
-
-                        if(Dir_lElbow >= -0.2f && Dir_lElbow < -0.15f)
-                        {
-                            closet.OnBottomArrowHover();
-                        }
-                        else if (Dir_lElbow >= -0.15f && Dir_lElbow < -0.075f)
-                        {
-                            closet.OnOutfitItemHover(3);
-                        }
-                        else if (Dir_lElbow >= -0.075f && Dir_lElbow < 0f)
-                        {
-                            closet.OnOutfitItemHover(2);
-                        }
-                        else if (Dir_lElbow >= 0f && Dir_lElbow < 0.075f)
-                        {
-                            closet.OnOutfitItemHover(1);
-                        }
-                        else if (Dir_lElbow >= 0.075f && Dir_lElbow < 0.15f)
-                        {
-                            closet.OnOutfitItemHover(0);
-                        }
-                        else if (Dir_lElbow >= 0.15f && Dir_lElbow < 2f)
-                        {
-                            closet.OnTopArrowHover();
-                        }
-                        else
-                        {
-                            closet.OnUnselectAll();
-                        }
+                        ClosetLeft.OnBottomArrowHover();
                     }
-                    else if (closet.ClosetSide == Closet.Side.Right)
+                    else if (Dir_lElbow >= -0.15f && Dir_lElbow < -0.075f)
                     {
-                        Dir_rElbow = Mathf.Lerp(Dir_lElbow, kinect.GetJointDirection(userID, (int)KinectInterop.JointType.ElbowRight).y, 0.25f);
-                        if (Dir_rElbow >= -0.2f && Dir_rElbow < -0.15f)
-                        {
-                            closet.OnBottomArrowHover();
-                        }
-                        else if (Dir_rElbow >= -0.15f && Dir_rElbow < -0.075f)
-                        {
-                            closet.OnOutfitItemHover(3);
-                        }
-                        else if (Dir_rElbow >= -0.075f && Dir_rElbow < 0f)
-                        {
-                            closet.OnOutfitItemHover(2);
-                        }
-                        else if (Dir_rElbow >= 0f && Dir_rElbow < 0.075f)
-                        {
-                            closet.OnOutfitItemHover(1);
-                        }
-                        else if (Dir_rElbow >= 0.075f && Dir_rElbow < 0.15f)
-                        {
-                            closet.OnOutfitItemHover(0);
-                        }
-                        else if (Dir_rElbow >= 0.15f && Dir_rElbow < 2f)
-                        {
-                            closet.OnTopArrowHover();
-                        }
-                        else
-                        {
-                            closet.OnUnselectAll();
-                        }
+                        ClosetLeft.OnOutfitItemHover(3);
+                    }
+                    else if (Dir_lElbow >= -0.075f && Dir_lElbow < 0f)
+                    {
+                        ClosetLeft.OnOutfitItemHover(2);
+                    }
+                    else if (Dir_lElbow >= 0f && Dir_lElbow < 0.075f)
+                    {
+                        ClosetLeft.OnOutfitItemHover(1);
+                    }
+                    else if (Dir_lElbow >= 0.075f && Dir_lElbow < 0.15f)
+                    {
+                        ClosetLeft.OnOutfitItemHover(0);
+                    }
+                    else if (Dir_lElbow >= 0.15f && Dir_lElbow < 2f)
+                    {
+                        ClosetLeft.OnTopArrowHover();
+                    }
+                    else
+                    {
+                        ClosetLeft.OnUnselectAll();
+                    }
+                }
+            }
+
+            if (ClosetRight.IsActive)
+            {
+                long userID = ClosetRight.OwnerID;
+                if (kinect.IsUserTracked(userID))
+                {
+                    Dir_rElbow = Mathf.Lerp(Dir_lElbow, kinect.GetJointDirection(userID, (int)KinectInterop.JointType.ElbowRight).y, 0.25f);
+                    if (Dir_rElbow >= -0.2f && Dir_rElbow < -0.15f)
+                    {
+                        ClosetRight.OnBottomArrowHover();
+                    }
+                    else if (Dir_rElbow >= -0.15f && Dir_rElbow < -0.075f)
+                    {
+                        ClosetRight.OnOutfitItemHover(3);
+                    }
+                    else if (Dir_rElbow >= -0.075f && Dir_rElbow < 0f)
+                    {
+                        ClosetRight.OnOutfitItemHover(2);
+                    }
+                    else if (Dir_rElbow >= 0f && Dir_rElbow < 0.075f)
+                    {
+                        ClosetRight.OnOutfitItemHover(1);
+                    }
+                    else if (Dir_rElbow >= 0.075f && Dir_rElbow < 0.15f)
+                    {
+                        ClosetRight.OnOutfitItemHover(0);
+                    }
+                    else if (Dir_rElbow >= 0.15f && Dir_rElbow < 2f)
+                    {
+                        ClosetRight.OnTopArrowHover();
+                    }
+                    else
+                    {
+                        ClosetRight.OnUnselectAll();
                     }
                 }
             }
