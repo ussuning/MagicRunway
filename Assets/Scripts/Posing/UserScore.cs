@@ -6,78 +6,41 @@ using UnityEngine.UI;
 public class UserScore : MonoBehaviour {
 
     public Text UserName;
-    public Text UserScoreText;
-    public PoseFeedbackLightraysFX lightRaysFX;
-    public GameObject ScoreTextPrefab;
+    public GameObject[] Stars;
 
-    private float score;
-
-    long userID;
-
-    public void DebugScoreText()
+    private long userID;
+    public long UserID
     {
-        GenerateEffects(0.9f);
-    }
-
-    public void Init(long user)
-    {
-        userID = user;
-        UserName.text = string.Format("Player  {0}", KinectManager.Instance.GetUserIndexById(userID) + 1);
-        score = 0;
-    }
-
-    public void AddScore(int points)
-    {
-        score += points;
-        UserScoreText.text = score.ToString();
-    }
-
-    void OnEnable()
-    {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
-        EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Broken_Detected, OnComboScored);
-    }
-
-    void OnDisable()
-    {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnUserPoseMatched);
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboScored);
-    }
-
-    public void OnUserPoseMatched(object [] param)
-    {
-        long matchedUserID = (long)param[0];
-        int poseID = (int)param[1];
-        float poseConfidence = (float)param[2];
-        if (matchedUserID == userID)
+        get
         {
-            AddScore(ScoreMgr.Instance.SinglePoseScore);
-            GenerateEffects(poseConfidence);
+            return userID;
         }
     }
 
-    public void OnComboScored(object [] param)
-    {
-        long lastComboOwner = (long)param[0];
-        List<int> comboIDs = (List<int>)param[1];
+    private int score;
 
-        int combo = comboIDs.Count;
-        if (lastComboOwner == userID)
+    public void init(long userID)
+    {
+        this.userID = userID;
+        this.score = 0;
+
+        if (UserName)
+            UserName.text = string.Format("P{0}", KinectManager.Instance.GetUserIndexById(userID)+1);
+
+        UpdateStars();
+    }
+
+    public void AddScore(int s)
+    {
+        score += s;
+        UpdateStars();
+    }
+
+    void UpdateStars()
+    {
+        for (int i = 0; i < Stars.Length; i++)
         {
-            AddScore(ScoreMgr.Instance.GetComboScore(combo));
+            Stars[i].SetActive(i < score);
         }
-    }
-
-    public void GenerateEffects(float poseConfidence)
-    {
-        lightRaysFX.StartFX(poseConfidence);
-        GenerateScoreText(poseConfidence);
-    }
-
-    public void GenerateScoreText(float poseConfidence)
-    {
-        GameObject scoreTextGO = Instantiate(ScoreTextPrefab, this.transform);
-        PoseFeedbackTextFX textFX = scoreTextGO.GetComponent<PoseFeedbackTextFX>();
-        textFX.ActivateTextFX(poseConfidence);
     }
 }

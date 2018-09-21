@@ -61,15 +61,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         isModeActive = false;
     }
 
-    public static string GetPathForOutfitPrefab(string prefabName, string gender)
-    {
-        string sex = (gender == "f") ? "Female" : "Male";
-        string path = "RunwayModels/" + sex + "/" + prefabName;
-
-        return path;
-    }
-
-
     //GestureListenerInterface
 
     public void UserDetected(long userId, int userIndex)
