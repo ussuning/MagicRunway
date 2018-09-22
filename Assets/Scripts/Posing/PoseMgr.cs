@@ -14,7 +14,7 @@ public class PoseMgr : MonoBehaviour {
     private bool isImageFadingIN;
     private float imageAlpha;
 
-
+    public float PoseDuration = 5f;
     public float PoseCD = 0.75f;
 
     private int curPose = 0;
@@ -60,6 +60,8 @@ public class PoseMgr : MonoBehaviour {
 
     public void GenerateNewPose()
     {
+        CancelInvoke("GenerateNewPose");
+
         int newPose = 0;
         do
         {
@@ -73,6 +75,8 @@ public class PoseMgr : MonoBehaviour {
 
         object[] param = { curPose };
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
+
+        Invoke("GenerateNewPose", PoseDuration);
     }
 
     public void HidePoseImage()

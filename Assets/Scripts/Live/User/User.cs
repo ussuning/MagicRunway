@@ -14,6 +14,13 @@ public class User : MonoBehaviour {
     public SpriteFader GenderSelectionUI;
 
     private long uid;
+    public long UserID
+    {
+        get
+        {
+            return uid;
+        }
+    }
 
     private Gender ugender;
     public Gender UserGender
@@ -35,8 +42,16 @@ public class User : MonoBehaviour {
         }
     }
 
-    private PoseAgentSelector poseAgentSelector;
     private UserScore uScore;
+    public UserScore UserScore
+    {
+        get
+        {
+            return uScore;
+        }
+    }
+
+    private PoseAgentSelector poseAgentSelector;
 
     Camera uiCamera;
     KinectManager manager;
@@ -65,7 +80,7 @@ public class User : MonoBehaviour {
         uid = id;
         uScore = userScore;
 
-        poseAgentSelector.Init(id);
+        poseAgentSelector.Init(this);
     }
 
     void Update()

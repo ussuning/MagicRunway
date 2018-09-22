@@ -8,22 +8,19 @@ public class PoseAgentSelector : MonoBehaviour
 
     TargetPoseRecognizingAgent[] poseAgents;
 
-    public void Init(long kinectUserID)
+    public void Init(User user)
     {
-        userID = kinectUserID;
-        generatePoseAgents(kinectUserID);
-        PoseFX fx = GetComponent<PoseFX>();
-        if (fx)
-            fx.Init(kinectUserID);
+        userID = user.UserID;
+        generatePoseAgents(user);
     }
 
-    void generatePoseAgents(long userID)
+    void generatePoseAgents(User user)
     {
         poseAgents = new TargetPoseRecognizingAgent[BrainDataManager.Instance.NumPoses];
         for (int i = 0; i < BrainDataManager.Instance.NumPoses; i++)
         {
             TargetPoseRecognizingAgent tprAgent = gameObject.AddComponent<TargetPoseRecognizingAgent>();
-            tprAgent.Init(userID, i);
+            tprAgent.Init(user, i);
             tprAgent.GiveBrain(BrainDataManager.Instance.GetBrain(i));
             tprAgent.enabled = false;
             poseAgents[i] = tprAgent;
@@ -42,7 +39,7 @@ public class PoseAgentSelector : MonoBehaviour
 
     public void OnNewPoseGenerated(object [] param)
     {
-        if (!isUserTracked())
+        if (!KinectManager.Instance.IsUserTracked(userID))
         {
             activatePoseAgent(-1);
             return;
@@ -50,11 +47,6 @@ public class PoseAgentSelector : MonoBehaviour
 
         int poseID = (int)param[0];
         activatePoseAgent(poseID);
-    }
-
-    bool isUserTracked()
-    {
-        return userID > 0L && KinectManager.Instance.IsUserTracked(userID) && KinectManager.Instance.IsUserInKinectView(userID);
     }
 
     void activatePoseAgent(int poseID)

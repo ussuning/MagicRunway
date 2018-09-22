@@ -5,9 +5,11 @@ using UnityEngine;
 public class TargetPoseRecognizingAgent : Agent {
     
     private KinectManager kinectMgr;
+    private BrainDataManager brainMgr;
+
+    private User user;
     private long KinectUserId;
 
-    private BrainDataManager brainMgr;
     private int poseID;
 
     private bool isPoseMatched = false;
@@ -17,12 +19,14 @@ public class TargetPoseRecognizingAgent : Agent {
 
     PoseParameter pose;
 
-    public void Init(long userID, int PoseID)
+    public void Init(User user, int PoseID)
     {
-        kinectMgr = KinectManager.Instance;
-        brainMgr = BrainDataManager.Instance;
-        KinectUserId = userID;
-        poseID = PoseID;
+        this.kinectMgr = KinectManager.Instance;
+        this.brainMgr = BrainDataManager.Instance;
+
+        this.user = user;
+        this.KinectUserId = user.UserID;
+        this.poseID = PoseID;
 
         pose = brainMgr.GetPoseInfo(poseID);
 
@@ -44,6 +48,11 @@ public class TargetPoseRecognizingAgent : Agent {
             {
                 object[] param = { KinectUserId, poseID, poseConfidence };
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, param);
+
+                user.UserScore.AddScore(1);
+
+                PoseMgr.Instance.GenerateNewPose();
+
                 isPoseMatched = false;
                 isInCooldown = true;
             }
@@ -63,13 +72,6 @@ public class TargetPoseRecognizingAgent : Agent {
                 int JointIdx = pose.joint_ids[i];
                 if (kinectMgr.IsJointTracked(KinectUserId, JointIdx))
                 {
-                    //Vector3 JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx).eulerAngles;
-                    //JointOrientation = NormalizeAngles(JointOrientation);
-                    //AddVectorObs(JointOrientation);
-
-                    //Vector3 JointDirection = kinectMgr.GetJointDirection(KinectUserId, JointIdx);
-                    //AddVectorObs(JointDirection);
-
                     Quaternion JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx);
                     AddVectorObs(JointOrientation);
                 }
@@ -79,7 +81,6 @@ public class TargetPoseRecognizingAgent : Agent {
         {
             for (int i = 0; i < pose.num_joint_detections; i++)
             {
-                //AddVectorObs(Vector3.zero);
                 AddVectorObs(Quaternion.identity);
             }
         }
@@ -88,7 +89,7 @@ public class TargetPoseRecognizingAgent : Agent {
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         poseConfidence = vectorAction[0];
-       // Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
+        //Debug.Log(string.Format("User {0} : Agent {1}: action = {2}", this.name, poseID, poseConfidence));
     }
 
     public override void AgentOnDone()
