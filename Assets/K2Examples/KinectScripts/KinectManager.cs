@@ -3981,8 +3981,6 @@ public class KinectManager : MonoBehaviour
 				}
 				
 				ResetFilters();
-
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.Kinect_User_ID_Added);
 			}
 		}
     }

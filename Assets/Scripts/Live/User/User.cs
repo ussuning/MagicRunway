@@ -43,14 +43,6 @@ public class User : MonoBehaviour {
     }
 
     private UserScore uScore;
-    public UserScore UserScore
-    {
-        get
-        {
-            return uScore;
-        }
-    }
-
     private PoseAgentSelector poseAgentSelector;
 
     Camera uiCamera;
@@ -80,7 +72,8 @@ public class User : MonoBehaviour {
         uid = id;
         uScore = userScore;
 
-        poseAgentSelector.Init(this);
+        poseAgentSelector.Init(uid);
+        uScore.init(uid);
     }
 
     void Update()

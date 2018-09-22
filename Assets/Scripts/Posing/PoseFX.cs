@@ -15,12 +15,12 @@ public class PoseFX : MonoBehaviour {
 
     void OnEnable()
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Detected, OnPoseDetected);
+        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Matched, OnPoseDetected);
     }
 
     void OnDisable ()
     {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Detected, OnPoseDetected);
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Matched, OnPoseDetected);
     }
 
     public void OnPoseDetected(object [] param)

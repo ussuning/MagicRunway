@@ -8,19 +8,19 @@ public class PoseAgentSelector : MonoBehaviour
 
     TargetPoseRecognizingAgent[] poseAgents;
 
-    public void Init(User user)
+    public void Init(long userID)
     {
-        userID = user.UserID;
-        generatePoseAgents(user);
+        this.userID = userID;
+        generatePoseAgents(userID);
     }
 
-    void generatePoseAgents(User user)
+    void generatePoseAgents(long userID)
     {
         poseAgents = new TargetPoseRecognizingAgent[BrainDataManager.Instance.NumPoses];
         for (int i = 0; i < BrainDataManager.Instance.NumPoses; i++)
         {
             TargetPoseRecognizingAgent tprAgent = gameObject.AddComponent<TargetPoseRecognizingAgent>();
-            tprAgent.Init(user, i);
+            tprAgent.Init(userID, i);
             tprAgent.GiveBrain(BrainDataManager.Instance.GetBrain(i));
             tprAgent.enabled = false;
             poseAgents[i] = tprAgent;

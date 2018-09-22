@@ -19,13 +19,12 @@ public class TargetPoseRecognizingAgent : Agent {
 
     PoseParameter pose;
 
-    public void Init(User user, int PoseID)
+    public void Init(long userID, int PoseID)
     {
         this.kinectMgr = KinectManager.Instance;
         this.brainMgr = BrainDataManager.Instance;
 
-        this.user = user;
-        this.KinectUserId = user.UserID;
+        this.KinectUserId = userID;
         this.poseID = PoseID;
 
         pose = brainMgr.GetPoseInfo(poseID);
@@ -47,9 +46,7 @@ public class TargetPoseRecognizingAgent : Agent {
             if (isPoseMatched)
             {
                 object[] param = { KinectUserId, poseID, poseConfidence };
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Detected, param);
-
-                user.UserScore.AddScore(1);
+                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Matched, param);
 
                 PoseMgr.Instance.GenerateNewPose();
 
