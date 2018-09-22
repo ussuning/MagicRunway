@@ -71,6 +71,7 @@ public class UserScore : MonoBehaviour {
             Stars[i].fillAmount = (i < score) ? 1f : 0f;
         }
 
-        Stars[score].fillAmount = ((float)numConsecutivePoseMatches / (score + 1));
+        if(score < Stars.Length)
+            Stars[score].fillAmount = ((float)numConsecutivePoseMatches / (score + 1));
     }
 }
