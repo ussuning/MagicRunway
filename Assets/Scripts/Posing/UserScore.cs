@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UserScore : MonoBehaviour {
 
     public Text UserName;
-    public GameObject[] Stars;
+    public Image[] Stars;
 
     private long userID;
     public long UserID
@@ -41,7 +41,7 @@ public class UserScore : MonoBehaviour {
             numConsecutivePoseMatches++;
             if(numConsecutivePoseMatches > score)
             {
-                AddScore(1);
+                score++;
                 numConsecutivePoseMatches = 0;
             }
         }
@@ -49,6 +49,7 @@ public class UserScore : MonoBehaviour {
         {
             numConsecutivePoseMatches = 0;
         }
+        UpdateStars();
     }
 
     public void init(long userID)
@@ -63,17 +64,13 @@ public class UserScore : MonoBehaviour {
         UpdateStars();
     }
 
-    private void AddScore(int s)
-    {
-        score += s;
-        UpdateStars();
-    }
-
     void UpdateStars()
     {
         for (int i = 0; i < Stars.Length; i++)
         {
-            Stars[i].SetActive(i < score);
+            Stars[i].fillAmount = (i < score) ? 1f : 0f;
         }
+
+        Stars[score].fillAmount = ((float)numConsecutivePoseMatches / (score + 1));
     }
 }
