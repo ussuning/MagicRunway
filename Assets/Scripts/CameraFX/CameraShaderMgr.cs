@@ -49,54 +49,54 @@ public class CameraShaderController
 
 public class CameraShaderMgr : MonoBehaviour {
 
-    public CameraShaderController[] shaderControllers;
+    //public CameraShaderController[] shaderControllers;
 
-    void Start ()
-    {
-        for(int i=0; i<shaderControllers.Length; i++)
-        {
-            shaderControllers[i].ZeroIntensity();
-        }
-    }
+    //void Start ()
+    //{
+    //    for(int i=0; i<shaderControllers.Length; i++)
+    //    {
+    //        shaderControllers[i].ZeroIntensity();
+    //    }
+    //}
 
-    void Update()
-    {
-        for (int i = 0; i < shaderControllers.Length; i++)
-        {
-            shaderControllers[i].UpdateIntensity();
-        }
-    }
+    //void Update()
+    //{
+    //    for (int i = 0; i < shaderControllers.Length; i++)
+    //    {
+    //        shaderControllers[i].UpdateIntensity();
+    //    }
+    //}
 
-    void OnEnable()
-    {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.High_Combo_Detected, OnHighComboDetected);
-        EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
-    }
+    //void OnEnable()
+    //{
+    //    EventMsgDispatcher.Instance.registerEvent(EventDef.High_Combo_Detected, OnHighComboDetected);
+    //    EventMsgDispatcher.Instance.registerEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
+    //}
 
-    void OnDisable()
-    {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.High_Combo_Detected, OnHighComboDetected);
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
-    }
+    //void OnDisable()
+    //{
+    //    EventMsgDispatcher.Instance.unRegisterEvent(EventDef.High_Combo_Detected, OnHighComboDetected);
+    //    EventMsgDispatcher.Instance.unRegisterEvent(EventDef.Combo_Broken_Detected, OnComboBroken);
+    //}
 
-    public void OnHighComboDetected(object [] param)
-    {
-        int comboNum = (int)param[0];
+    //public void OnHighComboDetected(object [] param)
+    //{
+    //    int comboNum = (int)param[0];
 
-        for (int i = 0; i < shaderControllers.Length; i++)
-        {
-            float targetIntensity = FeedbackMgr.Instance.GetComboFeedback(comboNum).intensity;//(float)((comboNum - 4) / 3);
-            if (targetIntensity > 1f)
-                targetIntensity = 1f;
-            shaderControllers[i].TargetIntensity = targetIntensity;
-        }
-    }
+    //    for (int i = 0; i < shaderControllers.Length; i++)
+    //    {
+    //        float targetIntensity = FeedbackMgr.Instance.GetComboFeedback(comboNum).intensity;//(float)((comboNum - 4) / 3);
+    //        if (targetIntensity > 1f)
+    //            targetIntensity = 1f;
+    //        shaderControllers[i].TargetIntensity = targetIntensity;
+    //    }
+    //}
 
-    public void OnComboBroken(object [] param)
-    {
-        for (int i = 0; i < shaderControllers.Length; i++)
-        {
-            shaderControllers[i].TargetIntensity = 0f;
-        }
-    }
+    //public void OnComboBroken(object [] param)
+    //{
+    //    for (int i = 0; i < shaderControllers.Length; i++)
+    //    {
+    //        shaderControllers[i].TargetIntensity = 0f;
+    //    }
+    //}
 }
