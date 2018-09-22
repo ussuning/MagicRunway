@@ -35,7 +35,7 @@ public class PoseMgr : MonoBehaviour {
 
     void Start()
     {
-        HidePoseImage();
+        StopPosing();
     }
 
     void Update()
@@ -79,8 +79,17 @@ public class PoseMgr : MonoBehaviour {
         Invoke("GenerateNewPose", PoseDuration);
     }
 
-    public void HidePoseImage()
+    public void StopPosing()
     {
+        CancelInvoke("GenerateNewPose");
+
+        curPose = 0;
+        prevPose = 0;
+        isInNewPoseCD = false;
+
+        object[] param = { curPose };
+        EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
+
         isImageFadingIN = false;
         imageAlpha = 0f;
         PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
