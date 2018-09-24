@@ -41,10 +41,15 @@ public class ClosetManager : MonoBehaviour {
 
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
         if (userClosets.Count == 0)
-            ClosetLeft.SetCloset(userID, userGender, userOutfits);  
+        {
+            ClosetLeft.SetCloset(userID, userGender, userOutfits);
+            userClosets.Add(ClosetLeft);
+        }
         else if (userClosets.Count == 1)
-             ClosetRight.SetCloset(userID, userGender, userOutfits);
-        userClosets.Add(ClosetLeft);
+        {
+            ClosetRight.SetCloset(userID, userGender, userOutfits);
+            userClosets.Add(ClosetRight);
+        }
     }
 
     public void OnEnterLiveMode()

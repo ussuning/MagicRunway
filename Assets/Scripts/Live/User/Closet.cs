@@ -259,8 +259,6 @@ public class Closet : MonoBehaviour {
 
     List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)
     {
-        if (displayedOutfits.Count == 0)
-            Debug.Log(string.Format("{0} [Closet] GetDisplayedOutfits(): displayedOutfits.Count = {1},  displayedPage = {2}", gameObject.name, displayedOutfits.Count, displayedPage));
         List<Outfit> dOutfits = new List<Outfit>();
         for (int i = 0; i < ClosetManager.NUMBER_CLOSET_ITEMS; i++)
         {
