@@ -5,10 +5,11 @@ using UnityEngine;
 public class ScrollingVideoWall : MonoBehaviour {
     public Renderer mesh;
 
-    private float scrollSpeed = 0.01f;
-    private float scrollSpeed2 = 0.01f;
+    private float scrollSpeed = 0.005f;
+    private float scrollSpeed2 = 0.005f;
 
     private Material videoMaterial;
+    private bool isRunning = true;
 
     void Awake()
     {
@@ -16,12 +17,24 @@ public class ScrollingVideoWall : MonoBehaviour {
         videoMaterial = mats[1];
     }
 
+    public void Run()
+    {
+        isRunning = true;
+    }
+
+    public void Freeze()
+    {
+        isRunning = false;
+    }
+
     private void FixedUpdate()
     {
-        float offsetX = Time.time * scrollSpeed;
-        float offsetY = Time.time * scrollSpeed2;
+        if (isRunning)
+        {
+            float offsetX = Time.time * scrollSpeed;
+            float offsetY = Time.time * scrollSpeed2;
 
-        //renderer.material.mainTextureOffset = Vector2(offset2, -offset);
-        videoMaterial.mainTextureOffset = new Vector2(offsetX, -offsetY);
+            videoMaterial.mainTextureOffset = new Vector2(offsetX, -offsetY);
+        }
     }
 }

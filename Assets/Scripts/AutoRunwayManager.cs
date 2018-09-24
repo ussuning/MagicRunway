@@ -14,6 +14,9 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private VideoWall videoWall;
 
     [SerializeField]
+    private ScrollingVideoWall scrollingVideoWall;
+
+    [SerializeField]
     private AudioSource audioSource;
 
     [SerializeField]
@@ -47,6 +50,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Debug.Log("SetUp Auto Runway");
 
         Application.targetFrameRate = 120;
+        //Application.backgroundLoadingPriority = ThreadPriority.Low;
+        //Shader.WarmupAllShaders();
 
         AddRunwayEventListeners();
 
@@ -56,6 +61,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         if (KinectManager.Instance.GetAllUserIds().Count > 0)
             UIManager.Instance.ShowStartMenu(false);
+
+        scrollingVideoWall.Freeze();
 
         autoRunwayContainer.SetActive(true);
 
@@ -118,9 +125,11 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     IEnumerator PrepareModelsAndBeginShow(float waitToStart = 1.5f)
     {
         Debug.Log("PrepareModelsAndBeginShow");
+
         PrepareCollectionRunwayModelPrefabs();
         yield return new WaitForSeconds(1.0f); //wait till title show so it wont look choppy
         yield return StartCoroutine(LoadAndPrepareModels());
+        scrollingVideoWall.Run();
         videoWall.ChangeAndFadeIn(showcaseManager.currentCollection.splash);
         yield return new WaitForSeconds(waitToStart);
         UIManager.Instance.HideCollectionTitle(true);
@@ -139,9 +148,9 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         {
             ResourceRequest request = Resources.LoadAsync(resource[total]);
             yield return request;
-
+            
             GameObject prefab = (GameObject)request.asset;
-
+            
             GameObject go = GameObject.Instantiate(prefab);
             go.SetActive(true);
             go.transform.SetParent(runwayModels.transform);
@@ -161,10 +170,10 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             ModelValidator.ValidateModel(go);
 
             models.Add(go);
-
+            
             if (total == (resource.Count - 1))
                 notReady = false;
-
+                
             total++;
         }
     }
@@ -206,7 +215,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         showcaseManager.ReadyNextShow();
 
         yield return new WaitForSeconds(1.5f);
-
+        scrollingVideoWall.Freeze();
         StartCoroutine(PrepareModelsAndBeginShow());
     }
 
@@ -270,9 +279,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         int index = Random.Range(0, crowd.Count);
 
         AudioClip clip = SfxManager.LoadClip(crowd[index]);
-        audioSource.PlayOneShot(clip);
+        audioSource.PlayOneShot(clip);   
         */
-        
     }
 
     private void OnRunwayFinish(Collider other)
