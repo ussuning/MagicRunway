@@ -11,8 +11,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     public GameObject userContainer;
     public GameObject posingScoreContainer;
 
-    public ClosetManager closetMgr;
-
     private List<long> userBuffer = new List<long>();
     private Dictionary<long, User> users = new Dictionary<long, User>();
 
