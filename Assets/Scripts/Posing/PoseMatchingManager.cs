@@ -18,18 +18,20 @@ public class PoseMatchingManager : MonoBehaviour {
 
     public void OnPoseMatched(object[] param)
     {
-        long userID = (long)param[0];
+        int userIdx = (int)param[0];
         int poseID = (int)param[1];
         float pose_confidence = (float)param[2];
-        GameObject particleGO = (GameObject)Instantiate(matchedFXParticlesPrefab, GetUserScreenPos(userID), Quaternion.identity);
+        GameObject particleGO = (GameObject)Instantiate(matchedFXParticlesPrefab, GetUserScreenPos(userIdx), Quaternion.identity);
     }
 
-    Vector3 GetUserScreenPos(long userID)
+    Vector3 GetUserScreenPos(int userIdx)
     {
         KinectManager manager = KinectManager.Instance;
 
         if (manager && manager.IsInitialized())
         {
+            long userID = manager.GetUserIdByIndex(userIdx);
+
             Camera foregroundCamera = Camera.main;
             Rect backgroundRect = foregroundCamera.pixelRect;
             PortraitBackground portraitBack = PortraitBackground.Instance;

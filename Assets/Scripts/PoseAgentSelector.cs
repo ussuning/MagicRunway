@@ -3,24 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PoseAgentSelector : MonoBehaviour
-{
-    long userID;
+{ 
+    int userIdx;
+    long userID
+    {
+        get
+        {
+            return KinectManager.Instance.GetUserIdByIndex(userIdx);
+        }
+    }
 
     TargetPoseRecognizingAgent[] poseAgents;
 
-    public void Init(long userID)
+    public void Init(int userIndex)
     {
-        this.userID = userID;
-        generatePoseAgents(userID);
+        this.userIdx = userIndex;
+        generatePoseAgents(userIdx);
     }
 
-    void generatePoseAgents(long userID)
+    void generatePoseAgents(int userIndex)
     {
         poseAgents = new TargetPoseRecognizingAgent[BrainDataManager.Instance.NumPoses];
         for (int i = 0; i < BrainDataManager.Instance.NumPoses; i++)
         {
             TargetPoseRecognizingAgent tprAgent = gameObject.AddComponent<TargetPoseRecognizingAgent>();
-            tprAgent.Init(userID, i);
+            tprAgent.Init(userIndex, i);
             tprAgent.GiveBrain(BrainDataManager.Instance.GetBrain(i));
             tprAgent.enabled = false;
             poseAgents[i] = tprAgent;
