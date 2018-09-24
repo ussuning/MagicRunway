@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UserScore : MonoBehaviour {
 
+    public GameObject StarPartcilesPrefab;
+
     public Text UserName;
     public Image[] Stars;
 
@@ -43,12 +45,15 @@ public class UserScore : MonoBehaviour {
             {
                 score++;
                 numConsecutivePoseMatches = 0;
+
+                GameObject starParticlesGO = Instantiate(StarPartcilesPrefab, Stars[score - 1].rectTransform.position, Quaternion.identity, Stars[score - 1].rectTransform);
             }
         }
         else
         {
             numConsecutivePoseMatches = 0;
         }
+
         UpdateStars();
     }
 
