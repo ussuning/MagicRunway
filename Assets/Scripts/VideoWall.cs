@@ -82,7 +82,7 @@ public class VideoWall : MonoBehaviour {
     void Update () {
         if (videoFadeState == 1)
         {
-            videoMaterial.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.white * 2f, videoColor));
+            videoMaterial.SetColor("_EmissionColor", Color.Lerp(Color.black, Color.white * 1.5f, videoColor));
             videoMaterial.color = Color.Lerp(Color.black, Color.white, videoColor);
             if (videoColor < 1)
             {
@@ -90,7 +90,7 @@ public class VideoWall : MonoBehaviour {
             }
             else
             {
-                videoMaterial.SetColor("_EmissionColor", Color.white * 2f);
+                videoMaterial.SetColor("_EmissionColor", Color.white * 1.5f);
                 videoMaterial.color = Color.white;
 
                 videoFadeState = 0;

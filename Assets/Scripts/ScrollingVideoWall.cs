@@ -5,8 +5,8 @@ using UnityEngine;
 public class ScrollingVideoWall : MonoBehaviour {
     public Renderer mesh;
 
-    private float scrollSpeed = 0.01f;
-    private float scrollSpeed2 = 0.01f;
+    private float scrollSpeed = 0.005f;
+    private float scrollSpeed2 = 0.005f;
 
     private Material videoMaterial;
 
