@@ -35,6 +35,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         runwayModels = new GameObject("RunwayModels");
         runwayModels.transform.parent = autoRunwayContainer.transform;
+        Application.backgroundLoadingPriority = ThreadPriority.Low;
     }
 
     public Mode GetMode()
@@ -124,7 +125,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         videoWall.ChangeAndFadeIn(showcaseManager.currentCollection.splash);
         yield return new WaitForSeconds(waitToStart);
         UIManager.Instance.HideCollectionTitle(true);
-        PresentRunwayModel();
+        yield return PresentRunwayModel();
     }
 
     IEnumerator LoadAndPrepareModels()
@@ -148,15 +149,15 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             go.transform.localScale = Vector3.one;
             go.transform.localEulerAngles = Vector3.zero;
             go.transform.localPosition = Vector3.zero;
-            
+
+            go.transform.localPosition = startingPoint;
+
             Animator animator = go.GetComponent<Animator>();
             animator.runtimeAnimatorController = null;
             animator.enabled = false;
 
-            EnableObiCloth(go, false);
-            EnableRenderers(go, false);
-           
-            go.transform.localPosition = startingPoint;
+            yield return EnableObiCloth(go, false);
+            yield return EnableRenderers(go, false);
 
             ModelValidator.ValidateModel(go);
 
@@ -169,14 +170,18 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         }
     }
 
-    private void EnableRenderers(GameObject character, bool enable)
+    IEnumerator EnableRenderers(GameObject character, bool enable)
     {
         Renderer[] renderers = character.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
+        {
             renderer.enabled = enable;
+            if (enable)
+                yield return new WaitForSeconds(0.01f);
+        }
     }
 
-    private void EnableObiCloth(GameObject character, bool enable)
+    IEnumerator EnableObiCloth(GameObject character, bool enable)
     {
         ObiSolver[] oss = character.GetComponentsInChildren<ObiSolver>();
 
@@ -194,6 +199,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             oc.enabled = enable;
             if(enable == true)
                 oc.ResetActor();
+            if (enable)
+                yield return new WaitForSeconds(0.01f);
         }
     }
 
@@ -226,11 +233,11 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             UIManager.Instance.ShowUpNext(showcaseManager.nextCollection);
         } else
         {
-            PresentRunwayModel();
+            StartCoroutine(PresentRunwayModel());
         }
     }
 
-    private void PresentRunwayModel()
+    IEnumerator PresentRunwayModel()
     {
         Outfit outfit = showcaseManager.GetCurrentOutfit();
 
@@ -238,7 +245,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         {
             Debug.LogError("Something went wrong. Restarting AutoRunway");
             AppManager.Instance.TransitionToAuto();
-            return;
+            yield break;
         }
 
         GameObject model = models[showcaseManager.curOutfit];
@@ -246,12 +253,12 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Animator animator = model.GetComponent<Animator>();
         
         string animation = ModelAnimationManager.GetPoseAnimation(outfit.sex);
-        EnableRenderers(model, true);
+        yield return EnableRenderers(model, true);
         RuntimeAnimatorController ani = (RuntimeAnimatorController)Resources.Load(animation, typeof(RuntimeAnimatorController));
         animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(ani, model.transform);
         animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         animator.enabled = true;
-        EnableObiCloth(model, true);
+        yield return EnableObiCloth(model, true);
         model.SetActive(true);
 
         CutoutTextureSwapper cutout = model.GetComponentInChildren<CutoutTextureSwapper>();
