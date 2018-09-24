@@ -7,8 +7,14 @@ public class TargetPoseRecognizingAgent : Agent {
     private KinectManager kinectMgr;
     private BrainDataManager brainMgr;
 
-    private User user;
-    private long KinectUserId;
+    private int userIdx;
+    private long userId
+    {
+        get
+        {
+            return kinectMgr.GetUserIdByIndex(userIdx);
+        }
+    }
 
     private int poseID;
 
@@ -19,12 +25,12 @@ public class TargetPoseRecognizingAgent : Agent {
 
     PoseParameter pose;
 
-    public void Init(long userID, int PoseID)
+    public void Init(int userIndex, int PoseID)
     {
         this.kinectMgr = KinectManager.Instance;
         this.brainMgr = BrainDataManager.Instance;
 
-        this.KinectUserId = userID;
+        this.userIdx = userIndex;
         this.poseID = PoseID;
 
         pose = brainMgr.GetPoseInfo(poseID);
@@ -45,7 +51,7 @@ public class TargetPoseRecognizingAgent : Agent {
             isPoseMatched = poseConfidence >= pose.min_confidence;
             if (isPoseMatched)
             {
-                object[] param = { KinectUserId, poseID, poseConfidence };
+                object[] param = { userIdx, poseID, poseConfidence };
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Matched, param);
 
                 PoseMgr.Instance.GenerateNewPose();
@@ -62,14 +68,14 @@ public class TargetPoseRecognizingAgent : Agent {
 
     public override void CollectObservations()
     {
-        if (kinectMgr.IsUserInKinectView(KinectUserId))
+        if (kinectMgr.IsUserInKinectView(userId))
         {
             for (int i = 0; i < pose.num_joint_detections; i++)
             {
                 int JointIdx = pose.joint_ids[i];
-                if (kinectMgr.IsJointTracked(KinectUserId, JointIdx))
+                if (kinectMgr.IsJointTracked(userId, JointIdx))
                 {
-                    Quaternion JointOrientation = kinectMgr.GetJointOrientation(KinectUserId, JointIdx);
+                    Quaternion JointOrientation = kinectMgr.GetJointOrientation(userId, JointIdx);
                     AddVectorObs(JointOrientation);
                 }
             }

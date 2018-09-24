@@ -13,14 +13,22 @@ public class User : MonoBehaviour {
 
     public SpriteFader GenderSelectionUI;
 
-    private long uid;
+    private int uidx;
+    public int UserIndex
+    {
+        get
+        {
+            return uidx;
+        }
+    }
+
     public long UserID
     {
         get
         {
-            return uid;
+            return manager.GetUserIdByIndex(uidx);
         }
-    }
+    }  
 
     private Gender ugender;
     public Gender UserGender
@@ -32,7 +40,7 @@ public class User : MonoBehaviour {
             {
                 GenderSelectionUI.StartFadingOut();
 
-                object[] param = { uid, ugender };
+                object[] param = { uidx, ugender };
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Gender_Selected, param);
             }
         }
@@ -67,13 +75,13 @@ public class User : MonoBehaviour {
         }
     }
 
-    public void initialize(long id, UserScore userScore)
+    public void initialize(int idx, UserScore userScore)
     {
-        uid = id;
+        uidx = idx;
         uScore = userScore;
 
-        poseAgentSelector.Init(uid);
-        uScore.init(uid);
+        poseAgentSelector.Init(idx);
+        uScore.init(idx);
     }
 
     void Update()
@@ -109,9 +117,9 @@ public class User : MonoBehaviour {
             }
 
             int iJointIndex = (int)KinectInterop.JointType.Head;
-            if (manager.IsJointTracked(uid, iJointIndex))
+            if (manager.IsJointTracked(UserID, iJointIndex))
             {
-                return manager.GetJointPosColorOverlay(uid, iJointIndex, uiCamera, backgroundRect);
+                return manager.GetJointPosColorOverlay(UserID, iJointIndex, uiCamera, backgroundRect);
             }
         }
 

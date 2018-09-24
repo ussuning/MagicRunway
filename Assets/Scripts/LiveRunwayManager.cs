@@ -11,8 +11,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     public GameObject userContainer;
     public GameObject posingScoreContainer;
 
-    private List<long> userBuffer = new List<long>();
-    private Dictionary<long, User> users = new Dictionary<long, User>();
+    private List<int> userBuffer = new List<int>();
+    private Dictionary<int, User> users = new Dictionary<int, User>();
 
     private bool isModeActive = false;
 
@@ -66,25 +66,20 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         if(isModeActive)
         {
-            if (users.ContainsKey(userId))
-            {
-                Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} is already added in the Dictionary users", userId));
+            if (users.ContainsKey(userIndex))
                 return;
-            }
-            User user = CreateUser(userId);
+
+            User user = CreateUser(userIndex);
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} created", userId));
         }
         else
         {
-            if(userBuffer.Contains(userId))
-            {
-                Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} is already added in the userBuffer", userId));
+            if(userBuffer.Contains(userIndex))
                 return;
-            }
 
-            userBuffer.Add(userId);
+            userBuffer.Add(userIndex);
         }    
     }
 
@@ -92,32 +87,26 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         if(isModeActive)
         {
-            if (!users.ContainsKey(userId))
-            {
-                Debug.Log(string.Format("[LiveRunwayManager] UserLost: User {0} is not found in the Dictionary users", userId));
+            if (!users.ContainsKey(userIndex))
                 return;
-            }
 
-            DeleteUser(userId);
+            DeleteUser(userIndex);
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             Debug.Log(string.Format("[LiveRunwayManager] UserLost: User {0} is removed from the Dictionary users", userId));
 
-            ClosetManager.Instance.OnUserLost(userId);
-            OutfitGameObjectsManager.Instance.OnUserLost(userId);
+            ClosetManager.Instance.OnUserLost(userIndex);
+            OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
 
             if (users.Count <= 0)
                 AppManager.Instance.TransitionToAuto();
         }
         else
         {
-            if (!userBuffer.Contains(userId))
-            {
-                Debug.Log(string.Format("[LiveRunwayManager] UserLost: User {0} is not found in the userBuffer", userId));
+            if (!userBuffer.Contains(userIndex))
                 return;
-            }
 
-            userBuffer.Remove(userId);
+            userBuffer.Remove(userIndex);
         }
     }
 
@@ -130,9 +119,9 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (!isModeActive)
             return false;
 
-        if (users.ContainsKey(userId))
+        if (users.ContainsKey(userIndex))
         {
-            User user = users[userId];
+            User user = users[userIndex];
             if (user.UserGender == User.Gender.None)
             {
                 switch (gesture)
@@ -164,9 +153,10 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     void CreateUsersFromBuffer()
     {
-        foreach(long userId in userBuffer)
+        foreach(int userIdx in userBuffer)
         {
-            CreateUser(userId);
+            long userId = userBuffer[userIdx];
+            CreateUser(userIdx);
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             Debug.Log(string.Format("[LiveRunwayManager] CreateUsersFromBuffer: User {0} created", userId));
@@ -174,10 +164,10 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         userBuffer.Clear();
     }
 
-    User CreateUser(long userId)
+    User CreateUser(int userIdx)
     {
         GameObject userGO = Instantiate(UserPrefab, userContainer.transform);
-        userGO.name = string.Format("User_{0}", userId);
+        userGO.name = string.Format("User_{0}", KinectManager.Instance.GetUserIdByIndex(userIdx));
 
         User user = userGO.GetComponent<User>();
         if (user == null)
@@ -186,17 +176,17 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         GameObject posingScoreGO = Instantiate(PosingScorePrefab, posingScoreContainer.transform);
         UserScore userScore = posingScoreGO.GetComponent<UserScore>();
 
-        user.initialize(userId, userScore);
+        user.initialize(userIdx, userScore);
 
-        users.Add(userId, user);
+        users.Add(userIdx, user);
 
         return user;
     }
 
-    void DeleteUser(long userId)
+    void DeleteUser(int userIdx)
     {
-        User user = users[userId];
-        users.Remove(userId);
+        User user = users[userIdx];
+        users.Remove(userIdx);
         Destroy(user.gameObject);
     }
 }

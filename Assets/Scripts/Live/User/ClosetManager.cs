@@ -36,18 +36,18 @@ public class ClosetManager : MonoBehaviour {
 
     public void OnUserGenderSelected(object[] param)
     {
-        long userID = (long)param[0];
+        int userIdx = (int)param[0];
         User.Gender userGender = (User.Gender)param[1];
 
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
         if (userClosets.Count == 0)
         {
-            ClosetLeft.SetCloset(userID, userGender, userOutfits);
+            ClosetLeft.SetCloset(userIdx, userGender, userOutfits);
             userClosets.Add(ClosetLeft);
         }
         else if (userClosets.Count == 1)
         {
-            ClosetRight.SetCloset(userID, userGender, userOutfits);
+            ClosetRight.SetCloset(userIdx, userGender, userOutfits);
             userClosets.Add(ClosetRight);
         }
     }
@@ -64,11 +64,11 @@ public class ClosetManager : MonoBehaviour {
         ClosetRight.Clear();
     }
 
-    public void OnUserLost(long userID)
+    public void OnUserLost(int userIdx)
     {
         foreach(Closet c in userClosets)
         {
-            if(c.OwnerID == userID)
+            if(c.OwnerIndex == userIdx)
             {
                 userClosets.Remove(c);
                 c.Clear();
@@ -97,14 +97,14 @@ public class ClosetManager : MonoBehaviour {
                     Vector3 userRPos = kinect.GetUserPosition(userRID);
                     if(userRPos.x < userLPos.x)
                     {
-                        long closetLOwnerID = ClosetLeft.OwnerID;
+                        int closetLOwnerIndex = ClosetLeft.OwnerIndex;
                         User.Gender closetLGender = ClosetLeft.OwnerGender;
                         List<Outfit> closetLOutfits = ClosetLeft.Outfits;
                         int closetLOutfitPageIndex = ClosetLeft.OutfitPageIndex;
                         ClosetLeft.ResetCloset();
-                        ClosetLeft.SetCloset(ClosetRight.OwnerID, ClosetRight.OwnerGender, ClosetRight.Outfits, ClosetRight.OutfitPageIndex);
+                        ClosetLeft.SetCloset(ClosetRight.OwnerIndex, ClosetRight.OwnerGender, ClosetRight.Outfits, ClosetRight.OutfitPageIndex);
                         ClosetRight.ResetCloset();
-                        ClosetRight.SetCloset(closetLOwnerID, closetLGender, closetLOutfits, closetLOutfitPageIndex);
+                        ClosetRight.SetCloset(closetLOwnerIndex, closetLGender, closetLOutfits, closetLOutfitPageIndex);
                     }
                 }
             }

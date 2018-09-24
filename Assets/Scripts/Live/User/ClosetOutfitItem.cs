@@ -28,7 +28,7 @@ public class ClosetOutfitItem : ClosetItem {
     {
         base.OnItemSelected();
 
-        OutfitGameObjectsManager.Instance.GenerateOutfit(outfit, closet.OwnerID);
+        OutfitGameObjectsManager.Instance.GenerateOutfit(outfit, closet.OwnerIndex);
     }
 
     private Sprite GetOutfitThumb(string icon)

@@ -7,7 +7,7 @@ public class OutfitGameObjectsManager : MonoBehaviour {
     public static OutfitGameObjectsManager Instance;
 
     private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
-    private Dictionary<long, Dictionary<string, GameObject>> outfitGOs = new Dictionary<long, Dictionary<string, GameObject>>();
+    private Dictionary<int, Dictionary<string, GameObject>> outfitGOs = new Dictionary<int, Dictionary<string, GameObject>>();
 
     void Awake()
     {
@@ -26,11 +26,11 @@ public class OutfitGameObjectsManager : MonoBehaviour {
         outfitGOs.Clear();
     }
 
-    public void GenerateOutfit(Outfit outfit, long ownerID)
+    public void GenerateOutfit(Outfit outfit, int ownerIdx)
     {
-        if(outfitGOs.ContainsKey(ownerID))
+        if(outfitGOs.ContainsKey(ownerIdx))
         {
-            Dictionary<string, GameObject> userOutfits = outfitGOs[ownerID];
+            Dictionary<string, GameObject> userOutfits = outfitGOs[ownerIdx];
             foreach(GameObject o in userOutfits.Values)
             {
                 o.SetActive(false);
@@ -43,7 +43,7 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             }
             else
             {
-                GameObject selectedOutfit = GetOutfit(outfit, ownerID);
+                GameObject selectedOutfit = GetOutfit(outfit, ownerIdx);
                 userOutfits.Add(outfit.prefab, selectedOutfit);
             }
         }
@@ -51,32 +51,32 @@ public class OutfitGameObjectsManager : MonoBehaviour {
         {
             Dictionary<string, GameObject> userOutfits = new Dictionary<string, GameObject>();
 
-            GameObject selectedOutfit = GetOutfit(outfit, ownerID);
+            GameObject selectedOutfit = GetOutfit(outfit, ownerIdx);
             userOutfits.Add(outfit.prefab, selectedOutfit);
 
-            outfitGOs.Add(ownerID, userOutfits);
+            outfitGOs.Add(ownerIdx, userOutfits);
         }
     }
 
-    public void OnUserLost(long userID)
+    public void OnUserLost(int userIdx)
     {
-        if (outfitGOs.ContainsKey(userID))
+        if (outfitGOs.ContainsKey(userIdx))
         {
-            Dictionary<string, GameObject> userOutfits = outfitGOs[userID];
+            Dictionary<string, GameObject> userOutfits = outfitGOs[userIdx];
             foreach (GameObject outfit in userOutfits.Values)
             {
                 Destroy(outfit);
             }
-            outfitGOs.Remove(userID);
+            outfitGOs.Remove(userIdx);
         }
     }
 
-    private GameObject GetOutfit(Outfit outfit, long ownerID)
+    private GameObject GetOutfit(Outfit outfit, int ownerIdx)
     {
         GameObject outfitPrefab = GetOutfitPrefab(outfit);
         GameObject outfitGO = Instantiate(outfitPrefab, this.transform);
         AvatarControllerBootstrap bootstrap = outfitGO.AddComponent<AvatarControllerBootstrap>();
-        bootstrap.Init(KinectManager.Instance.GetUserIndexById(ownerID));
+        bootstrap.Init(ownerIdx);
 
         return outfitGO;
     }

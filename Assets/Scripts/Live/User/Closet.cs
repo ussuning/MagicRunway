@@ -13,12 +13,20 @@ public class Closet : MonoBehaviour {
 
     public Side ClosetSide;
 
-    private long ownerId;
+    //private long ownerId;
+    private int ownerIdx;
+    public int OwnerIndex
+    {
+        get
+        {
+            return ownerIdx;
+        }
+    }
     public long OwnerID
     {
         get
         {
-            return ownerId;
+            return kinect.GetUserIdByIndex(ownerIdx);
         }
     }
 
@@ -101,9 +109,9 @@ public class Closet : MonoBehaviour {
         {
             if (kinect && kinect.IsInitialized())
             {
-                if (kinect.IsUserTracked(ownerId))
+                if (kinect.IsUserTracked(OwnerID))
                 {
-                    ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, ownerId), 0.25f);
+                    ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, OwnerID), 0.25f);
                     if (ownerPointDir >= -0.75f && ownerPointDir < -0.5f)
                     {
                         OnBottomArrowHover();
@@ -137,9 +145,10 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    public void SetCloset(long userID, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
+    public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
     {
-        this.ownerId = userID;
+        //this.ownerId = userID;
+        this.ownerIdx = userIdx;
         this.ownerGender = userGender;
         this.outfits = outfits;
         this.outfitPageIdx = pageIdx;
@@ -154,7 +163,7 @@ public class Closet : MonoBehaviour {
     public void ResetCloset()
     {
         ClearClosetImage();
-        ownerId = 0L;
+        ownerIdx = -1;
         ownerGender = User.Gender.None;
         outfits = null;
         outfitPageIdx = 0;
@@ -163,7 +172,7 @@ public class Closet : MonoBehaviour {
     public void Clear()
     {
         ClearClosetImage();
-        ownerId = 0L;
+        ownerIdx = -1;
         ownerGender = User.Gender.None;
         if(outfits != null)
             outfits.Clear();

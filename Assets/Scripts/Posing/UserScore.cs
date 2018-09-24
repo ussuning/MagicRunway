@@ -10,12 +10,19 @@ public class UserScore : MonoBehaviour {
     public Text UserName;
     public Image[] Stars;
 
-    private long userID;
+    private int userIdx;
+    public int UserIndex
+    {
+        get
+        {
+            return userIdx;
+        }
+    }
     public long UserID
     {
         get
         {
-            return userID;
+            return KinectManager.Instance.GetUserIdByIndex(userIdx);
         }
     }
 
@@ -34,11 +41,11 @@ public class UserScore : MonoBehaviour {
 
     public void OnPoseMatched(object[] param)
     {
-        long matched_userID = (long)param[0];
+        int matched_userIdx = (int)param[0];
         int poseID = (int)param[1];
         float pose_confidence = (float)param[2];
 
-        if (matched_userID == userID)
+        if (matched_userIdx == userIdx)
         {
             numConsecutivePoseMatches++;
             if(numConsecutivePoseMatches > score)
@@ -57,14 +64,14 @@ public class UserScore : MonoBehaviour {
         UpdateStars();
     }
 
-    public void init(long userID)
+    public void init(int userIdx)
     {
-        this.userID = userID;
+        this.userIdx = userIdx;
         this.score = 0;
         this.numConsecutivePoseMatches = 0;
 
         if (UserName)
-            UserName.text = string.Format("P{0}", KinectManager.Instance.GetUserIndexById(userID)+1);
+            UserName.text = string.Format("P{0}", userIdx + 1);
 
         UpdateStars();
     }
