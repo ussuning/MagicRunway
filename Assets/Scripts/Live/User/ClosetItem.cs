@@ -45,7 +45,7 @@ public class ClosetItem : MonoBehaviour {
             if (closet.ClosetSide == Closet.Side.Left)
                 SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
             else if (closet.ClosetSide == Closet.Side.Right)
-                SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
+                SelectedFillImage.rectTransform.localPosition += -Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
 
             if (hoverDuration >= HoverToSelectTime)
             {
