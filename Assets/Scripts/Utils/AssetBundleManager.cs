@@ -4,10 +4,29 @@ using UnityEngine;
 
 public class AssetBundleManager : Singleton<AssetBundleManager> {
 
+    protected Dictionary<AssetBundles, string> assetBundleNameLookup = new Dictionary<AssetBundles, string>()
+    {
+        {AssetBundles.models, "models.assetbundle" },
+        {AssetBundles.clothingIcons, "clothing_icons.assetbundle" },
+        {AssetBundles.videowall, "videowall.assetbundle" },
+        {AssetBundles.cutouttextureswapper, "cutouttextureswapper.assetbundle" }
+    };
+
     public Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
 
-    public AssetBundle GetAssetBundle(string name)
+    public AssetBundle GetAssetBundle(AssetBundles bundle)
     {
+        string name = assetBundleNameLookup[bundle];
+        if (name == null)
+        {
+            Debug.LogError("No string name for AssetBundle enum " + bundle.ToString());
+            return null;
+        }
+
+        return GetAssetBundleByName(name);
+    }
+
+    public AssetBundle GetAssetBundleByName(string name) { 
         if (loadedBundles.ContainsKey(name) == false ||
             loadedBundles[name] == null)
         {
@@ -33,4 +52,13 @@ public class AssetBundleManager : Singleton<AssetBundleManager> {
 
         loadedBundles.Clear();
     }
+}
+
+
+public enum AssetBundles
+{
+    models,
+    clothingIcons,
+    videowall,
+    cutouttextureswapper
 }

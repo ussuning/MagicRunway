@@ -144,7 +144,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         bool notReady = true;
 
         models = new List<GameObject>();
-        AssetBundle modelsAB = AssetBundleManager.Instance.GetAssetBundle("models.assetbundle");
+        AssetBundle modelsAB = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
         if (modelsAB == null)
         {
             Debug.LogError("Failed to load modles.assetbundle!");

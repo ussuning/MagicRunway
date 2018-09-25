@@ -40,7 +40,7 @@ public class ClosetOutfitItem : ClosetItem {
         string iconPath = "Thumbs/" + icon;
         //return Resources.Load<Sprite>(iconPath);
 
-        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle("clothing_icons.assetbundle");
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.clothingIcons);
         if (ab == null)
         {
             Debug.LogError("Failed to load clothing_icon.assetbundle!");

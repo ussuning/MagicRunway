@@ -42,7 +42,7 @@ public class VideoWall : MonoBehaviour {
             Resources.UnloadAsset(videoSplash);
 
         //videoSplash = Resources.Load<Texture2D>(resourceImg);
-        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle("videowall.assetbundle");
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.videowall);
         videoSplash = ab.LoadAsset<Texture2D>(resourceImg);
         videoMaterial.SetTexture("_MainTex", videoSplash);
         videoMaterial.SetTexture("_EmissionMap", videoSplash);

@@ -110,7 +110,7 @@ public class EquipableWearablesManager : MonoBehaviour
 
         // Load wearable's prefab
         string path = GetPathForOutfitPrefab(wearable.prefab, wearable.sex);
-        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle("models.assetbundle");
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
         if (ab == null)
         {
             Debug.LogError("Failed to load models.assetbundle!");

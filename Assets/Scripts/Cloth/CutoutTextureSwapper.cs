@@ -32,7 +32,7 @@ public class CutoutTextureSwapper : MonoBehaviour
             alphaMaskMat = new Material(Shader.Find("Unlit/AlphaMask"));
         }
 
-        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle("cutouttextureswapper.assetbundle");
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.cutouttextureswapper);
         if (ab == null)
         {
             Debug.LogError("Unable to load cutouttextureswapper.assetbundle!");
