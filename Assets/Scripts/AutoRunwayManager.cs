@@ -117,7 +117,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         foreach (Outfit outfit in outfits)
         {
             string sex = (outfit.sex == "f") ? "Female" : "Male";
-            string path = "RunwayModels/"+sex+"/"+outfit.prefab;
+            string path = /*"RunwayModels/"+sex+"/"+*/ outfit.prefab;
 
             resource.Add(path);
         }
@@ -144,14 +144,21 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         bool notReady = true;
 
         models = new List<GameObject>();
+        AssetBundle modelsAB = AssetBundleManager.Instance.GetAssetBundle("models.assetbundle");
+        if (modelsAB == null)
+        {
+            Debug.LogError("Failed to load modles.assetbundle!");
+            yield break;
+        }
 
         while (notReady)
         {
-            ResourceRequest request = Resources.LoadAsync(resource[total]);
-            yield return request;
-            
-            GameObject prefab = (GameObject)request.asset;
-            
+            //ResourceRequest request = Resources.LoadAsync(resource[total]);
+            //yield return request;
+
+            //GameObject prefab = (GameObject)request.asset;
+            GameObject prefab = modelsAB.LoadAsset<GameObject>(resource[total]);
+
             GameObject go = GameObject.Instantiate(prefab);
             go.SetActive(true);
             go.transform.SetParent(runwayModels.transform);
