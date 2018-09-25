@@ -47,4 +47,16 @@ public class SpriteFader : MonoBehaviour {
     {
         m_isFading = true;
     }
+
+    public void Hide()
+    {
+        if(gameObject.activeInHierarchy)
+            gameObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        if(!gameObject.activeInHierarchy)
+            gameObject.SetActive(true);
+    }
 }

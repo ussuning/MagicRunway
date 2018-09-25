@@ -91,6 +91,10 @@ public class User : MonoBehaviour {
             if (GenderSelectionUI)
             {
                 GenderSelectionUI.transform.position = GetUserScreenPos() + new Vector3(0f, 160f, 0f);
+                if (manager.IsUserTracked(UserID))
+                    GenderSelectionUI.Show();
+                else
+                    GenderSelectionUI.Hide();
             }
         }
     }

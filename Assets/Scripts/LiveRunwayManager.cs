@@ -11,12 +11,13 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     public GameObject userContainer;
     public GameObject posingScoreContainer;
 
+    public float UserReconnectionTime = 3f;
+
     private List<int> userBuffer = new List<int>();
+    private List<int> disconnectedUserBuffer = new List<int>();
     private Dictionary<int, User> users = new Dictionary<int, User>();
 
     private bool isModeActive = false;
-
-    private float gestureGenderShowLength = 3.0f;
 
     void Awake()
     {
@@ -35,7 +36,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void SetUp(int level = 0)
     {
-        Debug.Log(string.Format("[LiveRunwayManager] SetUp:"));
+        Debug.Log(string.Format("[LiveRunwayManager] SetUp: level = {0}", level));
 
         liveRunwayContainer.SetActive(true);
 
@@ -66,13 +67,20 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         if(isModeActive)
         {
+            if (disconnectedUserBuffer.Contains(userIndex)) //Reconnection
+            {
+                Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} RECONNECTED, userID: {1}", userIndex, userId));
+                disconnectedUserBuffer.Remove(userIndex);
+            }
+
+            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+
             if (users.ContainsKey(userIndex))
                 return;
 
             User user = CreateUser(userIndex);
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
-            Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} created", userId));
+            Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0}: {1} created", userIndex, userId));
         }
         else
         {
@@ -87,19 +95,13 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         if(isModeActive)
         {
-            if (!users.ContainsKey(userIndex))
-                return;
+            if (!disconnectedUserBuffer.Contains(userIndex))
+                disconnectedUserBuffer.Add(userIndex);
 
-            DeleteUser(userIndex);
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
-            Debug.Log(string.Format("[LiveRunwayManager] UserLost: User {0} is removed from the Dictionary users", userId));
 
-            ClosetManager.Instance.OnUserLost(userIndex);
-            OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
-
-            if (users.Count <= 0)
-                AppManager.Instance.TransitionToAuto();
+            StartCoroutine(DisconnectingUser(userIndex, userId));
         }
         else
         {
@@ -188,5 +190,29 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         User user = users[userIdx];
         users.Remove(userIdx);
         Destroy(user.gameObject);
+    }
+
+    IEnumerator DisconnectingUser(int userIndex, long userId)
+    {
+        Debug.Log(string.Format("[LiveRunwayManager] DisconnectingUser: waiting for user {0} to reconnect", userIndex));
+
+        yield return new WaitForSeconds(UserReconnectionTime);
+
+        if(disconnectedUserBuffer.Contains(userIndex))
+        {
+            if (users.ContainsKey(userIndex))
+            {
+                DeleteUser(userIndex);
+                Debug.Log(string.Format("[LiveRunwayManager] DisconnectingUser: User {0}: {1} is Disconnected, removed from the Dictionary users", userIndex, userId));
+
+                ClosetManager.Instance.OnUserLost(userIndex);
+                OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
+
+                if (users.Count <= 0)
+                    AppManager.Instance.TransitionToAuto();
+            }
+
+            disconnectedUserBuffer.Remove(userIndex);
+        }
     }
 }
