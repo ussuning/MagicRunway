@@ -110,7 +110,13 @@ public class EquipableWearablesManager : MonoBehaviour
 
         // Load wearable's prefab
         string path = GetPathForOutfitPrefab(wearable.prefab, wearable.sex);
-        GameObject asset = Resources.Load<GameObject>(path);
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle("models.assetbundle");
+        if (ab == null)
+        {
+            Debug.LogError("Failed to load models.assetbundle!");
+            return;
+        }
+        GameObject asset = ab.LoadAsset<GameObject>(path); // Resources.Load<GameObject>(path);
         GameObject go;
         if (asset != null)
             go = Instantiate(asset);
@@ -248,7 +254,7 @@ public class EquipableWearablesManager : MonoBehaviour
     public static string GetPathForOutfitPrefab(string prefabName, string gender)
     {
         string sex = (gender == "f") ? "Female" : "Male";
-        string path = "RunwayModels/" + sex + "/" + prefabName;
+        string path = /*"RunwayModels/" + sex + "/" + */ prefabName;
 
         return path;
     }
