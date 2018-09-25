@@ -200,6 +200,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         if(disconnectedUserBuffer.Contains(userIndex))
         {
+            disconnectedUserBuffer.Remove(userIndex);
+
             if (users.ContainsKey(userIndex))
             {
                 DeleteUser(userIndex);
@@ -211,8 +213,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                 if (users.Count <= 0)
                     AppManager.Instance.TransitionToAuto();
             }
-
-            disconnectedUserBuffer.Remove(userIndex);
         }
     }
 }
