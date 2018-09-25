@@ -65,7 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4214282173954074}
   - component: {fileID: 137534339043634594}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: pants
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,6 +441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4553052110955026}
+  - component: {fileID: 136653439688696212}
   m_Layer: 0
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -669,7 +670,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4035527123522228}
   - component: {fileID: 137410785789906770}
-  - component: {fileID: 114168489449287414}
+  - component: {fileID: 114326808704369074}
   m_Layer: 0
   m_Name: body
   m_TagString: Untagged
@@ -2120,7 +2121,7 @@ Animator:
   m_GameObject: {fileID: 1447188899826672}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d92a8f5e19db94b9b86a0701fac38655, type: 3}
-  m_Controller: {fileID: 9100000, guid: 019e4b5a032074f2bb4e52284810ccb0, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2129,7 +2130,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114168489449287414
+--- !u!114 &114326808704369074
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2140,7 +2141,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b4f02e8bf6f4bb88c720bcc618e4d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alphaMap: {fileID: 2800000, guid: c1ec5ae6173314b5db77e654351fe26d, type: 3}
+  alphaMap: {fileID: 2800000, guid: 502aaa180f20b4da3bc1daae70f5396f, type: 3}
+  alphaMap2: {fileID: 0}
+  alphaMap3: {fileID: 0}
+  alphaMap4: {fileID: 0}
+  alphaMap5: {fileID: 0}
+  isGeneratingCutoutMaterial: 0
+--- !u!136 &136653439688696212
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1291449273408464}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.26
+  m_Height: 1.94
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.12, z: 0}
 --- !u!137 &137070305052275136
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
