@@ -141,6 +141,10 @@ public class Closet : MonoBehaviour {
                         OnUnselectAll();
                     }
                 }
+                else
+                {
+                    OnUnselectAll();
+                }
             }
         }
     }
