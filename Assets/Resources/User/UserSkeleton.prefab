@@ -68,7 +68,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4143989529666254}
-  - component: {fileID: 114922817821642828}
+  - component: {fileID: 114531220485607830}
   m_Layer: 0
   m_Name: GenderSelectionUI
   m_TagString: Untagged
@@ -142,7 +142,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80e5f574f6806ff4cbe970b72221b35c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GenderSelectionUI: {fileID: 114922817821642828}
+  GenderSelectionUI: {fileID: 114531220485607830}
+--- !u!114 &114531220485607830
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1995538898107692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc0a3bc4483e6a4ab9c63ca12875d10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maleSprite: {fileID: 212486829275348674}
+  femaleSprite: {fileID: 212231932687494286}
+  fadingDuration: 1
 --- !u!114 &114657682611211388
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -154,21 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c5ca8032356305488fd781260941de4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114922817821642828
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1995538898107692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab94cffd2d7aa804ca3898a1205674df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadingDuration: 1
-  renderers:
-  - {fileID: 212231932687494286}
-  - {fileID: 212486829275348674}
 --- !u!212 &212231932687494286
 SpriteRenderer:
   m_ObjectHideFlags: 1

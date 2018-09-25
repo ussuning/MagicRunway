@@ -11,7 +11,7 @@ public class User : MonoBehaviour {
         Male
     };
 
-    public SpriteFader GenderSelectionUI;
+    public GenderUIController GenderSelectionUI;
 
     private int uidx;
     public int UserIndex
@@ -38,7 +38,7 @@ public class User : MonoBehaviour {
             ugender = value;
             if (ugender != Gender.None)
             {
-                GenderSelectionUI.StartFadingOut();
+                GenderSelectionUI.OnGenderSelected(ugender);
 
                 object[] param = { uidx, ugender };
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Gender_Selected, param);
