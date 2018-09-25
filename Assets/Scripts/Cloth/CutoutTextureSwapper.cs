@@ -24,39 +24,39 @@ public class CutoutTextureSwapper : MonoBehaviour
 
     public bool isGeneratingCutoutMaterial = false;
 
-    private void Awake()
+    // Use this for initialization
+    void Start()
     {
+        if (alphaMaskMat == null)
+        {
+            alphaMaskMat = new Material(Shader.Find("Unlit/AlphaMask"));
+        }
+
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle("cutouttextureswapper.assetbundle");
+        if (ab == null)
+        {
+            Debug.LogError("Unable to load cutouttextureswapper.assetbundle!");
+            return;
+        }
+
         if (additiveMaterial == null)
         {
-            additiveMaterial = Resources.Load<Material>("Materials/BodyAlphaBlitter");
+            additiveMaterial = ab.LoadAsset<Material>("BodyAlphaBlitter");
             if (additiveMaterial == null)
                 Debug.LogError("Unabled to load blitter material at Materials/BodyAlphaBlitter");
         }
         if (invertedAdditiveMaterial == null)
         {
-            invertedAdditiveMaterial = Resources.Load<Material>("Materials/InvertColors");
+            invertedAdditiveMaterial = ab.LoadAsset<Material>("InvertColors");
             if (invertedAdditiveMaterial == null)
                 Debug.LogError("Unabled to load invertColorsMaterial at Materials/InvertColors");
         }
         if (blackTexture1x1 == null)
         {
-            blackTexture1x1 = Resources.Load<Texture2D>("Textures/blackTexture1x1");
+            blackTexture1x1 = ab.LoadAsset<Texture2D>("blackTexture1x1");
             if (blackTexture1x1 == null)
                 Debug.LogError("Unabled to load blackTexture1x1 at Textures/blackTexture1x1");
         }
-        if (alphaMaskMat == null)
-        {
-            alphaMaskMat = new Material(Shader.Find("Unlit/AlphaMask"));
-        }
-    }
-
-    // Use this for initialization
-    void Start()
-    {
-
-        //if (cutoutMaterial == null)
-        //    GenerateCutoutMaterial();
-        //Generate();
     }
 
     public void ClearAlphaMaps()
