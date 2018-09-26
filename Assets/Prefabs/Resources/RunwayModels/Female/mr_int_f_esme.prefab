@@ -871,7 +871,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1668905078197212
 GameObject:
   m_ObjectHideFlags: 1
@@ -2154,7 +2154,7 @@ Animator:
   m_GameObject: {fileID: 1641926575329052}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3bcea2cb19bb822498a8477573c3e221, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e711223f6ec3447bea9e2abb8a0435de, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -12011,7 +12011,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300002, guid: 3bcea2cb19bb822498a8477573c3e221, type: 3}
   m_Bones:
   - {fileID: 4240703447881838}
   - {fileID: 4477054726716142}
