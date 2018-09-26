@@ -93,8 +93,9 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             string sex = (outfit.sex == "f") ? "Female" : "Male";
             string path = /*"RunwayModels/" + sex + "/" +*/ outfit.prefab;
 
-            outfitPrefab = Resources.Load<GameObject>(path);
+            //outfitPrefab = Resources.Load<GameObject>(path);
             AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
+            outfitPrefab = ab.LoadAsset<GameObject>(path);
             prefabCache.Add(outfit.prefab, outfitPrefab);
         }
 

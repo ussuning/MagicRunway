@@ -103,7 +103,6 @@ public class EquipableWearablesManager : MonoBehaviour
         }
     }
 
-
     public void LoadEquipableSlotsWithWearableId(EquipableSlots equipableSlots, string wearableId)
     {
         Wearable wearable = wearables[wearableId];
@@ -111,11 +110,6 @@ public class EquipableWearablesManager : MonoBehaviour
         // Load wearable's prefab
         string path = GetPathForOutfitPrefab(wearable.prefab, wearable.sex);
         AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
-        if (ab == null)
-        {
-            Debug.LogError("Failed to load models.assetbundle!");
-            return;
-        }
         GameObject asset = ab.LoadAsset<GameObject>(path); // Resources.Load<GameObject>(path);
         GameObject go;
         if (asset != null)

@@ -41,10 +41,6 @@ public class ClosetOutfitItem : ClosetItem {
         //return Resources.Load<Sprite>(iconPath);
 
         AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.clothingIcons);
-        if (ab == null)
-        {
-            Debug.LogError("Failed to load clothing_icon.assetbundle!");
-        }
         return ab.LoadAsset<Sprite>(icon);
     }
     

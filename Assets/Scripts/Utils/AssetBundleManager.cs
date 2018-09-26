@@ -23,7 +23,14 @@ public class AssetBundleManager : Singleton<AssetBundleManager> {
             return null;
         }
 
-        return GetAssetBundleByName(name);
+        AssetBundle ab = GetAssetBundleByName(name);
+        if (ab == null)
+        {
+            Debug.LogError("Failed to load asset bundle named " + name);
+            return null;
+        }
+
+        return ab;
     }
 
     public AssetBundle GetAssetBundleByName(string name) { 

@@ -34,10 +34,7 @@ public class CutoutTextureSwapper : MonoBehaviour
 
         AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.cutouttextureswapper);
         if (ab == null)
-        {
-            Debug.LogError("Unable to load cutouttextureswapper.assetbundle!");
             return;
-        }
 
         if (additiveMaterial == null)
         {
