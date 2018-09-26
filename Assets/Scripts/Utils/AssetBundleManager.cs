@@ -37,7 +37,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager> {
         if (loadedBundles.ContainsKey(name) == false ||
             loadedBundles[name] == null)
         {
-            string platform = "/StandaloneWindows/";
+            string platform = "/"; ///StandaloneWindows
             string fullFilePath = Application.streamingAssetsPath + platform + name;
             Debug.Log("Loading AssetBundle at " + fullFilePath);
             AssetBundle myLoadedAssetBundle = AssetBundle.LoadFromFile(fullFilePath);
