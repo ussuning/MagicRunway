@@ -107,12 +107,28 @@ public class CutoutTextureSwapper : MonoBehaviour
 #endif
         // Check if already started.
         if (isGeneratingCutoutMaterial)
+        {
+            Debug.LogError("isGeneratingCutoutMaterial is true! Please wait until operation completes or reset this flag.");
             yield break;
+        }
 
         isGeneratingCutoutMaterial = true;
+        bool abort = false;
 
-        yield return StartCoroutine(Step1());
-        yield return StartCoroutine(Step2());
+        yield return StartCoroutine(Step1(error => abort = error));
+        if (abort)
+        {
+            isGeneratingCutoutMaterial = false;
+            yield break;
+        }
+
+        yield return StartCoroutine(Step2(error => abort = error));
+        if (abort)
+        {
+            isGeneratingCutoutMaterial = false;
+            yield break;
+        }
+
         yield return StartCoroutine(Step2b());
         yield return StartCoroutine(Step3());
         Texture2D neoTex = null;
@@ -123,13 +139,14 @@ public class CutoutTextureSwapper : MonoBehaviour
         Debug.Log("DONE DoGenerateCutoutMaterial()");
     }
 
-    IEnumerator Step1()
+    IEnumerator Step1(System.Action<bool> abort)
     {
         alphaMaps = new Texture2D[] { alphaMap, alphaMap2, alphaMap3, alphaMap4, alphaMap5 };
         alphaMapSize = Vector2Int.one;
         if (validateAlphaMaps(alphaMaps, out alphaMapSize) == false)
         {
             Debug.LogError("AlphaMap arrays are not valid! Aborting!");
+            abort(true);
             yield break;
         }
 
@@ -150,6 +167,7 @@ public class CutoutTextureSwapper : MonoBehaviour
             srcTex.height != alphaMapSize.y)
         {
             Debug.LogError("Body Diffuse texture size (" +srcTex.name+","+ srcTex.width + ") doesn't match alphaMapSize! (" + alphaMapSize.x + ")");
+            abort(true);
             yield break;
         }
 
@@ -157,10 +175,11 @@ public class CutoutTextureSwapper : MonoBehaviour
         if (alphaMapSize.x > 2048 || alphaMapSize.y > 2048)
             Debug.LogWarning("AlphaMapSize is very large - this might cause performance issues!");
         Debug.Log("DONE Step1() - Verified alphaMapSize = " + alphaMapSize);
+        abort(false);
     }
 
     // Create a combined alphaMap with the array of alphaMaps.
-    IEnumerator Step2()
+    IEnumerator Step2(System.Action<bool> abort)
     {
         yield return new WaitForSeconds(timeBetweenSteps);
         // Combine alpha maps, using the most transparent value for each pixel.
@@ -168,9 +187,11 @@ public class CutoutTextureSwapper : MonoBehaviour
         if (alphaMapsTexture == null)
         {
             Debug.Log("Invalid alpha maps. Aborting.");
+            abort(true);
             yield break;
         }
         Debug.Log("DONE Step2a() - alphaMaps combined.");
+        abort(false);
     }
 
     IEnumerator Step2b()
