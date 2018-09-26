@@ -8,7 +8,7 @@ public class UserScore : MonoBehaviour {
     public GameObject StarPartcilesPrefab;
 
     public Text UserName;
-    public Image[] Stars;
+    public ScoreStar[] Stars;
 
     private int userIdx;
     public int UserIndex
@@ -53,15 +53,19 @@ public class UserScore : MonoBehaviour {
                 score++;
                 numConsecutivePoseMatches = 0;
 
+                Stars[score - 1].SetTargetFillAmount(1f);
                 GameObject starParticlesGO = Instantiate(StarPartcilesPrefab, Stars[score - 1].rectTransform.position, Quaternion.identity, Stars[score - 1].rectTransform);
+            }
+            else
+            {
+                Stars[score].SetTargetFillAmount((float)numConsecutivePoseMatches / (score + 1));
             }
         }
         else
         {
             numConsecutivePoseMatches = 0;
+            Stars[score].SetTargetFillAmount(0f);
         }
-
-        UpdateStars();
     }
 
     public void init(int userIdx)
@@ -73,17 +77,9 @@ public class UserScore : MonoBehaviour {
         if (UserName)
             UserName.text = string.Format("P{0}", userIdx + 1);
 
-        UpdateStars();
-    }
-
-    void UpdateStars()
-    {
         for (int i = 0; i < Stars.Length; i++)
         {
-            Stars[i].fillAmount = (i < score) ? 1f : 0f;
+            Stars[i].ResetStar();
         }
-
-        if(score < Stars.Length)
-            Stars[score].fillAmount = ((float)numConsecutivePoseMatches / (score + 1));
     }
 }
