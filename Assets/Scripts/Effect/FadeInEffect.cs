@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FadeInEffect : MonoBehaviour {
+    public float duration = 1.0f;
     List<SkinnedMeshRenderer> skinnedRenderers = new List<SkinnedMeshRenderer>();
     List<Material[]> origSharedMaterials = new List<Material[]>();
     bool isEffectDone = false;
@@ -51,7 +52,7 @@ public class FadeInEffect : MonoBehaviour {
                 {
 
                     Color c = mat.color;
-                    c.a = Mathf.Clamp01(c.a + Time.deltaTime);
+                    c.a = Mathf.Clamp01(c.a + Time.deltaTime / duration);
                     mat.color = c;
 
                     if (c.a >= 1.0f)
