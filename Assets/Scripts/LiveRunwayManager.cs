@@ -71,6 +71,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             {
                 Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} RECONNECTED, userID: {1}", userIndex, userId));
                 disconnectedUserBuffer.Remove(userIndex);
+                OutfitGameObjectsManager.Instance.ShowUserOutfit(userIndex);
             }
 
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
@@ -96,7 +97,10 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if(isModeActive)
         {
             if (!disconnectedUserBuffer.Contains(userIndex))
+            {
                 disconnectedUserBuffer.Add(userIndex);
+                OutfitGameObjectsManager.Instance.HideUserOutfit(userIndex);
+            }
 
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);

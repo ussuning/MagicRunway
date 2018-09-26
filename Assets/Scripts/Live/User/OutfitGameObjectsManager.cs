@@ -8,6 +8,7 @@ public class OutfitGameObjectsManager : MonoBehaviour {
 
     private Dictionary<string, GameObject> prefabCache = new Dictionary<string, GameObject>();
     private Dictionary<int, Dictionary<string, GameObject>> outfitGOs = new Dictionary<int, Dictionary<string, GameObject>>();
+    private Dictionary<int, GameObject> curOutfit = new Dictionary<int, GameObject>();
 
     void Awake()
     {
@@ -24,11 +25,25 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             }
         }
         outfitGOs.Clear();
+        curOutfit.Clear();
+    }
+
+    public void ShowUserOutfit(int userIdx)
+    {
+        if (curOutfit.ContainsKey(userIdx))
+            curOutfit[userIdx].SetActive(true);
+    }
+
+    public void HideUserOutfit(int userIdx)
+    {
+        if (curOutfit.ContainsKey(userIdx))
+            curOutfit[userIdx].SetActive(false);
     }
 
     public void GenerateOutfit(Outfit outfit, int ownerIdx)
     {
-        if(outfitGOs.ContainsKey(ownerIdx))
+        GameObject selectedOutfit;
+        if (outfitGOs.ContainsKey(ownerIdx))
         {
             Dictionary<string, GameObject> userOutfits = outfitGOs[ownerIdx];
             foreach(GameObject o in userOutfits.Values)
@@ -38,12 +53,12 @@ public class OutfitGameObjectsManager : MonoBehaviour {
 
             if(userOutfits.ContainsKey(outfit.prefab))
             {
-                GameObject selectedOutfit = userOutfits[outfit.prefab];
+                selectedOutfit = userOutfits[outfit.prefab];
                 selectedOutfit.SetActive(true);
             }
             else
             {
-                GameObject selectedOutfit = GetOutfit(outfit, ownerIdx);
+                selectedOutfit = GetOutfit(outfit, ownerIdx);
                 userOutfits.Add(outfit.prefab, selectedOutfit);
             }
         }
@@ -51,10 +66,19 @@ public class OutfitGameObjectsManager : MonoBehaviour {
         {
             Dictionary<string, GameObject> userOutfits = new Dictionary<string, GameObject>();
 
-            GameObject selectedOutfit = GetOutfit(outfit, ownerIdx);
+            selectedOutfit = GetOutfit(outfit, ownerIdx);
             userOutfits.Add(outfit.prefab, selectedOutfit);
 
             outfitGOs.Add(ownerIdx, userOutfits);
+        }
+
+        if (curOutfit.ContainsKey(ownerIdx))
+        {
+            curOutfit[ownerIdx] = selectedOutfit;
+        }
+        else
+        {
+            curOutfit.Add(ownerIdx, selectedOutfit);
         }
     }
 
@@ -69,6 +93,9 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             }
             outfitGOs.Remove(userIdx);
         }
+
+        if (curOutfit.ContainsKey(userIdx))
+            curOutfit.Remove(userIdx);
     }
 
     private GameObject GetOutfit(Outfit outfit, int ownerIdx)
