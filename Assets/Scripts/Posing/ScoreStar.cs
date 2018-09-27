@@ -7,18 +7,12 @@ public class ScoreStar : MonoBehaviour {
 
     public Image StarImage;
 
+    public GameObject StarPartcilesPrefab;
+
     public float animateSpeed = 0.75f;
 
     private float targetFillAmount = 0f;
     private float curFillAmount = 0f;
-
-    public RectTransform rectTransform
-    {
-        get
-        {
-            return StarImage.rectTransform;
-        }
-    }
 
     void Awake()
     {
@@ -35,15 +29,24 @@ public class ScoreStar : MonoBehaviour {
     {
         if (curFillAmount < targetFillAmount)
         {
-            curFillAmount += Time.deltaTime * animateSpeed;
+            curFillAmount += Time.deltaTime * animateSpeed; 
+            if (curFillAmount > targetFillAmount)
+                curFillAmount = targetFillAmount;
+
             if (curFillAmount > 1f)
                 curFillAmount = 1f;
 
             StarImage.fillAmount = curFillAmount;
+
+            if(curFillAmount == 1f)
+                Instantiate(StarPartcilesPrefab, StarImage.rectTransform.position, Quaternion.identity, StarImage.rectTransform);
         }
         else if(curFillAmount > targetFillAmount)
         {
             curFillAmount -= Time.deltaTime * animateSpeed;
+            if (curFillAmount < targetFillAmount)
+                curFillAmount = targetFillAmount;
+
             if (curFillAmount < 0f)
                 curFillAmount = 0f;
 

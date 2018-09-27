@@ -247,8 +247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65db1226c512ef04fa8c7b85674a8719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StarPartcilesPrefab: {fileID: 1481688014812374, guid: 5c4e084db29c49e49836a6f218a3808d,
-    type: 2}
   UserName: {fileID: 114508735956683738}
   Stars:
   - {fileID: 114144311837983114}
@@ -316,7 +314,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75591dce506ec64429f164fc4c7617a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StarImage: {fileID: 0}
+  StarImage: {fileID: 114448508223086174}
+  StarPartcilesPrefab: {fileID: 1481688014812374, guid: 5c4e084db29c49e49836a6f218a3808d,
+    type: 2}
   animateSpeed: 0.75
 --- !u!114 &114243958784959080
 MonoBehaviour:
@@ -383,7 +383,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75591dce506ec64429f164fc4c7617a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StarImage: {fileID: 0}
+  StarImage: {fileID: 114551749085618374}
+  StarPartcilesPrefab: {fileID: 1481688014812374, guid: 5c4e084db29c49e49836a6f218a3808d,
+    type: 2}
   animateSpeed: 0.75
 --- !u!114 &114448508223086174
 MonoBehaviour:
@@ -591,7 +593,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75591dce506ec64429f164fc4c7617a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StarImage: {fileID: 0}
+  StarImage: {fileID: 114243958784959080}
+  StarPartcilesPrefab: {fileID: 1481688014812374, guid: 5c4e084db29c49e49836a6f218a3808d,
+    type: 2}
   animateSpeed: 0.75
 --- !u!114 &114943099794579336
 MonoBehaviour:
@@ -604,7 +608,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75591dce506ec64429f164fc4c7617a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StarImage: {fileID: 0}
+  StarImage: {fileID: 114007401102279084}
+  StarPartcilesPrefab: {fileID: 1481688014812374, guid: 5c4e084db29c49e49836a6f218a3808d,
+    type: 2}
   animateSpeed: 0.75
 --- !u!114 &114988803510647732
 MonoBehaviour:
@@ -644,7 +650,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75591dce506ec64429f164fc4c7617a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StarImage: {fileID: 0}
+  StarImage: {fileID: 114546197498312210}
+  StarPartcilesPrefab: {fileID: 1481688014812374, guid: 5c4e084db29c49e49836a6f218a3808d,
+    type: 2}
   animateSpeed: 0.75
 --- !u!222 &222059572059431812
 CanvasRenderer:

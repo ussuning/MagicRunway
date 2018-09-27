@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class UserScore : MonoBehaviour {
 
-    public GameObject StarPartcilesPrefab;
-
     public Text UserName;
     public ScoreStar[] Stars;
 
@@ -50,21 +48,20 @@ public class UserScore : MonoBehaviour {
             numConsecutivePoseMatches++;
             if(numConsecutivePoseMatches > score)
             {
+                SetStar(score, 1f);
+                
                 score++;
                 numConsecutivePoseMatches = 0;
-
-                Stars[score - 1].SetTargetFillAmount(1f);
-                GameObject starParticlesGO = Instantiate(StarPartcilesPrefab, Stars[score - 1].rectTransform.position, Quaternion.identity, Stars[score - 1].rectTransform);
             }
             else
             {
-                Stars[score].SetTargetFillAmount((float)numConsecutivePoseMatches / (score + 1));
+                SetStar(score, (float)numConsecutivePoseMatches / (score + 1));
             }
         }
         else
         {
+            SetStar(score, 0f);
             numConsecutivePoseMatches = 0;
-            Stars[score].SetTargetFillAmount(0f);
         }
     }
 
@@ -77,6 +74,16 @@ public class UserScore : MonoBehaviour {
         if (UserName)
             UserName.text = string.Format("P{0}", userIdx + 1);
 
+        ResetStars();
+    }
+
+    private void SetStar(int starIdx, float amount)
+    {
+        Stars[starIdx].SetTargetFillAmount(amount);
+    }
+
+    private void ResetStars()
+    {
         for (int i = 0; i < Stars.Length; i++)
         {
             Stars[i].ResetStar();
