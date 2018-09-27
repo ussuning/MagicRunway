@@ -7,7 +7,7 @@ public class ScoreStar : MonoBehaviour {
 
     public Image StarImage;
 
-    public GameObject StarPartcilesPrefab;
+    public ParticleSystem [] StarPartciles;
 
     public float animateSpeed = 0.75f;
 
@@ -38,8 +38,10 @@ public class ScoreStar : MonoBehaviour {
 
             StarImage.fillAmount = curFillAmount;
 
-            if(curFillAmount == 1f)
-                Instantiate(StarPartcilesPrefab, StarImage.rectTransform.position, Quaternion.identity, StarImage.rectTransform);
+            if (curFillAmount == 1f)
+            {
+                PlayParticles();
+            }
         }
         else if(curFillAmount > targetFillAmount)
         {
@@ -62,6 +64,15 @@ public class ScoreStar : MonoBehaviour {
     public void ResetStar()
     {
         StarImage.fillAmount = curFillAmount = targetFillAmount = 0f;
+    }
+
+    private void PlayParticles()
+    {
+        foreach (ParticleSystem p in StarPartciles)
+        {
+            p.Stop();
+            p.Play();
+        }
     }
 }
 

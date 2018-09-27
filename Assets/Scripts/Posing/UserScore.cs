@@ -79,7 +79,8 @@ public class UserScore : MonoBehaviour {
 
     private void SetStar(int starIdx, float amount)
     {
-        Stars[starIdx].SetTargetFillAmount(amount);
+        if(starIdx < Stars.Length)
+            Stars[starIdx].SetTargetFillAmount(amount);
     }
 
     private void ResetStars()
