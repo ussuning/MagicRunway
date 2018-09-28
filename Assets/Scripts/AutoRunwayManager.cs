@@ -11,6 +11,9 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private RunwayEventManager runwayEventManager;
 
     [SerializeField]
+    private FaceCapture faceCapture;
+
+    [SerializeField]
     private VideoWall videoWall;
 
     [SerializeField]
@@ -53,6 +56,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Application.targetFrameRate = 120;
         //Application.backgroundLoadingPriority = ThreadPriority.Low;
         //Shader.WarmupAllShaders();
+        faceCapture.enabled = false;
 
         AddRunwayEventListeners();
 
@@ -92,6 +96,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         showcaseManager = null;
 
         KinectManager.Instance.ClearKinectUsers();
+
+        faceCapture.enabled = false;
 
         autoRunwayContainer.SetActive(false);
 
@@ -344,6 +350,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (isModeActive == false)
             return;
 
+        faceCapture.enabled = true;
+
         UIManager.Instance.ShowStartMenu(true);
         KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
         KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Tpose);
@@ -353,6 +361,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         if (isModeActive == false)
             return;
+
+        faceCapture.enabled = false;
 
         UIManager.Instance.HideStartMenu(true);
         KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
@@ -371,6 +381,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             if (isModeActive == false)
                 return true;
 
+            faceCapture.enabled = false;
             KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
             UIManager.Instance.HideStartMenu(false);
             AppManager.Instance.TransitionToLive();
