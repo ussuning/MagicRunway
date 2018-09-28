@@ -7,6 +7,7 @@ public class PoseMgr : MonoBehaviour {
 
     public static PoseMgr Instance;
 
+    public StickmanPosing Stickman;
     public RawImage PoseImage;
 
     public float ImageFadeSpeed = 1f;
@@ -73,6 +74,8 @@ public class PoseMgr : MonoBehaviour {
 
         StartCoroutine(SetNewPoseCooldown());
 
+        Stickman.OnNewPoseGenerated(curPose);
+
         object[] param = { curPose };
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
 
@@ -86,6 +89,8 @@ public class PoseMgr : MonoBehaviour {
         curPose = 0;
         prevPose = 0;
         isInNewPoseCD = false;
+
+        Stickman.OnNewPoseGenerated(curPose);
 
         object[] param = { curPose };
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);

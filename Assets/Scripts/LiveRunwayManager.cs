@@ -41,11 +41,11 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         liveRunwayContainer.SetActive(true);
 
         CreateUsersFromBuffer();
-        isModeActive = true;
 
         ClosetManager.Instance.OnEnterLiveMode();
-
         PoseMgr.Instance.StartPosing();
+
+        isModeActive = true;
     }
 
     public void End()
@@ -53,11 +53,10 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Debug.Log(string.Format("[LiveRunwayManager] End:"));
 
         UIManager.Instance.HideAll();
-        
-        liveRunwayContainer.SetActive(false);
-
         PoseMatchingManager.Instance.ClearFX();
         PoseMgr.Instance.StopPosing();
+
+        liveRunwayContainer.SetActive(false);
 
         isModeActive = false;
     }
