@@ -28,13 +28,13 @@ public class PoseMatchingManager : MonoBehaviour {
 
             switch (numConsecutivePoseMatches)
             {
-                case 1://5:
+                case 5:
                     PlayComboParticles(0);
                     break;
-                case 3://8:
+                case 8:
                     PlayComboParticles(1);
                     break;
-                case 6://10:
+                case 10:
                     PlayComboParticles(2);
                     break;
             }
