@@ -24,21 +24,8 @@ public class ClosetManager : MonoBehaviour {
         Instance = this;
     }
 
-    void OnEnable ()
+    public void OnUserGenderSelected(int userIdx, User.Gender userGender)
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Gender_Selected, OnUserGenderSelected);
-    }
-
-    void OnDisable()
-    {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Gender_Selected, OnUserGenderSelected);
-    }
-
-    public void OnUserGenderSelected(object[] param)
-    {
-        int userIdx = (int)param[0];
-        User.Gender userGender = (User.Gender)param[1];
-
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
         if (userClosets.Count == 0)
         {

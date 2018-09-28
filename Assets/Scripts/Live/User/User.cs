@@ -39,9 +39,7 @@ public class User : MonoBehaviour {
             if (ugender != Gender.None)
             {
                 GenderSelectionUI.OnGenderSelected(ugender);
-
-                object[] param = { uidx, ugender };
-                EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Gender_Selected, param);
+                ClosetManager.Instance.OnUserGenderSelected(uidx, ugender);
             }
         }
         get
