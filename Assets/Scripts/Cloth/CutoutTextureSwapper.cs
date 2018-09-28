@@ -136,7 +136,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         yield return StartCoroutine(Step5(neoTex));
 
         isGeneratingCutoutMaterial = false;
-        Debug.Log("DONE DoGenerateCutoutMaterial()");
+        //Debug.Log("DONE DoGenerateCutoutMaterial()");
     }
 
     IEnumerator Step1(System.Action<bool> abort)
@@ -174,7 +174,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         //Color [] srcPixels = GetReadableTexture(srcTex).GetPixels();
         if (alphaMapSize.x > 2048 || alphaMapSize.y > 2048)
             Debug.LogWarning("AlphaMapSize is very large - this might cause performance issues!");
-        Debug.Log("DONE Step1() - Verified alphaMapSize = " + alphaMapSize);
+        //Debug.Log("DONE Step1() - Verified alphaMapSize = " + alphaMapSize);
         abort(false);
     }
 
@@ -190,7 +190,7 @@ public class CutoutTextureSwapper : MonoBehaviour
             abort(true);
             yield break;
         }
-        Debug.Log("DONE Step2a() - alphaMaps combined.");
+        //Debug.Log("DONE Step2a() - alphaMaps combined.");
         abort(false);
     }
 
@@ -198,7 +198,7 @@ public class CutoutTextureSwapper : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenSteps);
         yield return InvertTexture(alphaMapsTexture, result => alphaMapsTexture = result);
-        Debug.Log("DONE Step2b() - inverted texture");
+        //Debug.Log("DONE Step2b() - inverted texture");
     }
 
     IEnumerator Step3()
@@ -214,7 +214,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         alphaMaskMat.SetTexture("_AlphaTex", alphaMapsTexture);
         Graphics.Blit(srcTex, tmpRenderTex, alphaMaskMat);
 
-        Debug.Log("DONE Step3() - rendered alpha to tmpRenderTex");
+        //Debug.Log("DONE Step3() - rendered alpha to tmpRenderTex");
     }
 
     IEnumerator Step4(System.Action<Texture2D> result)
@@ -233,7 +233,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         RenderTexture.active = previous;
 
         result(neoTex);
-        Debug.Log("DONE Step4() - created cutout texture.");
+        //Debug.Log("DONE Step4() - created cutout texture.");
     }
 
     IEnumerator Step5(Texture2D neoTex)
@@ -260,7 +260,7 @@ public class CutoutTextureSwapper : MonoBehaviour
         RenderTexture.ReleaseTemporary(tmpRenderTex);
         Resources.UnloadUnusedAssets();
 
-        Debug.Log("DONE Step5() - created cutout mat.");
+        //Debug.Log("DONE Step5() - created cutout mat.");
     }
 
     bool validateAlphaMaps(Texture2D[] alphaMaps, out Vector2Int alphaMapSize)
