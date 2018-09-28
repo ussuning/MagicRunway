@@ -4,24 +4,73 @@ using UnityEngine;
 
 public class PoseMatchingManager : MonoBehaviour {
 
+    public static PoseMatchingManager Instance;
+
     public GameObject matchedFXParticlesPrefab;
 
-    void OnEnable()
+    public ParticleSystem [] comboFXParticles;
+
+    private int numConsecutivePoseMatches = 0;
+    private int lastMatcherIdx = -1;
+
+    void Awake()
     {
-        EventMsgDispatcher.Instance.registerEvent(EventDef.User_Pose_Matched, OnPoseMatched);
+        Instance = this;
     }
 
-    void OnDisable()
+    public void OnPoseMatched(int userIdx)
     {
-        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.User_Pose_Matched, OnPoseMatched);
-    }
-
-    public void OnPoseMatched(object[] param)
-    {
-        int userIdx = (int)param[0];
-        int poseID = (int)param[1];
-        float pose_confidence = (float)param[2];
         GameObject particleGO = (GameObject)Instantiate(matchedFXParticlesPrefab, GetUserScreenPos(userIdx), Quaternion.identity);
+
+        if (userIdx == lastMatcherIdx)
+        {
+            numConsecutivePoseMatches++;
+
+            switch (numConsecutivePoseMatches)
+            {
+                case 1://5:
+                    PlayComboParticles(0);
+                    break;
+                case 3://8:
+                    PlayComboParticles(1);
+                    break;
+                case 6://10:
+                    PlayComboParticles(2);
+                    break;
+            }
+        }
+        else
+        {
+            numConsecutivePoseMatches = 0;
+
+            PlayComboParticles(-1);
+        }
+
+        lastMatcherIdx = userIdx;
+    }
+    
+    public void ClearFX()
+    {
+        numConsecutivePoseMatches = 0;
+        lastMatcherIdx = -1;
+        PlayComboParticles(-1);
+    }
+
+    private void PlayComboParticles(int particlesIdx)
+    {
+        for(int i=0; i<comboFXParticles.Length; i++)
+        {
+            if(i == particlesIdx)
+            {
+                comboFXParticles[i].gameObject.SetActive(true);
+                comboFXParticles[i].Play();
+            }
+            else
+            {
+                comboFXParticles[i].Stop();
+                comboFXParticles[i].gameObject.SetActive(false);   
+            }
+        }
     }
 
     Vector3 GetUserScreenPos(int userIdx)

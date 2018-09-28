@@ -56,6 +56,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         
         liveRunwayContainer.SetActive(false);
 
+        PoseMatchingManager.Instance.ClearFX();
         PoseMgr.Instance.StopPosing();
 
         isModeActive = false;

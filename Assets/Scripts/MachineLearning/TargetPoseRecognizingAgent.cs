@@ -54,6 +54,7 @@ public class TargetPoseRecognizingAgent : Agent {
                 object[] param = { userIdx, poseID, poseConfidence };
                 EventMsgDispatcher.Instance.TriggerEvent(EventDef.User_Pose_Matched, param);
 
+                PoseMatchingManager.Instance.OnPoseMatched(userIdx);
                 PoseMgr.Instance.GenerateNewPose();
 
                 isPoseMatched = false;
