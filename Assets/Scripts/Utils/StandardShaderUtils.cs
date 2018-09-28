@@ -53,6 +53,7 @@ public static class StandardShaderUtils
                 standardShaderMaterial.renderQueue = 3000;
                 break;
         }
+        Debug.Log("Material " + standardShaderMaterial.name + " changed to " + blendMode.ToString());
 
     }
 }

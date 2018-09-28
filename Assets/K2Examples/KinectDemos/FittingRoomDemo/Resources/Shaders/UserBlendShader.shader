@@ -6,7 +6,6 @@ Shader "Custom/UserBlendShader"
 	{
 		_MainTex ("MainTex", 2D) = "white" {}
 		_BackTex ("BackTex", 2D) = "white" {}
-        _ColorTex ("ColorTex", 2D) = "white" {}
         _Threshold ("Depth Threshold", Range(0, 0.5)) = 0.1
 	}
 
@@ -33,7 +32,6 @@ Shader "Custom/UserBlendShader"
 			sampler2D _CameraDepthTexture;
 
 			uniform sampler2D _BackTex;
-			uniform sampler2D _ColorTex;
 			uniform float _Threshold;
 
 			uniform float _ColorResX;
@@ -89,12 +87,13 @@ Shader "Custom/UserBlendShader"
 #endif
 
 				// for non-flipped textures
-				float2 ctUv2 = float2(ctUv.x, 1.0 - ctUv.y);
+				float2 ctUv2 = float2(ctUv.x, ctUv.y);
 				
 				int cx = (int)(ctUv.x * _ColorResX);
 				int cy = (int)(ctUv.y * _ColorResY);
 				int ci = (int)(cx + cy * _ColorResX);
 
+				half4 clrMain = tex2D(_MainTex, i.uv);
 				if (!isinf(_DepthCoords[ci].x) && !isinf(_DepthCoords[ci].y))
 				{
 					int dx = (int)_DepthCoords[ci].x;
@@ -110,17 +109,20 @@ Shader "Custom/UserBlendShader"
 						if(camDepth > 0.1 && camDepth < 10.0 && 
 							(kinDepth < 0.1 || (kinDepth < 10.0 && camDepth <= (kinDepth + _Threshold))))
 						{
-							return tex2D(_MainTex, i.uv);
+							return clrMain;
 						}
 						else
 						{
 							//return half4(1.0 - kinDepth/3,0,1,1);
 							//return half4(i.uv.x, i.uv.y, 0, 1);
 							half4 clrBack = tex2D(_BackTex, ctUv2);
-							half4 clrFront = tex2D(_ColorTex, ctUv);
-							half3 clrBlend = clrBack.rgb * (1.0 - clrFront.a) + clrFront.rgb * clrFront.a;
-
-							return half4(clrBlend, 1.0);
+							half3 clrBlend = clrBack.rgb;
+							if (clrMain.a < 1.0) {
+								half3 clrBlendMain = (clrBlend.rgb * (1.0 - clrMain.a) + clrMain.rgb * clrMain.a);
+								return half4(clrBlendMain, 1.0);
+							}
+							else
+								return half4(clrBlend, 1.0);
 						}
 					}
 				}
@@ -129,14 +131,13 @@ Shader "Custom/UserBlendShader"
 					//return half4(i.uv.x, i.uv.y, 0, 1);
 					if(camDepth > 0.1 && camDepth < 10.0)
 					{
-						return tex2D(_MainTex, i.uv);
+						return clrMain;
 					}
 					else
 					{
 						//return tex2D(_ColorTex, ctUv);
 						half4 clrBack = tex2D(_BackTex, ctUv2);
-						half4 clrFront = tex2D(_ColorTex, ctUv);
-						half3 clrBlend = clrBack.rgb * (1.0 - clrFront.a) + clrFront.rgb * clrFront.a;
+						half3 clrBlend = clrBack.rgb;
 
 						return half4(clrBlend, 1.0);
 					} 

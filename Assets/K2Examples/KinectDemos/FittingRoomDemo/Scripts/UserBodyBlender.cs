@@ -8,16 +8,10 @@ public class UserBodyBlender : MonoBehaviour
 	[Range(-0.5f, 0.5f)]
 	public float depthThreshold = 0.1f;
 
-	[Tooltip("RawImage used to display the scene background.")]
-	public UnityEngine.UI.RawImage backgroundImage;
-
-	[Tooltip("Camera used to render the 1st scene background. This background camera gets disabled, when this component is enabled.")]
-	public Camera backrgoundCamera;
-
 	[Tooltip("Camera used to render the 2nd scene background (users). This background camera gets disabled, when this component is enabled.")]
 	public Camera backgroundCamera2;
 
-	private Material userBlendMat;
+	public Material userBlendMat;
 	private KinectManager kinectManager;
 	private BackgroundRemovalManager backManager;
 	private long lastDepthFrameTime;
@@ -57,10 +51,6 @@ public class UserBodyBlender : MonoBehaviour
 		}
 
 		// disable the background cameras
-		if (backrgoundCamera) 
-		{
-			backrgoundCamera.gameObject.SetActive(false);
-		}
 
 		if (backgroundCamera2) 
 		{
@@ -79,10 +69,6 @@ public class UserBodyBlender : MonoBehaviour
 		}
 
 		// enable the background cameras
-		if (backrgoundCamera) 
-		{
-			backrgoundCamera.gameObject.SetActive(true);
-		}
 
 		if (backgroundCamera2) 
 		{
@@ -125,10 +111,10 @@ public class UserBodyBlender : MonoBehaviour
 				depthImageBuffer = new ComputeBuffer(sensorData.depthImage.Length, sizeof(float));
 				userBlendMat.SetBuffer("_DepthBuffer", depthImageBuffer);
 
-				if (backgroundImage) 
-				{
-					userBlendMat.SetTexture("_BackTex", backgroundImage.texture);
-				}
+				//if (backgroundImage) 
+				//{
+				//	userBlendMat.SetTexture("_BackTex", backgroundImage.texture);
+				//}
 
 				// color camera texture
 				//userBlendMat.SetTexture("_ColorTex", sensorData.colorImageTexture);
@@ -214,9 +200,9 @@ public class UserBodyBlender : MonoBehaviour
 				depthImageBuffer.SetData(depthImageBufferData);
 
 				// color camera texture
-				Texture colorTex = backManager && sensorData.color2DepthTexture ? (Texture)sensorData.color2DepthTexture : 
+				Texture backTex = backManager && sensorData.color2DepthTexture ? (Texture)sensorData.color2DepthTexture : 
 					(Texture)(sensorData.colorImageTexture2D ? sensorData.colorImageTexture2D : sensorData.colorImageTexture);
-				userBlendMat.SetTexture("_ColorTex", colorTex);
+				userBlendMat.SetTexture("_BackTex", backTex);
 			}
 		}
 	}
