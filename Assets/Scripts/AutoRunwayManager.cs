@@ -35,6 +35,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private bool isModeActive = false;
 
+    //private long primerUserId = 0;
+
     void Awake()
     {
         autoRunwayContainer.SetActive(false);
@@ -345,16 +347,94 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         runwayEventManager.RunwayEnterEvents.OnTriggerEnterEvt -= OnRunwayEnter;
     }
 
-    public void UserDetected(long userId, int userIndex)
+    private void Update()
     {
         if (isModeActive == false)
             return;
 
-        faceCapture.enabled = true;
+        if (KinectManager.Instance.GetPrimaryUserID() == 0) {
+            HideStart();
+            return;
+        }
 
-        UIManager.Instance.ShowStartMenu(true);
+        long newPrimeUserId = CheckUsersZPosition();
+
+        if (newPrimeUserId == 0)
+            return;
+
+        AppointNewPrimeUser(newPrimeUserId);
+    }
+
+    private long CheckUsersZPosition()
+    {
+        if (KinectManager.Instance.GetUsersCount() <= 1)
+            return 0;
+
+        Vector3 primePos = KinectManager.Instance.GetUserPosition(KinectManager.Instance.GetPrimaryUserID());
+
+        int amount = KinectManager.Instance.GetAllUserIds().Count;
+        
+        for (int x = 0; x < amount; x++)
+        {
+            long userId = KinectManager.Instance.GetUserIdByIndex(x);
+
+            if (userId == 0)
+                continue;
+
+            Vector3 pos = KinectManager.Instance.GetUserPosition(userId);
+
+            if(pos.z < primePos.z)
+                return userId;
+        }
+        
+        return 0;
+    }
+
+    private void AppointNewPrimeUser(long userId)
+    {
+        long primerUserId = KinectManager.Instance.GetPrimaryUserID();
+        KinectManager.Instance.DeleteGesture(primerUserId, KinectGestures.Gestures.Wave);
+        KinectManager.Instance.DeleteGesture(primerUserId, KinectGestures.Gestures.Tpose);
+
+        KinectManager.Instance.SetPrimaryUserID(userId);
         KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
         KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Tpose);
+    }
+
+    private void AddKinectGestures(long userId)
+    {
+        KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
+        KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Tpose);
+    }
+
+    private void RemoveKinectGestures(long userId)
+    {
+        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
+        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Tpose);
+    }
+
+    private void HideStart()
+    {
+        if (faceCapture.isActiveAndEnabled == false)
+            return;
+
+        faceCapture.enabled = false;
+        UIManager.Instance.HideStartMenu(true);
+    }
+
+    public void UserDetected(long userId, int userIndex)
+    {
+        if (isModeActive == false)
+            return;   
+
+        //Debug.Log("NEW PLAYER!!  " + userId);
+
+        if (userId == KinectManager.Instance.GetPrimaryUserID())
+        {
+            faceCapture.enabled = true;
+            UIManager.Instance.ShowStartMenu(true);
+            AddKinectGestures(userId);
+        }
     }
 
     public void UserLost(long userId, int userIndex)
@@ -362,11 +442,16 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (isModeActive == false)
             return;
 
-        faceCapture.enabled = false;
+        RemoveKinectGestures(userId);
 
-        UIManager.Instance.HideStartMenu(true);
-        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
-        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Tpose);
+        //Debug.Log(KinectManager.Instance.GetAllUserIds().Count);
+     /*
+        if (KinectManager.Instance.GetAllUserIds().Count == 1)
+        {
+            faceCapture.enabled = false;
+            UIManager.Instance.HideStartMenu(true);
+        }
+        */
     }
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
@@ -382,7 +467,9 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                 return true;
 
             faceCapture.enabled = false;
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.Wave);
+
+            RemoveKinectGestures(userId);
+
             UIManager.Instance.HideStartMenu(false);
             AppManager.Instance.TransitionToLive();
 

@@ -48,7 +48,6 @@ public class FaceCapture : MonoBehaviour
 		faceTex = new Texture2D(100, 100, TextureFormat.ARGB32, false);
 
         ////////BILL
-        Debug.Log("YO");
     }
 
     void Update () 
@@ -64,8 +63,10 @@ public class FaceCapture : MonoBehaviour
 		if(!faceManager || !faceManager.IsFaceTrackingInitialized())
 			return;
 
-		long userId = kinectManager.GetUserIdByIndex(playerIndex);
-		if (userId == 0) 
+        //long userId = kinectManager.GetUserIdByIndex(playerIndex);
+        long userId = kinectManager.GetPrimaryUserID();
+		
+        if (userId == 0) 
 		{
             ////////BILL
 
