@@ -117,7 +117,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     }
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
-    {  
+    {
     }
 
     public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint, Vector3 screenPos)
@@ -213,6 +213,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
                 ClosetManager.Instance.OnUserLost(userIndex);
                 OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
+                PoseMatchingManager.Instance.ClearFX(userIndex);
 
                 if (users.Count <= 0)
                     AppManager.Instance.TransitionToAuto();

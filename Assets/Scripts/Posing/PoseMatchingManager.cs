@@ -49,11 +49,15 @@ public class PoseMatchingManager : MonoBehaviour {
         lastMatcherIdx = userIdx;
     }
     
-    public void ClearFX()
+    public void ClearFX(int userIdx = -1)
     {
-        numConsecutivePoseMatches = 0;
-        lastMatcherIdx = -1;
-        PlayComboParticles(-1);
+        if(userIdx == -1 || //Change to Auto mode
+          (userIdx >= 0 && userIdx == lastMatcherIdx)) //last matcher leave the scene
+        {
+            numConsecutivePoseMatches = 0;
+            lastMatcherIdx = -1;
+            PlayComboParticles(-1);
+        }
     }
 
     private void PlayComboParticles(int particlesIdx)
