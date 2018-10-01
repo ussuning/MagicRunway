@@ -10,7 +10,7 @@ public class PoseMatchingManager : MonoBehaviour {
 
     public ParticleSystem [] comboFXParticles;
 
-    public float FXDuration = 5f;
+    //public float FXDuration = 5f;
 
     private int numConsecutivePoseMatches = 0;
     private int lastMatcherIdx = -1;
@@ -31,13 +31,13 @@ public class PoseMatchingManager : MonoBehaviour {
             switch (numConsecutivePoseMatches)
             {
                 case 5:
-                    PlayComboParticles(0, FXDuration);
+                    PlayComboParticles(0);
                     break;
                 case 8:
-                    PlayComboParticles(1, FXDuration);
+                    PlayComboParticles(1);
                     break;
                 case 10:
-                    PlayComboParticles(2, FXDuration);
+                    PlayComboParticles(2);
                     break;
             }
         }
@@ -68,10 +68,8 @@ public class PoseMatchingManager : MonoBehaviour {
         }
     }
 
-    private void PlayComboParticles(int particlesIdx, float duration)
+    private void PlayComboParticles(int particlesIdx)
     {
-        CancelInvoke("StopComboParticles");
-
         for (int i=0; i<comboFXParticles.Length; i++)
         {
             if(i == particlesIdx)
@@ -85,14 +83,11 @@ public class PoseMatchingManager : MonoBehaviour {
                 comboFXParticles[i].gameObject.SetActive(false);   
             }
         }
-
-        if(particlesIdx >= 0)
-            Invoke("StopComboParticles", duration);
     }
 
     private void StopComboParticles()
     {
-        PlayComboParticles(-1, 0);
+        PlayComboParticles(-1);
     }
 
     Vector3 GetUserScreenPos(int userIdx)
