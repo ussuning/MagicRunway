@@ -8,8 +8,11 @@ public class UserBodyBlender : MonoBehaviour
 	[Range(-0.5f, 0.5f)]
 	public float depthThreshold = 0.1f;
 
-	[Tooltip("Camera used to render the 2nd scene background (users). This background camera gets disabled, when this component is enabled.")]
-	public Camera backgroundCamera2;
+    [Range(0.01f, 0.1f)]
+    public float alphaThreshold = 0.05f;
+
+	//[Tooltip("Camera used to render the 2nd scene background (users). This background camera gets disabled, when this component is enabled.")]
+	//public Camera backgroundCamera2;
 
 	public Material userBlendMat;
 	private KinectManager kinectManager;
@@ -49,13 +52,6 @@ public class UserBodyBlender : MonoBehaviour
 		{
 			thisCamera.clearFlags = CameraClearFlags.SolidColor;
 		}
-
-		// disable the background cameras
-
-		if (backgroundCamera2) 
-		{
-			backgroundCamera2.gameObject.SetActive(false);
-		}
 	}
 
 
@@ -66,13 +62,6 @@ public class UserBodyBlender : MonoBehaviour
 		if(thisCamera) 
 		{
 			thisCamera.clearFlags = CameraClearFlags.Depth;
-		}
-
-		// enable the background cameras
-
-		if (backgroundCamera2) 
-		{
-			backgroundCamera2.gameObject.SetActive(true);
 		}
 	}
 
@@ -212,7 +201,8 @@ public class UserBodyBlender : MonoBehaviour
 		if(userBlendMat != null)
 		{
 			userBlendMat.SetFloat("_Threshold", depthThreshold);
-			Graphics.Blit(source, destination, userBlendMat);
+            userBlendMat.SetFloat("_AlphaThreshold", alphaThreshold);
+            Graphics.Blit(source, destination, userBlendMat);
 
 			if (copyToTex != null) 
 			{

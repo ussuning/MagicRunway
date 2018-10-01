@@ -7,6 +7,7 @@ Shader "Custom/UserBlendShader"
 		_MainTex ("MainTex", 2D) = "white" {}
 		_BackTex ("BackTex", 2D) = "white" {}
         _Threshold ("Depth Threshold", Range(0, 0.5)) = 0.1
+		_AlphaThreshold("Alpha Threshold", Range(0.01, 0.5)) = 0.01
 	}
 
 	SubShader 
@@ -33,6 +34,7 @@ Shader "Custom/UserBlendShader"
 
 			uniform sampler2D _BackTex;
 			uniform float _Threshold;
+			uniform float _AlphaThreshold;
 
 			uniform float _ColorResX;
 			uniform float _ColorResY;
@@ -94,6 +96,7 @@ Shader "Custom/UserBlendShader"
 				int ci = (int)(cx + cy * _ColorResX);
 
 				half4 clrMain = tex2D(_MainTex, i.uv);
+				half4 clrBack = tex2D(_BackTex, ctUv2);
 				if (!isinf(_DepthCoords[ci].x) && !isinf(_DepthCoords[ci].y))
 				{
 					int dx = (int)_DepthCoords[ci].x;
@@ -113,16 +116,13 @@ Shader "Custom/UserBlendShader"
 						}
 						else
 						{
-							//return half4(1.0 - kinDepth/3,0,1,1);
-							//return half4(i.uv.x, i.uv.y, 0, 1);
-							half4 clrBack = tex2D(_BackTex, ctUv2);
-							half3 clrBlend = clrBack.rgb;
-							if (clrMain.a < 1.0) {
-								half3 clrBlendMain = (clrBlend.rgb * (1.0 - clrMain.a) + clrMain.rgb * clrMain.a);
-								return half4(clrBlendMain, 1.0);
-							}
-							else
-								return half4(clrBlend, 1.0);
+							//return clrMain;
+							float diff = camDepth - kinDepth;
+							float alpha = diff / _AlphaThreshold;
+							if (alpha > 1.0)
+								alpha = 1.0;
+							half3 blend = clrBack.rgb * alpha + clrMain.rgb * (1.0 - alpha);
+							return half4(blend, 1.0);
 						}
 					}
 				}
@@ -131,15 +131,12 @@ Shader "Custom/UserBlendShader"
 					//return half4(i.uv.x, i.uv.y, 0, 1);
 					if(camDepth > 0.1 && camDepth < 10.0)
 					{
+						//return half4(0.0, 0.0, 1.0, 1.0);
 						return clrMain;
 					}
 					else
 					{
-						//return tex2D(_ColorTex, ctUv);
-						half4 clrBack = tex2D(_BackTex, ctUv2);
-						half3 clrBlend = clrBack.rgb;
-
-						return half4(clrBlend, 1.0);
+						return half4(clrBack.rgb, 1.0);
 					} 
 				}
 			}
