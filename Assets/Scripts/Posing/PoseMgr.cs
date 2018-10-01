@@ -61,13 +61,18 @@ public class PoseMgr : MonoBehaviour {
 
     public void GenerateNewPose()
     {
-        CancelInvoke("GenerateNewPose");
+        CancelInvoke("OnNoPoseMatched");
 
         int newPose = 0;
         do
         {
             newPose = UnityEngine.Random.Range(1, 1 + BrainDataManager.Instance.NumPoses);
         } while (newPose == curPose || newPose == prevPose);
+
+        //Debug
+        //int newPose = curPose + 1;
+        //if (newPose == BrainDataManager.Instance.NumPoses + 1)
+        //    newPose = 1;
 
         prevPose = curPose;
         curPose = newPose;
@@ -79,7 +84,7 @@ public class PoseMgr : MonoBehaviour {
         object[] param = { curPose };
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
 
-        Invoke("GenerateNewPose", PoseDuration);
+        Invoke("OnNoPoseMatched", PoseDuration);
     }
 
     public void StopPosing()
@@ -99,6 +104,12 @@ public class PoseMgr : MonoBehaviour {
         imageAlpha = 0f;
         PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
         PoseImage.enabled = false;
+    }
+
+    private void OnNoPoseMatched()
+    {
+        PoseMatchingManager.Instance.OnNoPoseMatched();
+        GenerateNewPose();
     }
 
     IEnumerator SetNewPoseCooldown()

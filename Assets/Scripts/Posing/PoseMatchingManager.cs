@@ -49,6 +49,13 @@ public class PoseMatchingManager : MonoBehaviour {
 
         lastMatcherIdx = userIdx;
     }
+
+    public void OnNoPoseMatched()
+    {
+        lastMatcherIdx = -1;
+        numConsecutivePoseMatches = 0;
+        StopComboParticles();
+    }
     
     public void ClearFX(int userIdx = -1)
     {
