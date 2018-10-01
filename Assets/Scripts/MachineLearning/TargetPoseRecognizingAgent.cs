@@ -17,10 +17,7 @@ public class TargetPoseRecognizingAgent : Agent {
     }
 
     private int poseID;
-
     private bool isPoseMatched = false;
-    private bool isInCooldown = false;
-
     private float poseConfidence;
 
     PoseParameter pose;
@@ -39,14 +36,9 @@ public class TargetPoseRecognizingAgent : Agent {
             agentParameters = new AgentParameters();
     }
 
-    void OnDisable()
-    {
-        isInCooldown = false;
-    }
-
     void Update()
     { 
-        if (!PoseMgr.Instance.IsInNewPoseCooldown && !isInCooldown)
+        if (!PoseMgr.Instance.IsInNewPoseCooldown)
         {
             isPoseMatched = poseConfidence >= pose.min_confidence;
             if (isPoseMatched)
@@ -58,7 +50,6 @@ public class TargetPoseRecognizingAgent : Agent {
                 PoseMgr.Instance.GenerateNewPose();
 
                 isPoseMatched = false;
-                isInCooldown = true;
             }
         }
     }
@@ -105,6 +96,7 @@ public class TargetPoseRecognizingAgent : Agent {
     {
         isPoseMatched = false;
     }
+
     //Normalizing to [-1, 1]
     Vector3 NormalizeAngles(Vector3 angles)
     {
