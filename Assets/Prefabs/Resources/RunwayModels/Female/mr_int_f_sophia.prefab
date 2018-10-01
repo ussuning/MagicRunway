@@ -245,6 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4437670750813238}
+  - component: {fileID: 136341701086276390}
   m_Layer: 13
   m_Name: mixamorig:Hips
   m_TagString: Untagged
@@ -2176,6 +2177,19 @@ MonoBehaviour:
   alphaMap4: {fileID: 0}
   alphaMap5: {fileID: 0}
   isGeneratingCutoutMaterial: 0
+--- !u!136 &136341701086276390
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1271843976905242}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.26
+  m_Height: 1.94
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.12, z: 0}
 --- !u!137 &137069255064164716
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
