@@ -10,6 +10,8 @@ public class PoseMatchingManager : MonoBehaviour {
 
     public ParticleSystem [] comboFXParticles;
 
+    public float FXDuration = 5f;
+
     private int numConsecutivePoseMatches = 0;
     private int lastMatcherIdx = -1;
 
@@ -29,21 +31,20 @@ public class PoseMatchingManager : MonoBehaviour {
             switch (numConsecutivePoseMatches)
             {
                 case 5:
-                    PlayComboParticles(0);
+                    PlayComboParticles(0, FXDuration);
                     break;
                 case 8:
-                    PlayComboParticles(1);
+                    PlayComboParticles(1, FXDuration);
                     break;
                 case 10:
-                    PlayComboParticles(2);
+                    PlayComboParticles(2, FXDuration);
                     break;
             }
         }
         else
         {
             numConsecutivePoseMatches = 0;
-
-            PlayComboParticles(-1);
+            StopComboParticles();
         }
 
         lastMatcherIdx = userIdx;
@@ -54,15 +55,17 @@ public class PoseMatchingManager : MonoBehaviour {
         if(userIdx == -1 || //Change to Auto mode
           (userIdx >= 0 && userIdx == lastMatcherIdx)) //last matcher leave the scene
         {
-            numConsecutivePoseMatches = 0;
             lastMatcherIdx = -1;
-            PlayComboParticles(-1);
+            numConsecutivePoseMatches = 0;
+            StopComboParticles();
         }
     }
 
-    private void PlayComboParticles(int particlesIdx)
+    private void PlayComboParticles(int particlesIdx, float duration)
     {
-        for(int i=0; i<comboFXParticles.Length; i++)
+        CancelInvoke("StopComboParticles");
+
+        for (int i=0; i<comboFXParticles.Length; i++)
         {
             if(i == particlesIdx)
             {
@@ -75,6 +78,14 @@ public class PoseMatchingManager : MonoBehaviour {
                 comboFXParticles[i].gameObject.SetActive(false);   
             }
         }
+
+        if(particlesIdx >= 0)
+            Invoke("StopComboParticles", duration);
+    }
+
+    private void StopComboParticles()
+    {
+        PlayComboParticles(-1, 0);
     }
 
     Vector3 GetUserScreenPos(int userIdx)
