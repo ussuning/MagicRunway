@@ -131,11 +131,12 @@ Shader "Custom/UserBlendShader"
 					//return half4(i.uv.x, i.uv.y, 0, 1);
 					if(camDepth > 0.1 && camDepth < 10.0)
 					{
-						//return half4(0.0, 0.0, 1.0, 1.0);
+						return half4(0.0, 0.0, 1.0, 1.0);
 						return clrMain;
 					}
 					else
 					{
+						return half4(0.0, 1.0, 0.0, 1.0);
 						return half4(clrBack.rgb, 1.0);
 					} 
 				}
