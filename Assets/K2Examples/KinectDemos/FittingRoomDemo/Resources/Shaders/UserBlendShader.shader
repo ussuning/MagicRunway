@@ -117,10 +117,14 @@ Shader "Custom/UserBlendShader"
 						else
 						{
 							//return clrMain;
-							float diff = camDepth - kinDepth;
+							float diff = (camDepth - kinDepth);
 							float alpha = diff / _AlphaThreshold;
 							if (alpha > 1.0)
 								alpha = 1.0;
+							if (kinDepth > 10.0) {
+								float kinDepthAlpha = (10.0 - kinDepth) / 0.1;
+
+							}
 							half3 blend = clrBack.rgb * alpha + clrMain.rgb * (1.0 - alpha);
 							return half4(blend, 1.0);
 						}
@@ -131,12 +135,12 @@ Shader "Custom/UserBlendShader"
 					//return half4(i.uv.x, i.uv.y, 0, 1);
 					if(camDepth > 0.1 && camDepth < 10.0)
 					{
-						return half4(0.0, 0.0, 1.0, 1.0);
+						//return half4(0.0, 0.0, 1.0, 1.0);
 						return clrMain;
 					}
 					else
 					{
-						return half4(0.0, 1.0, 0.0, 1.0);
+						//return half4(0.0, 1.0, 0.0, 1.0);
 						return half4(clrBack.rgb, 1.0);
 					} 
 				}
