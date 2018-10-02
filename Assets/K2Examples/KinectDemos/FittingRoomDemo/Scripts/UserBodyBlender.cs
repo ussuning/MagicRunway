@@ -8,13 +8,15 @@ public class UserBodyBlender : MonoBehaviour
 	[Range(-0.5f, 0.5f)]
 	public float depthThreshold = 0.1f;
 
-    [Range(0.01f, 0.1f)]
+    [Range(0.01f, 0.5f)]
     public float alphaThreshold = 0.05f;
+    [Range(0.01f, 0.5f)]
+    public float edgeThreshold = 0.05f;
 
-	//[Tooltip("Camera used to render the 2nd scene background (users). This background camera gets disabled, when this component is enabled.")]
-	//public Camera backgroundCamera2;
+    //[Tooltip("Camera used to render the 2nd scene background (users). This background camera gets disabled, when this component is enabled.")]
+    //public Camera backgroundCamera2;
 
-	public Material userBlendMat;
+    public Material userBlendMat;
 	private KinectManager kinectManager;
 	private BackgroundRemovalManager backManager;
 	private long lastDepthFrameTime;
@@ -202,6 +204,7 @@ public class UserBodyBlender : MonoBehaviour
 		{
 			userBlendMat.SetFloat("_Threshold", depthThreshold);
             userBlendMat.SetFloat("_AlphaThreshold", alphaThreshold);
+            userBlendMat.SetFloat("_EdgeThreshold", edgeThreshold);
             Graphics.Blit(source, destination, userBlendMat);
 
 			if (copyToTex != null) 

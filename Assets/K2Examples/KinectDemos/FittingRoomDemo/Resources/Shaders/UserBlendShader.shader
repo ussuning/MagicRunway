@@ -8,6 +8,7 @@ Shader "Custom/UserBlendShader"
 		_BackTex ("BackTex", 2D) = "white" {}
         _Threshold ("Depth Threshold", Range(0, 0.5)) = 0.1
 		_AlphaThreshold("Alpha Threshold", Range(0.01, 0.5)) = 0.01
+		_EdgeThreshold("Edge Threshold", Range(0.01, 0.5)) = 0.25
 	}
 
 	SubShader 
@@ -35,6 +36,7 @@ Shader "Custom/UserBlendShader"
 			uniform sampler2D _BackTex;
 			uniform float _Threshold;
 			uniform float _AlphaThreshold;
+			uniform float _EdgeThreshold;
 
 			uniform float _ColorResX;
 			uniform float _ColorResY;
@@ -107,6 +109,14 @@ Shader "Custom/UserBlendShader"
 					//if(di >= 0 && di < di_length)
 					{
 						float kinDepth = _DepthBuffer[di] / 1000.0;
+						if (di > 0 && di < _DepthResX*_DepthResY) {
+							// Average the two most close values.
+							float di_diplus1 = abs(_DepthBuffer[di] - _DepthBuffer[di + 1]) / 1000.0;
+							float di_diminus1= abs(_DepthBuffer[di] - _DepthBuffer[di - 1]) / 1000.0;
+							if (di_diplus1 > _EdgeThreshold || di_diminus1 > _EdgeThreshold)
+								//return half4(1.0, 0, 0, 1.0);
+								kinDepth = 0;
+						}
 						//kinDepth *= _DepthFactor;
 					
 						if(camDepth > 0.1 && camDepth < 10.0 && 
@@ -121,10 +131,6 @@ Shader "Custom/UserBlendShader"
 							float alpha = diff / _AlphaThreshold;
 							if (alpha > 1.0)
 								alpha = 1.0;
-							if (kinDepth > 10.0) {
-								float kinDepthAlpha = (10.0 - kinDepth) / 0.1;
-
-							}
 							half3 blend = clrBack.rgb * alpha + clrMain.rgb * (1.0 - alpha);
 							return half4(blend, 1.0);
 						}
