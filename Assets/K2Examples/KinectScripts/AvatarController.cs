@@ -131,6 +131,8 @@ public class AvatarController : MonoBehaviour
     public float shoulderAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
     [Range(0.5f, 2.0f)]
     public float hipAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
+    [Range(0.5f, 2.0f)]
+    public float hipZFactor = 1.0f;
     [Range(0f, 1.0f)]
     public float hipUpwardsFactor = 0.1f;
     //public float shoulderAngleRange = 1f;
