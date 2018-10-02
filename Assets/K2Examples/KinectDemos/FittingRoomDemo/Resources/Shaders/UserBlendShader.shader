@@ -8,7 +8,7 @@ Shader "Custom/UserBlendShader"
 		_BackTex ("BackTex", 2D) = "white" {}
         _Threshold ("Depth Threshold", Range(0, 0.5)) = 0.1
 		_AlphaThreshold("Alpha Threshold", Range(0.01, 0.5)) = 0.01
-		_EdgeThreshold("Edge Threshold", Range(0.01, 0.5)) = 0.25
+		_EdgeThreshold("Edge Threshold", Range(0.01, 1.0)) = 0.25
 	}
 
 	SubShader 

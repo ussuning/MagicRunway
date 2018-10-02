@@ -10,8 +10,8 @@ public class UserBodyBlender : MonoBehaviour
 
     [Range(0.01f, 0.5f)]
     public float alphaThreshold = 0.05f;
-    [Range(0.01f, 0.5f)]
-    public float edgeThreshold = 0.05f;
+    [Range(0.01f, 1.0f)]
+    public float edgeThreshold = 0.5f;
 
     //[Tooltip("Camera used to render the 2nd scene background (users). This background camera gets disabled, when this component is enabled.")]
     //public Camera backgroundCamera2;
