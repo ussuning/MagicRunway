@@ -69,7 +69,7 @@ public class FaceCapture : MonoBehaviour
         if (userId == 0) 
 		{
             ////////BILL
-            Debug.Log("NO SHOW");
+            //Debug.Log("NO SHOW");
 			return;
 		}
 

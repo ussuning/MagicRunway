@@ -58,6 +58,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Application.targetFrameRate = 120;
         //Application.backgroundLoadingPriority = ThreadPriority.Low;
         //Shader.WarmupAllShaders();
+        KinectManager.Instance.maxTrackedUsers = 6;
+
         faceCapture.enabled = false;
 
         AddRunwayEventListeners();

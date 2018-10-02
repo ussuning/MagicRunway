@@ -38,6 +38,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         Debug.Log(string.Format("[LiveRunwayManager] SetUp: level = {0}", level));
 
+        KinectManager.Instance.maxTrackedUsers = 6;
+
         liveRunwayContainer.SetActive(true);
 
         CreateUsersFromBuffer();
