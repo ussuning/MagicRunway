@@ -154,7 +154,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         bool notReady = true;
 
         models = new List<GameObject>();
-        AssetBundle modelsAB = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
 
         while (notReady)
         {
@@ -162,7 +161,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             //yield return request;
 
             //GameObject prefab = (GameObject)request.asset;
-            GameObject prefab = modelsAB.LoadAsset<GameObject>(resource[total]);
+            GameObject prefab = AssetBundleManager.Instance.GetModelAsset(resource[total]);
 
             GameObject go = GameObject.Instantiate(prefab);
             go.SetActive(true);

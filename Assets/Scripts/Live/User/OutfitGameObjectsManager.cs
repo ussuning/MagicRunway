@@ -121,8 +121,8 @@ public class OutfitGameObjectsManager : MonoBehaviour {
             string path = /*"RunwayModels/" + sex + "/" +*/ outfit.prefab;
 
             //outfitPrefab = Resources.Load<GameObject>(path);
-            AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
-            outfitPrefab = ab.LoadAsset<GameObject>(path);
+
+            outfitPrefab = AssetBundleManager.Instance.modelsBundleManager.LoadAsset<GameObject>(path);
             prefabCache.Add(outfit.prefab, outfitPrefab);
         }
 
