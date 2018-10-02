@@ -11,11 +11,25 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     public GameObject userContainer;
     public GameObject posingScoreContainer;
 
+    public int NumberOfPlayers = 2;
     public float UserReconnectionTime = 3f;
 
     private List<int> userBuffer = new List<int>();
     private List<int> disconnectedUserBuffer = new List<int>();
     private Dictionary<int, User> users = new Dictionary<int, User>();
+    private int NumActivatedUsers
+    {
+        get
+        {
+            int aUsers = 0;
+            foreach(User user in users.Values)
+            {
+                if (user.IsActivated)
+                    aUsers++;
+            }
+            return aUsers;
+        }
+    }
 
     private bool isModeActive = false;
 
@@ -130,24 +144,40 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (users.ContainsKey(userIndex))
         {
             User user = users[userIndex];
-            //if (user.UserGender == User.Gender.None)
-            //{
-                switch (gesture)
+            if (!user.IsActivated)
+            {
+                if (NumActivatedUsers >= NumberOfPlayers)
+                    return false;
+
+                user.activate();
+
+                if (NumActivatedUsers >= NumberOfPlayers)
                 {
-                    case KinectGestures.Gestures.RaiseLeftHand:
-                        user.UserGender = User.Gender.Female;
-                        Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Female", userId));
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
-                        break;
-                    case KinectGestures.Gestures.RaiseRightHand:
-                        user.UserGender = User.Gender.Male;
-                        Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Male", userId));
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
-                        break;
-                }
-            //} 
+                    foreach(User u in users.Values)
+                    {
+                        if (!u.IsActivated)
+                            u.IsReadyToBeActivated = false;
+                    }
+                }  
+            }
+
+            switch (gesture)
+            {
+                case KinectGestures.Gestures.RaiseLeftHand:
+                    user.UserGender = User.Gender.Female;
+                    Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Female", userId));
+                    //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+                    //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+                    break;
+                case KinectGestures.Gestures.RaiseRightHand:
+                    user.UserGender = User.Gender.Male;
+                    Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Male", userId));
+                    //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+                    //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+                    break;
+            }
+            ClosetManager.Instance.OnUserGenderSelected(userIndex, user.UserGender);
+            
             return true;
         }
 
@@ -164,7 +194,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         foreach(int userIdx in userBuffer)
         {
             long userId = userBuffer[userIdx];
-            CreateUser(userIdx);
+            User user = CreateUser(userIdx);
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
             KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             Debug.Log(string.Format("[LiveRunwayManager] CreateUsersFromBuffer: User {0} created", userId));
@@ -196,7 +226,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         User user = users[userIdx];
         users.Remove(userIdx);
         Destroy(user.gameObject);
-    }
+    } 
 
     IEnumerator DisconnectingUser(int userIndex, long userId)
     {
@@ -216,6 +246,15 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                 ClosetManager.Instance.OnUserLost(userIndex);
                 OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
                 PoseMatchingManager.Instance.ClearFX(userIndex);
+
+                if (NumActivatedUsers < NumberOfPlayers)
+                {
+                    foreach (User u in users.Values)
+                    {
+                        if(!u.IsActivated)
+                            u.IsReadyToBeActivated = true;
+                    }
+                }
 
                 if (users.Count <= 0)
                     AppManager.Instance.TransitionToAuto();

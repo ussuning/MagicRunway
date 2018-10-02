@@ -28,7 +28,7 @@ public class User : MonoBehaviour {
         {
             return manager.GetUserIdByIndex(uidx);
         }
-    }  
+    }
 
     private Gender ugender;
     public Gender UserGender
@@ -39,7 +39,6 @@ public class User : MonoBehaviour {
             if (ugender != Gender.None)
             {
                 GenderSelectionUI.OnGenderSelected(ugender);
-                ClosetManager.Instance.OnUserGenderSelected(uidx, ugender);
             }
         }
         get
@@ -47,6 +46,25 @@ public class User : MonoBehaviour {
             return ugender;
         }
     }
+
+    private bool isActivated = false;
+    public bool IsActivated
+    {
+        get
+        {
+            return isActivated;
+        }
+    }
+
+    private bool isReadyToBeActivated = true;
+    public bool IsReadyToBeActivated
+    {
+        set
+        {
+            isReadyToBeActivated = value;
+        }
+    }
+
 
     private UserScore uScore;
     private PoseAgentSelector poseAgentSelector;
@@ -79,7 +97,25 @@ public class User : MonoBehaviour {
         uScore = userScore;
 
         poseAgentSelector.Init(idx);
+        poseAgentSelector.enabled = false;
+
         uScore.init(idx);
+        uScore.gameObject.SetActive(false);
+
+        isReadyToBeActivated = true;
+        isActivated = false;
+    }
+
+    public void activate()
+    {
+        if (isReadyToBeActivated)
+        {
+            poseAgentSelector.enabled = true;
+            uScore.gameObject.SetActive(true);
+
+            isReadyToBeActivated = false;
+            isActivated = true;
+        }
     }
 
     void Update()
@@ -88,7 +124,7 @@ public class User : MonoBehaviour {
         {
             if (GenderSelectionUI)
             {
-                if (manager.IsUserTracked(UserID))
+                if (isReadyToBeActivated && manager.IsUserTracked(UserID))
                 {
                     GenderSelectionUI.transform.position = GetUserScreenPos() + new Vector3(0f, 160f, 0f);
                     GenderSelectionUI.Show();
