@@ -809,6 +809,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   broadcast: 1
   brain: {fileID: 0}
+--- !u!20 &139335875 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 20064724715000156, guid: 88b77abc855415b4e821200dd0bc69e0,
+    type: 2}
+  m_PrefabInternal: {fileID: 389059348}
 --- !u!1 &140712119
 GameObject:
   m_ObjectHideFlags: 0
@@ -23093,8 +23098,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f592d25590649d41a97ee9caae5fd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundCamera: {fileID: 1999457807}
-  backgroundCamera2: {fileID: 1516950169}
+  backgroundCamera: {fileID: 0}
+  backgroundCamera2: {fileID: 0}
   foregroundCamera: {fileID: 332944801}
 --- !u!114 &1314250650
 MonoBehaviour:
@@ -28938,11 +28943,6 @@ Transform:
   m_Father: {fileID: 984732707}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 20, z: -90}
---- !u!20 &1516950169 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 20750147251494480, guid: 88b77abc855415b4e821200dd0bc69e0,
-    type: 2}
-  m_PrefabInternal: {fileID: 389059348}
 --- !u!1 &1517884774
 GameObject:
   m_ObjectHideFlags: 0
@@ -29684,6 +29684,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1023743740}
+    - target: {fileID: 114668652663923630, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 139335875}
     - target: {fileID: 114205455763185360, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -29709,6 +29714,11 @@ Prefab:
       propertyPath: comboFXParticles.Array.data[2]
       value: 
       objectReference: {fileID: 648758929}
+    - target: {fileID: 114467580326782088, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 139335875}
     - target: {fileID: 114178751664764264, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
       propertyPath: Stickman
@@ -35670,11 +35680,6 @@ MonoBehaviour:
   m_Name: (Clone)(Clone)(Clone)(Clone)(Clone)(Clone)
   m_EditorClassIdentifier: 
   brain: {fileID: 0}
---- !u!20 &1999457807 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 20451094178470854, guid: 88b77abc855415b4e821200dd0bc69e0,
-    type: 2}
-  m_PrefabInternal: {fileID: 389059348}
 --- !u!1 &2016554036
 GameObject:
   m_ObjectHideFlags: 0

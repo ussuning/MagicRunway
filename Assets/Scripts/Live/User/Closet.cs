@@ -13,6 +13,8 @@ public class Closet : MonoBehaviour {
 
     public Side ClosetSide;
 
+    public Camera cam;
+
     //private long ownerId;
     private int ownerIdx;
     public int OwnerIndex
@@ -112,31 +114,31 @@ public class Closet : MonoBehaviour {
                 if (kinect.IsUserTracked(OwnerID))
                 {
                     ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, OwnerID), 0.25f);
-                    if (ownerPointDir >= -0.75f && ownerPointDir < -0.5f)
+                    if (ownerPointDir >= bottomArrow.BottomBound && ownerPointDir < bottomArrow.TopBound)
                     {
                         OnBottomArrowHover();
                     }
-                    else if (ownerPointDir >= -0.5f && ownerPointDir < -0.25f)
+                    else if (ownerPointDir >= OutfitItems[3].BottomBound && ownerPointDir < OutfitItems[3].TopBound)
                     {
                         OnOutfitItemHover(3);
                     }
-                    else if (ownerPointDir >= -0.25f && ownerPointDir < 0f)
+                    else if (ownerPointDir >= OutfitItems[2].BottomBound && ownerPointDir < OutfitItems[2].TopBound)
                     {
                         OnOutfitItemHover(2);
                     }
-                    else if (ownerPointDir >= 0f && ownerPointDir < 0.25f)
+                    else if (ownerPointDir >= OutfitItems[1].BottomBound && ownerPointDir < OutfitItems[1].TopBound)
                     {
                         OnOutfitItemHover(1);
                     }
-                    else if (ownerPointDir >= 0.25f && ownerPointDir < 0.5f)
+                    else if (ownerPointDir >= OutfitItems[0].BottomBound && ownerPointDir < OutfitItems[0].TopBound)
                     {
                         OnOutfitItemHover(0);
                     }
-                    else if (ownerPointDir >= 0.5f && ownerPointDir < 0.75f)
+                    else if (ownerPointDir >= topArrow.BottomBound && ownerPointDir <= topArrow.TopBound)
                     {
                         OnTopArrowHover();
                     }
-                    else
+                    else if(ownerPointDir < bottomArrow.BottomBound || ownerPointDir > topArrow.TopBound)
                     {
                         OnUnselectAll();
                     }
@@ -281,19 +283,26 @@ public class Closet : MonoBehaviour {
         return dOutfits;
     }
 
+
     float GetPointDirection(Side closetSide, long ownerID)
     {
         if (closetSide == Closet.Side.Left)
         {
-            Vector3 lHandPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.HandLeft);
-            Vector3 lShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ShoulderLeft);
-            return (lHandPos - lShoulderPos).normalized.y;
+            Vector3 lFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipLeft, cam, cam.pixelRect);
+            //Vector3 lHandPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandLeft, cam, cam.pixelRect);
+            Vector3 lWristPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.WristLeft, cam, cam.pixelRect);
+            //Vector3 lElbowPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ElbowLeft, cam, cam.pixelRect);
+            Vector3 lShoulderPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ShoulderLeft, cam, cam.pixelRect);
+            return (lFingersPos - lShoulderPos).normalized.y;
         }
         else if (closetSide == Closet.Side.Right)
         {
-            Vector3 rHandPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.HandRight);
-            Vector3 rShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ShoulderRight);
-            return (rHandPos - rShoulderPos).normalized.y;
+            Vector3 rFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipRight, cam, cam.pixelRect);
+            //Vector3 rHandPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandRight, cam, cam.pixelRect);
+            Vector3 rWristPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.WristRight, cam, cam.pixelRect);
+            //Vector3 rElbowPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ElbowRight, cam, cam.pixelRect);
+            Vector3 rShoulderPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ShoulderRight, cam, cam.pixelRect);
+            return (rFingersPos - rShoulderPos).normalized.y;
         }
 
         return -1f;
