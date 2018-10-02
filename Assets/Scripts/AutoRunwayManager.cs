@@ -35,7 +35,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private bool isModeActive = false;
 
-    private float waveInactivityTime = 10.0f;
+    //private float waveInactivityTime = 10.0f;
 
     void Awake()
     {
@@ -71,7 +71,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (KinectManager.Instance.GetAllUserIds().Count > 0)
             UIManager.Instance.ShowStartMenu(false);
 
-        scrollingVideoWall.Freeze();
+        scrollingVideoWall.Run();
 
         autoRunwayContainer.SetActive(true);
 
