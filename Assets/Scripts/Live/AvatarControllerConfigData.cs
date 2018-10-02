@@ -14,6 +14,7 @@ class AvatarControllerEntry
     public float neckVerticalOffset = 0f;
     public float headVerticalOffset = 0f; //Compensate for head is not actually
     public float hipAdjustWidthFactor = 1.0f;
+    public float hipZFactor = 1.0f;
     public float shoulderAdjustWidthFactor = 1.0f;
     public float hipUpwardsFactor = 0.0f; // Make legs longer.
 
@@ -41,6 +42,7 @@ class AvatarControllerEntry
         this.neckVerticalOffset = avatarController.neckVerticalOffset;
         this.headVerticalOffset = avatarController.headVerticalOffset;
         this.hipAdjustWidthFactor = avatarController.hipAdjustWidthFactor;
+        this.hipZFactor = avatarController.hipZFactor;
         this.shoulderAdjustWidthFactor = avatarController.shoulderAdjustWidthFactor;
         this.hipUpwardsFactor = avatarController.hipUpwardsFactor;
     }
@@ -56,6 +58,7 @@ class AvatarControllerEntry
         avatarController.neckVerticalOffset = this.neckVerticalOffset;
         avatarController.headVerticalOffset = this.headVerticalOffset;
         avatarController.hipAdjustWidthFactor = this.hipAdjustWidthFactor;
+        avatarController.hipZFactor = this.hipZFactor;
         avatarController.shoulderAdjustWidthFactor = this.shoulderAdjustWidthFactor;
         avatarController.hipUpwardsFactor = this.hipUpwardsFactor;
 
