@@ -109,8 +109,8 @@ public class EquipableWearablesManager : MonoBehaviour
 
         // Load wearable's prefab
         string path = GetPathForOutfitPrefab(wearable.prefab, wearable.sex);
-        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.models);
-        GameObject asset = ab.LoadAsset<GameObject>(path); // Resources.Load<GameObject>(path);
+        GameObject asset = AssetBundleManager.Instance.modelsBundleManager.LoadAsset<GameObject>(path); // Resources.Load<GameObject>(path);
+        
         GameObject go;
         if (asset != null)
             go = Instantiate(asset);
