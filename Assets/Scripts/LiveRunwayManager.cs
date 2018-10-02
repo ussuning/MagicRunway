@@ -59,7 +59,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         CreateUsersFromBuffer();
 
         ClosetManager.Instance.OnEnterLiveMode();
-        PoseMgr.Instance.StartPosing();
+        //PoseMgr.Instance.StartPosing();
 
         isModeActive = true;
     }
@@ -70,7 +70,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         UIManager.Instance.HideAll();
         PoseMatchingManager.Instance.ClearFX();
-        PoseMgr.Instance.StopPosing();
+        //PoseMgr.Instance.StopPosing();
 
         liveRunwayContainer.SetActive(false);
 
@@ -151,14 +151,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
                 user.activate();
 
-                if (NumActivatedUsers >= NumberOfPlayers)
-                {
-                    foreach(User u in users.Values)
-                    {
-                        if (!u.IsActivated)
-                            u.IsReadyToBeActivated = false;
-                    }
-                }  
+                UpdateLiveStatus(NumActivatedUsers);
             }
 
             switch (gesture)
@@ -247,18 +240,26 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                 OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
                 PoseMatchingManager.Instance.ClearFX(userIndex);
 
-                if (NumActivatedUsers < NumberOfPlayers)
-                {
-                    foreach (User u in users.Values)
-                    {
-                        if(!u.IsActivated)
-                            u.IsReadyToBeActivated = true;
-                    }
-                }
+                UpdateLiveStatus(NumActivatedUsers);
 
                 if (users.Count <= 0)
                     AppManager.Instance.TransitionToAuto();
             }
         }
+    }
+
+    void UpdateLiveStatus(int numActivatedUsers)
+    {
+        foreach (User u in users.Values)
+        {
+            if (!u.IsActivated)
+                u.IsReadyToBeActivated = (numActivatedUsers < NumberOfPlayers);
+        }
+
+        PoseMgr poseMgr = PoseMgr.Instance;
+        if (!poseMgr.IsPosing && numActivatedUsers >= 1)
+            poseMgr.StartPosing();
+        else if (poseMgr.IsPosing && numActivatedUsers == 0)
+            poseMgr.StopPosing();
     }
 }

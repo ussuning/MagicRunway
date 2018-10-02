@@ -10,9 +10,11 @@ public class PoseMgr : MonoBehaviour {
     public StickmanPosing Stickman;
     public RawImage PoseImage;
 
-    public float ImageFadeSpeed = 1f;
+    public float ImageFadeInSpeed = 1f;
+    public float ImageFadeOutSpeed = 3f;
 
     private bool isImageFadingIN;
+    private bool isImageFadingOUT;
     private float imageAlpha;
 
     public float PoseDuration = 5f;
@@ -26,6 +28,15 @@ public class PoseMgr : MonoBehaviour {
         get
         {
             return isInNewPoseCD;
+        }
+    }
+
+    private bool isPosing = false;
+    public bool IsPosing
+    {
+        get
+        {
+            return isPosing;
         }
     }
 
@@ -43,12 +54,24 @@ public class PoseMgr : MonoBehaviour {
     {
         if(isImageFadingIN)
         {
-            imageAlpha += Time.deltaTime * ImageFadeSpeed;
+            imageAlpha += Time.deltaTime * ImageFadeInSpeed;
             PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
             if (imageAlpha >= 1f) //Fade in completed
             {
+                imageAlpha = 1f;
                 isImageFadingIN = false;
                 GenerateNewPose();
+            }
+        }
+        else if(isImageFadingOUT)
+        {
+            imageAlpha -= Time.deltaTime * ImageFadeOutSpeed;
+            PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
+            if (imageAlpha <= 0f) //Fade out completed
+            {
+                imageAlpha = 0f;
+                isImageFadingOUT = false;
+                PoseImage.enabled = false;
             }
         }
     }
@@ -57,6 +80,9 @@ public class PoseMgr : MonoBehaviour {
     {
         PoseImage.enabled = true;
         isImageFadingIN = true;
+        isImageFadingOUT = false;
+
+        isPosing = true;
     }
 
     public void GenerateNewPose()
@@ -101,9 +127,12 @@ public class PoseMgr : MonoBehaviour {
         EventMsgDispatcher.Instance.TriggerEvent(EventDef.New_Pose_Generated, param);
 
         isImageFadingIN = false;
-        imageAlpha = 0f;
-        PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
-        PoseImage.enabled = false;
+        isImageFadingOUT = true;
+        //imageAlpha = 0f;
+        //PoseImage.color = new Color(1f, 1f, 1f, imageAlpha);
+        //PoseImage.enabled = false;
+
+        isPosing = false;
     }
 
     private void OnNoPoseMatched()
