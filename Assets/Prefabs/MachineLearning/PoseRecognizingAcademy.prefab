@@ -27,7 +27,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1168941676943296
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,7 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c796d2e83840dc4dae64471fae69fbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brainDataFilePath: /StreamingAssets/brain_data.json
+  brainDataFilePath: brain_data.json
   trainedDataFolderPath: MachineLearningModels/TargetPoseRecognizing/TargetPoseTraining_training_
 --- !u!114 &114946702897875792
 MonoBehaviour:

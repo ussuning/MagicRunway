@@ -18,9 +18,9 @@ public class Poses
 {
     public List<PoseParameter> poses;
 
-    public static Poses CreateFromJSON(string JsonPath)
+    public static Poses CreateFromJSON(string jsonString)
     {
-        string jsonString = File.ReadAllText(JsonPath);
+        //string jsonString = File.ReadAllText(JsonPath);
         Poses poses_data = JsonUtility.FromJson<Poses>(jsonString);
         return poses_data;
     }
@@ -31,7 +31,7 @@ public class BrainDataManager : MonoBehaviour
 
     public static BrainDataManager Instance;
 
-    public string brainDataFilePath = "/StreamingAssets/brain_data.json";
+    public string brainDataFilePath = "brain_data.json";
     public string trainedDataFolderPath = "MachineLearningModels/TargetPoseRecognizing/TargetPoseTraining_training_"; //Rooted from Resources
 
     private Academy academy;
@@ -76,9 +76,13 @@ public class BrainDataManager : MonoBehaviour
     {
         string filePath = Application.dataPath + brainDataFilePath;
 
-        if (File.Exists(filePath))
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.textdata);
+        TextAsset textAsset = ab.LoadAsset<TextAsset>(brainDataFilePath);
+        Debug.LogWarning("brain_data: " + textAsset.text);
+
+        if (textAsset != null)
         {
-            posesData = Poses.CreateFromJSON(filePath);
+            posesData = Poses.CreateFromJSON(textAsset.text);
         }
         else
         {

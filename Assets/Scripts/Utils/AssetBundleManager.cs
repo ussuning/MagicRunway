@@ -9,7 +9,8 @@ public class AssetBundleManager : Singleton<AssetBundleManager> {
         {AssetBundles.models, "models.assetbundle" },
         {AssetBundles.clothingIcons, "clothing_icons.assetbundle" },
         {AssetBundles.videowall, "videowall.assetbundle" },
-        {AssetBundles.cutouttextureswapper, "cutouttextureswapper.assetbundle" }
+        {AssetBundles.cutouttextureswapper, "cutouttextureswapper.assetbundle" },
+        {AssetBundles.textdata, "textdata.assetbundle" }
     };
 
     public Dictionary<string, AssetBundle> loadedBundles = new Dictionary<string, AssetBundle>();
@@ -67,5 +68,6 @@ public enum AssetBundles
     models,
     clothingIcons,
     videowall,
-    cutouttextureswapper
+    cutouttextureswapper,
+    textdata
 }

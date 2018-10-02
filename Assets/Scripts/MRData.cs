@@ -30,11 +30,14 @@ public class MRData : Singleton<MRData>
     }
 
     public void GetWearables() {
-        string filePath = Path.Combine(Application.streamingAssetsPath, wearablesFileName);
 
-        if (File.Exists(filePath))
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.textdata);
+        TextAsset textAsset = ab.LoadAsset<TextAsset>(wearablesFileName);
+        //string filePath = Path.Combine(Application.streamingAssetsPath, wearablesFileName);
+
+        if (textAsset != null)
         {
-            string dataAsJson = File.ReadAllText(filePath);
+            string dataAsJson = textAsset.text;
             wearables = JsonUtility.FromJson<Wearables>(dataAsJson);
             //Debug.Log(wearables.wearables[0].name);
         }
@@ -44,12 +47,15 @@ public class MRData : Singleton<MRData>
         }
     }
 
-    public void GetOutfits() {
-        string filePath = Path.Combine(Application.streamingAssetsPath, outfitsFileName);
+    public void GetOutfits()
+    {
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.textdata);
+        TextAsset textAsset = ab.LoadAsset<TextAsset>(outfitsFileName);
+        //string filePath = Path.Combine(Application.streamingAssetsPath, outfitsFileName);
 
-        if (File.Exists(filePath))
+        if (textAsset != null)
         {
-            string dataAsJson = File.ReadAllText(filePath);
+            string dataAsJson = textAsset.text;
             outfits = JsonUtility.FromJson<Outfits>(dataAsJson);
             //Debug.Log(outfits.outfits[0].id);
             //Debug.Log(outfits.outfits[0].name);
@@ -64,11 +70,13 @@ public class MRData : Singleton<MRData>
 
     public void GetCollections()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, collectionsFileName);
+        AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.textdata);
+        TextAsset textAsset = ab.LoadAsset<TextAsset>(collectionsFileName);
+        //string filePath = Path.Combine(Application.streamingAssetsPath, collectionsFileName);
 
-        if (File.Exists(filePath))
+        if (textAsset != null)
         {
-            string dataAsJson = File.ReadAllText(filePath);
+            string dataAsJson = textAsset.text;
             collections = JsonUtility.FromJson<Collections>(dataAsJson);
             //Debug.Log(collections.collections[0].name);
         }
