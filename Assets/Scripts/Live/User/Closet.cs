@@ -13,6 +13,11 @@ public class Closet : MonoBehaviour {
 
     public Side ClosetSide;
 
+    public float shiftOutSpeed = 10f;
+    public float shiftInSpeed = 20f;
+
+    public float idolTime = 5f;
+
     public Camera cam;
 
     //private long ownerId;
@@ -68,6 +73,17 @@ public class Closet : MonoBehaviour {
         }
     }
 
+    private bool isHidden = true;
+    public bool IsHidden
+    {
+        get
+        {
+            return isHidden;
+        }
+    }
+    private bool isHidding = false;
+    private bool isShowing = false;
+
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
@@ -75,11 +91,18 @@ public class Closet : MonoBehaviour {
 
     private float ownerPointDir;
 
+    private RectTransform rectTrans;
+    private Vector3 shownPos;
+    private Vector3 hiddenPos;
+    private float idolTimeEllapsed = 0f;
+
     KinectManager kinect;
 
     void Awake ()
     {
-        for(int i=0; i<transform.childCount; i++)
+        rectTrans = GetComponent<RectTransform>();
+
+        for (int i=0; i<transform.childCount; i++)
         {
             if(i == 0)
             {
@@ -103,52 +126,140 @@ public class Closet : MonoBehaviour {
     {
         if(!kinect)
             kinect = KinectManager.Instance;
+
+        hiddenPos = rectTrans.anchoredPosition;
+        if (ClosetSide == Side.Left)
+            shownPos = new Vector3(hiddenPos.x + rectTrans.sizeDelta.x, hiddenPos.y, hiddenPos.z);
+        else if(ClosetSide == Side.Right)
+            shownPos = new Vector3(hiddenPos.x - rectTrans.sizeDelta.x, hiddenPos.y, hiddenPos.z);
+
+        isHidden = true;
+        isHidding = false;
+        isShowing = false;
+        idolTimeEllapsed = 0f;
     }
 
     void Update()
     {
-        if(isActive)
+        if (isActive)
         {
-            if (kinect && kinect.IsInitialized())
+            if (!isHidden)
             {
-                if (kinect.IsUserTracked(OwnerID))
+                if (kinect && kinect.IsInitialized())
                 {
-                    ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, OwnerID), 0.25f);
-                    if (ownerPointDir >= bottomArrow.BottomBound && ownerPointDir < bottomArrow.TopBound)
+                    if (kinect.IsUserTracked(OwnerID))
                     {
-                        OnBottomArrowHover();
+                        ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, OwnerID), 0.25f);
+                        if (ownerPointDir >= bottomArrow.BottomBound && ownerPointDir < bottomArrow.TopBound)
+                        {
+                            OnBottomArrowHover();
+                        }
+                        else if (ownerPointDir >= OutfitItems[3].BottomBound && ownerPointDir < OutfitItems[3].TopBound)
+                        {
+                            OnOutfitItemHover(3);
+                        }
+                        else if (ownerPointDir >= OutfitItems[2].BottomBound && ownerPointDir < OutfitItems[2].TopBound)
+                        {
+                            OnOutfitItemHover(2);
+                        }
+                        else if (ownerPointDir >= OutfitItems[1].BottomBound && ownerPointDir < OutfitItems[1].TopBound)
+                        {
+                            OnOutfitItemHover(1);
+                        }
+                        else if (ownerPointDir >= OutfitItems[0].BottomBound && ownerPointDir < OutfitItems[0].TopBound)
+                        {
+                            OnOutfitItemHover(0);
+                        }
+                        else if (ownerPointDir >= topArrow.BottomBound && ownerPointDir <= topArrow.TopBound)
+                        {
+                            OnTopArrowHover();
+                        }
+                        else if (ownerPointDir < bottomArrow.BottomBound || ownerPointDir > topArrow.TopBound)
+                        {
+                            OnUnselectAll();
+                        }
                     }
-                    else if (ownerPointDir >= OutfitItems[3].BottomBound && ownerPointDir < OutfitItems[3].TopBound)
-                    {
-                        OnOutfitItemHover(3);
-                    }
-                    else if (ownerPointDir >= OutfitItems[2].BottomBound && ownerPointDir < OutfitItems[2].TopBound)
-                    {
-                        OnOutfitItemHover(2);
-                    }
-                    else if (ownerPointDir >= OutfitItems[1].BottomBound && ownerPointDir < OutfitItems[1].TopBound)
-                    {
-                        OnOutfitItemHover(1);
-                    }
-                    else if (ownerPointDir >= OutfitItems[0].BottomBound && ownerPointDir < OutfitItems[0].TopBound)
-                    {
-                        OnOutfitItemHover(0);
-                    }
-                    else if (ownerPointDir >= topArrow.BottomBound && ownerPointDir <= topArrow.TopBound)
-                    {
-                        OnTopArrowHover();
-                    }
-                    else if(ownerPointDir < bottomArrow.BottomBound || ownerPointDir > topArrow.TopBound)
+                    else
                     {
                         OnUnselectAll();
                     }
                 }
-                else
+            }
+
+            if(idolTimeEllapsed >= idolTime)
+            {
+                Hide();
+                idolTimeEllapsed = 0f;
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (!isHidden)
+        {
+            if (isHidding)
+            {
+                if (ClosetSide == Side.Left)
                 {
-                    OnUnselectAll();
+                    rectTrans.anchoredPosition += Vector2.left * shiftOutSpeed;
+                    if (rectTrans.anchoredPosition.x < hiddenPos.x)
+                    {
+                        rectTrans.anchoredPosition = hiddenPos;
+                        isHidden = true;
+                        isHidding = false;
+                    }
+                }
+                else if (ClosetSide == Side.Right)
+                {
+                    rectTrans.anchoredPosition += Vector2.right * shiftOutSpeed;
+                    if (rectTrans.anchoredPosition.x > hiddenPos.x)
+                    {
+                        rectTrans.anchoredPosition = hiddenPos;
+                        isHidden = true;
+                        isHidding = false;
+                    }
                 }
             }
         }
+        else
+        {
+            if (isShowing)
+            {
+                if (ClosetSide == Side.Left)
+                {
+                    rectTrans.anchoredPosition += Vector2.right * shiftInSpeed;
+                    if (rectTrans.anchoredPosition.x > shownPos.x)
+                    {
+                        rectTrans.anchoredPosition = shownPos;
+                        isHidden = false;
+                        isShowing = false;
+                    }
+                }
+                else if (ClosetSide == Side.Right)
+                {
+                    rectTrans.anchoredPosition += Vector2.left * shiftInSpeed;
+                    if (rectTrans.anchoredPosition.x < shownPos.x)
+                    {
+                        rectTrans.anchoredPosition = shownPos;
+                        isHidden = false;
+                        isShowing = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public void Show()
+    {
+        if(isHidden)
+            isShowing = true;
+    }
+
+    public void Hide()
+    {
+        if (!isHidden)
+            isHidding = true;
     }
 
     public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
@@ -175,8 +286,15 @@ public class Closet : MonoBehaviour {
         outfitPageIdx = 0;
     }
 
-    public void Clear()
+    public void Clear(bool resetPos = false)
     {
+        if(resetPos)
+            rectTrans.anchoredPosition = hiddenPos;
+        isHidden = true;
+        isHidding = false;
+        isShowing = false;
+        idolTimeEllapsed = 0f;
+
         ClearClosetImage();
         ownerIdx = -1;
         ownerGender = User.Gender.None;
@@ -233,6 +351,8 @@ public class Closet : MonoBehaviour {
         {
             outfitItem.OnItemUnselected();
         }
+
+        idolTimeEllapsed = 0f;
     }
 
     private void OnBottomArrowHover()
@@ -243,6 +363,8 @@ public class Closet : MonoBehaviour {
         {
             outfitItem.OnItemUnselected();
         }
+
+        idolTimeEllapsed = 0f;
     }
 
     private void OnOutfitItemHover(int idx)
@@ -260,6 +382,8 @@ public class Closet : MonoBehaviour {
                 OutfitItems[i].OnItemUnselected();
             }
         }
+
+        idolTimeEllapsed = 0f;
     }
 
     private void OnUnselectAll()
@@ -270,6 +394,9 @@ public class Closet : MonoBehaviour {
         {
             outfitItem.OnItemUnselected();
         }
+
+        if(!isHidden && !isHidding)
+            idolTimeEllapsed += Time.deltaTime;
     }
 
     List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)

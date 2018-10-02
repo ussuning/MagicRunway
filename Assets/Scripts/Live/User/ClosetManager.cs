@@ -24,18 +24,46 @@ public class ClosetManager : MonoBehaviour {
         Instance = this;
     }
 
+    public Closet GetUserCloset(int userIdx)
+    {
+        foreach(Closet c in userClosets)
+        {
+            if (c.OwnerIndex == userIdx)
+                return c;
+        }
+
+        return null;
+    }
+
     public void OnUserGenderSelected(int userIdx, User.Gender userGender)
     {
+        Closet closet = ClosetManager.Instance.GetUserCloset(userIdx);
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
-        if (userClosets.Count == 0)
+
+        if (closet)
         {
-            ClosetLeft.SetCloset(userIdx, userGender, userOutfits);
-            userClosets.Add(ClosetLeft);
+            if (closet.IsHidden)
+            {
+                closet.Clear();
+                closet.SetCloset(userIdx, userGender, userOutfits);
+                closet.Show();
+            }    
         }
-        else if (userClosets.Count == 1)
+        else
         {
-            ClosetRight.SetCloset(userIdx, userGender, userOutfits);
-            userClosets.Add(ClosetRight);
+            if (userClosets.Count == 0)
+                closet = ClosetLeft;
+            else if (userClosets.Count == 1)
+                closet = ClosetRight;
+
+            if (closet)
+            {
+                closet.SetCloset(userIdx, userGender, userOutfits);
+                userClosets.Add(closet);
+
+                if (closet.IsHidden)
+                    closet.Show();
+            }
         }
     }
 
@@ -58,7 +86,7 @@ public class ClosetManager : MonoBehaviour {
             if(c.OwnerIndex == userIdx)
             {
                 userClosets.Remove(c);
-                c.Clear();
+                c.Clear(true);
                 break;
             }
         }

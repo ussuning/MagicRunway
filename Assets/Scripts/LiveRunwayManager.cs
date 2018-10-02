@@ -130,24 +130,24 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (users.ContainsKey(userIndex))
         {
             User user = users[userIndex];
-            if (user.UserGender == User.Gender.None)
-            {
+            //if (user.UserGender == User.Gender.None)
+            //{
                 switch (gesture)
                 {
                     case KinectGestures.Gestures.RaiseLeftHand:
                         user.UserGender = User.Gender.Female;
                         Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Female", userId));
-                        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-                        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
                         break;
                     case KinectGestures.Gestures.RaiseRightHand:
                         user.UserGender = User.Gender.Male;
                         Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Male", userId));
-                        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-                        KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
                         break;
                 }
-            }
+            //} 
             return true;
         }
 
