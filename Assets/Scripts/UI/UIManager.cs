@@ -12,8 +12,8 @@ public class UIManager : Singleton<UIManager>
     public GameObject uiCollectionTitle;
     public GameObject uiUpNext;
     //public GameObject uiGestureGender;
-    public GameObject uiHandCursor;
-    public GameObject uiHandCursor2;
+    //public GameObject uiHandCursor;
+    //public GameObject uiHandCursor2;
     //public GameObject uiStickMan;
 
     // Inventory Menu
@@ -95,6 +95,8 @@ public class UIManager : Singleton<UIManager>
             uiStartMenu.SetActive(true);
             faderStartMenu.StartFading(CanvasFade.IN);
         } else {
+            CanvasGroup canvasGroup = uiStartMenu.GetComponent<CanvasGroup>();
+            canvasGroup.alpha = 1;
             uiStartMenu.SetActive(true);
         }
     }
@@ -297,7 +299,7 @@ public class UIManager : Singleton<UIManager>
     //    }
     //}
 
-
+        /*
     public void ShowHandCursor()
     {
         uiHandCursor.SetActive(true);
@@ -309,7 +311,7 @@ public class UIManager : Singleton<UIManager>
         uiHandCursor.SetActive(false);
         uiHandCursor2.SetActive(false);
     }
-
+    */
     public void HideAll()
     {
         HideOutfit(false);
@@ -317,7 +319,7 @@ public class UIManager : Singleton<UIManager>
         //HideInventory(false);
         HideUpNext();
         //HideGestureGender(false);
-        HideHandCursor();
+        //HideHandCursor();
         HideStartMenu(false);
         //HideStickMan(false);
         HideCollectionTitle(false);

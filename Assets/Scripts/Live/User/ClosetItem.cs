@@ -21,6 +21,23 @@ public class ClosetItem : MonoBehaviour {
             closet = value;
         }
     }
+    public float TopBound
+    {
+        get
+        {
+            //return (ItemImage.rectTransform.position.y + (Screen.height/2160f * 200f)/2f)/Screen.height - 0.5f;
+            return ItemImage.rectTransform.position.y/Screen.height + 0.0785f - 0.5f;
+        }
+    }
+
+    public float BottomBound
+    {
+        get
+        {
+            //return (ItemImage.rectTransform.position.y - (Screen.height / 2160f * 200f) / 2f) / Screen.height - 0.5f;
+            return ItemImage.rectTransform.position.y/Screen.height - 0.0785f - 0.5f;
+        }
+    }
 
     protected bool isSelected = false;
     protected bool isHover = false;
@@ -38,6 +55,8 @@ public class ClosetItem : MonoBehaviour {
 
     void Update ()
     {
+        //Debug.Log(string.Format("{0}    Top: {1},  Bottom: {2}", name, TopBound, BottomBound));
+
         if(isHover && !isSelected)
         {
             hoverDuration += Time.deltaTime;

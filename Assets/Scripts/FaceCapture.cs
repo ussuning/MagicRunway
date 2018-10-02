@@ -69,7 +69,7 @@ public class FaceCapture : MonoBehaviour
         if (userId == 0) 
 		{
             ////////BILL
-
+            Debug.Log("NO SHOW");
 			return;
 		}
 
@@ -106,10 +106,12 @@ public class FaceCapture : MonoBehaviour
 
             rawImage.texture = faceTex;
 		} 
+        /*
 		else 
 		{
+            Debug.Log("NO FACE");
             rawImage.texture = null;
-        }
+        }*/
 	}
 
 	private Rect GetHeadJointFaceRect(long userId)

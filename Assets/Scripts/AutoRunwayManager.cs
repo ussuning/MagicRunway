@@ -35,7 +35,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private bool isModeActive = false;
 
-    //private long primerUserId = 0;
+    private float waveInactivityTime = 10.0f;
 
     void Awake()
     {
@@ -172,7 +172,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             go.transform.localPosition = startingPoint;
 
             Animator animator = go.GetComponent<Animator>();
-            animator.runtimeAnimatorController = null;
+            //animator.runtimeAnimatorController = null;
             animator.enabled = false;
 
             yield return EnableObiCloth(go, false);
@@ -207,8 +207,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         foreach (ObiSolver os in oss)
         {
             os.enabled = enable;
-            if(enable == true)
-                os.UpdateOrder = ObiSolver.SimulationOrder.LateUpdate;
+            //if(enable == true)
+            //    os.UpdateOrder = ObiSolver.SimulationOrder.LateUpdate;
         }
             
         ObiCloth[] ocs = character.GetComponentsInChildren<ObiCloth>();
@@ -274,7 +274,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         string animation = ModelAnimationManager.GetPoseAnimation(outfit.sex);
         yield return EnableRenderers(model, true);
         RuntimeAnimatorController ani = (RuntimeAnimatorController)Resources.Load(animation, typeof(RuntimeAnimatorController));
-        animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(ani, model.transform);
+        //animator.runtimeAnimatorController = (RuntimeAnimatorController)RuntimeAnimatorController.Instantiate(ani, model.transform);
         animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         animator.enabled = true;
         yield return EnableObiCloth(model, true);
@@ -352,7 +352,10 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (isModeActive == false)
             return;
 
-        if (KinectManager.Instance.GetPrimaryUserID() == 0) {
+        long userId = KinectManager.Instance.GetPrimaryUserID();
+
+        if (userId == 0)
+        {
             HideStart();
             return;
         }
@@ -425,14 +428,15 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     public void UserDetected(long userId, int userIndex)
     {
         if (isModeActive == false)
-            return;   
+            return;
 
-        //Debug.Log("NEW PLAYER!!  " + userId);
+        if (faceCapture.isActiveAndEnabled == false)
+            faceCapture.enabled = true;
 
+        UIManager.Instance.ShowStartMenu(false);
+        
         if (userId == KinectManager.Instance.GetPrimaryUserID())
         {
-            faceCapture.enabled = true;
-            UIManager.Instance.ShowStartMenu(true);
             AddKinectGestures(userId);
         }
     }
@@ -443,15 +447,6 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             return;
 
         RemoveKinectGestures(userId);
-
-        //Debug.Log(KinectManager.Instance.GetAllUserIds().Count);
-     /*
-        if (KinectManager.Instance.GetAllUserIds().Count == 1)
-        {
-            faceCapture.enabled = false;
-            UIManager.Instance.HideStartMenu(true);
-        }
-        */
     }
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
