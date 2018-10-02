@@ -125,10 +125,8 @@ public class AvatarController : MonoBehaviour
     public float neckVerticalOffset = 0f; 
     [Range(-0.25f, 0.25f)]
     public float headVerticalOffset = 0f; //Compensate for head is not actually
-    [Range(0.5f, 2.0f)]
-    public float hipWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
-    [Range(0.5f, 2.0f)]
-    public float shoulderWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
+    internal float hipWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
+    internal float shoulderWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
     [Range(0.5f, 2.0f)]
     public float shoulderAdjustWidthFactor = 1.0f; // Sometimes, the model will produce very wide or narrow shoulderWidthFactors due to their initial shoulder widths. Use this to adjsut
     [Range(0.5f, 2.0f)]
