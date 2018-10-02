@@ -858,6 +858,16 @@ public class AvatarController : MonoBehaviour
             //    //    boneTransform.position = GetRawJointWorldPos(joint);
             //    //    boneTransform.parent = originalParent;
             //    break;
+            case KinectInterop.JointType.ElbowLeft:
+            case KinectInterop.JointType.ElbowRight:
+            case KinectInterop.JointType.WristLeft:
+            case KinectInterop.JointType.WristRight:
+            case KinectInterop.JointType.HandLeft:
+            case KinectInterop.JointType.HandRight:
+            case KinectInterop.JointType.HandTipLeft:
+            case KinectInterop.JointType.HandTipRight:
+                // Don't override position. Just use what kinect gives us.
+                break;
             default:
                 boneTransform.position = GetRawJointWorldPos(joint);
                 break;
@@ -955,9 +965,14 @@ public class AvatarController : MonoBehaviour
             //    elbowLeftForward = GetTranslatedBonePos(KinectInterop.JointType.WristLeft) - boneTransform.position;
             //    float interp = 0;
             //    Vector3 elbowStraightDown = GetElbowStraightDown(GetTranslatedBonePos(KinectInterop.JointType.ShoulderLeft), shoulderLeftForward, elbowLeftForward, ref interp);
-            //    Debug.Log("ElbowInterp = " + interp);
+            //    //Debug.Log("ElbowInterp = " + interp);
             //    Quaternion elbowLookDown = Quaternion.LookRotation(elbowStraightDown, shoulderLeftForward);
-            //    boneTransform.rotation = Quaternion.Slerp(boneTransform.rotation, elbowLookDown, interp);
+
+            //    Vector3 spineToHipForward = GetRawJointWorldPos(KinectInterop.JointType.SpineBase) - GetRawJointWorldPos(KinectInterop.JointType.SpineMid);
+            //    Vector3 elbowOut = GetKneeOut(shoulderLeftForward, elbowLeftForward, spineToHipForward);
+            //    Vector3 elbowLeftDown = Vector3.Cross(shoulderLeftForward, elbowOut);
+            //    Quaternion elbowForward = Quaternion.LookRotation(elbowLeftDown, shoulderLeftForward);
+            //    boneTransform.rotation = Quaternion.Slerp(elbowForward, elbowLookDown, interp);
             //    break;
             case KinectInterop.JointType.HipLeft:
                 Vector3 hipLeftForward = GetRawJointWorldPos(KinectInterop.JointType.KneeLeft) - boneTransform.position;
@@ -1074,7 +1089,12 @@ public class AvatarController : MonoBehaviour
         Vector3 spineIn = GetSpineIn(shoulderPos, ref isFlipped);
         float shoulderStraightness = Vector3.Dot(spineDown.normalized, shoulderForward.normalized);
         float elbowStraightness = Vector3.Dot(shoulderForward.normalized, elbowForward.normalized);
-        interp = Mathf.Clamp(0.97f - ((shoulderStraightness + elbowStraightness) / 2f) / 0.1f, 0, 1);
+
+        Debug.Log("shoulderStraightness = " + shoulderStraightness);
+        Debug.Log("elbowStraightness = " + elbowStraightness);
+        float avgStraightness = (shoulderStraightness + elbowStraightness) / 2.0f;
+        interp = 1f - Mathf.Clamp((1f - avgStraightness) / 0.1f, 0, 1);
+        Debug.Log("interp = " + interp);
 
         Vector3 shoulderOut = Vector3.Cross(spineDown, shoulderForward);
         Vector3 shoulderDown = Vector3.Cross(shoulderForward, shoulderOut);
