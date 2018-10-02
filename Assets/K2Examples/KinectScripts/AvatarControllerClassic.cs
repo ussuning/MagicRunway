@@ -163,6 +163,8 @@ public class AvatarControllerClassicEditor : Editor
         {
             myScript.LoadConfigData();
         }
+        GUILayout.Label("hipWidthFactor=" + myScript.hipWidthFactor);
+        GUILayout.Label("shoulderWidthFactor=" + myScript.shoulderWidthFactor);
     }
 
     //void OnSceneGUI()
