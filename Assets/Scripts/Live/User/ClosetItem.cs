@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class ClosetItem : MonoBehaviour {
 
     public float HoverToSelectTime = 1.25f;
-    public Color UnselectedColor;
-    public Color HoverColor;
-    public Color SelectedColor;
 
     public Image ItemImage;
     public Image SelectedFillImage;
@@ -48,8 +45,6 @@ public class ClosetItem : MonoBehaviour {
     {
         HoverToSelectTransitionSpeed = SelectedFillImage.rectTransform.sizeDelta.x / HoverToSelectTime;
 
-        //SelectedFillImage.color = SelectedColor;
-
         OnItemUnselected();
     }
 
@@ -60,11 +55,6 @@ public class ClosetItem : MonoBehaviour {
         if(isHover && !isSelected)
         {
             hoverDuration += Time.deltaTime;
-
-            //if (closet.ClosetSide == Closet.Side.Left)
-            //    SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
-            //else if (closet.ClosetSide == Closet.Side.Right)
-            //    SelectedFillImage.rectTransform.localPosition += -Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
             SelectedFillImage.fillAmount = hoverDuration / HoverToSelectTime;
 
             if (hoverDuration >= HoverToSelectTime)
@@ -90,25 +80,17 @@ public class ClosetItem : MonoBehaviour {
 
     public void OnItemHover()
     {
-        //if (!isHover)
-        //    ItemImage.color = HoverColor;
         isHover = true;
     }
 
     public virtual void OnItemSelected()
     {
-        //SelectedFillImage.rectTransform.localPosition = Vector3.zero;
         SelectedFillImage.fillAmount = 1f;
         isSelected = true;
     }
 
     public void OnItemUnselected ()
     {
-        ItemImage.color = UnselectedColor;
-        //if (closet.ClosetSide == Closet.Side.Left)
-        //    SelectedFillImage.rectTransform.localPosition = new Vector3(-SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
-        //else if (closet.ClosetSide == Closet.Side.Right)
-        //    SelectedFillImage.rectTransform.localPosition = new Vector3(SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
         SelectedFillImage.fillAmount = 0f;
         isSelected = false;
         isHover = false;
