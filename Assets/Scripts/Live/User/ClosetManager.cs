@@ -51,10 +51,23 @@ public class ClosetManager : MonoBehaviour {
         }
         else
         {
+
             if (userClosets.Count == 0)
-                closet = ClosetLeft;
+            {
+                float xPos = kinect.GetUserPosition(kinect.GetUserIdByIndex(userIdx)).x;
+                if(xPos > 0)
+                    closet = ClosetRight;
+                else
+                    closet = ClosetLeft;
+            }
             else if (userClosets.Count == 1)
-                closet = ClosetRight;
+            {
+                if (ClosetLeft.IsActive)
+                    closet = ClosetRight;
+                else
+                    closet = ClosetLeft;
+            }
+                
 
             if (closet)
             {
