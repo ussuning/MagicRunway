@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class Closet : MonoBehaviour {
 
     public enum Side
@@ -20,6 +24,7 @@ public class Closet : MonoBehaviour {
 
     public ImageProgress activateIcon;
     public Camera cam;
+    protected Canvas canvas;
 
     //private long ownerId;
     private int ownerIdx;
@@ -138,6 +143,21 @@ public class Closet : MonoBehaviour {
         isHidding = false;
         isShowing = false;
         idolTimeEllapsed = 0f;
+
+        canvas = GetComponentInParent<Canvas>();
+    }
+
+    public RectTransform pointFrom;
+    public RectTransform pointTo;
+
+    public Vector3 ptFrom;
+    public Vector3 ptTo;
+
+    Vector2 ScreenPtToCanvasPt(Vector2 screenPt)
+    {
+        return new Vector2(
+            screenPt.x * canvas.pixelRect.width / cam.scaledPixelWidth,
+            screenPt.y * canvas.pixelRect.height / cam.scaledPixelHeight);
     }
 
     void Update()
@@ -150,35 +170,73 @@ public class Closet : MonoBehaviour {
                 {
                     if (kinect.IsUserTracked(OwnerID))
                     {
-                        ownerPointDir = Mathf.Lerp(ownerPointDir, GetPointDirection(ClosetSide, OwnerID), 0.25f);
-                        if (ownerPointDir >= bottomArrow.BottomBound && ownerPointDir < bottomArrow.TopBound)
+                        Vector3 fromScreenPt;
+                        Vector3 toScreenPt;
+                        GetUserPointingScreenPoints(ClosetSide, OwnerID, out fromScreenPt, out toScreenPt);
+
+                        Vector2 fromLocal = ScreenPtToCanvasPt(fromScreenPt);
+                        if (pointFrom != null)
+                            pointFrom.position = fromLocal;
+                        Vector2 toLocal = ScreenPtToCanvasPt(toScreenPt);
+                        if (pointTo != null)
+                            pointTo.position = toLocal;
+
+                        ptFrom = pointFrom.transform.position;
+                        ptTo = pointTo.transform.position;
+                        
+                        //Vector2 directionLocal;
+                        //RectTransformUtility.ScreenPointToLocalPointInRectangle(imgRectT, ray2D.origin,    cam, out originLocal);
+                        //RectTransformUtility.ScreenPointToLocalPointInRectangle(imgRectT, ray2D.direction, cam, out directionLocal);
+                        //Ray2D rayLocal = new Ray2D(originLocal, directionLocal);
+
+                        RaycastHit2D hit = Physics2D.Raycast(ptFrom, ptTo-ptFrom, float.MaxValue, LayerMask.GetMask(new string []{ "Pointable2D" }));
+
+                        Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
+
+                        if (hit.collider != null)
                         {
-                            OnBottomArrowHover();
+                            ClosetItem closetItem = hit.collider.GetComponent<ClosetItem>();
+                            OnClosetItemHover(closetItem);
                         }
-                        else if (ownerPointDir >= OutfitItems[3].BottomBound && ownerPointDir < OutfitItems[3].TopBound)
-                        {
-                            OnOutfitItemHover(3);
-                        }
-                        else if (ownerPointDir >= OutfitItems[2].BottomBound && ownerPointDir < OutfitItems[2].TopBound)
-                        {
-                            OnOutfitItemHover(2);
-                        }
-                        else if (ownerPointDir >= OutfitItems[1].BottomBound && ownerPointDir < OutfitItems[1].TopBound)
-                        {
-                            OnOutfitItemHover(1);
-                        }
-                        else if (ownerPointDir >= OutfitItems[0].BottomBound && ownerPointDir < OutfitItems[0].TopBound)
-                        {
-                            OnOutfitItemHover(0);
-                        }
-                        else if (ownerPointDir >= topArrow.BottomBound && ownerPointDir <= topArrow.TopBound)
-                        {
-                            OnTopArrowHover();
-                        }
-                        else if (ownerPointDir < bottomArrow.BottomBound || ownerPointDir > topArrow.TopBound)
+                        else
                         {
                             OnUnselectAll();
                         }
+
+
+                        //Debug.Log("Canvas " + canvas.pixelRect);
+                        //Debug.Log("bottomArrow.rectPos " + bottomArrow.ItemImage.rectTransform.position);
+                        //Debug.Log("bottomArrow.width " + bottomArrow.ItemImage.rectTransform.rect.width);
+                        //Debug.Log("bottomArrow.TopBound " + bottomArrow.TopBound);
+                        //ownerPointDir = Mathf.Lerp(ownerPointDir, , 0.25f);
+                        //if (ownerPointDir >= bottomArrow.BottomBound && ownerPointDir < bottomArrow.TopBound)
+                        //{
+                        //    OnBottomArrowHover();
+                        //}
+                        //else if (ownerPointDir >= OutfitItems[3].BottomBound && ownerPointDir < OutfitItems[3].TopBound)
+                        //{
+                        //    OnOutfitItemHover(3);
+                        //}
+                        //else if (ownerPointDir >= OutfitItems[2].BottomBound && ownerPointDir < OutfitItems[2].TopBound)
+                        //{
+                        //    OnOutfitItemHover(2);
+                        //}
+                        //else if (ownerPointDir >= OutfitItems[1].BottomBound && ownerPointDir < OutfitItems[1].TopBound)
+                        //{
+                        //    OnOutfitItemHover(1);
+                        //}
+                        //else if (ownerPointDir >= OutfitItems[0].BottomBound && ownerPointDir < OutfitItems[0].TopBound)
+                        //{
+                        //    OnOutfitItemHover(0);
+                        //}
+                        //else if (ownerPointDir >= topArrow.BottomBound && ownerPointDir <= topArrow.TopBound)
+                        //{
+                        //    OnTopArrowHover();
+                        //}
+                        //else if (ownerPointDir < bottomArrow.BottomBound || ownerPointDir > topArrow.TopBound)
+                        //{
+                        //    OnUnselectAll();
+                        //}
                     }
                     else
                     {
@@ -393,6 +451,23 @@ public class Closet : MonoBehaviour {
         idolTimeEllapsed = 0f;
     }
 
+    private void OnClosetItemHover(ClosetItem hoveredItem)
+    {
+        hoveredItem.OnItemHover();
+
+        if (hoveredItem != topArrow)
+            topArrow.OnItemUnselected();
+
+        if (hoveredItem != bottomArrow)
+            bottomArrow.OnItemUnselected();
+
+        foreach (ClosetOutfitItem outfitItem in OutfitItems)
+        {
+            if (hoveredItem != outfitItem)
+                outfitItem.OnItemUnselected();
+        }
+    }
+
     private void OnUnselectAll()
     {
         topArrow.OnItemUnselected();
@@ -418,28 +493,42 @@ public class Closet : MonoBehaviour {
     }
 
 
-    float GetPointDirection(Side closetSide, long ownerID)
+    void GetUserPointingScreenPoints(Side closetSide, long ownerID, out Vector3 from, out Vector3 to)
     {
+        Vector2 wristPos2D;
+        Vector2 elbowPos2D;
         if (closetSide == Closet.Side.Left)
         {
-            //Vector3 lFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipLeft, cam, cam.pixelRect);
-            //Vector3 lHandPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandLeft, cam, cam.pixelRect);
-            Vector3 lWristPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.WristLeft, cam, cam.pixelRect);
-            //Vector3 lElbowPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ElbowLeft, cam, cam.pixelRect);
-            Vector3 lShoulderPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ShoulderLeft, cam, cam.pixelRect);
-            return (lWristPos - lShoulderPos).normalized.y;
+            Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristLeft);
+            Vector3 elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowLeft);
+            wristPos2D = cam.WorldToScreenPoint(wristPos);
+            elbowPos2D = cam.WorldToScreenPoint(elbowPos);
         }
-        else if (closetSide == Closet.Side.Right)
+        else // (closetSide == Closet.Side.Right)
         {
-            //Vector3 rFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipRight, cam, cam.pixelRect);
-            //Vector3 rHandPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandRight, cam, cam.pixelRect);
-            Vector3 rWristPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.WristRight, cam, cam.pixelRect);
-            //Vector3 rElbowPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ElbowRight, cam, cam.pixelRect);
-            Vector3 rShoulderPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ShoulderRight, cam, cam.pixelRect);
-            return (rWristPos - rShoulderPos).normalized.y;
+            Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristRight);
+            Vector3 elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowRight);
+            wristPos2D = cam.WorldToScreenPoint(wristPos);
+            elbowPos2D = cam.WorldToScreenPoint(elbowPos);
         }
-
-        return -1f;
+        to = wristPos2D;
+        from = elbowPos2D;
     }
 
 }
+
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(Closet))]
+public class ClosetEditor : Editor
+{
+
+    void OnSceneGUI()
+    {
+        Closet t = (Closet)target;
+        Handles.color = Color.red;
+        Handles.DrawLine(t.ptFrom, t.ptTo);
+
+    }
+}
+#endif

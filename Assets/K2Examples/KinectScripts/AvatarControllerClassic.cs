@@ -166,24 +166,24 @@ public class AvatarControllerClassicEditor : Editor
         GUILayout.Label("shoulderWidthFactor=" + myScript.shoulderWidthFactor);
     }
 
-    //void OnSceneGUI()
-    //{
-    //    AvatarController ac = (AvatarController)target;
-    //    Handles.color = Color.red;
-    //    Handles.DrawLine(ac.shPos, ac.shPos + ac.shShoulderDown.normalized);
-    //    Handles.color = Color.green;
-    //    Handles.DrawLine(ac.shPos, ac.shPos + ac.shElbowDown.normalized);
-    //    Handles.color = Color.blue;
-    //    Handles.DrawLine(ac.shPos, ac.shPos + ac.shSpineIn.normalized);
+    void OnSceneGUI()
+    {
+        AvatarController ac = (AvatarController)target;
+        Handles.color = Color.red;
+        Handles.DrawLine(ac.elbowPos, ac.elbowPos + ac.elbowOutty.normalized);
+        Handles.color = Color.green;
+        Handles.DrawLine(ac.shPos, ac.shPos + ac.shOutty.normalized);
+        //Handles.color = Color.blue;
+        //Handles.DrawLine(ac.shPos, ac.shPos + ac.shSpineIn.normalized);
 
 
-    //    Handles.color = Color.magenta;
-    //    Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shLeftForward.normalized, 5f);
-    //    Handles.color = Color.cyan;
-    //    Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shFinalDown.normalized, 5f);
-    //    Handles.color = Color.yellow;
-    //    Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shElbowForward.normalized, 5f);
+        //Handles.color = Color.magenta;
+        //Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shLeftForward.normalized, 5f);
+        //Handles.color = Color.cyan;
+        //Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shFinalDown.normalized, 5f);
+        //Handles.color = Color.yellow;
+        //Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shElbowForward.normalized, 5f);
 
-    //}
+    }
 }
 #endif
