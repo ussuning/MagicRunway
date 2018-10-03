@@ -134,6 +134,14 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
     {
+        if (!isModeActive)
+            return;
+
+        Closet closet = ClosetManager.Instance.GetUserCloset(userIndex);
+        if (closet)
+        {
+            closet.activateIcon.SetProgressValue(progress);
+        }
     }
 
     public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint, Vector3 screenPos)
