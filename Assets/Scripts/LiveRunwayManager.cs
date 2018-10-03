@@ -53,7 +53,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Debug.Log(string.Format("[LiveRunwayManager] SetUp: level = {0}", level));
 
         KinectManager.Instance.maxTrackedUsers = 6;
-
+        UIManager.Instance.HideCollectionTitle(false);
         liveRunwayContainer.SetActive(true);
 
         CreateUsersFromBuffer();
@@ -134,6 +134,14 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void GestureInProgress(long userId, int userIndex, KinectGestures.Gestures gesture, float progress, KinectInterop.JointType joint, Vector3 screenPos)
     {
+        if (!isModeActive)
+            return;
+
+        Closet closet = ClosetManager.Instance.GetUserCloset(userIndex);
+        if (closet)
+        {
+            closet.activateIcon.SetProgressValue(progress);
+        }
     }
 
     public bool GestureCompleted(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint, Vector3 screenPos)
@@ -179,7 +187,15 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public bool GestureCancelled(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint)
     {
-        return true;
+        if (!isModeActive)
+            return false;
+
+        Closet closet = ClosetManager.Instance.GetUserCloset(userIndex);
+        if (!closet)
+            return false;
+
+        closet.activateIcon.SetProgressValue(0f);
+        return true;          
     }
 
     void CreateUsersFromBuffer()

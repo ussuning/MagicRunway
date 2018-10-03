@@ -22,6 +22,7 @@ public class Closet : MonoBehaviour {
 
     public float idolTime = 5f;
 
+    public ImageProgress activateIcon;
     public Camera cam;
     protected Canvas canvas;
 
@@ -163,7 +164,7 @@ public class Closet : MonoBehaviour {
     {
         if (isActive)
         {
-            if (!isHidden)
+            if (!isHidden && !isHidding)
             {
                 if (kinect && kinect.IsInitialized())
                 {
@@ -306,12 +307,16 @@ public class Closet : MonoBehaviour {
                 }
             }
         }
+
+        activateIcon.SetImageOut((rectTrans.anchoredPosition.x - shownPos.x)/(hiddenPos.x - shownPos.x));
     }
 
     public void Show()
     {
         if(isHidden)
             isShowing = true;
+
+        activateIcon.SetProgressValue(0f);
     }
 
     public void Hide()
@@ -332,6 +337,7 @@ public class Closet : MonoBehaviour {
 
         SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
 
+        activateIcon.gameObject.SetActive(true);
         isActive = true;
     }
 
@@ -360,6 +366,7 @@ public class Closet : MonoBehaviour {
             outfits.Clear();
         outfitPageIdx = 0;
         isActive = false;
+        activateIcon.gameObject.SetActive(false);
     }
 
     public void PageUp()
