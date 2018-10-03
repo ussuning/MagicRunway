@@ -250,7 +250,7 @@ public class Closet : MonoBehaviour {
             }
         }
 
-        activateIcon.SetImageAlpha((rectTrans.anchoredPosition.x - shownPos.x)/(hiddenPos.x - shownPos.x));
+        activateIcon.SetImageOut((rectTrans.anchoredPosition.x - shownPos.x)/(hiddenPos.x - shownPos.x));
     }
 
     public void Show()
