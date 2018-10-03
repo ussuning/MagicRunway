@@ -143,7 +143,7 @@ public class Closet : MonoBehaviour {
     {
         if (isActive)
         {
-            if (!isHidden)
+            if (!isHidden && !isHidding)
             {
                 if (kinect && kinect.IsInitialized())
                 {
@@ -415,21 +415,21 @@ public class Closet : MonoBehaviour {
     {
         if (closetSide == Closet.Side.Left)
         {
-            Vector3 lFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipLeft, cam, cam.pixelRect);
+            //Vector3 lFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipLeft, cam, cam.pixelRect);
             //Vector3 lHandPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandLeft, cam, cam.pixelRect);
             Vector3 lWristPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.WristLeft, cam, cam.pixelRect);
             //Vector3 lElbowPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ElbowLeft, cam, cam.pixelRect);
             Vector3 lShoulderPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ShoulderLeft, cam, cam.pixelRect);
-            return (lFingersPos - lShoulderPos).normalized.y;
+            return (lWristPos - lShoulderPos).normalized.y;
         }
         else if (closetSide == Closet.Side.Right)
         {
-            Vector3 rFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipRight, cam, cam.pixelRect);
+            //Vector3 rFingersPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandTipRight, cam, cam.pixelRect);
             //Vector3 rHandPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.HandRight, cam, cam.pixelRect);
             Vector3 rWristPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.WristRight, cam, cam.pixelRect);
             //Vector3 rElbowPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ElbowRight, cam, cam.pixelRect);
             Vector3 rShoulderPos = kinect.GetJointPosColorOverlay(ownerID, (int)KinectInterop.JointType.ShoulderRight, cam, cam.pixelRect);
-            return (rFingersPos - rShoulderPos).normalized.y;
+            return (rWristPos - rShoulderPos).normalized.y;
         }
 
         return -1f;
