@@ -48,7 +48,7 @@ public class ClosetItem : MonoBehaviour {
     {
         HoverToSelectTransitionSpeed = SelectedFillImage.rectTransform.sizeDelta.x / HoverToSelectTime;
 
-        SelectedFillImage.color = SelectedColor;
+        //SelectedFillImage.color = SelectedColor;
 
         OnItemUnselected();
     }
