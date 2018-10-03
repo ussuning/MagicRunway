@@ -69,7 +69,6 @@ public class User : MonoBehaviour {
     private UserScore uScore;
     private PoseAgentSelector poseAgentSelector;
 
-    Camera uiCamera;
     KinectManager manager;
 
     void Awake ()
@@ -79,12 +78,6 @@ public class User : MonoBehaviour {
 
     void OnEnable()
     {
-        if(!uiCamera)
-        {
-            GameObject cameraGO = GameObject.Find("/Live runway/FittingRoom/Camera");
-            uiCamera = cameraGO.GetComponent<Camera>();
-        }
-
         if(!manager)
         {
             manager = KinectManager.Instance;
@@ -126,7 +119,7 @@ public class User : MonoBehaviour {
             {
                 if (isReadyToBeActivated && manager.IsUserTracked(UserID))
                 {
-                    GenderSelectionUI.transform.position = GetUserScreenPos() + new Vector3(0f, 160f, 0f);
+                    GenderSelectionUI.SetUITransform(UserID);
                     GenderSelectionUI.Show();
                 }
                 else
@@ -141,28 +134,5 @@ public class User : MonoBehaviour {
         {
             Destroy(uScore.gameObject);
         }
-    }
-
-    Vector3 GetUserScreenPos()
-    {
-        if (manager && manager.IsInitialized())
-        {
-            // get the background rectangle (use the portrait background, if available)
-            Rect backgroundRect = uiCamera.pixelRect;
-            PortraitBackground portraitBack = PortraitBackground.Instance;
-
-            if (portraitBack && portraitBack.enabled)
-            {
-                backgroundRect = portraitBack.GetBackgroundRect();
-            }
-
-            int iJointIndex = (int)KinectInterop.JointType.Head;
-            if (manager.IsJointTracked(UserID, iJointIndex))
-            {
-                return manager.GetJointPosColorOverlay(UserID, iJointIndex, uiCamera, backgroundRect);
-            }
-        }
-
-        return Vector3.zero;
     }
 }
