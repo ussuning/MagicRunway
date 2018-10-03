@@ -20,7 +20,7 @@ public class AppManager : Singleton<AppManager>
     private IRunwayMode currentMode;
     private IRunwayMode nextMode;
 
-    private List<string> playList = new List<string>(new string[] { "fast-forward", "fast-forward" });
+    private List<string> playList = new List<string>(new string[] { "clearskies", "seeking" });
     private int curSong = 0;
     private float maxSongVolume = 0.4f;
     private float minSongVolume = 0.1f;
@@ -67,7 +67,14 @@ public class AppManager : Singleton<AppManager>
 
     private void Begin()
     {
-        songVolumeState = 1;
+        if (audioSource.clip == null)
+            StartAudio();
+
+        if (GetRunwayMode() == Mode.AUTO)
+            songVolumeState = 1;
+        else
+            songVolumeState = 2;
+
         currentMode.Begin();
     }
 
@@ -175,38 +182,50 @@ public class AppManager : Singleton<AppManager>
         return curLevel;
     }
 
+    private void StartAudio()
+    {
+        curSong = 0;
+        int rand = Random.Range(0, playList.Count);
+        AudioClip clip = Resources.Load<AudioClip>(playList[rand]);
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
     void Update()
     {
-        /*
-        if(audioSource.time >= audioSource.clip.length)
+        if (audioSource != null && audioSource.clip != null)
         {
-            curSong++;
-            if (curSong == playList.Count)
-                curSong = 0;
-            AudioClip clip = Resources.Load<AudioClip>(playList[curSong]);
-            audioSource.clip = clip;
-            audioSource.Play();
-        }
-
-        if (songVolumeState == 1)
-        {
-            float startVolume = audioSource.volume;
-
-            if (audioSource.volume < maxSongVolume)
+            if (audioSource.time >= audioSource.clip.length - 0.05)
             {
-                audioSource.volume += startVolume * Time.deltaTime / reduceSongVolumeTime;
+                curSong++;
+                if (curSong == playList.Count)
+                    curSong = 0;
+                AudioClip clip = Resources.Load<AudioClip>(playList[curSong]);
+                audioSource.clip = clip;
+                audioSource.Play();
+            }
+
+            if (songVolumeState == 1)
+            {
+                float startVolume = audioSource.volume;
+
+                if (audioSource.volume < maxSongVolume)
+                {
+                    audioSource.volume += startVolume * Time.deltaTime / reduceSongVolumeTime;
+                }
+            }
+
+            if (songVolumeState == 2)
+            {
+                float startVolume = audioSource.volume;
+
+                if (audioSource.volume > minSongVolume)
+                {
+                    audioSource.volume -= startVolume * Time.deltaTime / reduceSongVolumeTime;
+                }
             }
         }
 
-        if (songVolumeState == 2) {
-            float startVolume = audioSource.volume;
-
-            if (audioSource.volume > minSongVolume)
-            {
-                audioSource.volume -= startVolume * Time.deltaTime / reduceSongVolumeTime;
-            }
-        }
-        */
         if (fadeState == 1)
         {
             if (fadeCounter >= fadeTime) {

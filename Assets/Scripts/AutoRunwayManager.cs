@@ -35,6 +35,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private bool isModeActive = false;
 
+    private AudioSource sfx;
+
     //private float waveInactivityTime = 10.0f;
 
     void Awake()
@@ -44,6 +46,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         runwayModels = new GameObject("RunwayModels");
         runwayModels.transform.parent = autoRunwayContainer.transform;
         Application.backgroundLoadingPriority = ThreadPriority.Low;
+
+        sfx = autoRunwayContainer.GetComponent<AudioSource>();
     }
 
     public Mode GetMode()
@@ -292,13 +296,11 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void OnRunwayEnter(Collider model)
     {
-        /*
         List<string> crowd = new List<string>(new string[] { SfxManager.CROWD_SHORT, SfxManager.CROWD_LONG,  SfxManager.APPLAUSE_1, SfxManager.APPLAUSE_2 });
         int index = Random.Range(0, crowd.Count);
-
         AudioClip clip = SfxManager.LoadClip(crowd[index]);
-        audioSource.PlayOneShot(clip);   
-        */
+        sfx.clip = clip;
+        sfx.Play();
     }
 
     private void OnRunwayFinish(Collider other)
