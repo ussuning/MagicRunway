@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class GenderUIController : MonoBehaviour {
 
-    public SpriteRenderer maleSprite;
-    public SpriteRenderer femaleSprite;
+    //public SpriteRenderer maleSprite;
+    //public SpriteRenderer femaleSprite;
+    public GameObject maleGO;
+    public GameObject femaleGO;
 
     public bool needScaling = true;
     public bool needRotating = true;
 
-    public float IconYOffset = 160f;
+    public Vector3 IconOffset = new Vector3(0f, 200f, -5f);
     public float maxScale = 2f;
     public float minScale = 1f;
     public float maxRotation = 15f;
@@ -60,7 +62,9 @@ public class GenderUIController : MonoBehaviour {
             if (m_alpha < 0f)
                 m_alpha = 0f;
 
-            maleSprite.color = new Color(maleSprite.color.r, maleSprite.color.g, maleSprite.color.b, m_alpha);
+            //maleSprite.color = new Color(maleSprite.color.r, maleSprite.color.g, maleSprite.color.b, m_alpha);
+            if(maleGO)
+                maleGO.GetComponent<MeshRenderer>().material.color = new Color(maleGO.GetComponent<MeshRenderer>().material.color.r, maleGO.GetComponent<MeshRenderer>().material.color.g, maleGO.GetComponent<MeshRenderer>().material.color.b, m_alpha);
 
             if (m_alpha == 0f)
             {
@@ -77,7 +81,9 @@ public class GenderUIController : MonoBehaviour {
             if (f_alpha < 0f)
                 f_alpha = 0f;
 
-            femaleSprite.color = new Color(femaleSprite.color.r, femaleSprite.color.g, femaleSprite.color.b, f_alpha);
+            //femaleSprite.color = new Color(femaleSprite.color.r, femaleSprite.color.g, femaleSprite.color.b, f_alpha);
+            if (femaleGO)
+                femaleGO.GetComponent<MeshRenderer>().material.color = new Color(femaleGO.GetComponent<MeshRenderer>().material.color.r, femaleGO.GetComponent<MeshRenderer>().material.color.g, femaleGO.GetComponent<MeshRenderer>().material.color.b, m_alpha);
 
             if (f_alpha == 0f)
             {
@@ -117,12 +123,12 @@ public class GenderUIController : MonoBehaviour {
     public void SetUITransform(long userID)
     {
         Vector3 userScreenPos = GetUserScreenPos(userID);
-        transform.position = userScreenPos + new Vector3(0f, IconYOffset, 0f);
+        transform.position = userScreenPos + IconOffset;
 
         if (needScaling)
         {
             float scale = Mathf.Clamp(maxScale - userScreenPos.z, minScale, maxScale);
-            transform.localScale = new Vector3(scale, scale, 1f);
+            transform.localScale = new Vector3(scale, scale, scale);
         }
 
         if (needRotating)
