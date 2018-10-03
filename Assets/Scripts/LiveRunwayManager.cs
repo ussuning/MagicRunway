@@ -187,7 +187,15 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public bool GestureCancelled(long userId, int userIndex, KinectGestures.Gestures gesture, KinectInterop.JointType joint)
     {
-        return true;
+        if (!isModeActive)
+            return false;
+
+        Closet closet = ClosetManager.Instance.GetUserCloset(userIndex);
+        if (!closet)
+            return false;
+
+        closet.activateIcon.SetProgressValue(0f);
+        return true;          
     }
 
     void CreateUsersFromBuffer()
