@@ -466,6 +466,7 @@ public class Closet : MonoBehaviour {
             if (hoveredItem != outfitItem)
                 outfitItem.OnItemUnselected();
         }
+        idolTimeEllapsed = 0f;
     }
 
     private void OnUnselectAll()

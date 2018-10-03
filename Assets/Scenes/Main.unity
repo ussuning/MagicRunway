@@ -747,11 +747,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   broadcast: 1
   brain: {fileID: 0}
---- !u!20 &139335875 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 20064724715000156, guid: 88b77abc855415b4e821200dd0bc69e0,
-    type: 2}
-  m_PrefabInternal: {fileID: 881775316}
 --- !u!114 &151484232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6012,31 +6007,21 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114178751664764264, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
-        type: 2}
-      propertyPath: Stickman
-      value: 
-      objectReference: {fileID: 231855769}
-    - target: {fileID: 114467580326782088, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
-        type: 2}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 139335875}
-    - target: {fileID: 114668652663923630, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
-        type: 2}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 139335875}
-    - target: {fileID: 114088011446169300, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+    - target: {fileID: 114583240447635570, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1023743737}
+      objectReference: {fileID: 1023743740}
     - target: {fileID: 114205455763185360, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1023743740}
+    - target: {fileID: 114088011446169300, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1023743737}
     - target: {fileID: 114223697441753602, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
       propertyPath: comboFXParticles.Array.data[0]
@@ -6052,11 +6037,21 @@ Prefab:
       propertyPath: comboFXParticles.Array.data[2]
       value: 
       objectReference: {fileID: 648758929}
-    - target: {fileID: 114583240447635570, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+    - target: {fileID: 114178751664764264, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: Stickman
       value: 
-      objectReference: {fileID: 1023743740}
+      objectReference: {fileID: 231855769}
+    - target: {fileID: 114668652663923630, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 332944801}
+    - target: {fileID: 114467580326782088, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 332944801}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d89fe2abcc35dd14183eed60d8c2a9a6, type: 2}
   m_IsPrefabAsset: 0
