@@ -1097,7 +1097,7 @@ public class AvatarController : MonoBehaviour
             elbowOut = Vector3.Cross(elbowForward, shoulderForward);
             elbowOutty = elbowOut;
             elbowInterp = Mathf.Clamp((0.95f - elbowStraightness) / .1f, 0, 1);
-            Debug.Log("elbowInterp=" + elbowInterp);
+            //Debug.Log("elbowInterp=" + elbowInterp);
         }
 
         float shoulderStraightness = Vector3.Dot(shoulderForward.normalized, spineToHipForward.normalized);

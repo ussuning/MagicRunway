@@ -191,7 +191,7 @@ public class Closet : MonoBehaviour {
 
                         RaycastHit2D hit = Physics2D.Raycast(ptFrom, ptTo-ptFrom, float.MaxValue, LayerMask.GetMask(new string []{ "Pointable2D" }));
 
-                        Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
+                        //Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
 
                         if (hit.collider != null)
                         {
