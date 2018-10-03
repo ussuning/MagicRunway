@@ -61,10 +61,11 @@ public class ClosetItem : MonoBehaviour {
         {
             hoverDuration += Time.deltaTime;
 
-            if (closet.ClosetSide == Closet.Side.Left)
-                SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
-            else if (closet.ClosetSide == Closet.Side.Right)
-                SelectedFillImage.rectTransform.localPosition += -Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
+            //if (closet.ClosetSide == Closet.Side.Left)
+            //    SelectedFillImage.rectTransform.localPosition += Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
+            //else if (closet.ClosetSide == Closet.Side.Right)
+            //    SelectedFillImage.rectTransform.localPosition += -Vector3.right * Time.deltaTime * HoverToSelectTransitionSpeed;
+            SelectedFillImage.fillAmount = hoverDuration / HoverToSelectTime;
 
             if (hoverDuration >= HoverToSelectTime)
             {
@@ -96,17 +97,19 @@ public class ClosetItem : MonoBehaviour {
 
     public virtual void OnItemSelected()
     {
-        SelectedFillImage.rectTransform.localPosition = Vector3.zero;
+        //SelectedFillImage.rectTransform.localPosition = Vector3.zero;
+        SelectedFillImage.fillAmount = 1f;
         isSelected = true;
     }
 
     public void OnItemUnselected ()
     {
         ItemImage.color = UnselectedColor;
-        if (closet.ClosetSide == Closet.Side.Left)
-            SelectedFillImage.rectTransform.localPosition = new Vector3(-SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
-        else if (closet.ClosetSide == Closet.Side.Right)
-            SelectedFillImage.rectTransform.localPosition = new Vector3(SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
+        //if (closet.ClosetSide == Closet.Side.Left)
+        //    SelectedFillImage.rectTransform.localPosition = new Vector3(-SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
+        //else if (closet.ClosetSide == Closet.Side.Right)
+        //    SelectedFillImage.rectTransform.localPosition = new Vector3(SelectedFillImage.rectTransform.sizeDelta.x, 0f, 0f);
+        SelectedFillImage.fillAmount = 0f;
         isSelected = false;
         isHover = false;
         hoverDuration = 0f;
