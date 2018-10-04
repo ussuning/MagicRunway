@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MR;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -17,10 +18,11 @@ public class Closet : MonoBehaviour {
 
     public Side ClosetSide;
 
-    public float shiftOutSpeed = 10f;
-    public float shiftInSpeed = 20f;
+    public float shiftOutTime = 0.5f;
+    public float shiftInTime = 0.5f;
+    public float showDistanceX = 100f;
 
-    public float idolTime = 5f;
+    public float idleTime = 3f;
 
     public ImageProgress activateIcon;
     public Camera cam;
@@ -87,8 +89,10 @@ public class Closet : MonoBehaviour {
             return isHidden;
         }
     }
-    private bool isHidding = false;
+    private bool isHiding = false;
     private bool isShowing = false;
+    private float hidingStartTime = 0;
+    private float showingStartTime = 0;
 
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
@@ -135,12 +139,12 @@ public class Closet : MonoBehaviour {
 
         hiddenPos = rectTrans.anchoredPosition;
         if (ClosetSide == Side.Left)
-            shownPos = new Vector3(hiddenPos.x + rectTrans.sizeDelta.x, hiddenPos.y, hiddenPos.z);
+            shownPos = new Vector3(hiddenPos.x + showDistanceX, hiddenPos.y, hiddenPos.z);
         else if(ClosetSide == Side.Right)
-            shownPos = new Vector3(hiddenPos.x - rectTrans.sizeDelta.x, hiddenPos.y, hiddenPos.z);
+            shownPos = new Vector3(hiddenPos.x - showDistanceX, hiddenPos.y, hiddenPos.z);
 
         isHidden = true;
-        isHidding = false;
+        isHiding = false;
         isShowing = false;
         idolTimeEllapsed = 0f;
 
@@ -164,7 +168,7 @@ public class Closet : MonoBehaviour {
     {
         if (isActive)
         {
-            if (!isHidden && !isHidding)
+            if (!isHidden && !isHiding)
             {
                 if (kinect && kinect.IsInitialized())
                 {
@@ -195,7 +199,7 @@ public class Closet : MonoBehaviour {
 
                         if (hit.collider != null)
                         {
-                            ClosetItem closetItem = hit.collider.GetComponent<ClosetItem>();
+                            ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
                             OnClosetItemHover(closetItem);
                         }
                         else
@@ -245,7 +249,7 @@ public class Closet : MonoBehaviour {
                 }
             }
 
-            if(idolTimeEllapsed >= idolTime)
+            if(idolTimeEllapsed >= idleTime)
             {
                 Hide();
                 idolTimeEllapsed = 0f;
@@ -257,27 +261,14 @@ public class Closet : MonoBehaviour {
     {
         if (!isHidden)
         {
-            if (isHidding)
+            if (isHiding)
             {
-                if (ClosetSide == Side.Left)
+                float t = Mathf.Clamp01((Time.time - hidingStartTime) / shiftOutTime);
+                rectTrans.anchoredPosition = Vector3Helper.SmoothStep(shownPos, hiddenPos, t);
+                if (t >= 1)
                 {
-                    rectTrans.anchoredPosition += Vector2.left * shiftOutSpeed;
-                    if (rectTrans.anchoredPosition.x < hiddenPos.x)
-                    {
-                        rectTrans.anchoredPosition = hiddenPos;
-                        isHidden = true;
-                        isHidding = false;
-                    }
-                }
-                else if (ClosetSide == Side.Right)
-                {
-                    rectTrans.anchoredPosition += Vector2.right * shiftOutSpeed;
-                    if (rectTrans.anchoredPosition.x > hiddenPos.x)
-                    {
-                        rectTrans.anchoredPosition = hiddenPos;
-                        isHidden = true;
-                        isHidding = false;
-                    }
+                    isHidden = true;
+                    isHiding = false;
                 }
             }
         }
@@ -285,25 +276,12 @@ public class Closet : MonoBehaviour {
         {
             if (isShowing)
             {
-                if (ClosetSide == Side.Left)
+                float t = Mathf.Clamp01((Time.time - showingStartTime) / shiftInTime);
+                rectTrans.anchoredPosition = Vector3Helper.SmoothStep(hiddenPos, shownPos, t);
+                if (t >= 1)
                 {
-                    rectTrans.anchoredPosition += Vector2.right * shiftInSpeed;
-                    if (rectTrans.anchoredPosition.x > shownPos.x)
-                    {
-                        rectTrans.anchoredPosition = shownPos;
-                        isHidden = false;
-                        isShowing = false;
-                    }
-                }
-                else if (ClosetSide == Side.Right)
-                {
-                    rectTrans.anchoredPosition += Vector2.left * shiftInSpeed;
-                    if (rectTrans.anchoredPosition.x < shownPos.x)
-                    {
-                        rectTrans.anchoredPosition = shownPos;
-                        isHidden = false;
-                        isShowing = false;
-                    }
+                    isHidden = false;
+                    isShowing = false;
                 }
             }
         }
@@ -313,8 +291,11 @@ public class Closet : MonoBehaviour {
 
     public void Show()
     {
-        if(isHidden)
+        if (isHidden)
+        {
             isShowing = true;
+            showingStartTime = Time.time;
+        }
 
         activateIcon.SetProgressValue(0f);
     }
@@ -322,7 +303,10 @@ public class Closet : MonoBehaviour {
     public void Hide()
     {
         if (!isHidden)
-            isHidding = true;
+        {
+            isHiding = true;
+            hidingStartTime = Time.time;
+        }
     }
 
     public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
@@ -355,7 +339,7 @@ public class Closet : MonoBehaviour {
         if(resetPos)
             rectTrans.anchoredPosition = hiddenPos;
         isHidden = true;
-        isHidding = false;
+        isHiding = false;
         isShowing = false;
         idolTimeEllapsed = 0f;
 
@@ -478,7 +462,7 @@ public class Closet : MonoBehaviour {
             outfitItem.OnItemUnselected();
         }
 
-        if(!isHidden && !isHidding)
+        if(!isHidden && !isHiding)
             idolTimeEllapsed += Time.deltaTime;
     }
 
