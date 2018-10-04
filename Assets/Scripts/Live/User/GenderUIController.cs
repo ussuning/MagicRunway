@@ -83,7 +83,7 @@ public class GenderUIController : MonoBehaviour {
 
             //femaleSprite.color = new Color(femaleSprite.color.r, femaleSprite.color.g, femaleSprite.color.b, f_alpha);
             if (femaleGO)
-                femaleGO.GetComponent<MeshRenderer>().material.color = new Color(femaleGO.GetComponent<MeshRenderer>().material.color.r, femaleGO.GetComponent<MeshRenderer>().material.color.g, femaleGO.GetComponent<MeshRenderer>().material.color.b, m_alpha);
+                femaleGO.GetComponent<MeshRenderer>().material.color = new Color(femaleGO.GetComponent<MeshRenderer>().material.color.r, femaleGO.GetComponent<MeshRenderer>().material.color.g, femaleGO.GetComponent<MeshRenderer>().material.color.b, f_alpha);
 
             if (f_alpha == 0f)
             {
