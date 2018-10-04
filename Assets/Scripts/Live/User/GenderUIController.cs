@@ -130,7 +130,7 @@ public class GenderUIController : MonoBehaviour {
             float scale = Mathf.Clamp(maxScale - userScreenPos.z, minScale, maxScale);
             transform.localScale = new Vector3(scale, scale, scale);
 
-            transform.position += Vector3.up * 200f * (scale - minScale) / (maxScale - minScale);
+            transform.position += Vector3.up * 200f * (scale - minScale) / (maxScale - minScale); 
         }
 
         if (needRotating)
