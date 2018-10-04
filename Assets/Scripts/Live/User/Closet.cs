@@ -104,7 +104,7 @@ public class Closet : MonoBehaviour {
     private RectTransform rectTrans;
     private Vector3 shownPos;
     private Vector3 hiddenPos;
-    private float idolTimeEllapsed = 0f;
+    private float idleElapsedTime = 0f;
 
     KinectManager kinect;
 
@@ -146,7 +146,7 @@ public class Closet : MonoBehaviour {
         isHidden = true;
         isHiding = false;
         isShowing = false;
-        idolTimeEllapsed = 0f;
+        idleElapsedTime = 0f;
 
         canvas = GetComponentInParent<Canvas>();
     }
@@ -200,8 +200,6 @@ public class Closet : MonoBehaviour {
                         if (hit.collider != null)
                         {
                             ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
-                            if (closetItem.Animator != null)
-                                closetItem.Animator.SetTrigger("onHoverStart");
                             OnClosetItemHover(closetItem);
                         }
                         else
@@ -251,10 +249,10 @@ public class Closet : MonoBehaviour {
                 }
             }
 
-            if(idolTimeEllapsed >= idleTime)
+            if(idleElapsedTime >= idleTime)
             {
                 Hide();
-                idolTimeEllapsed = 0f;
+                idleElapsedTime = 0f;
             }
         }
     }
@@ -343,7 +341,7 @@ public class Closet : MonoBehaviour {
         isHidden = true;
         isHiding = false;
         isShowing = false;
-        idolTimeEllapsed = 0f;
+        idleElapsedTime = 0f;
 
         ClearClosetImage();
         ownerIdx = -1;
@@ -452,7 +450,7 @@ public class Closet : MonoBehaviour {
             if (hoveredItem != outfitItem)
                 outfitItem.OnItemUnselected();
         }
-        idolTimeEllapsed = 0f;
+        idleElapsedTime = 0f;
     }
 
     private void OnUnselectAll()
@@ -465,7 +463,7 @@ public class Closet : MonoBehaviour {
         }
 
         if(!isHidden && !isHiding)
-            idolTimeEllapsed += Time.deltaTime;
+            idleElapsedTime += Time.deltaTime;
     }
 
     List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)

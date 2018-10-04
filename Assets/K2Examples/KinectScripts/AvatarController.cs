@@ -1722,7 +1722,7 @@ public class AvatarController : MonoBehaviour
             Vector3 hipVerticalDown = hipLeftBone.position;
             hipVerticalDown.y -= 1f;
             float angleBetween = Vector3.Angle(ankleLeftBone.position - hipLeftBone.position, hipVerticalDown - hipLeftBone.position);
-            Debug.Log("angleBetweenL = " + angleBetween);
+            //Debug.Log("angleBetweenL = " + angleBetween);
             hipLeftBone.localEulerAngles += new Vector3(0, 0, angleBetween);
         }
 
@@ -1732,7 +1732,7 @@ public class AvatarController : MonoBehaviour
             Vector3 hipVerticalDown = hipRightBone.position;
             hipVerticalDown.y -= 1f;
             float angleBetween = Vector3.Angle(ankleRightBone.position - hipRightBone.position, hipVerticalDown - hipRightBone.position);
-            Debug.Log("angleBetweenR = " + angleBetween);
+            //Debug.Log("angleBetweenR = " + angleBetween);
             hipRightBone.localEulerAngles += new Vector3(0, 0, -angleBetween);
         }
 
@@ -1897,9 +1897,9 @@ public class AvatarController : MonoBehaviour
                 bones[jointMap2boneIndex[KinectInterop.JointType.HipRight]].position, 0.5f)
                 ).magnitude;
 
-        Debug.Log("initialShoulderWidth = " + initialShoulderWidth);
-        Debug.Log("initialHipWidth = " + initialHipWidth);
-        Debug.Log("initialTorsoHeight = " + initialTorsoHeight);
+        //Debug.Log("initialShoulderWidth = " + initialShoulderWidth);
+        //Debug.Log("initialHipWidth = " + initialHipWidth);
+        //Debug.Log("initialTorsoHeight = " + initialTorsoHeight);
     }
 
     // Converts kinect joint rotation to avatar joint rotation, depending on joint initial rotation and offset rotation

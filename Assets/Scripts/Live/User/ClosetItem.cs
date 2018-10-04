@@ -11,6 +11,7 @@ public class ClosetItem : MonoBehaviour {
     public Image SelectedFillImage;
 
     public Animator Animator;
+    public bool isAnimatorDebug = false;
 
     protected Closet closet;
     public Closet Closet
@@ -83,7 +84,12 @@ public class ClosetItem : MonoBehaviour {
 
     public void OnItemHover()
     {
-        isHover = true;
+        if (isHover == false)
+        {
+            isHover = true;
+            if (Animator != null)
+                Animator.SetTrigger("onHoverStart");
+        }
     }
 
     public virtual void OnItemSelected()
@@ -94,11 +100,17 @@ public class ClosetItem : MonoBehaviour {
 
     public void OnItemUnselected ()
     {
-        SelectedFillImage.fillAmount = 0f;
-        isSelected = false;
-        isHover = false;
-        hoverDuration = 0f;
-        if (Animator != null)
-            Animator.SetTrigger("onHoverEnd");
+        if (isSelected || isHover)
+        {
+            SelectedFillImage.fillAmount = 0f;
+            isSelected = false;
+            isHover = false;
+            hoverDuration = 0f;
+            if (isAnimatorDebug)
+                Debug.Log("animator Debug");
+
+            if (Animator != null)
+                Animator.SetTrigger("onHoverEnd");
+        }
     }
 }
