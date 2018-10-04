@@ -44,6 +44,11 @@ public class ClosetItem : MonoBehaviour {
     private float hoverDuration = 0f;
     private float HoverToSelectTransitionSpeed;
 
+    public float hoverProgress
+    {
+        get { return Mathf.Clamp01(hoverDuration / HoverToSelectTime); }
+    } 
+
     void Start ()
     {
         Animator = GetComponentInChildren<Animator>();
@@ -59,7 +64,7 @@ public class ClosetItem : MonoBehaviour {
         if(isHover && !isSelected)
         {
             hoverDuration += Time.deltaTime;
-            SelectedFillImage.fillAmount = hoverDuration / HoverToSelectTime;
+            SelectedFillImage.fillAmount = hoverProgress;
 
             if (hoverDuration >= HoverToSelectTime)
             {

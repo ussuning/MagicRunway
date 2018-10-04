@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MR;
+using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -26,6 +27,17 @@ public class Closet : MonoBehaviour {
 
     public ImageProgress activateIcon;
     public Camera cam;
+
+    public RectTransform pointFrom;
+    public RectTransform pointTo;
+    public RectTransform pointSpine;
+
+    public Vector3 ptFrom;
+    public Vector3 ptTo;
+
+    public Image bubble;
+    protected ClosetOutfitItem bubbleOutfit;
+    protected Vector3 bubbleStartPos;
     protected Canvas canvas;
 
     //private long ownerId;
@@ -151,12 +163,6 @@ public class Closet : MonoBehaviour {
         canvas = GetComponentInParent<Canvas>();
     }
 
-    public RectTransform pointFrom;
-    public RectTransform pointTo;
-
-    public Vector3 ptFrom;
-    public Vector3 ptTo;
-
     Vector2 ScreenPtToCanvasPt(Vector2 screenPt)
     {
         return new Vector2(
@@ -174,24 +180,25 @@ public class Closet : MonoBehaviour {
                 {
                     if (kinect.IsUserTracked(OwnerID))
                     {
+                        // First, get Screen points
                         Vector3 fromScreenPt;
                         Vector3 toScreenPt;
-                        GetUserPointingScreenPoints(ClosetSide, OwnerID, out fromScreenPt, out toScreenPt);
-
+                        Vector3 spineShoulderPt;
+                        GetUserPointingScreenPoints(ClosetSide, OwnerID, out fromScreenPt, out toScreenPt, out spineShoulderPt);
+                        // Second, convert from Screen Pt to Canvas Pt
                         Vector2 fromLocal = ScreenPtToCanvasPt(fromScreenPt);
                         if (pointFrom != null)
                             pointFrom.position = fromLocal;
                         Vector2 toLocal = ScreenPtToCanvasPt(toScreenPt);
                         if (pointTo != null)
                             pointTo.position = toLocal;
+                        Vector2 spineShoulderLocal = ScreenPtToCanvasPt(spineShoulderPt);
+                        if (pointSpine != null)
+                            pointSpine.position = spineShoulderLocal;
 
+                        // For Debug line rendering, using world coords.
                         ptFrom = pointFrom.transform.position;
                         ptTo = pointTo.transform.position;
-                        
-                        //Vector2 directionLocal;
-                        //RectTransformUtility.ScreenPointToLocalPointInRectangle(imgRectT, ray2D.origin,    cam, out originLocal);
-                        //RectTransformUtility.ScreenPointToLocalPointInRectangle(imgRectT, ray2D.direction, cam, out directionLocal);
-                        //Ray2D rayLocal = new Ray2D(originLocal, directionLocal);
 
                         RaycastHit2D hit = Physics2D.Raycast(ptFrom, ptTo-ptFrom, float.MaxValue, LayerMask.GetMask(new string []{ "Pointable2D" }));
 
@@ -200,10 +207,12 @@ public class Closet : MonoBehaviour {
                         if (hit.collider != null)
                         {
                             ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
+                            SetItemToBubble(closetItem);
                             OnClosetItemHover(closetItem);
                         }
                         else
                         {
+                            SetItemToBubble(null);
                             OnUnselectAll();
                         }
 
@@ -254,6 +263,36 @@ public class Closet : MonoBehaviour {
                 Hide();
                 idleElapsedTime = 0f;
             }
+
+            UpdateBubble();
+        }
+    }
+
+    private void SetItemToBubble(ClosetItem closetItem)
+    {
+        ClosetOutfitItem neoOutfit = closetItem as ClosetOutfitItem;
+        if (neoOutfit != null)
+        {
+            bubble.sprite = neoOutfit.OutfitImage.sprite;
+            bubble.GetComponent<CanvasGroup>().alpha = 1;
+            bubbleStartPos = neoOutfit.OutfitImage.rectTransform.position;
+            bubble.rectTransform.position = bubbleStartPos;
+            if (bubbleOutfit != neoOutfit)
+                bubble.GetComponent<Animator>().SetTrigger("onBubbleStart");
+        }
+        else
+        {
+            bubble.GetComponent<CanvasGroup>().alpha = 0;
+            bubble.rectTransform.anchoredPosition = new Vector2(0, -500);
+        }
+        bubbleOutfit = neoOutfit;
+    }
+
+    void UpdateBubble()
+    {
+        if (bubbleOutfit != null)
+        {
+            bubble.rectTransform.position = Vector3Helper.SmoothStep(bubbleStartPos, pointSpine.position, bubbleOutfit.hoverProgress);
         }
     }
 
@@ -478,10 +517,11 @@ public class Closet : MonoBehaviour {
     }
 
 
-    void GetUserPointingScreenPoints(Side closetSide, long ownerID, out Vector3 from, out Vector3 to)
+    void GetUserPointingScreenPoints(Side closetSide, long ownerID, out Vector3 from, out Vector3 to, out Vector3 spineShoulder)
     {
         Vector2 wristPos2D;
         Vector2 elbowPos2D;
+        Vector2 spineShoulder2D;
         if (closetSide == Closet.Side.Left)
         {
             Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristLeft);
@@ -496,8 +536,12 @@ public class Closet : MonoBehaviour {
             wristPos2D = cam.WorldToScreenPoint(wristPos);
             elbowPos2D = cam.WorldToScreenPoint(elbowPos);
         }
+        Vector3 spineShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.SpineMid);
+        spineShoulder2D = cam.WorldToScreenPoint(spineShoulderPos);
+
         to = wristPos2D;
         from = elbowPos2D;
+        spineShoulder = spineShoulder2D;
     }
 
 }
