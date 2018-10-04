@@ -17,14 +17,13 @@ public class GenderUIController : MonoBehaviour {
     public float minScale = 1f;
     public float maxRotation = 15f;
 
+    public float fadingDuration = 1.0f;    //Time for fading
+    private float fadeSpeed = 1.0f;
+
     private float m_alpha = 1f;
     private float f_alpha = 1f;
     private bool m_isFading = false;
     private bool f_isFading = false;
-
-    [SerializeField]
-    private float fadingDuration = 1.0f;    //Time for fading
-    private float fadeSpeed = 1.0f;
 
     private User.Gender selectedGender = User.Gender.None;
 
@@ -118,25 +117,10 @@ public class GenderUIController : MonoBehaviour {
             gameObject.SetActive(true);
     }
 
-    //float debug_userScreenPosMax = -9999f;
-    //float debug_userScreenPosMin = 9999f;
     public void SetUITransform(long userID)
     {
         Vector3 userScreenPos = GetUserScreenPos(userID);
         Vector3 newIconPos = userScreenPos + IconOffset;
-
-
-        //if(userScreenPos.z > debug_userScreenPosMax)
-        //{
-        //    debug_userScreenPosMax = userScreenPos.z;
-        //    Debug.Log(string.Format("New posZMax: {0}", debug_userScreenPosMax));
-        //}
-
-        //if (userScreenPos.z < debug_userScreenPosMin)
-        //{
-        //    debug_userScreenPosMin = userScreenPos.z;
-        //    Debug.Log(string.Format("New posZMin: {0}", debug_userScreenPosMin));
-        //}
 
         if (needScaling)
         {
@@ -146,7 +130,8 @@ public class GenderUIController : MonoBehaviour {
             scale = Mathf.Clamp(scale * (maxScale - minScale) + minScale, minScale, maxScale);
             transform.localScale = new Vector3(scale, scale, scale);
 
-            newIconPos += Vector3.up * 200f * (scale - minScale) / (maxScale - minScale); 
+            Debug.Log(string.Format("scale {0} maleGO bounds = {1}", scale, maleGO.GetComponent<MeshRenderer>().bounds.size));
+            newIconPos += Vector3.down * 80f * (maxScale - scale) / 2f;
         }
 
         if (needRotating)
