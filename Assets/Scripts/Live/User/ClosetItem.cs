@@ -10,6 +10,8 @@ public class ClosetItem : MonoBehaviour {
     public Image ItemImage;
     public Image SelectedFillImage;
 
+    public Animator Animator;
+
     protected Closet closet;
     public Closet Closet
     {
@@ -43,6 +45,7 @@ public class ClosetItem : MonoBehaviour {
 
     void Start ()
     {
+        Animator = GetComponentInChildren<Animator>();
         HoverToSelectTransitionSpeed = SelectedFillImage.rectTransform.sizeDelta.x / HoverToSelectTime;
 
         OnItemUnselected();
@@ -95,5 +98,7 @@ public class ClosetItem : MonoBehaviour {
         isSelected = false;
         isHover = false;
         hoverDuration = 0f;
+        if (Animator != null)
+            Animator.SetTrigger("onHoverEnd");
     }
 }

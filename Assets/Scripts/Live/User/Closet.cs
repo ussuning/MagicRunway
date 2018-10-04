@@ -200,6 +200,8 @@ public class Closet : MonoBehaviour {
                         if (hit.collider != null)
                         {
                             ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
+                            if (closetItem.Animator != null)
+                                closetItem.Animator.SetTrigger("onHoverStart");
                             OnClosetItemHover(closetItem);
                         }
                         else
@@ -392,48 +394,48 @@ public class Closet : MonoBehaviour {
         bottomArrow.HideArrow();
     }
 
-    private void OnTopArrowHover()
-    {
-        topArrow.OnItemHover();
-        bottomArrow.OnItemUnselected();
-        foreach(ClosetOutfitItem outfitItem in OutfitItems)
-        {
-            outfitItem.OnItemUnselected();
-        }
+    //private void OnTopArrowHover()
+    //{
+    //    topArrow.OnItemHover();
+    //    bottomArrow.OnItemUnselected();
+    //    foreach(ClosetOutfitItem outfitItem in OutfitItems)
+    //    {
+    //        outfitItem.OnItemUnselected();
+    //    }
 
-        idolTimeEllapsed = 0f;
-    }
+    //    idolTimeEllapsed = 0f;
+    //}
 
-    private void OnBottomArrowHover()
-    {
-        topArrow.OnItemUnselected();
-        bottomArrow.OnItemHover();
-        foreach (ClosetOutfitItem outfitItem in OutfitItems)
-        {
-            outfitItem.OnItemUnselected();
-        }
+    //private void OnBottomArrowHover()
+    //{
+    //    topArrow.OnItemUnselected();
+    //    bottomArrow.OnItemHover();
+    //    foreach (ClosetOutfitItem outfitItem in OutfitItems)
+    //    {
+    //        outfitItem.OnItemUnselected();
+    //    }
 
-        idolTimeEllapsed = 0f;
-    }
+    //    idolTimeEllapsed = 0f;
+    //}
 
-    private void OnOutfitItemHover(int idx)
-    {
-        topArrow.OnItemUnselected();
-        bottomArrow.OnItemUnselected();
-        for(int i=0; i< ClosetManager.NUMBER_CLOSET_ITEMS; i++)
-        {
-            if(i == idx)
-            {
-                OutfitItems[i].OnItemHover();
-            }
-            else
-            {
-                OutfitItems[i].OnItemUnselected();
-            }
-        }
+    //private void OnOutfitItemHover(int idx)
+    //{
+    //    topArrow.OnItemUnselected();
+    //    bottomArrow.OnItemUnselected();
+    //    for(int i=0; i< ClosetManager.NUMBER_CLOSET_ITEMS; i++)
+    //    {
+    //        if(i == idx)
+    //        {
+    //            OutfitItems[i].OnItemHover();
+    //        }
+    //        else
+    //        {
+    //            OutfitItems[i].OnItemUnselected();
+    //        }
+    //    }
 
-        idolTimeEllapsed = 0f;
-    }
+    //    idolTimeEllapsed = 0f;
+    //}
 
     private void OnClosetItemHover(ClosetItem hoveredItem)
     {
