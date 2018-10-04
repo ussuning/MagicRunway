@@ -62,7 +62,6 @@ public class GenderUIController : MonoBehaviour {
             if (m_alpha < 0f)
                 m_alpha = 0f;
 
-            //maleSprite.color = new Color(maleSprite.color.r, maleSprite.color.g, maleSprite.color.b, m_alpha);
             if(maleGO)
                 maleGO.GetComponent<MeshRenderer>().material.color = new Color(maleGO.GetComponent<MeshRenderer>().material.color.r, maleGO.GetComponent<MeshRenderer>().material.color.g, maleGO.GetComponent<MeshRenderer>().material.color.b, m_alpha);
 
@@ -71,7 +70,7 @@ public class GenderUIController : MonoBehaviour {
                 m_isFading = false;
 
                 if (selectedGender == User.Gender.Female)
-                    Invoke("FadeFemaleSprite", 2f);
+                    Invoke("FadeFemaleIcon", 2f);
             }
         }
 
@@ -81,7 +80,6 @@ public class GenderUIController : MonoBehaviour {
             if (f_alpha < 0f)
                 f_alpha = 0f;
 
-            //femaleSprite.color = new Color(femaleSprite.color.r, femaleSprite.color.g, femaleSprite.color.b, f_alpha);
             if (femaleGO)
                 femaleGO.GetComponent<MeshRenderer>().material.color = new Color(femaleGO.GetComponent<MeshRenderer>().material.color.r, femaleGO.GetComponent<MeshRenderer>().material.color.g, femaleGO.GetComponent<MeshRenderer>().material.color.b, f_alpha);
 
@@ -90,7 +88,7 @@ public class GenderUIController : MonoBehaviour {
                 f_isFading = false;
 
                 if (selectedGender == User.Gender.Male)
-                    Invoke("FadeMaleSprite", 2f);
+                    Invoke("FadeMaleIcon", 2f);
             }
         }
     }
@@ -100,11 +98,11 @@ public class GenderUIController : MonoBehaviour {
         selectedGender = g;
         if (g == User.Gender.Male)
         {
-            FadeFemaleSprite();
+            FadeFemaleIcon();
         }
         else if(g == User.Gender.Female)
         {
-            FadeMaleSprite();
+            FadeMaleIcon();
         }
     }
 
@@ -120,35 +118,55 @@ public class GenderUIController : MonoBehaviour {
             gameObject.SetActive(true);
     }
 
+    //float debug_userScreenPosMax = -9999f;
+    //float debug_userScreenPosMin = 9999f;
     public void SetUITransform(long userID)
     {
         Vector3 userScreenPos = GetUserScreenPos(userID);
-        transform.position = userScreenPos + IconOffset;
+        Vector3 newIconPos = userScreenPos + IconOffset;
+
+
+        //if(userScreenPos.z > debug_userScreenPosMax)
+        //{
+        //    debug_userScreenPosMax = userScreenPos.z;
+        //    Debug.Log(string.Format("New posZMax: {0}", debug_userScreenPosMax));
+        //}
+
+        //if (userScreenPos.z < debug_userScreenPosMin)
+        //{
+        //    debug_userScreenPosMin = userScreenPos.z;
+        //    Debug.Log(string.Format("New posZMin: {0}", debug_userScreenPosMin));
+        //}
 
         if (needScaling)
         {
-            float scale = Mathf.Clamp(maxScale - userScreenPos.z, minScale, maxScale);
+            float kinectMaxDistance = manager.maxUserDistance;
+            float kinectMinDistance = manager.minUserDistance;
+            float scale = (kinectMaxDistance - userScreenPos.z) / (kinectMaxDistance - kinectMinDistance);
+            scale = Mathf.Clamp(scale * (maxScale - minScale) + minScale, minScale, maxScale);
             transform.localScale = new Vector3(scale, scale, scale);
 
-            transform.position += Vector3.up * 200f * (scale - minScale) / (maxScale - minScale); 
+            newIconPos += Vector3.up * 200f * (scale - minScale) / (maxScale - minScale); 
         }
 
         if (needRotating)
         {
             float userRot = manager.GetUserOrientation(userID, false).eulerAngles.y;
-            if (userRot >= 0 && userRot <= maxRotation)
+            if ((userRot >= 0 && userRot <= maxRotation) || (userRot < 0 && userRot >= -maxRotation))
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, userRot, 0f), 1f);
             else if (userRot >= 360 - maxRotation && userRot <= 360f)
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, userRot - 360f, 0f), 1f);
         }
+
+        transform.position = Vector3.Lerp(transform.position, newIconPos, 1f);
     }
 
-    private void FadeMaleSprite()
+    private void FadeMaleIcon()
     {
         m_isFading = true;
     }
 
-    private void FadeFemaleSprite()
+    private void FadeFemaleIcon()
     {
         f_isFading = true;
     }
