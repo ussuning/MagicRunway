@@ -13,6 +13,7 @@ public class GenderUIController : MonoBehaviour {
     public bool needRotating = true;
 
     public Vector3 IconOffset = new Vector3(0f, 200f, -5f);
+    public float scalingPosSmoothing = 110f;
     public float maxScale = 2f;
     public float minScale = 1f;
     public float maxRotation = 15f;
@@ -116,7 +117,7 @@ public class GenderUIController : MonoBehaviour {
         if (!gameObject.activeInHierarchy)
             gameObject.SetActive(true);
     }
-
+    
     public void SetUITransform(long userID)
     {
         Vector3 userScreenPos = GetUserScreenPos(userID);
@@ -130,8 +131,8 @@ public class GenderUIController : MonoBehaviour {
             scale = Mathf.Clamp(scale * (maxScale - minScale) + minScale, minScale, maxScale);
             transform.localScale = new Vector3(scale, scale, scale);
 
-            Debug.Log(string.Format("scale {0} maleGO bounds = {1}", scale, maleGO.GetComponent<MeshRenderer>().bounds.size));
-            newIconPos += Vector3.down * 80f * (maxScale - scale) / 2f;
+            Debug.Log(string.Format("scale {0} maleGO bounds = {1}", scale, maleGO.GetComponent<MeshRenderer>().bounds.size)); 
+            newIconPos += Vector3.down * scalingPosSmoothing * (maxScale - scale)/2f;
         }
 
         if (needRotating)
