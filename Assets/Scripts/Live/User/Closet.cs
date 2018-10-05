@@ -236,41 +236,6 @@ public class Closet : MonoBehaviour {
                             SetItemToBubble(null);
                             OnUnselectAll();
                         }
-
-
-                        //Debug.Log("Canvas " + canvas.pixelRect);
-                        //Debug.Log("bottomArrow.rectPos " + bottomArrow.ItemImage.rectTransform.position);
-                        //Debug.Log("bottomArrow.width " + bottomArrow.ItemImage.rectTransform.rect.width);
-                        //Debug.Log("bottomArrow.TopBound " + bottomArrow.TopBound);
-                        //ownerPointDir = Mathf.Lerp(ownerPointDir, , 0.25f);
-                        //if (ownerPointDir >= bottomArrow.BottomBound && ownerPointDir < bottomArrow.TopBound)
-                        //{
-                        //    OnBottomArrowHover();
-                        //}
-                        //else if (ownerPointDir >= OutfitItems[3].BottomBound && ownerPointDir < OutfitItems[3].TopBound)
-                        //{
-                        //    OnOutfitItemHover(3);
-                        //}
-                        //else if (ownerPointDir >= OutfitItems[2].BottomBound && ownerPointDir < OutfitItems[2].TopBound)
-                        //{
-                        //    OnOutfitItemHover(2);
-                        //}
-                        //else if (ownerPointDir >= OutfitItems[1].BottomBound && ownerPointDir < OutfitItems[1].TopBound)
-                        //{
-                        //    OnOutfitItemHover(1);
-                        //}
-                        //else if (ownerPointDir >= OutfitItems[0].BottomBound && ownerPointDir < OutfitItems[0].TopBound)
-                        //{
-                        //    OnOutfitItemHover(0);
-                        //}
-                        //else if (ownerPointDir >= topArrow.BottomBound && ownerPointDir <= topArrow.TopBound)
-                        //{
-                        //    OnTopArrowHover();
-                        //}
-                        //else if (ownerPointDir < bottomArrow.BottomBound || ownerPointDir > topArrow.TopBound)
-                        //{
-                        //    OnUnselectAll();
-                        //}
                     }
                     else
                     {
@@ -330,10 +295,6 @@ public class Closet : MonoBehaviour {
                 }
             }
         }
-    }
-
-    private void FixedUpdate()
-    {
     }
 
     void LateUpdate()
