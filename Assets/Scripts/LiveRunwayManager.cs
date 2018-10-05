@@ -223,7 +223,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         GameObject posingScoreGO = Instantiate(PosingScorePrefab, posingScoreContainer.transform);
         UserScore userScore = posingScoreGO.GetComponent<UserScore>();
 
-        user.initialize(userIdx, userScore);
+        user.initialize(userIdx, userScore, NumActivatedUsers < NumberOfPlayers);
 
         users.Add(userIdx, user);
 

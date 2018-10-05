@@ -84,7 +84,7 @@ public class User : MonoBehaviour {
         }
     }
 
-    public void initialize(int idx, UserScore userScore)
+    public void initialize(int idx, UserScore userScore, bool isReady = true)
     {
         uidx = idx;
         uScore = userScore;
@@ -95,7 +95,7 @@ public class User : MonoBehaviour {
         uScore.init(idx);
         uScore.gameObject.SetActive(false);
 
-        isReadyToBeActivated = true;
+        isReadyToBeActivated = isReady;
         isActivated = false;
     }
 
