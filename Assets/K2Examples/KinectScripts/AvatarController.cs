@@ -540,7 +540,8 @@ public class AvatarController : MonoBehaviour
 		// move the avatar to its Kinect position
 		if(!externalRootMotion)
 		{
-			MoveAvatar(UserID);
+            if (!MoveAvatar(UserID))
+                return;
 		}
 
 		// get the left hand state and event
@@ -1491,12 +1492,12 @@ public class AvatarController : MonoBehaviour
 	}
 	
 	// Moves the avatar - gets the tracked position of the user and applies it to avatar.
-	protected void MoveAvatar(Int64 UserID)
+	protected bool MoveAvatar(Int64 UserID)
 	{
 		if((moveRate == 0f) || !kinectManager ||
 		   !kinectManager.IsJointTracked(UserID, (int)KinectInterop.JointType.SpineBase))
 		{
-			return;
+            return false;
 		}
 		
 		// get the position of user's spine base
@@ -1524,7 +1525,9 @@ public class AvatarController : MonoBehaviour
 				}
 
 				trans = kinectManager.GetJointPosColorOverlay(UserID, (int)KinectInterop.JointType.SpineBase, posRelativeToCamera, backgroundRect);
-			}
+                if (trans.Equals(Vector3.zero))
+                    return false;
+            }
 
 			if(flipLeftRight)
 				trans.x = -trans.x;
@@ -1648,6 +1651,8 @@ public class AvatarController : MonoBehaviour
 			transform.position = smoothFactor != 0f ? 
 				Vector3.Lerp(transform.position, targetPos, smoothFactor * Time.deltaTime) : targetPos;
 		}
+
+        return true;
 	}
 	
 	// Set model's arms to be in T-pose
