@@ -332,7 +332,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         RemoveRunwayEventListeners();
         isModeActive = true;
 
-        runwayEventManager.RunwayEnterEvents.OnTriggerEnterEvt += OnRunwayEnter;
+        runwayEventManager.RunwayEnter.OnTriggerEnterEvt += OnRunwayEnter;
         runwayEventManager.RunwayMidExit.OnTriggerEnterEvt += OnRunwayMidExit;
         runwayEventManager.RunwayFinish.OnTriggerEnterEvt += OnRunwayFinish;
         runwayEventManager.RunwayEnd.OnTriggerEnterEvt += OnRunwayEndEnter;
@@ -347,7 +347,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         runwayEventManager.RunwayFinish.OnTriggerEnterEvt -= OnRunwayFinish;
         runwayEventManager.RunwayEnd.OnTriggerEnterEvt -= OnRunwayEndEnter;
         runwayEventManager.RunwayEnd.OnTriggerExitEvt -= OnRunwayEndExit;
-        runwayEventManager.RunwayEnterEvents.OnTriggerEnterEvt -= OnRunwayEnter;
+        runwayEventManager.RunwayEnter.OnTriggerEnterEvt -= OnRunwayEnter;
     }
 
     private void Update()
