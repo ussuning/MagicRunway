@@ -84,7 +84,7 @@ public class User : MonoBehaviour {
         }
     }
 
-    public void initialize(int idx, UserScore userScore, bool isReady = true)
+    public void initialize(int idx, UserScore userScore, bool isReady = false)
     {
         uidx = idx;
         uScore = userScore;
@@ -110,6 +110,15 @@ public class User : MonoBehaviour {
             isActivated = true;
         }
     }
+
+    //public void deactivate(bool isReady = false)
+    //{
+    //    poseAgentSelector.enabled = false;
+    //    uScore.gameObject.SetActive(false);
+
+    //    isReadyToBeActivated = isReady;
+    //    isActivated = false;
+    //}
 
     void Update()
     {  

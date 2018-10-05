@@ -17,6 +17,21 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private List<int> userBuffer = new List<int>();
     private List<int> disconnectedUserBuffer = new List<int>();
     private Dictionary<int, User> users = new Dictionary<int, User>();
+    private int [] userIndices
+    {
+        get
+        {
+            int[] uIdx = new int[users.Count];
+            int counter = 0;
+            foreach(int i in users.Keys)
+            {
+                uIdx[counter] = i;
+                counter++;
+            }
+
+            return uIdx;
+        }
+    }
     private int NumActivatedUsers
     {
         get
@@ -33,9 +48,26 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private bool isModeActive = false;
 
+    KinectManager manager;
+
     void Awake()
     {
         liveRunwayContainer.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (!isModeActive)
+            return;
+
+        int[] userIdx = new int[userIndices.Length]; //fix this later
+        userIndices.CopyTo(userIdx, 0); //fix this later
+        SortUsersByDistance(ref userIdx, 0);
+        
+        for(int i=0; i< userIdx.Length; i++)
+        {
+            users[userIdx[i]].IsReadyToBeActivated = i < NumberOfPlayers;
+        }
     }
 
     public Mode GetMode()
@@ -45,14 +77,17 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void Begin()
     {
-        Debug.Log(string.Format("[LiveRunwayManager] Begin:"));
+        Debug.Log(string.Format("[LiveRunwayManager] Begin:"));  
     }
 
     public void SetUp(int level = 0)
     {
         Debug.Log(string.Format("[LiveRunwayManager] SetUp: level = {0}", level));
 
-        KinectManager.Instance.maxTrackedUsers = 6;
+        if (!manager)
+            manager = KinectManager.Instance;
+        manager.maxTrackedUsers = 6;
+
         UIManager.Instance.HideCollectionTitle(false);
         liveRunwayContainer.SetActive(true);
 
@@ -223,7 +258,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         GameObject posingScoreGO = Instantiate(PosingScorePrefab, posingScoreContainer.transform);
         UserScore userScore = posingScoreGO.GetComponent<UserScore>();
 
-        user.initialize(userIdx, userScore, NumActivatedUsers < NumberOfPlayers);
+        user.initialize(userIdx, userScore, false);
 
         users.Add(userIdx, user);
 
@@ -264,7 +299,26 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         }
     }
 
-    void UpdateLiveStatus(int numActivatedUsers)
+    private void SortUsersByDistance(ref int[] allUsers, int idx)
+    {
+        for (int i = idx; i > 0; i--)
+        {
+            float curUserPosZ = manager.GetUserPosition(manager.GetUserIdByIndex(allUsers[i])).z;
+            float preUserPosZ = manager.GetUserPosition(manager.GetUserIdByIndex(allUsers[i - 1])).z;
+            if (curUserPosZ < preUserPosZ) //cur closer than pre
+            {
+                int curUser = allUsers[i];
+                allUsers[i] = allUsers[i - 1];
+                allUsers[i - 1] = curUser;
+                SortUsersByDistance(ref allUsers, idx);
+            }
+        }
+
+        if (idx + 1 < allUsers.Length)
+            SortUsersByDistance(ref allUsers, idx + 1);
+    }
+
+    private void UpdateLiveStatus(int numActivatedUsers)
     {
         foreach (User u in users.Values)
         {
@@ -277,5 +331,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             poseMgr.StartPosing();
         else if (poseMgr.IsPosing && numActivatedUsers == 0)
             poseMgr.StopPosing();
-    }
+    }   
 }
+
