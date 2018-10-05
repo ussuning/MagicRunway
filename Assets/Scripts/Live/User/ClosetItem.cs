@@ -63,14 +63,22 @@ public class ClosetItem : MonoBehaviour {
 
         if(isHover && !isSelected)
         {
-            hoverDuration += Time.deltaTime;
+            //hoverDuration += Time.deltaTime; // Do this in FixedUpdate for smoothness.
             SelectedFillImage.fillAmount = hoverProgress;
 
-            if (hoverDuration >= HoverToSelectTime)
+            if (hoverProgress >= 1f)
             {
                 OnItemSelected();
-                hoverDuration = 0f;
+                //hoverDuration = 0f;
             }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (isHover && !isSelected)
+        {
+            hoverDuration += Time.fixedDeltaTime;
         }
     }
 
@@ -92,6 +100,7 @@ public class ClosetItem : MonoBehaviour {
         if (isHover == false)
         {
             isHover = true;
+            hoverDuration = 0f;
             if (Animator != null)
                 Animator.SetTrigger("onHoverStart");
         }
@@ -110,7 +119,6 @@ public class ClosetItem : MonoBehaviour {
             SelectedFillImage.fillAmount = 0f;
             isSelected = false;
             isHover = false;
-            hoverDuration = 0f;
             if (isAnimatorDebug)
                 Debug.Log("animator Debug");
 

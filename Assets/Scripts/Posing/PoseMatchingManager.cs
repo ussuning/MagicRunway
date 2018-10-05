@@ -90,7 +90,7 @@ public class PoseMatchingManager : MonoBehaviour {
         PlayComboParticles(-1);
     }
 
-    Vector3 GetUserScreenPos(int userIdx)
+    public Vector3 GetUserScreenPos(int userIdx)
     {
         KinectManager manager = KinectManager.Instance;
 

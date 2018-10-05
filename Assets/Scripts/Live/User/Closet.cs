@@ -36,8 +36,11 @@ public class Closet : MonoBehaviour {
     public Vector3 ptTo;
 
     public Image bubble;
+    public ParticleSystem bubblePop;
     protected ClosetOutfitItem bubbleOutfit;
+    protected bool isBubblePopped = false;
     protected Vector3 bubbleStartPos;
+    protected Vector3 bubbleEndPos;
     protected Canvas canvas;
 
     //private long ownerId;
@@ -274,16 +277,19 @@ public class Closet : MonoBehaviour {
         if (neoOutfit != null)
         {
             bubble.sprite = neoOutfit.OutfitImage.sprite;
-            bubble.GetComponent<CanvasGroup>().alpha = 1;
             bubbleStartPos = neoOutfit.OutfitImage.rectTransform.position;
+            bubbleEndPos = pointSpine.position;
             bubble.rectTransform.position = bubbleStartPos;
             if (bubbleOutfit != neoOutfit)
+            {
                 bubble.GetComponent<Animator>().SetTrigger("onBubbleStart");
+                isBubblePopped = false;
+            }
         }
         else
         {
             bubble.GetComponent<CanvasGroup>().alpha = 0;
-            bubble.rectTransform.anchoredPosition = new Vector2(0, -500);
+            bubble.rectTransform.anchoredPosition = new Vector2(0, -2000);
         }
         bubbleOutfit = neoOutfit;
     }
@@ -292,8 +298,23 @@ public class Closet : MonoBehaviour {
     {
         if (bubbleOutfit != null)
         {
-            bubble.rectTransform.position = Vector3Helper.SmoothStep(bubbleStartPos, pointSpine.position, bubbleOutfit.hoverProgress);
+            bubble.rectTransform.position = Vector3Helper.SmoothStep(bubbleStartPos, bubbleEndPos, bubbleOutfit.hoverProgress);
+            //Debug.Log("bubbleOutfit.hoverProgress = " + bubbleOutfit.hoverProgress);
+            if (bubbleOutfit.hoverProgress >= 1f)
+            {
+                if (isBubblePopped == false)
+                {
+                    bubblePop.transform.position = PoseMatchingManager.Instance.GetUserScreenPos(ownerIdx);
+                    bubblePop.Play();
+
+                    isBubblePopped = true;
+                }
+            }
         }
+    }
+
+    private void FixedUpdate()
+    {
     }
 
     void LateUpdate()
