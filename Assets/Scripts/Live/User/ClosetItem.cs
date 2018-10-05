@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class ClosetItem : MonoBehaviour {
 
+    public delegate void ClosetItemEventHandler(ClosetItem closetItem);
+    public event ClosetItemEventHandler OnItemSelectedEvent;
+
     public float HoverToSelectTime = 1.25f;
 
     public Image ItemImage;
@@ -110,6 +113,9 @@ public class ClosetItem : MonoBehaviour {
     {
         SelectedFillImage.fillAmount = 1f;
         isSelected = true;
+
+        if (OnItemSelectedEvent != null)
+            OnItemSelectedEvent(this);
     }
 
     public void OnItemUnselected ()

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class ClosetOutfitItem : ClosetItem {
 
     public Image OutfitImage;
-    private Outfit outfit;
-    
+    public Outfit outfit;
+
     public void SetOutfit(Outfit outfit)
     {
         this.outfit = outfit;

@@ -43,6 +43,8 @@ public class Closet : MonoBehaviour {
     protected Vector3 bubbleEndPos;
     protected Canvas canvas;
 
+    private Outfit lastSelectedOutfit;
+
     //private long ownerId;
     private int ownerIdx;
     public int OwnerIndex
@@ -143,7 +145,23 @@ public class Closet : MonoBehaviour {
             {
                 OutfitItems[i-1] = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
                 OutfitItems[i - 1].Closet = this;
+                OutfitItems[i - 1].OnItemSelectedEvent += OnItemOutfitItemSelected;
             }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        foreach (ClosetOutfitItem outfitItem in OutfitItems)
+            outfitItem.OnItemSelectedEvent -= OnItemOutfitItemSelected;
+    }
+
+    private void OnItemOutfitItemSelected(ClosetItem closetItem)
+    {
+        ClosetOutfitItem outfitItem = closetItem as ClosetOutfitItem;
+        if (outfitItem != null)
+        {
+            lastSelectedOutfit = outfitItem.outfit;
         }
     }
 
@@ -204,10 +222,10 @@ public class Closet : MonoBehaviour {
                         ptTo = pointTo.transform.position;
 
                         RaycastHit2D hit = Physics2D.Raycast(ptFrom, ptTo-ptFrom, float.MaxValue, LayerMask.GetMask(new string []{ "Pointable2D" }));
-
                         //Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
 
-                        if (hit.collider != null)
+                        if (hit.collider != null && 
+                            hit.collider.GetComponentInParent<Closet>() == this)// Only allow selecting from this closet
                         {
                             ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
                             SetItemToBubble(closetItem);
@@ -274,7 +292,7 @@ public class Closet : MonoBehaviour {
     private void SetItemToBubble(ClosetItem closetItem)
     {
         ClosetOutfitItem neoOutfit = closetItem as ClosetOutfitItem;
-        if (neoOutfit != null)
+        if (neoOutfit != null && neoOutfit.outfit != lastSelectedOutfit)
         {
             bubble.sprite = neoOutfit.OutfitImage.sprite;
             bubbleStartPos = neoOutfit.OutfitImage.rectTransform.position;
@@ -285,13 +303,14 @@ public class Closet : MonoBehaviour {
                 bubble.GetComponent<Animator>().SetTrigger("onBubbleStart");
                 isBubblePopped = false;
             }
+            bubbleOutfit = neoOutfit;
         }
         else
         {
             bubble.GetComponent<CanvasGroup>().alpha = 0;
             bubble.rectTransform.anchoredPosition = new Vector2(0, -2000);
+            bubbleOutfit = null;
         }
-        bubbleOutfit = neoOutfit;
     }
 
     void UpdateBubble()
@@ -497,7 +516,9 @@ public class Closet : MonoBehaviour {
 
     private void OnClosetItemHover(ClosetItem hoveredItem)
     {
-        hoveredItem.OnItemHover();
+        ClosetOutfitItem outfit = hoveredItem as ClosetOutfitItem;
+        if (outfit == null || outfit.outfit != lastSelectedOutfit)
+            hoveredItem.OnItemHover();
 
         if (hoveredItem != topArrow)
             topArrow.OnItemUnselected();
