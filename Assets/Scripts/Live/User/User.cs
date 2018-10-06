@@ -111,14 +111,14 @@ public class User : MonoBehaviour {
         }
     }
 
-    //public void deactivate(bool isReady = false)
-    //{
-    //    poseAgentSelector.enabled = false;
-    //    uScore.gameObject.SetActive(false);
+    public void deactivate(bool isReady = false)
+    {
+        poseAgentSelector.enabled = false;
+        uScore.gameObject.SetActive(false);
 
-    //    isReadyToBeActivated = isReady;
-    //    isActivated = false;
-    //}
+        isReadyToBeActivated = isReady;
+        isActivated = false;
+    }
 
     void Update()
     {  
