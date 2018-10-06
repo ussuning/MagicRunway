@@ -67,12 +67,25 @@ public class GenderUIController : MonoBehaviour {
         {
             manager = KinectManager.Instance;
         }
+
+        m_alpha = f_alpha = 1f;
+        m_isFading = f_isFading = false;
+
+        if (maleMesh)
+            maleMesh.material.color = new Color(maleMesh.material.color.r, maleMesh.material.color.g, maleMesh.material.color.b, m_alpha);
+        if (maleHandMesh)
+            maleHandMesh.material.color = new Color(maleHandMesh.material.color.r, maleHandMesh.material.color.g, maleHandMesh.material.color.b, m_alpha);
+
+        if (femaleMesh)
+            femaleMesh.material.color = new Color(femaleMesh.material.color.r, femaleMesh.material.color.g, femaleMesh.material.color.b, f_alpha);
+        if (femaleHandMesh)
+            femaleHandMesh.material.color = new Color(femaleHandMesh.material.color.r, femaleHandMesh.material.color.g, femaleHandMesh.material.color.b, f_alpha);
     }
 
     void Start ()
     {
-        m_alpha = f_alpha = 1f;
-        m_isFading = f_isFading = false;
+        //m_alpha = f_alpha = 1f;
+        //m_isFading = f_isFading = false;
 
         if (fadingDuration > 0f)
             fadeSpeed = 1f / fadingDuration;
@@ -152,12 +165,6 @@ public class GenderUIController : MonoBehaviour {
         }
         else if(g == User.Gender.Female)
         {
-            //m_alpha = 0f;
-            //if (maleMesh)
-            //    maleMesh.material.color = new Color(maleMesh.material.color.r, maleMesh.material.color.g, maleMesh.material.color.b, m_alpha);
-            //if (maleHandMesh)
-            //    maleHandMesh.material.color = new Color(maleHandMesh.material.color.r, maleHandMesh.material.color.g, maleHandMesh.material.color.b, m_alpha);
-
             if (maleGO)
                 maleGO.SetActive(false);
             if (femaleGO)
