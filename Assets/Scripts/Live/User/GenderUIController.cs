@@ -30,16 +30,29 @@ public class GenderUIController : MonoBehaviour {
 
     private MeshRenderer maleMesh;
     private MeshRenderer femaleMesh;
+    private MeshRenderer maleHandMesh;
+    private MeshRenderer femaleHandMesh;
+
+    public float IconAlternateTime = 3f;
+
+    private User.Gender shownGender = User.Gender.None;
+    private float iconTimeElapsed = 0f;
 
     KinectManager manager;
     Camera uiCamera;
 
     void Awake()
     {
-        if(maleGO)
+        if (maleGO)
+        {
             maleMesh = maleGO.GetComponent<MeshRenderer>();
-        if(femaleGO)
+            maleHandMesh = maleGO.transform.GetChild(0).GetComponent<MeshRenderer>();
+        }
+        if (femaleGO)
+        {
             femaleMesh = femaleGO.GetComponent<MeshRenderer>();
+            femaleHandMesh = femaleGO.transform.GetChild(0).GetComponent<MeshRenderer>();
+        }
     }
 
     void OnEnable()
@@ -63,25 +76,44 @@ public class GenderUIController : MonoBehaviour {
 
         if (fadingDuration > 0f)
             fadeSpeed = 1f / fadingDuration;
+
+        shownGender = (User.Gender) Random.Range(1, 3);
+        ShowIcon(shownGender);
     }
 	
 	void Update ()
     {
+        if(selectedGender == User.Gender.None)
+        {
+            iconTimeElapsed += Time.deltaTime;
+            if (iconTimeElapsed >= IconAlternateTime)
+            {
+                if (shownGender == User.Gender.Male)
+                    shownGender = User.Gender.Female;
+                else if (shownGender == User.Gender.Female)
+                    shownGender = User.Gender.Male;
+
+                ShowIcon(shownGender);
+            }
+        }
+
         if (m_isFading)
         {
             m_alpha -= Time.deltaTime * fadeSpeed;
             if (m_alpha < 0f)
                 m_alpha = 0f;
 
-            if(maleMesh)
+            if (maleMesh)
                 maleMesh.material.color = new Color(maleMesh.material.color.r, maleMesh.material.color.g, maleMesh.material.color.b, m_alpha);
+            if (maleHandMesh)
+                maleHandMesh.material.color = new Color(maleHandMesh.material.color.r, maleHandMesh.material.color.g, maleHandMesh.material.color.b, m_alpha);
 
             if (m_alpha == 0f)
             {
-                m_isFading = false;
+                if (maleGO)
+                    maleGO.SetActive(false);
 
-                if (selectedGender == User.Gender.Female)
-                    Invoke("FadeFemaleIcon", 2f);
+                m_isFading = false;
             }
         }
 
@@ -93,13 +125,15 @@ public class GenderUIController : MonoBehaviour {
 
             if (femaleMesh)
                 femaleMesh.material.color = new Color(femaleMesh.material.color.r, femaleMesh.material.color.g, femaleMesh.material.color.b, f_alpha);
+            if (femaleHandMesh)
+                femaleHandMesh.material.color = new Color(femaleHandMesh.material.color.r, femaleHandMesh.material.color.g, femaleHandMesh.material.color.b, f_alpha);
 
             if (f_alpha == 0f)
             {
-                f_isFading = false;
+                if (femaleGO)
+                    femaleGO.SetActive(false);
 
-                if (selectedGender == User.Gender.Male)
-                    Invoke("FadeMaleIcon", 2f);
+                f_isFading = false;
             }
         }
     }
@@ -109,11 +143,27 @@ public class GenderUIController : MonoBehaviour {
         selectedGender = g;
         if (g == User.Gender.Male)
         {
-            FadeFemaleIcon();
+            if (maleGO)
+                maleGO.SetActive(true);
+            if (femaleGO)
+                femaleGO.SetActive(false);
+
+            Invoke("FadeMaleIcon", 2f);
         }
         else if(g == User.Gender.Female)
         {
-            FadeMaleIcon();
+            //m_alpha = 0f;
+            //if (maleMesh)
+            //    maleMesh.material.color = new Color(maleMesh.material.color.r, maleMesh.material.color.g, maleMesh.material.color.b, m_alpha);
+            //if (maleHandMesh)
+            //    maleHandMesh.material.color = new Color(maleHandMesh.material.color.r, maleHandMesh.material.color.g, maleHandMesh.material.color.b, m_alpha);
+
+            if (maleGO)
+                maleGO.SetActive(false);
+            if (femaleGO)
+                femaleGO.SetActive(true);
+
+            Invoke("FadeFemaleIcon", 2f);
         }
     }
 
@@ -172,6 +222,26 @@ public class GenderUIController : MonoBehaviour {
     private void FadeFemaleIcon()
     {
         f_isFading = true;
+    }
+
+    private void ShowIcon(User.Gender gender)
+    {
+        if(gender == User.Gender.Male)
+        {
+            if (maleGO)
+                maleGO.SetActive(true);
+            if (femaleGO)
+                femaleGO.SetActive(false);
+        }
+        else if(gender == User.Gender.Female)
+        {
+            if (maleGO)
+                maleGO.SetActive(false);
+            if (femaleGO)
+                femaleGO.SetActive(true);
+        }
+
+        iconTimeElapsed = 0f;
     }
 
     Vector3 GetUserScreenPos(long userID)
