@@ -56,7 +56,7 @@ public class User : MonoBehaviour {
         }
     }
 
-    private bool isReadyToBeActivated = true;
+    public bool isReadyToBeActivated = true;
     public bool IsReadyToBeActivated
     {
         set
@@ -117,6 +117,9 @@ public class User : MonoBehaviour {
     {
         poseAgentSelector.enabled = false;
         uScore.gameObject.SetActive(false);
+
+        ugender = Gender.None;
+        GenderSelectionUI.ResetUI();
 
         isReadyToBeActivated = isReady;
         isActivated = false;
