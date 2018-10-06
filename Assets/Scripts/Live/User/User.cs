@@ -108,6 +108,8 @@ public class User : MonoBehaviour {
 
             isReadyToBeActivated = false;
             isActivated = true;
+
+            ugender = Gender.None;
         }
     }
 
