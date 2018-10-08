@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.GestureListenerInterface
 {
+    public static int NUM_OF_ACTIVE_USERS = 2;
+
     public GameObject UserPrefab;
     public GameObject PosingScorePrefab;
 
@@ -11,7 +13,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     public GameObject userContainer;
     public GameObject posingScoreContainer;
 
-    public int NumberOfPlayers = 2;
     public float UserReconnectionTime = 3f;
 
     private List<int> userBuffer = new List<int>();
@@ -65,12 +66,13 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             return;
 
         int[] userIdx = usersSortedByDistance;
+        closetMgr.UpdateClosestUsers(userIdx);
 
         for (int i = 0; i < userIdx.Length; i++)
         {
             int uIdx = userIdx[i];
             User user_i = users[uIdx];
-            if (i < NumberOfPlayers)
+            if (i < NUM_OF_ACTIVE_USERS)
             {
                 if (!user_i.IsActivated)
                 {
