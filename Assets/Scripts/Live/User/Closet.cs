@@ -372,6 +372,7 @@ public class Closet : MonoBehaviour {
         ownerGender = User.Gender.None;
         outfits = null;
         outfitPageIdx = 0;
+        lastSelectedOutfit = null;
     }
 
     public void Clear(bool resetPos = false)
@@ -389,6 +390,7 @@ public class Closet : MonoBehaviour {
         if(outfits != null)
             outfits.Clear();
         outfitPageIdx = 0;
+        lastSelectedOutfit = null;
         isActive = false;
         activateIcon.gameObject.SetActive(false);
     }
