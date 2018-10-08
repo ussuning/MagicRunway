@@ -537,7 +537,10 @@ public class AvatarController : MonoBehaviour
 		if(!externalRootMotion)
 		{
             if (!MoveAvatar(UserID))
+            {
+                gameObject.SetActive(false);
                 return;
+            }
 		}
 
 		// get the left hand state and event
@@ -1524,6 +1527,9 @@ public class AvatarController : MonoBehaviour
 		
 		// get the position of user's spine base
 		Vector3 trans = kinectManager.GetUserPosition(UserID);
+        if(trans == Vector3.zero)
+            return false;
+
 		if(flipLeftRight)
 			trans.x = -trans.x;
 
