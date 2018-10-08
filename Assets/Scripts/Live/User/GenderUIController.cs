@@ -165,8 +165,6 @@ public class GenderUIController : MonoBehaviour {
 
     public void Hide()
     {
-        Debug.Log(string.Format("[GenderUIController]  Hide:"));
-
         if (gameObject.activeInHierarchy)
             gameObject.SetActive(false);
     }
