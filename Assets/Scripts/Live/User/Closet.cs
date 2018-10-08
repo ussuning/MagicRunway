@@ -26,7 +26,7 @@ public class Closet : MonoBehaviour {
     public float idleTime = 3f;
 
     public ImageProgress activateIcon;
-    public Camera cam;
+    public Camera jointCamera;
 
     public RectTransform pointFrom;
     public RectTransform pointTo;
@@ -187,8 +187,8 @@ public class Closet : MonoBehaviour {
     Vector2 ScreenPtToCanvasPt(Vector2 screenPt)
     {
         return new Vector2(
-            screenPt.x * canvas.pixelRect.width / cam.scaledPixelWidth,
-            screenPt.y * canvas.pixelRect.height / cam.scaledPixelHeight);
+            screenPt.x * (canvas.pixelRect.width/canvas.scaleFactor) / jointCamera.scaledPixelWidth,
+            screenPt.y * (canvas.pixelRect.height/canvas.scaleFactor) / jointCamera.scaledPixelHeight);
     }
 
     void Update()
@@ -209,13 +209,13 @@ public class Closet : MonoBehaviour {
                         // Second, convert from Screen Pt to Canvas Pt
                         Vector2 fromLocal = ScreenPtToCanvasPt(fromScreenPt);
                         if (pointFrom != null)
-                            pointFrom.position = fromLocal;
+                            pointFrom.anchoredPosition = fromLocal;
                         Vector2 toLocal = ScreenPtToCanvasPt(toScreenPt);
                         if (pointTo != null)
-                            pointTo.position = toLocal;
+                            pointTo.anchoredPosition = toLocal;
                         Vector2 spineShoulderLocal = ScreenPtToCanvasPt(spineShoulderPt);
                         if (pointSpine != null)
-                            pointSpine.position = spineShoulderLocal;
+                            pointSpine.anchoredPosition = spineShoulderLocal;
 
                         // For Debug line rendering, using world coords.
                         ptFrom = pointFrom.transform.position;
@@ -531,18 +531,18 @@ public class Closet : MonoBehaviour {
         {
             Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristLeft);
             Vector3 elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowLeft);
-            wristPos2D = cam.WorldToScreenPoint(wristPos);
-            elbowPos2D = cam.WorldToScreenPoint(elbowPos);
+            wristPos2D = jointCamera.WorldToScreenPoint(wristPos);
+            elbowPos2D = jointCamera.WorldToScreenPoint(elbowPos);
         }
         else // (closetSide == Closet.Side.Right)
         {
             Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristRight);
             Vector3 elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowRight);
-            wristPos2D = cam.WorldToScreenPoint(wristPos);
-            elbowPos2D = cam.WorldToScreenPoint(elbowPos);
+            wristPos2D = jointCamera.WorldToScreenPoint(wristPos);
+            elbowPos2D = jointCamera.WorldToScreenPoint(elbowPos);
         }
         Vector3 spineShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.SpineMid);
-        spineShoulder2D = cam.WorldToScreenPoint(spineShoulderPos);
+        spineShoulder2D = jointCamera.WorldToScreenPoint(spineShoulderPos);
 
         to = wristPos2D;
         from = elbowPos2D;

@@ -24,28 +24,27 @@ public class ClosetItem : MonoBehaviour {
             closet = value;
         }
     }
-    public float TopBound
-    {
-        get
-        {
-            //return (ItemImage.rectTransform.position.y + (Screen.height/2160f * 200f)/2f)/Screen.height - 0.5f;
-            return ItemImage.rectTransform.position.y/Screen.height + 0.0785f - 0.5f;
-        }
-    }
+    //public float TopBound
+    //{
+    //    get
+    //    {
+    //        //return (ItemImage.rectTransform.position.y + (Screen.height/2160f * 200f)/2f)/Screen.height - 0.5f;
+    //        return ItemImage.rectTransform.position.y/Screen.height + 0.0785f - 0.5f;
+    //    }
+    //}
 
-    public float BottomBound
-    {
-        get
-        {
-            //return (ItemImage.rectTransform.position.y - (Screen.height / 2160f * 200f) / 2f) / Screen.height - 0.5f;
-            return ItemImage.rectTransform.position.y/Screen.height - 0.0785f - 0.5f;
-        }
-    }
+    //public float BottomBound
+    //{
+    //    get
+    //    {
+    //        //return (ItemImage.rectTransform.position.y - (Screen.height / 2160f * 200f) / 2f) / Screen.height - 0.5f;
+    //        return ItemImage.rectTransform.position.y/Screen.height - 0.0785f - 0.5f;
+    //    }
+    //}
 
     protected bool isSelected = false;
     protected bool isHover = false;
     private float hoverDuration = 0f;
-    private float HoverToSelectTransitionSpeed;
 
     public float hoverProgress
     {
@@ -55,7 +54,6 @@ public class ClosetItem : MonoBehaviour {
     void Start ()
     {
         Animator = GetComponentInChildren<Animator>();
-        HoverToSelectTransitionSpeed = SelectedFillImage.rectTransform.sizeDelta.x / HoverToSelectTime;
 
         OnItemUnselected();
     }
@@ -67,7 +65,8 @@ public class ClosetItem : MonoBehaviour {
         if(isHover && !isSelected)
         {
             //hoverDuration += Time.deltaTime; // Do this in FixedUpdate for smoothness.
-            SelectedFillImage.fillAmount = hoverProgress;
+            if (SelectedFillImage != null)
+                SelectedFillImage.fillAmount = hoverProgress;
 
             if (hoverProgress >= 1f)
             {
@@ -87,15 +86,19 @@ public class ClosetItem : MonoBehaviour {
 
     public void ShowItem()
     {
-        SelectedFillImage.enabled = true;
-        ItemImage.enabled = true;
+        if (SelectedFillImage != null)
+            SelectedFillImage.enabled = true;
+        if (ItemImage != null)
+            ItemImage.enabled = true;
     }
 
     public void HideItem()
     {
         OnItemUnselected();
-        SelectedFillImage.enabled = false;
-        ItemImage.enabled = false;
+        if (SelectedFillImage != null)
+            SelectedFillImage.enabled = false;
+        if (ItemImage != null)
+            ItemImage.enabled = false;
     }
 
     public void OnItemHover()
@@ -111,7 +114,8 @@ public class ClosetItem : MonoBehaviour {
 
     public virtual void OnItemSelected()
     {
-        SelectedFillImage.fillAmount = 1f;
+        if (SelectedFillImage != null)
+            SelectedFillImage.fillAmount = 1f;
         isSelected = true;
 
         if (OnItemSelectedEvent != null)
@@ -122,7 +126,8 @@ public class ClosetItem : MonoBehaviour {
     {
         if (isSelected || isHover)
         {
-            SelectedFillImage.fillAmount = 0f;
+            if (SelectedFillImage != null)
+                SelectedFillImage.fillAmount = 0f;
             isSelected = false;
             isHover = false;
             if (isAnimatorDebug)
