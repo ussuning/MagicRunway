@@ -224,7 +224,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1847989885155602}
   m_LocalRotation: {x: 0, y: -0, z: 0, w: 1}
-  m_LocalPosition: {x: -38, y: 20.2, z: 0}
+  m_LocalPosition: {x: -33, y: 20.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: -1}
   m_Children: []
   m_Father: {fileID: 4040614919357220}
@@ -251,7 +251,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1474986087253400}
   m_LocalRotation: {x: 0, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: -38, y: 20.2, z: 0}
+  m_LocalPosition: {x: -33, y: 20.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: -1}
   m_Children: []
   m_Father: {fileID: 4169266512570470}
@@ -307,7 +307,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 2ca63f1795581db4bade0f27685be4e9, type: 2}
+  - {fileID: 2100000, guid: 876cfc8e38ef6a34bb1fecf2d50c87e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -377,7 +377,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 2ca63f1795581db4bade0f27685be4e9, type: 2}
+  - {fileID: 2100000, guid: 3ae74bd4c3095a44199a381990630c09, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -468,6 +468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GenderSelectionUI: {fileID: 114531220485607830}
+  isReadyToBeActivated: 1
 --- !u!114 &114531220485607830
 MonoBehaviour:
   m_ObjectHideFlags: 1
