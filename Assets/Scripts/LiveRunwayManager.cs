@@ -50,7 +50,9 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private bool isModeActive = false;
 
-    KinectManager manager;
+    KinectManager kinectMgr;
+    ClosetManager closetMgr;
+    OutfitGameObjectsManager outfitMgr;
 
     void Awake()
     {
@@ -80,8 +82,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                 if(user_i.IsActivated)
                 {
                     user_i.deactivate();
-                    ClosetManager.Instance.OnUserLost(uIdx);
-                    OutfitGameObjectsManager.Instance.OnUserLost(uIdx);
+                    outfitMgr.HideUserOutfit(uIdx);
+                    closetMgr.OnUserLost(uIdx);
                 }
                 else
                 {
@@ -105,17 +107,23 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         Debug.Log(string.Format("[LiveRunwayManager] SetUp: level = {0}", level));
 
-        if (!manager)
-            manager = KinectManager.Instance;
-        manager.maxTrackedUsers = 6;
-
         UIManager.Instance.HideCollectionTitle(false);
+
+        if (!kinectMgr)
+            kinectMgr = KinectManager.Instance;
+
+        kinectMgr.maxTrackedUsers = 6;
+
         liveRunwayContainer.SetActive(true);
+
+        if (!closetMgr)
+            closetMgr = ClosetManager.Instance;
+        if (!outfitMgr)
+            outfitMgr = OutfitGameObjectsManager.Instance;
 
         CreateUsersFromBuffer();
 
-        ClosetManager.Instance.OnEnterLiveMode();
-        //PoseMgr.Instance.StartPosing();
+        closetMgr.OnEnterLiveMode();
 
         isModeActive = true;
     }
@@ -126,7 +134,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         UIManager.Instance.HideAll();
         PoseMatchingManager.Instance.ClearFX();
-        //PoseMgr.Instance.StopPosing();
 
         liveRunwayContainer.SetActive(false);
 
@@ -134,7 +141,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     }
 
     //GestureListenerInterface
-
     public void UserDetected(long userId, int userIndex)
     {
         if(isModeActive)
@@ -143,11 +149,11 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             {
                 Debug.Log(string.Format("[LiveRunwayManager] UserDetected: User {0} RECONNECTED, userID: {1}", userIndex, userId));
                 disconnectedUserBuffer.Remove(userIndex);
-                OutfitGameObjectsManager.Instance.ShowUserOutfit(userIndex);
+                outfitMgr.ShowUserOutfit(userIndex);
             }
 
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+            kinectMgr.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+            kinectMgr.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
 
             if (users.ContainsKey(userIndex))
                 return;
@@ -171,11 +177,11 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             if (!disconnectedUserBuffer.Contains(userIndex))
             {
                 disconnectedUserBuffer.Add(userIndex);
-                OutfitGameObjectsManager.Instance.HideUserOutfit(userIndex);
+                outfitMgr.HideUserOutfit(userIndex);
             }
 
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-            KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+            kinectMgr.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+            kinectMgr.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
 
             StartCoroutine(DisconnectingUser(userIndex, userId));
         }
@@ -193,7 +199,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (!isModeActive)
             return;
 
-        Closet closet = ClosetManager.Instance.GetUserCloset(userIndex);
+        Closet closet = closetMgr.GetUserCloset(userIndex);
         if (closet)
         {
             closet.activateIcon.SetProgressValue(progress);
@@ -231,17 +237,13 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                     case KinectGestures.Gestures.RaiseLeftHand:
                         user.UserGender = User.Gender.Female;
                         Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Female", userId));
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
                         break;
                     case KinectGestures.Gestures.RaiseRightHand:
                         user.UserGender = User.Gender.Male;
                         Debug.Log(string.Format("[LiveRunwayManager] GestureCompleted: User {0} is Male", userId));
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-                        //KinectManager.Instance.DeleteGesture(userId, KinectGestures.Gestures.RaiseRightHand);
                         break;
                 }
-                ClosetManager.Instance.OnUserGenderSelected(userIndex, user.UserGender);
+                closetMgr.OnUserGenderSelected(userIndex, user.UserGender);
             }
             
             return true;
@@ -255,7 +257,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (!isModeActive)
             return false;
 
-        Closet closet = ClosetManager.Instance.GetUserCloset(userIndex);
+        Closet closet = closetMgr.GetUserCloset(userIndex);
         if (!closet)
             return false;
 
@@ -269,8 +271,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         {
             long userId = userBuffer[userIdx];
             User user = CreateUser(userIdx);
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
-            KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
+            kinectMgr.DetectGesture(userId, KinectGestures.Gestures.RaiseLeftHand);
+            kinectMgr.DetectGesture(userId, KinectGestures.Gestures.RaiseRightHand);
             Debug.Log(string.Format("[LiveRunwayManager] CreateUsersFromBuffer: User {0} created", userId));
         }
         userBuffer.Clear();
@@ -317,8 +319,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                 DeleteUser(userIndex);
                 Debug.Log(string.Format("[LiveRunwayManager] DisconnectingUser: User {0}: {1} is Disconnected, removed from the Dictionary users", userIndex, userId));
 
-                ClosetManager.Instance.OnUserLost(userIndex);
-                OutfitGameObjectsManager.Instance.OnUserLost(userIndex);
+                closetMgr.OnUserLost(userIndex);
+                outfitMgr.OnUserLost(userIndex);
                 PoseMatchingManager.Instance.ClearFX(userIndex);
 
                 UpdateLiveStatus(NumActivatedUsers);
@@ -333,8 +335,8 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         for (int i = idx; i > 0; i--)
         {
-            float curUserPosZ = manager.GetUserPosition(manager.GetUserIdByIndex(allUsers[i])).z;
-            float preUserPosZ = manager.GetUserPosition(manager.GetUserIdByIndex(allUsers[i - 1])).z;
+            float curUserPosZ = kinectMgr.GetUserPosition(kinectMgr.GetUserIdByIndex(allUsers[i])).z;
+            float preUserPosZ = kinectMgr.GetUserPosition(kinectMgr.GetUserIdByIndex(allUsers[i - 1])).z;
             if (curUserPosZ < preUserPosZ) //cur closer than pre
             {
                 int curUser = allUsers[i];
@@ -350,12 +352,6 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void UpdateLiveStatus(int numActivatedUsers)
     {
-        //foreach (User u in users.Values)
-        //{
-        //    if (!u.IsActivated)
-        //        u.IsReadyToBeActivated = (numActivatedUsers < NumberOfPlayers);
-        //}
-
         PoseMgr poseMgr = PoseMgr.Instance;
         if (!poseMgr.IsPosing && numActivatedUsers >= 1)
             poseMgr.StartPosing();

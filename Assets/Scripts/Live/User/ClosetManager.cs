@@ -16,8 +16,6 @@ public class ClosetManager : MonoBehaviour {
     Outfits outfits;
 
     KinectManager kinect;
-    float Dir_lElbow;
-    float Dir_rElbow;
 
     void Awake()
     {
@@ -37,7 +35,7 @@ public class ClosetManager : MonoBehaviour {
 
     public void OnUserGenderSelected(int userIdx, User.Gender userGender)
     {
-        Closet closet = ClosetManager.Instance.GetUserCloset(userIdx);
+        Closet closet = GetUserCloset(userIdx);
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
 
         if (closet)
