@@ -204,7 +204,16 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Closet closet = closetMgr.GetUserCloset(userIndex);
         if (closet)
         {
-            closet.activateIcon.SetProgressValue(progress);
+            switch (gesture)
+            {
+                case KinectGestures.Gestures.RaiseLeftHand:
+                    closet.activateIcon.SetProgressValue(progress, User.Gender.Female);
+                    break;
+                case KinectGestures.Gestures.RaiseRightHand:
+                    closet.activateIcon.SetProgressValue(progress, User.Gender.Male);
+                    break;
+            }
+            
         }
     }
 
