@@ -261,7 +261,7 @@ public class Closet : MonoBehaviour {
         {
             bubble.sprite = neoOutfit.OutfitImage.sprite;
             bubbleStartPos = neoOutfit.OutfitImage.rectTransform.position;
-            bubbleEndPos = pointSpine.position;
+            bubbleEndPos = Vector3.Lerp(pointSpine.position, pointFrom.position, 0.5f);
             bubble.rectTransform.position = bubbleStartPos;
             if (bubbleOutfit != neoOutfit)
             {
