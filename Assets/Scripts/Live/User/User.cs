@@ -133,8 +133,8 @@ public class User : MonoBehaviour {
             {
                 if (isReadyToBeActivated && manager.IsUserTracked(UserID))
                 {
-                    GenderSelectionUI.SetUITransform(UserID);
-                    GenderSelectionUI.Show();
+                    if(GenderSelectionUI.SetUITransform(UserID))
+                        GenderSelectionUI.Show();
                 }
                 else
                     GenderSelectionUI.Hide();

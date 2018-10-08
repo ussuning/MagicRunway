@@ -165,6 +165,8 @@ public class GenderUIController : MonoBehaviour {
 
     public void Hide()
     {
+        Debug.Log(string.Format("[GenderUIController]  Hide:"));
+
         if (gameObject.activeInHierarchy)
             gameObject.SetActive(false);
     }
@@ -193,14 +195,14 @@ public class GenderUIController : MonoBehaviour {
             femaleHandMesh.material.color = new Color(femaleHandMesh.material.color.r, femaleHandMesh.material.color.g, femaleHandMesh.material.color.b, f_alpha);
     }
 
-    public void SetUITransform(long userID)
+    public bool SetUITransform(long userID)
     {
         Vector3 userScreenPos = GetUserScreenPos(userID);
 
-        if (userScreenPos.Equals(Vector3.zero))
+        if (userScreenPos == Vector3.zero)
         {
             Hide();
-            return;
+            return false;
         }
 
         Vector3 newIconPos = userScreenPos + IconOffset;
@@ -226,6 +228,7 @@ public class GenderUIController : MonoBehaviour {
         }
 
         transform.position = Vector3.Lerp(transform.position, newIconPos, followSpeed);
+        return true;
     }
 
     private void FadeMaleIcon()
@@ -260,6 +263,7 @@ public class GenderUIController : MonoBehaviour {
 
     Vector3 GetUserScreenPos(long userID)
     {
+        Vector3 userScreenPos = Vector3.zero;
         if (manager && manager.IsInitialized())
         {
             // get the background rectangle (use the portrait background, if available)
@@ -274,11 +278,11 @@ public class GenderUIController : MonoBehaviour {
             int iJointIndex = (int)KinectInterop.JointType.Head;
             if (manager.IsJointTracked(userID, iJointIndex))
             {
-                return manager.GetJointPosColorOverlay(userID, iJointIndex, uiCamera, backgroundRect);
+                userScreenPos = manager.GetJointPosColorOverlay(userID, iJointIndex, uiCamera, backgroundRect);
             }
         }
 
-        return Vector3.zero;
+        return userScreenPos;
     }
 }
 
