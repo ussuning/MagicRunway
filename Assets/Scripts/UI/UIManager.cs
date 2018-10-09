@@ -16,6 +16,8 @@ public class UIManager : Singleton<UIManager>
     //public GameObject uiHandCursor2;
     //public GameObject uiStickMan;
 
+    public GameObject uiSettingMenu;
+
     // Inventory Menu
     //public float inventoryScrollSize = 424;
     //public GameObject scrollRectGO;
@@ -54,7 +56,7 @@ public class UIManager : Singleton<UIManager>
         //uiShowcase.SetActive(false);
         //uiGestureGender.SetActive(false);
         uiStartMenu.SetActive(false);
-
+        uiSettingMenu.SetActive(false);
         //uiMaleGender = uiGestureGender.transform.Find("Male").gameObject;
         //uiFemaleGender = uiGestureGender.transform.Find("Female").gameObject;
         faderStartMenu = uiStartMenu.GetComponent<CanvasFader>();
@@ -65,6 +67,20 @@ public class UIManager : Singleton<UIManager>
         faderCollectionTitle = uiCollectionTitle.GetComponent<CanvasFader>();
 
         UIEvents.OnCanvaseFadeCompleteCallback += UIEvents_CanvasFadeComplete;
+    }
+
+    void Update()
+    {
+        if (AppManager.Instance.GetRunwayMode() == Mode.LIVE)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (uiSettingMenu.activeSelf)
+                    uiSettingMenu.SetActive(false);
+                else
+                    uiSettingMenu.SetActive(true);
+            }
+        }
     }
 
     //----------------------------------------

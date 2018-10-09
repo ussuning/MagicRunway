@@ -13497,21 +13497,26 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114583240447635570, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+    - target: {fileID: 114308053231323780, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: DownwardLight
       value: 
-      objectReference: {fileID: 1023743740}
-    - target: {fileID: 114205455763185360, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+      objectReference: {fileID: 960173676}
+    - target: {fileID: 114308053231323780, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: LeftLight
       value: 
-      objectReference: {fileID: 1023743740}
-    - target: {fileID: 114088011446169300, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+      objectReference: {fileID: 628246413}
+    - target: {fileID: 114308053231323780, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: RightLight
       value: 
-      objectReference: {fileID: 1023743737}
+      objectReference: {fileID: 1959999942}
+    - target: {fileID: 114178751664764264, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: Stickman
+      value: 
+      objectReference: {fileID: 231855769}
     - target: {fileID: 114223697441753602, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
       propertyPath: comboFXParticles.Array.data[0]
@@ -13527,11 +13532,21 @@ Prefab:
       propertyPath: comboFXParticles.Array.data[2]
       value: 
       objectReference: {fileID: 648758929}
-    - target: {fileID: 114178751664764264, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+    - target: {fileID: 114088011446169300, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
         type: 2}
-      propertyPath: Stickman
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 231855769}
+      objectReference: {fileID: 1023743737}
+    - target: {fileID: 114205455763185360, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1023743740}
+    - target: {fileID: 114583240447635570, guid: d89fe2abcc35dd14183eed60d8c2a9a6,
+        type: 2}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1023743740}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d89fe2abcc35dd14183eed60d8c2a9a6, type: 2}
   m_IsPrefabAsset: 0
@@ -13690,6 +13705,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 625923391}
   m_Mesh: {fileID: 4300002, guid: 42deb04145d92364cabcf4e2bc39662e, type: 3}
+--- !u!108 &628246413 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 108892383705082058, guid: 88b77abc855415b4e821200dd0bc69e0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1903896331}
 --- !u!114 &631919329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20095,6 +20115,11 @@ MonoBehaviour:
   m_Name: (Clone)(Clone)(Clone)
   m_EditorClassIdentifier: 
   brain: {fileID: 0}
+--- !u!108 &960173676 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 108691691266948616, guid: 88b77abc855415b4e821200dd0bc69e0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1903896331}
 --- !u!1 &975431537
 GameObject:
   m_ObjectHideFlags: 0
@@ -28891,45 +28916,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224437752186471782, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -598.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 224736028186598090, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -598.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 224154392994033066, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -598.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 224415224492924432, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -598.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 224201758291258912, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -250.00012
-      objectReference: {fileID: 0}
-    - target: {fileID: 224333959877373852, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 250.00012
-      objectReference: {fileID: 0}
-    - target: {fileID: 224000681076758630, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -598.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 224849504133107608, guid: 88b77abc855415b4e821200dd0bc69e0,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: -598.0001
+    - target: {fileID: 1397753557676928, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88b77abc855415b4e821200dd0bc69e0, type: 2}
@@ -33925,6 +33914,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1956281212}
   m_Mesh: {fileID: 4300004, guid: 42deb04145d92364cabcf4e2bc39662e, type: 3}
+--- !u!108 &1959999942 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 108983599104145880, guid: 88b77abc855415b4e821200dd0bc69e0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1903896331}
 --- !u!114 &1969381968 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114946702897875792, guid: 052f4c09e2574654a930df511157ed8d,
