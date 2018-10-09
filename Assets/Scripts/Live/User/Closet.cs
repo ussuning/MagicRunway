@@ -342,8 +342,6 @@ public class Closet : MonoBehaviour {
             isShowing = true;
             isHiding = false;
             showingStartTime = Time.time;
-            foreach (ClosetOutfitItem item in OutfitItems)
-                item.ShowItem();
         }
 
         activateIcon.SetProgressValue(0f);
