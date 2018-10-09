@@ -37,6 +37,8 @@ public class AppManager : Singleton<AppManager>
 
     void Start()
     {
+        Screen.fullScreen = true;
+
         MRData.Instance.LoadEverything();
 
         fadeState = 0;
@@ -193,6 +195,12 @@ public class AppManager : Singleton<AppManager>
 
     void Update()
     {
+  
+        if (Input.GetKeyDown(KeyCode.Escape) == true)
+        {
+            Application.Quit();
+        }
+
         if (audioSource != null && audioSource.clip != null)
         {
             if (audioSource.time >= audioSource.clip.length - 0.05)
