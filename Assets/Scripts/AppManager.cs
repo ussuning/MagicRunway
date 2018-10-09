@@ -22,8 +22,8 @@ public class AppManager : Singleton<AppManager>
 
     private List<string> playList = new List<string>(new string[] { "clearskies", "seeking" });
     private int curSong = 0;
-    private float maxSongVolume = 0.4f;
-    private float minSongVolume = 0.1f;
+    private float maxSongVolume = 1.0f;
+    private float minSongVolume = 0.4f;
     private float reduceSongVolumeTime = 1.0f;
     private byte songVolumeState;
 
