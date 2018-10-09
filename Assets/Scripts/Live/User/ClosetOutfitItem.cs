@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,5 +44,18 @@ public class ClosetOutfitItem : ClosetItem {
         AssetBundle ab = AssetBundleManager.Instance.GetAssetBundle(AssetBundles.clothingIcons);
         return ab.LoadAsset<Sprite>(icon);
     }
-    
+
+    public override void ShowItem()
+    {
+        base.ShowItem();
+        //Debug.Log("ShowItem");
+        SetNextAnimTrigger("onShow");
+    }
+
+    public override void HideItem()
+    {
+        base.HideItem();
+        //Debug.Log("HideItem");
+        SetNextAnimTrigger("onHide");
+    }
 }

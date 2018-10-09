@@ -13,7 +13,8 @@ public class ClosetItem : MonoBehaviour {
     public Image ItemImage;
     public Image SelectedFillImage;
 
-    public Animator Animator;
+    public Animator animator;
+    protected string nextAnimationTrigger;
     public bool isAnimatorDebug = false;
 
     protected Closet closet;
@@ -49,19 +50,21 @@ public class ClosetItem : MonoBehaviour {
     public float hoverProgress
     {
         get { return Mathf.Clamp01(hoverDuration / HoverToSelectTime); }
-    } 
+    }
 
-    void Start ()
+    void Awake()
     {
-        Animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>();
+    }
 
+    private void Start()
+    {
         OnItemUnselected();
     }
 
     void Update ()
     {
         //Debug.Log(string.Format("{0}    Top: {1},  Bottom: {2}", name, TopBound, BottomBound));
-
         if(isHover && !isSelected)
         {
             //hoverDuration += Time.deltaTime; // Do this in FixedUpdate for smoothness.
@@ -76,6 +79,21 @@ public class ClosetItem : MonoBehaviour {
         }
     }
 
+    private void LateUpdate()
+    {
+        if (nextAnimationTrigger != null && animator != null)
+        {
+            animator.SetTrigger(nextAnimationTrigger);
+            nextAnimationTrigger = null;
+        }
+    }
+
+    public void SetNextAnimTrigger(string trigger)
+    {
+        // Do this to avoid trigger conflicts that can happen if multiple triggers are made on the same tick -HH.
+        nextAnimationTrigger = trigger;
+    }
+
     private void FixedUpdate()
     {
         if (isHover && !isSelected)
@@ -84,7 +102,7 @@ public class ClosetItem : MonoBehaviour {
         }
     }
 
-    public void ShowItem()
+    public virtual void ShowItem()
     {
         if (SelectedFillImage != null)
             SelectedFillImage.enabled = true;
@@ -92,7 +110,7 @@ public class ClosetItem : MonoBehaviour {
             ItemImage.enabled = true;
     }
 
-    public void HideItem()
+    public virtual void HideItem()
     {
         OnItemUnselected();
         if (SelectedFillImage != null)
@@ -107,8 +125,7 @@ public class ClosetItem : MonoBehaviour {
         {
             isHover = true;
             hoverDuration = 0f;
-            if (Animator != null)
-                Animator.SetTrigger("onHoverStart");
+            SetNextAnimTrigger("onHoverStart");
         }
     }
 
@@ -133,8 +150,7 @@ public class ClosetItem : MonoBehaviour {
             if (isAnimatorDebug)
                 Debug.Log("animator Debug");
 
-            if (Animator != null)
-                Animator.SetTrigger("onHoverEnd");
+            SetNextAnimTrigger("onHoverEnd");
         }
     }
 }

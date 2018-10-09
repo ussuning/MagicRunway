@@ -176,6 +176,11 @@ public class Closet : MonoBehaviour {
         else if(ClosetSide == Side.Right)
             shownPos = new Vector3(hiddenPos.x - showDistanceX, hiddenPos.y, hiddenPos.z);
 
+        topArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
+        bottomArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
+        foreach(ClosetItem item in OutfitItems)
+            item.animator.SetBool("isLeft", ClosetSide == Side.Left);
+
         isHidden = true;
         isHiding = false;
         isShowing = false;
@@ -333,8 +338,12 @@ public class Closet : MonoBehaviour {
     {
         if (isHidden)
         {
+            Debug.Log("Closet.Show()");
             isShowing = true;
+            isHiding = false;
             showingStartTime = Time.time;
+            foreach (ClosetOutfitItem item in OutfitItems)
+                item.ShowItem();
         }
 
         activateIcon.SetProgressValue(0f);
@@ -344,7 +353,9 @@ public class Closet : MonoBehaviour {
     {
         if (!isHidden)
         {
+            Debug.Log("Closet.Hide()");
             isHiding = true;
+            isShowing = false;
             hidingStartTime = Time.time;
         }
     }
@@ -359,7 +370,7 @@ public class Closet : MonoBehaviour {
 
         numberPages = Mathf.CeilToInt((float)outfits.Count / ClosetManager.NUMBER_CLOSET_ITEMS);
 
-        SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
+        SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
 
         activateIcon.gameObject.SetActive(true);
         isActive = true;
@@ -401,7 +412,7 @@ public class Closet : MonoBehaviour {
         if (outfitPageIdx >= numberPages)
             outfitPageIdx = 0;
 
-        SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
+        SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
     }
 
     public void PageDown()
@@ -410,12 +421,24 @@ public class Closet : MonoBehaviour {
         if (outfitPageIdx < 0)
             outfitPageIdx = numberPages - 1;
 
-        SetClosetImage(GetDisplayedOutfits(outfits, outfitPageIdx));
+        SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
     }
 
-    private void SetClosetImage(List<Outfit> outfits)
+    private void SetClosetImages(List<Outfit> outfits)
     {
-        for(int i=0; i<OutfitItems.Length; i++)
+        StartCoroutine(DoSetClosetImages(outfits));
+    }
+
+    IEnumerator DoSetClosetImages(List<Outfit> outfits)
+    {
+        // Hide animation
+        foreach (ClosetItem item in OutfitItems)
+            item.SetNextAnimTrigger("onHide");
+
+        yield return new WaitForSeconds(0.25f); // wait for hide animation
+
+        // Show new outfits
+        for (int i = 0; i < OutfitItems.Length; i++)
         {
             OutfitItems[i].SetOutfit(outfits[i]);
         }
