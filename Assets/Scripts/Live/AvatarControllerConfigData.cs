@@ -111,7 +111,19 @@ class AvatarControllerConfigData
     {
         get
         {
-            return "Assets/Resources/AvatarControllerConfigData.txt";
+            return "AvatarControllerConfigData";
+        }
+    }
+
+    private static AvatarControllerConfigData _instance;
+    public static AvatarControllerConfigData Instance
+    {
+        get
+        {
+            if (_instance == null)
+                _instance = new AvatarControllerConfigData();
+
+            return _instance;
         }
     }
 
@@ -122,12 +134,9 @@ class AvatarControllerConfigData
 
     protected void Load()
     {
-        StreamReader reader = new StreamReader(ConfigDatatPath);
-        String contents = reader.ReadToEnd();
-        //Debug.Log(contents);
-        reader.Close();
+        TextAsset textAsset = Resources.Load<TextAsset>(ConfigDatatPath);
 
-        string[] lines = contents.Split(
+        string[] lines = textAsset.text.Split(
             new[] { "\r\n", "\r", "\n" },
             StringSplitOptions.None
         );

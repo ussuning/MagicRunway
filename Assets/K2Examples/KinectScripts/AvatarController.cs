@@ -2343,7 +2343,7 @@ public class AvatarController : MonoBehaviour
 
     public void SaveConfigData()
     {
-        AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
+        AvatarControllerConfigData acConfigData = AvatarControllerConfigData.Instance;
         acConfigData.entries.Remove(this.name);
         acConfigData.entries.Add(this.name, new AvatarControllerEntry(this));
         acConfigData.Save();
@@ -2351,7 +2351,7 @@ public class AvatarController : MonoBehaviour
 
     public void LoadConfigData()
     {
-        AvatarControllerConfigData acConfigData = new AvatarControllerConfigData();
+        AvatarControllerConfigData acConfigData = AvatarControllerConfigData.Instance;
         string acName = this.name;
 
         // Clean up the name in case this is a (Clone) object.
