@@ -533,6 +533,15 @@ public class KinectManager : MonoBehaviour
         return false;
     }
 
+    public bool IsUserPositionValid(Int64 userId)
+    {
+        if (IsUserInKinectView(userId))
+        {
+            return GetUserPosition(userId) != Vector3.zero;
+        }
+        return false;
+    }
+    
     /// <summary>
     /// Gets the number of currently detected users.
     /// </summary>

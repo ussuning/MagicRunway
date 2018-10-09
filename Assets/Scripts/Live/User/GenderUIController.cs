@@ -196,13 +196,6 @@ public class GenderUIController : MonoBehaviour {
     public bool SetUITransform(long userID)
     {
         Vector3 userScreenPos = GetUserScreenPos(userID);
-
-        if (userScreenPos == Vector3.zero)
-        {
-            Hide();
-            return false;
-        }
-
         Vector3 newIconPos = userScreenPos + IconOffset;
 
         if (needScaling)
@@ -226,6 +219,7 @@ public class GenderUIController : MonoBehaviour {
         }
 
         transform.position = Vector3.Lerp(transform.position, newIconPos, followSpeed);
+
         return true;
     }
 
