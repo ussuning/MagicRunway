@@ -538,7 +538,6 @@ public class AvatarController : MonoBehaviour
 		{
             if (!MoveAvatar(UserID))
             {
-                gameObject.SetActive(false);
                 return;
             }
 		}
@@ -1524,12 +1523,15 @@ public class AvatarController : MonoBehaviour
 		{
             return false;
 		}
+
+        if(!kinectManager.IsUserPositionValid(UserID))
+        {
+            gameObject.SetActive(false);
+            return false;
+        }
 		
 		// get the position of user's spine base
 		Vector3 trans = kinectManager.GetUserPosition(UserID);
-        if(trans == Vector3.zero)
-            return false;
-
 		if(flipLeftRight)
 			trans.x = -trans.x;
 

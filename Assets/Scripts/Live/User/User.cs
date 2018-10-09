@@ -106,10 +106,10 @@ public class User : MonoBehaviour {
             poseAgentSelector.enabled = true;
             uScore.gameObject.SetActive(true);
 
-            isReadyToBeActivated = false;
-            isActivated = true;
-
             ugender = Gender.None;
+
+            isReadyToBeActivated = false;
+            isActivated = true; 
         }
     }
 
@@ -131,7 +131,7 @@ public class User : MonoBehaviour {
         {
             if (GenderSelectionUI)
             {
-                if (isReadyToBeActivated && manager.IsUserTracked(UserID))
+                if (isReadyToBeActivated && manager.IsUserPositionValid(UserID))
                 {
                     if(GenderSelectionUI.SetUITransform(UserID))
                         GenderSelectionUI.Show();
