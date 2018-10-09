@@ -440,6 +440,7 @@ public class Closet : MonoBehaviour {
         // Show new outfits
         for (int i = 0; i < OutfitItems.Length; i++)
         {
+            yield return new WaitForSeconds(0.01f); // wait for hide animation
             OutfitItems[i].SetOutfit(outfits[i]);
         }
 
