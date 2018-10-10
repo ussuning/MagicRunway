@@ -115,7 +115,7 @@ Shader "Custom/UserBlendShader"
 							float di_diminus1= abs(_DepthBuffer[di] - _DepthBuffer[di - 1]) / 1000.0;
 							if (di_diplus1 > _EdgeThreshold || di_diminus1 > _EdgeThreshold)
 								//return half4(1.0, 0, 0, 1.0);
-								kinDepth = 0;
+								kinDepth = kinDepth + _AlphaThreshold * 0.5f;
 						}
 						//kinDepth *= _DepthFactor;
 					
