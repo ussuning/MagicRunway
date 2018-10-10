@@ -841,6 +841,7 @@ public class AvatarController : MonoBehaviour
     protected void TranslateBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
         Transform boneTransform = bones[boneIndex];
+        Vector3 oldPos = boneTransform.position;
         if (boneTransform == null || kinectManager == null)
             return;
 
@@ -913,6 +914,8 @@ public class AvatarController : MonoBehaviour
                 break;
         }
 
+        boneTransform.position = Vector3.Lerp(oldPos, boneTransform.position, 0.65f);
+
         translatedBoneTransforms.Add(joint, boneTransform.position);
     }
 
@@ -928,6 +931,8 @@ public class AvatarController : MonoBehaviour
     protected void TransformBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
         Transform boneTransform = bones[boneIndex];
+        Quaternion oldRot = boneTransform.rotation;
+        Vector3 oldScale = boneTransform.localScale;
         if (boneTransform == null || kinectManager == null)
             return;
 
@@ -1050,6 +1055,9 @@ public class AvatarController : MonoBehaviour
                 boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
                 break;
         }
+
+        boneTransform.localScale = Vector3.Lerp(oldScale, boneTransform.localScale, 0.65f);
+        boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);
 
     }
 
