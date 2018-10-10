@@ -176,11 +176,6 @@ public class Closet : MonoBehaviour {
         else if(ClosetSide == Side.Right)
             shownPos = new Vector3(hiddenPos.x - showDistanceX, hiddenPos.y, hiddenPos.z);
 
-        topArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
-        bottomArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
-        foreach(ClosetItem item in OutfitItems)
-            item.animator.SetBool("isLeft", ClosetSide == Side.Left);
-
         isHidden = true;
         isHiding = false;
         isShowing = false;
@@ -369,6 +364,11 @@ public class Closet : MonoBehaviour {
         numberPages = Mathf.CeilToInt((float)outfits.Count / ClosetManager.NUMBER_CLOSET_ITEMS);
 
         SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
+
+        topArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
+        bottomArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
+        foreach (ClosetItem item in OutfitItems)
+            item.animator.SetBool("isLeft", ClosetSide == Side.Left);
 
         activateIcon.gameObject.SetActive(true);
         isActive = true;
