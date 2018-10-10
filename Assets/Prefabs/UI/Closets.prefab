@@ -753,12 +753,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114718737542960156}
   SelectedFillImage: {fileID: 114491235265249588}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114556318569175196}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114109910182288726
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -825,11 +833,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114450043192481216}
   SelectedFillImage: {fileID: 114352603084643238}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   ArrowDirection: 0
 --- !u!114 &114127844767348816
 MonoBehaviour:
@@ -843,12 +850,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 1}
-  SelectedColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 0.60784316}
   ItemImage: {fileID: 114848678110819852}
   SelectedFillImage: {fileID: 114120580762994422}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114175995626292136}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114160778458303350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1192,12 +1207,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114190478643059242}
   SelectedFillImage: {fileID: 114351259197741926}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114570916614683930}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114467661380166686
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1291,6 +1314,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosetSide: 0
+  shiftOutTime: 0.5
+  shiftInTime: 0.5
+  showDistanceX: 100
+  idleTime: 3
+  activateIcon: {fileID: 0}
+  jointCamera: {fileID: 0}
+  pointFrom: {fileID: 0}
+  pointTo: {fileID: 0}
+  pointSpine: {fileID: 0}
+  ptFrom: {x: 0, y: 0, z: 0}
+  ptTo: {x: 0, y: 0, z: 0}
+  bubblePrefab: {fileID: 0}
+  bubble: {fileID: 0}
+  bubblePop: {fileID: 0}
 --- !u!114 &114497164772028100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1303,12 +1340,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114662310181405286}
   SelectedFillImage: {fileID: 114109910182288726}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114246852320451544}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114504107597943526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1438,11 +1483,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114539303630596318}
   SelectedFillImage: {fileID: 114631116104340674}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   ArrowDirection: 1
 --- !u!114 &114631116104340674
 MonoBehaviour:
@@ -1626,12 +1670,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 1}
-  SelectedColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 0.60784316}
   ItemImage: {fileID: 114847570753429820}
   SelectedFillImage: {fileID: 114324137204822762}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114160778458303350}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114777425284293682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1698,11 +1750,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114016512084362930}
   SelectedFillImage: {fileID: 114790752267385112}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   ArrowDirection: 1
 --- !u!114 &114836035490171132
 MonoBehaviour:
@@ -1743,6 +1794,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClosetSide: 1
+  shiftOutTime: 0.5
+  shiftInTime: 0.5
+  showDistanceX: 100
+  idleTime: 3
+  activateIcon: {fileID: 0}
+  jointCamera: {fileID: 0}
+  pointFrom: {fileID: 0}
+  pointTo: {fileID: 0}
+  pointSpine: {fileID: 0}
+  ptFrom: {x: 0, y: 0, z: 0}
+  ptTo: {x: 0, y: 0, z: 0}
+  bubblePrefab: {fileID: 0}
+  bubble: {fileID: 0}
+  bubblePop: {fileID: 0}
 --- !u!114 &114847570753429820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1836,12 +1901,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 1}
-  SelectedColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 0.60784316}
   ItemImage: {fileID: 114396315057568850}
   SelectedFillImage: {fileID: 114654626148552344}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114850483620501078}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114892424249633382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1854,12 +1927,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114477761749379710}
   SelectedFillImage: {fileID: 114467661380166686}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114713116082843814}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!114 &114896085542725672
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1872,11 +1953,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 1}
-  SelectedColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 0.60784316}
   ItemImage: {fileID: 114836035490171132}
   SelectedFillImage: {fileID: 114037309434311000}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   ArrowDirection: 0
 --- !u!114 &114980164527767808
 MonoBehaviour:
@@ -1890,12 +1970,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
-  UnselectedColor: {r: 0.6392157, g: 0.6627451, b: 0.67058825, a: 1}
-  HoverColor: {r: 0.89411765, g: 0.827451, b: 0.49411765, a: 1}
-  SelectedColor: {r: 0.69803923, g: 0.47843137, b: 0.57254905, a: 0.60784316}
   ItemImage: {fileID: 114428593398741710}
   SelectedFillImage: {fileID: 114777425284293682}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
   OutfitImage: {fileID: 114436807089757016}
+  outfit:
+    id: 
+    name: 
+    sex: 
+    desc: 
+    prefab: 
+    icon: 
+    wearableids: []
+    wearables: []
 --- !u!222 &222060346624487652
 CanvasRenderer:
   m_ObjectHideFlags: 1

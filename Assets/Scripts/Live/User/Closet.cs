@@ -28,14 +28,16 @@ public class Closet : MonoBehaviour {
     public ImageProgress activateIcon;
     public Camera jointCamera;
 
-    public RectTransform pointFrom;
-    public RectTransform pointTo;
-    public RectTransform pointSpine;
+    public GameObject jointImgPrefab;
+    protected RectTransform pointFrom;
+    protected RectTransform pointTo;
+    protected RectTransform pointSpine;
 
     public Vector3 ptFrom;
     public Vector3 ptTo;
 
-    public Image bubble;
+    public GameObject bubblePrefab;
+    protected Image bubble;
     public ParticleSystem bubblePop;
     protected ClosetOutfitItem bubbleOutfit;
     protected bool isBubblePopped = false;
@@ -147,6 +149,36 @@ public class Closet : MonoBehaviour {
                 OutfitItems[i - 1].Closet = this;
                 OutfitItems[i - 1].OnItemSelectedEvent += OnItemOutfitItemSelected;
             }
+        }
+
+        if (bubble == null)
+        {
+            GameObject bubbleInstance = GameObject.Instantiate(bubblePrefab);
+            bubbleInstance.transform.parent = this.transform.parent;
+            bubbleInstance.name = "Bubble" + ClosetSide;
+            bubble = bubbleInstance.GetComponent<Image>();
+        }
+
+        if (pointFrom == null)
+        {
+            GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
+            jointImgInstance.transform.parent = this.transform.parent;
+            jointImgInstance.name = "pointFrom" + ClosetSide;
+            pointFrom = jointImgInstance.GetComponent<RectTransform>();
+        }
+        if (pointTo == null)
+        {
+            GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
+            jointImgInstance.transform.parent = this.transform.parent;
+            jointImgInstance.name = "pointTo" + ClosetSide;
+            pointTo = jointImgInstance.GetComponent<RectTransform>();
+        }
+        if (pointSpine == null)
+        {
+            GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
+            jointImgInstance.transform.parent = this.transform.parent;
+            jointImgInstance.name = "pointSpine" + ClosetSide;
+            pointSpine = jointImgInstance.GetComponent<RectTransform>();
         }
     }
 
