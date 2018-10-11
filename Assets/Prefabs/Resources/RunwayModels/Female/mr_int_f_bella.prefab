@@ -740,14 +740,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4521222357877078}
   - component: {fileID: 95550994140828926}
-  - component: {fileID: 114723179316325204}
   m_Layer: 13
   m_Name: mr_int_f_bella
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1686504647010246
 GameObject:
   m_ObjectHideFlags: 1
@@ -93020,17 +93019,6 @@ MonoBehaviour:
   alphaMap4: {fileID: 0}
   alphaMap5: {fileID: 0}
   isGeneratingCutoutMaterial: 0
---- !u!114 &114723179316325204
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1682241645840050}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d48b2ded8e5495cac0e7bf6eb1fa42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114805510627711204
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -103923,7 +103911,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300006, guid: 39bc9416b75ae46b4923778dca6542d2, type: 3}
   m_Bones:
   - {fileID: 4177830190254144}
   - {fileID: 4531371724451978}

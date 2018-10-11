@@ -20,14 +20,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4732259171069020}
   - component: {fileID: 95099850849180710}
-  - component: {fileID: 114318202593880042}
   m_Layer: 13
   m_Name: mr_sun_f_mabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1020452192784884
 GameObject:
   m_ObjectHideFlags: 1
@@ -20776,17 +20775,6 @@ MonoBehaviour:
     pinOffsets: []
     stiffnesses: []
     pinBreakResistance: []
---- !u!114 &114318202593880042
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1017525048822258}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d48b2ded8e5495cac0e7bf6eb1fa42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114371151739256584
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -127686,7 +127674,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: ec68fa64f45944729a4ed42e83087a0f, type: 3}
   m_Bones:
   - {fileID: 4434587001672192}
   - {fileID: 4469331030134560}
@@ -127749,7 +127737,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300004, guid: ec68fa64f45944729a4ed42e83087a0f, type: 3}
   m_Bones:
   - {fileID: 4434587001672192}
   - {fileID: 4469331030134560}
@@ -127969,7 +127957,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300002, guid: ec68fa64f45944729a4ed42e83087a0f, type: 3}
   m_Bones:
   - {fileID: 4434587001672192}
   - {fileID: 4469331030134560}
