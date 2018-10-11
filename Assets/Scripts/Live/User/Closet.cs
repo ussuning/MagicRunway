@@ -33,6 +33,8 @@ public class Closet : MonoBehaviour {
     protected RectTransform pointTo;
     protected RectTransform pointSpine;
 
+    public RectTransform offsetTransform;
+
     public Vector3 ptFrom;
     public Vector3 ptTo;
 
@@ -154,7 +156,7 @@ public class Closet : MonoBehaviour {
         if (bubble == null)
         {
             GameObject bubbleInstance = GameObject.Instantiate(bubblePrefab);
-            bubbleInstance.transform.parent = this.transform.parent;
+            bubbleInstance.transform.parent = this.transform.parent.parent;
             bubbleInstance.name = "Bubble" + ClosetSide;
             bubble = bubbleInstance.GetComponent<Image>();
         }
@@ -162,21 +164,21 @@ public class Closet : MonoBehaviour {
         if (pointFrom == null)
         {
             GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
-            jointImgInstance.transform.parent = this.transform.parent;
+            jointImgInstance.transform.parent = this.transform.parent.parent;
             jointImgInstance.name = "pointFrom" + ClosetSide;
             pointFrom = jointImgInstance.GetComponent<RectTransform>();
         }
         if (pointTo == null)
         {
             GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
-            jointImgInstance.transform.parent = this.transform.parent;
+            jointImgInstance.transform.parent = this.transform.parent.parent;
             jointImgInstance.name = "pointTo" + ClosetSide;
             pointTo = jointImgInstance.GetComponent<RectTransform>();
         }
         if (pointSpine == null)
         {
             GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
-            jointImgInstance.transform.parent = this.transform.parent;
+            jointImgInstance.transform.parent = this.transform.parent.parent;
             jointImgInstance.name = "pointSpine" + ClosetSide;
             pointSpine = jointImgInstance.GetComponent<RectTransform>();
         }
@@ -249,6 +251,8 @@ public class Closet : MonoBehaviour {
                         if (pointSpine != null)
                             pointSpine.anchoredPosition = spineShoulderLocal;
 
+                        UpdateOffset();
+
                         // For Debug line rendering, using world coords.
                         ptFrom = pointFrom.transform.position;
                         ptTo = pointTo.transform.position;
@@ -284,6 +288,47 @@ public class Closet : MonoBehaviour {
 
             UpdateBubble();
         }
+    }
+
+    void UpdateOffset()
+    {
+        float halfIdleTime = idleTime / 2.0f;
+        if (isHidden || isHiding)
+        {
+            // Set back to default position.
+            offsetTransform.anchoredPosition = Vector2.zero;
+        }
+        else if (idleElapsedTime > halfIdleTime)
+        {
+            // Start moving back to default position at halfIdleTime.
+            float elapsedTime = idleElapsedTime - halfIdleTime;
+            float t = elapsedTime / halfIdleTime;
+            offsetTransform.anchoredPosition = Vector2.Lerp(offsetTransform.anchoredPosition, Vector2.zero, t);
+        }
+        else
+        {
+            //Vector3 worldPos = pointTo.parent.TransformPoint(neoWorldPos);
+            //Debug.Log(ClosetSide + " worldPos " + worldPos);
+            //Vector3 localPos = offsetTransform.InverseTransformPoint(worldPos);
+            //Debug.Log(ClosetSide + " localPos " + localPos);
+            Vector3 neoPos = offsetTransform.position;
+            neoPos.x = pointSpine.position.x;
+            offsetTransform.position = neoPos;// new Vector3(localPos.x, offsetTransform.anchoredPosition.y);
+            float canvasPixelWidth = canvas.pixelRect.width / canvas.scaleFactor;
+            if (ClosetSide == Side.Left)
+            {
+                offsetTransform.anchoredPosition = new Vector2(
+                    Mathf.Clamp(offsetTransform.anchoredPosition.x - canvasPixelWidth / 3.0f, 0, canvasPixelWidth * 0.5f),
+                    offsetTransform.anchoredPosition.y);
+            }
+            else
+            {
+                offsetTransform.anchoredPosition = new Vector2(
+                    Mathf.Clamp(offsetTransform.anchoredPosition.x + canvasPixelWidth / 3.0f, -canvasPixelWidth * 0.5f, 0),
+                    offsetTransform.anchoredPosition.y);
+            }
+        }
+
     }
 
     private void SetItemToBubble(ClosetItem closetItem)
@@ -365,7 +410,7 @@ public class Closet : MonoBehaviour {
     {
         if (isHidden)
         {
-            Debug.Log("Closet.Show()");
+            //Debug.Log("Closet.Show()");
             isShowing = true;
             isHiding = false;
             showingStartTime = Time.time;
@@ -378,7 +423,7 @@ public class Closet : MonoBehaviour {
     {
         if (!isHidden)
         {
-            Debug.Log("Closet.Hide()");
+            //Debug.Log("Closet.Hide()");
             isHiding = true;
             isShowing = false;
             hidingStartTime = Time.time;
