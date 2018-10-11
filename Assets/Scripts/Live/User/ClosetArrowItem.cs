@@ -38,5 +38,7 @@ public class ClosetArrowItem : ClosetItem {
                 closet.PageDown();
                 break;
         }
+
+        base.OnItemUnselected();
     }
 }
