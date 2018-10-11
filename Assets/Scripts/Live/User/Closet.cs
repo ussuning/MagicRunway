@@ -29,6 +29,9 @@ public class Closet : MonoBehaviour {
     public Camera jointCamera;
 
     public GameObject jointImgPrefab;
+    public GameObject bubblePrefab;
+    public GameObject pointerArrowPrefab;
+
     protected RectTransform pointFrom;
     protected RectTransform pointTo;
     protected RectTransform pointSpine;
@@ -38,7 +41,6 @@ public class Closet : MonoBehaviour {
     public Vector3 ptFrom;
     public Vector3 ptTo;
 
-    public GameObject bubblePrefab;
     protected Image bubble;
     public ParticleSystem bubblePop;
     protected ClosetOutfitItem bubbleOutfit;
