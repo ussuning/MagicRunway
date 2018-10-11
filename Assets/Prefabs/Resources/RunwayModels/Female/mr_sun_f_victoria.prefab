@@ -415,14 +415,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4702955001420566}
   - component: {fileID: 95182147232749746}
-  - component: {fileID: 114585026085286964}
   m_Layer: 13
   m_Name: mr_sun_f_victoria
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1266892958669878
 GameObject:
   m_ObjectHideFlags: 1
@@ -2252,7 +2251,7 @@ Animator:
   m_GameObject: {fileID: 1264960126300646}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 15183c146fc554d05a0b4d416d6c37bc, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0d652f05e8c16478884939c7351024d7, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -49830,17 +49829,6 @@ MonoBehaviour:
     - 0.00004622085
     - 0.05
     - 0.05
---- !u!114 &114585026085286964
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1264960126300646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d48b2ded8e5495cac0e7bf6eb1fa42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114664051104240804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -129328,7 +129316,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300004, guid: 15183c146fc554d05a0b4d416d6c37bc, type: 3}
   m_Bones:
   - {fileID: 4422481180062630}
   - {fileID: 4310787562125806}
@@ -129617,7 +129605,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300002, guid: 15183c146fc554d05a0b4d416d6c37bc, type: 3}
   m_Bones:
   - {fileID: 4422481180062630}
   - {fileID: 4310787562125806}

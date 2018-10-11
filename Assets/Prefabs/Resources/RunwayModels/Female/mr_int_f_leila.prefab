@@ -679,7 +679,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4589851494792464}
   - component: {fileID: 95499645939808844}
-  - component: {fileID: 114860176314921330}
   m_Layer: 13
   m_Name: mr_int_f_leila
   m_TagString: Untagged
@@ -18648,17 +18647,6 @@ MonoBehaviour:
     - {x: 0, y: 0}
     - {x: 0, y: 0}
     - {x: 0, y: 0}
---- !u!114 &114860176314921330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1558762511220300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d48b2ded8e5495cac0e7bf6eb1fa42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!136 &136564736279505092
 CapsuleCollider:
   m_ObjectHideFlags: 1
