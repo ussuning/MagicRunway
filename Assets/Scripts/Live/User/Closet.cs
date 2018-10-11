@@ -292,6 +292,8 @@ public class Closet : MonoBehaviour {
 
     void UpdateOffset()
     {
+        Vector2 oldAnchorPos = offsetTransform.anchoredPosition;
+
         float halfIdleTime = idleTime / 2.0f;
         if (isHidden || isHiding)
         {
@@ -307,10 +309,6 @@ public class Closet : MonoBehaviour {
         }
         else
         {
-            //Vector3 worldPos = pointTo.parent.TransformPoint(neoWorldPos);
-            //Debug.Log(ClosetSide + " worldPos " + worldPos);
-            //Vector3 localPos = offsetTransform.InverseTransformPoint(worldPos);
-            //Debug.Log(ClosetSide + " localPos " + localPos);
             Vector3 neoPos = offsetTransform.position;
             neoPos.x = pointSpine.position.x;
             offsetTransform.position = neoPos;// new Vector3(localPos.x, offsetTransform.anchoredPosition.y);
@@ -327,7 +325,11 @@ public class Closet : MonoBehaviour {
                     Mathf.Clamp(offsetTransform.anchoredPosition.x + canvasPixelWidth / 3.0f, -canvasPixelWidth * 0.5f, 0),
                     offsetTransform.anchoredPosition.y);
             }
+
         }
+
+        // Smooth it.
+        offsetTransform.anchoredPosition = Vector2.Lerp(oldAnchorPos, offsetTransform.anchoredPosition, 0.5f);
 
     }
 
