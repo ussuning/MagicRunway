@@ -886,7 +886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1797264717242560
 GameObject:
   m_ObjectHideFlags: 1
@@ -971,6 +971,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4825436590365296}
   - component: {fileID: 137241388933783390}
+  - component: {fileID: 114015230434839964}
   m_Layer: 13
   m_Name: body
   m_TagString: Untagged
@@ -2123,6 +2124,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114015230434839964
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1852904056393934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33b4f02e8bf6f4bb88c720bcc618e4d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alphaMap: {fileID: 2800000, guid: 3d18cd811b9b5a44fb2784fa77756579, type: 3}
+  alphaMap2: {fileID: 0}
+  alphaMap3: {fileID: 0}
+  alphaMap4: {fileID: 0}
+  alphaMap5: {fileID: 0}
+  isGeneratingCutoutMaterial: 0
 --- !u!136 &136650018202963898
 CapsuleCollider:
   m_ObjectHideFlags: 1
