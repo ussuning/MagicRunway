@@ -363,20 +363,36 @@ public class Closet : MonoBehaviour {
         offsetTransform.anchoredPosition = Vector2.Lerp(oldAnchorPos, offsetTransform.anchoredPosition, 0.5f);
 
     }
+    float timeSincePointerHit = 0;
+    float pointerFadeTime = 0.5f;
 
     private void UpdatePointer(ref RaycastHit2D hit)
     {
+        // Set position.
         if (hit.collider != null)
+        {
             pointerRectTransform.position = hit.point;
-        else
-            pointerRectTransform.position = new Vector3(pointTo.position.x, pointTo.position.y);
+            timeSincePointerHit = 0;
 
-        Vector3 direction = pointTo.position - pointFrom.position;
-        direction.z = 0;
-        direction = direction.normalized;
-        Vector3 lookAtPos = new Vector3(pointFrom.position.x, pointFrom.position.y) + direction * 5000f;
-        lookAtPos.z = 0;
-        pointerRectTransform.LookAt(lookAtPos, Vector3.forward);
+            // Set direction.
+            Vector3 direction = pointTo.position - pointFrom.position;
+            direction.z = 0;
+            direction = direction.normalized;
+            Vector3 lookAtPos = new Vector3(pointFrom.position.x, pointFrom.position.y) + direction * 5000f;
+            lookAtPos.z = 0;
+            pointerRectTransform.LookAt(lookAtPos, Vector3.forward);
+        }
+        else
+        {
+            timeSincePointerHit += Time.deltaTime;
+            if (timeSincePointerHit > pointerFadeTime + 0.1f)
+                pointerRectTransform.position = new Vector3(0, -3000);
+        }
+
+
+        //else
+        //    pointerRectTransform.position = new Vector3(pointTo.position.x, pointTo.position.y);
+
 
 
         // Control the alpha
@@ -386,10 +402,10 @@ public class Closet : MonoBehaviour {
             // Hide the pointer
             neoColor.a = 0;
         }
-        else if (idleElapsedTime > 0)
+        else if (timeSincePointerHit > 0)
         {
             // Start fading when idle
-            float t = Mathf.Clamp01(idleElapsedTime / 0.5f); // fade in half a second
+            float t = Mathf.Clamp01(idleElapsedTime / pointerFadeTime); // fade in half a second
             neoColor.a = 1.0f - t;
         }
         else
