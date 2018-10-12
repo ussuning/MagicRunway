@@ -309,6 +309,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         Destroy(other.gameObject.transform.parent.gameObject);
 
         if (isCollectionEnding == false) { return; }
+
         StartCoroutine(NextCollection());
     }
 
@@ -352,6 +353,16 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.N) == true)
+        {
+            if (isModeActive == false)
+                return;
+
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.COLLECTION_END);
+            UIManager.Instance.HideStartMenu(false);
+            AppManager.Instance.TransitionToNextAutoLevel();
+        }
+
         if (isModeActive == false)
             return;
 
@@ -478,6 +489,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             if (isModeActive == false)
                 return true;
 
+            EventMsgDispatcher.Instance.TriggerEvent(EventDef.COLLECTION_END);
             UIManager.Instance.HideStartMenu(false);
             AppManager.Instance.TransitionToNextAutoLevel();
             
