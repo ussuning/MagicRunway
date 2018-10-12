@@ -16,7 +16,7 @@ public class AppSettings : MonoBehaviour {
     public Light LeftLight;
     public Light RightLight;
 
-    public float maxLightIntensity = 20f;
+    public float maxLightIntensity = 6f;
 
     private float downwardLightIntensity = 0.8f;
     private float leftLightIntensity = 0.4f;
@@ -26,7 +26,7 @@ public class AppSettings : MonoBehaviour {
     private float defaultLeftLightIntensity = 0.4f;
     private float defaultRightLightIntensity = 0.4f;
 
-    void Start()
+    private void Awake()
     {
         downwardLightIntensity = PlayerPrefs.GetFloat("DownLight", defaultDownwardLightIntensity);
         leftLightIntensity = PlayerPrefs.GetFloat("LeftLight", defaultLeftLightIntensity);
@@ -38,9 +38,9 @@ public class AppSettings : MonoBehaviour {
         LeftLight.intensity = LeftLightSlider.value = leftLightIntensity;
         RightLight.intensity = RightLightSlider.value = rightLightIntensity;
 
-        DownwardLightSliderValText.text = string.Format("{0}%", Mathf.RoundToInt(downwardLightIntensity/maxLightIntensity * 100f));
-        LeftLightSliderValText.text = string.Format("{0}%", Mathf.RoundToInt(leftLightIntensity/maxLightIntensity * 100f));
-        RightLightSliderValText.text = string.Format("{0}%", Mathf.RoundToInt(rightLightIntensity/maxLightIntensity * 100f));
+        DownwardLightSliderValText.text = string.Format("{0}%", Mathf.RoundToInt(downwardLightIntensity / maxLightIntensity * 100f));
+        LeftLightSliderValText.text = string.Format("{0}%", Mathf.RoundToInt(leftLightIntensity / maxLightIntensity * 100f));
+        RightLightSliderValText.text = string.Format("{0}%", Mathf.RoundToInt(rightLightIntensity / maxLightIntensity * 100f));
     }
 
     public void OnDownwardLightSliderValueChanged()
