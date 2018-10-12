@@ -52,8 +52,8 @@ public class ClosetManager : MonoBehaviour {
         {
             if (closet.IsHidden)
             {
-                closet.Clear();
-                closet.SetCloset(userIdx, userGender, userOutfits);
+                //closet.Clear();
+                closet.SetCloset(userIdx, userGender, userOutfits, userGender == closet.OwnerGender ? closet.OutfitPageIndex : 0);
                 closet.Show();
             }    
         }
@@ -108,6 +108,7 @@ public class ClosetManager : MonoBehaviour {
 
             if (closet)
             {
+                closet.Clear();
                 closet.SetCloset(userIdx, userGender, userOutfits);
                 userClosets.Add(closet);
 
