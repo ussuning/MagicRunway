@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -127,6 +127,11 @@ public class MultiBundleManager
         if (lookup == null)
             InitLookups();
 
+if(!lookup.ContainsKey(assetName))
+{
+    Debug.Log("can't find " + assetName);
+    Debug.Break();
+}
         AssetBundles abName = lookup[assetName];
         AssetBundle ab = abManager.GetAssetBundle(abName);
         Type type = typeof(T);
