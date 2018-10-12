@@ -19,16 +19,12 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     protected string ConversionCamera = "Conversion Camera";
     protected AvatarControllerClassic avatarController = null;
 
-    void Start()
+    private void Awake()
     {
-        //if (disableOnStart)
-        //{
-        //    DisableAvatarControllers();
-        //}
-
-        // There's a bug where camera unset themselves on play after being set with the "Initialize" button.
-        //GetComponent<AvatarControllerClassic>().posRelativeToCamera = gameObject.FindAny<Camera>(BackgroundCamera1);// Find(BackgroundCamera1)?.GetComponent<Camera>();
-        //GetComponent<AvatarScaler>().foregroundCamera = gameObject.FindAny<Camera>(MainCamera);
+        // Remove any animator controller
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+            animator.runtimeAnimatorController = null;
     }
 
     //public void DisableAvatarControllers()
@@ -49,10 +45,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         // First, deactivate this gameobject.
         gameObject.SetActive(false);
 
-        // Remove any animator controller
-        Animator animator = GetComponent<Animator>();
-        if (animator != null)
-            animator.runtimeAnimatorController = null;
 
         transform.localEulerAngles = new Vector3(0f, 180f, 0f);
         transform.FindDeepChild("body")?.gameObject.SetActive(false);

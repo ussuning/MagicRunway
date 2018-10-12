@@ -626,12 +626,25 @@ public class AvatarController : MonoBehaviour
 
         ScaleTorso();
 
-		//if (applyMuscleLimits && kinectManager && kinectManager.IsUserTracked(UserID)) 
-		//{
-		//	// check for limits
-		//	CheckMuscleLimits();
-		//}
-	}
+        for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
+        {
+            if (!bones[boneIndex] || isBoneDisabled[boneIndex])
+                continue;
+
+            if (boneIndex2JointMap.ContainsKey(boneIndex))
+            {
+                KinectInterop.JointType joint = !(mirroredMovement ^ flipLeftRight) ?
+                    boneIndex2JointMap[boneIndex] : boneIndex2MirrorJointMap[boneIndex];
+
+                ScaleBone(UserID, joint, boneIndex, !(mirroredMovement ^ flipLeftRight));
+            }
+        }
+        //if (applyMuscleLimits && kinectManager && kinectManager.IsUserTracked(UserID)) 
+        //{
+        //	// check for limits
+        //	CheckMuscleLimits();
+        //}
+    }
 
     protected void CalibrateHipShoulders()
     {
@@ -967,7 +980,7 @@ public class AvatarController : MonoBehaviour
             case KinectInterop.JointType.ShoulderLeft:
                 Vector3 shoulderLeftForward = GetTranslatedBonePos(KinectInterop.JointType.ElbowLeft) - boneTransform.position;
                 Vector3 elbowLeftForward = GetTranslatedBonePos(KinectInterop.JointType.WristLeft) - GetTranslatedBonePos(KinectInterop.JointType.ElbowLeft);
-                Vector3 shoulderDown =  GetShoulderDown(boneTransform.position, shoulderLeftForward, elbowLeftForward);
+                Vector3 shoulderDown = GetShoulderDown(boneTransform.position, shoulderLeftForward, elbowLeftForward);
                 // Recalculate shoulderDown so that it is a perfect 90 degree angle from shoulderLeftFoward.
                 Vector3 shoulderOut = Vector3.Cross(shoulderLeftForward, shoulderDown);
                 shoulderDown = Vector3.Cross(shoulderOut, shoulderLeftForward);
@@ -1014,6 +1027,22 @@ public class AvatarController : MonoBehaviour
                 break;
         }
 
+        boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);
+    }
+
+    // Apply the rotations tracked by kinect to the joints.
+    protected void ScaleBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
+    {
+        Transform boneTransform = bones[boneIndex];
+        Quaternion oldRot = boneTransform.rotation;
+        Vector3 oldScale = boneTransform.localScale;
+        if (boneTransform == null || kinectManager == null)
+            return;
+
+        int iJoint = (int)joint;
+        if (iJoint < 0 || !kinectManager.IsJointTracked(userId, iJoint))
+            return;
+
         // Correct scaling
         switch (joint)
         {
@@ -1022,12 +1051,18 @@ public class AvatarController : MonoBehaviour
                 float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]] -
                     initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]]).magnitude;
                 boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
+                // Unscale child bone
+                Transform elbowLeft = boneTransform.GetChild(0);
+                resetJointScale(ref elbowLeft);
                 break;
             case KinectInterop.JointType.ShoulderRight:
                 upperArmLength = (GetTranslatedBonePos(KinectInterop.JointType.ElbowRight) - boneTransform.position).magnitude;
                 origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]] -
                     initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowRight]]).magnitude;
                 boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
+                // Unscale child bone
+                Transform elbowRight = boneTransform.GetChild(0);
+                resetJointScale(ref elbowRight);
                 break;
             //case KinectInterop.JointType.ElbowLeft:
             //    float forearmLength = (GetRawJointWorldPos(KinectInterop.JointType.WristLeft) - boneTransform.position).magnitude;
@@ -1047,19 +1082,31 @@ public class AvatarController : MonoBehaviour
                     initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
                 //Debug.Log("hipLeftY scale = " + (thighLength / origThighLength));
                 boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
+                // Unscale child bone
+                Transform kneeLeft = boneTransform.GetChild(0);
+                resetJointScale(ref kneeLeft);
                 break;
             case KinectInterop.JointType.HipRight:
                 thighLength = (boneTransform.position - GetTranslatedBonePos(KinectInterop.JointType.KneeRight)).magnitude;
                 origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipRight]] -
                     initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeRight]]).magnitude;
                 boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
+                // Unscale child bone
+                Transform kneeRight = boneTransform.GetChild(0);
+                resetJointScale(ref kneeRight);
                 break;
         }
 
         boneTransform.localScale = Vector3.Lerp(oldScale, boneTransform.localScale, 0.65f);
-        boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);
 
     }
+
+    protected void resetJointScale(ref Transform joint)
+    {
+        Vector3 parentScale = joint.parent.lossyScale;
+        joint.localScale = new Vector3(1f / parentScale.x, 1f / parentScale.y, 1f / parentScale.z);
+    }
+
 
     //public Vector3 shPos;
     //public Vector3 shFinalDown;
