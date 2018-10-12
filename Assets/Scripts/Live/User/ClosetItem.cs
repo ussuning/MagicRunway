@@ -45,7 +45,7 @@ public class ClosetItem : MonoBehaviour {
 
     protected bool isSelected = false;
     protected bool isHover = false;
-    private float hoverDuration = 0f;
+    protected float hoverDuration = 0f;
 
     public float hoverProgress
     {
@@ -94,7 +94,7 @@ public class ClosetItem : MonoBehaviour {
         nextAnimationTrigger = trigger;
     }
 
-    private void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (isHover && !isSelected)
         {

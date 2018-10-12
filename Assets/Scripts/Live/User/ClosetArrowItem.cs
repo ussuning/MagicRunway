@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClosetArrowItem : ClosetItem {
+public class ClosetArrowItem : ClosetItem
+{
 
     public enum Direction
     {
@@ -13,7 +14,25 @@ public class ClosetArrowItem : ClosetItem {
 
     //public Image ArrowImage;
     public Direction ArrowDirection;
-    
+
+    public float SelectionCooldown = 1f;
+    private bool isInSelectionCD = false;
+
+    public override void FixedUpdate()
+    {
+        if (isHover && !isSelected)
+        {
+            if (!isInSelectionCD)
+            {
+                hoverDuration += Time.fixedDeltaTime;
+            }
+        }
+        else
+        {
+            isInSelectionCD = false;
+        }
+    }
+
     public void ShowArrow()
     {
         //ArrowImage.enabled = true;
@@ -29,7 +48,7 @@ public class ClosetArrowItem : ClosetItem {
     public override void OnItemSelected()
     {
         base.OnItemSelected();
-        switch(ArrowDirection)
+        switch (ArrowDirection)
         {
             case Direction.Up:
                 closet.PageUp();
@@ -39,6 +58,17 @@ public class ClosetArrowItem : ClosetItem {
                 break;
         }
 
+        StartCoroutine(OnPagingCooldown());
+    }
+
+    IEnumerator OnPagingCooldown()
+    {
+        isInSelectionCD = true;
+        yield return new WaitForSeconds(SelectionCooldown);
+        isInSelectionCD = false;
+
         base.OnItemUnselected();
     }
 }
+
+
