@@ -35,6 +35,8 @@ public class Closet : MonoBehaviour {
     protected RectTransform pointFrom;
     protected RectTransform pointTo;
     protected RectTransform pointSpine;
+    protected Image pointerImg;
+    protected RectTransform pointerRectTransform;
 
     public RectTransform offsetTransform;
 
@@ -158,7 +160,7 @@ public class Closet : MonoBehaviour {
         if (bubble == null)
         {
             GameObject bubbleInstance = GameObject.Instantiate(bubblePrefab);
-            bubbleInstance.transform.parent = this.transform.parent.parent;
+            bubbleInstance.transform.SetParent(this.transform.parent.parent, false);
             bubbleInstance.name = "Bubble" + ClosetSide;
             bubble = bubbleInstance.GetComponent<Image>();
         }
@@ -166,23 +168,31 @@ public class Closet : MonoBehaviour {
         if (pointFrom == null)
         {
             GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
-            jointImgInstance.transform.parent = this.transform.parent.parent;
+            jointImgInstance.transform.SetParent(this.transform.parent.parent, false);
             jointImgInstance.name = "pointFrom" + ClosetSide;
             pointFrom = jointImgInstance.GetComponent<RectTransform>();
         }
         if (pointTo == null)
         {
             GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
-            jointImgInstance.transform.parent = this.transform.parent.parent;
+            jointImgInstance.transform.SetParent(this.transform.parent.parent, false);
             jointImgInstance.name = "pointTo" + ClosetSide;
             pointTo = jointImgInstance.GetComponent<RectTransform>();
         }
         if (pointSpine == null)
         {
             GameObject jointImgInstance = GameObject.Instantiate(jointImgPrefab);
-            jointImgInstance.transform.parent = this.transform.parent.parent;
+            jointImgInstance.transform.SetParent(this.transform.parent.parent, false);
             jointImgInstance.name = "pointSpine" + ClosetSide;
             pointSpine = jointImgInstance.GetComponent<RectTransform>();
+        }
+        if (pointerImg == null)
+        {
+            GameObject instance = GameObject.Instantiate(pointerArrowPrefab);
+            instance.transform.SetParent(this.transform.parent.parent, false);
+            instance.name = "pointer" + ClosetSide;
+            pointerRectTransform = instance.GetComponent<RectTransform>();
+            pointerImg = instance.GetComponentInChildren<Image>();
         }
     }
 
@@ -253,27 +263,45 @@ public class Closet : MonoBehaviour {
                         if (pointSpine != null)
                             pointSpine.anchoredPosition = spineShoulderLocal;
 
-                        UpdateOffset();
+                        UpdateOffsetTransform();
 
                         // For Debug line rendering, using world coords.
                         ptFrom = pointFrom.transform.position;
                         ptTo = pointTo.transform.position;
 
-                        RaycastHit2D hit = Physics2D.Raycast(ptFrom, ptTo-ptFrom, float.MaxValue, LayerMask.GetMask(new string []{ "Pointable2D" }));
+
+                        // Gather hits and parse
+                        RaycastHit2D [] hits = Physics2D.RaycastAll(ptFrom, ptTo-ptFrom, float.MaxValue, LayerMask.GetMask(new string []{ "Pointable2D" }));
                         //Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
 
-                        if (hit.collider != null && 
-                            hit.collider.GetComponentInParent<Closet>() == this)// Only allow selecting from this closet
+                        RaycastHit2D pointerRailHit = new RaycastHit2D();
+                        ClosetItem closetItemHit = null;
+                        float lowestHitDist = float.MaxValue;
+                        foreach (RaycastHit2D hit in hits)
                         {
-                            ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
-                            SetItemToBubble(closetItem);
-                            OnClosetItemHover(closetItem);
+                            if (hit.collider.gameObject == this.gameObject)
+                            {
+                                //Debug.Log("pointerRailHit = " + hit.collider.gameObject.name);
+                                pointerRailHit = hit;
+                            }
+                            else if (hit.collider.GetComponentInParent<Closet>() == this)
+                            {
+                                ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
+                                if(closetItem != null && hit.distance < lowestHitDist)
+                                {
+                                    lowestHitDist = hit.distance;
+                                    closetItemHit = closetItem;
+                                }
+                            }
                         }
+
+                        SetItemToBubble(closetItemHit);
+                        if (closetItemHit != null) 
+                            OnClosetItemHover(closetItemHit);
                         else
-                        {
-                            SetItemToBubble(null);
                             OnUnselectAll();
-                        }
+
+                        UpdatePointer(ref pointerRailHit);
                     }
                     else
                     {
@@ -292,7 +320,7 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    void UpdateOffset()
+    void UpdateOffsetTransform()
     {
         Vector2 oldAnchorPos = offsetTransform.anchoredPosition;
 
@@ -311,6 +339,7 @@ public class Closet : MonoBehaviour {
         }
         else
         {
+            // Otherwise, follow user's x position.
             Vector3 neoPos = offsetTransform.position;
             neoPos.x = pointSpine.position.x;
             offsetTransform.position = neoPos;// new Vector3(localPos.x, offsetTransform.anchoredPosition.y);
@@ -333,6 +362,61 @@ public class Closet : MonoBehaviour {
         // Smooth it.
         offsetTransform.anchoredPosition = Vector2.Lerp(oldAnchorPos, offsetTransform.anchoredPosition, 0.5f);
 
+    }
+    float timeSincePointerHit = 0;
+    float pointerFadeTime = 0.5f;
+
+    private void UpdatePointer(ref RaycastHit2D hit)
+    {
+        // Set position.
+        if (hit.collider != null)
+        {
+            pointerRectTransform.position = hit.point;
+            timeSincePointerHit = 0;
+
+            // Set direction.
+            Vector3 direction = pointTo.position - pointFrom.position;
+            direction.z = 0;
+            direction = direction.normalized;
+            Vector3 lookAtPos = new Vector3(pointFrom.position.x, pointFrom.position.y) + direction * 5000f;
+            lookAtPos.z = 0;
+            pointerRectTransform.LookAt(lookAtPos, Vector3.forward);
+        }
+        else
+        {
+            timeSincePointerHit += Time.deltaTime;
+            if (timeSincePointerHit > pointerFadeTime + 0.1f)
+                pointerRectTransform.position = new Vector3(0, -3000);
+        }
+
+
+        //else
+        //    pointerRectTransform.position = new Vector3(pointTo.position.x, pointTo.position.y);
+
+
+
+        // Control the alpha
+        Color neoColor = pointerImg.color;
+        if (isHidden || isHiding)
+        {
+            // Hide the pointer
+            neoColor.a = 0;
+        }
+        else if (timeSincePointerHit > 0)
+        {
+            // Start fading when idle
+            float t = Mathf.Clamp01(idleElapsedTime / pointerFadeTime); // fade in half a second
+            neoColor.a = 1.0f - t;
+        }
+        else
+        {
+            // Show the pointer.
+            neoColor.a = 1;
+        }
+
+        Color neoLerpedColor = Color.Lerp(pointerImg.color, neoColor, 0.5f);
+        // Smooth transition color
+        pointerImg.color = neoLerpedColor;
     }
 
     private void SetItemToBubble(ClosetItem closetItem)
