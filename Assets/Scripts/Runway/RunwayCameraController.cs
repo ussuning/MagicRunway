@@ -584,6 +584,11 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void OnRunwayExit(Collider model) { ClearModelHistory(model); }
 
+    private void OnCollectionEnd(object[] args)
+    {
+        RunReturnCenter(true, false);
+    }
+
     private void AddRunwayEventListeners()
     {
         RemoveRunwayEventListeners();
@@ -597,6 +602,8 @@ public class RunwayCameraController : MonoBehaviour {
         runwayEventManager.RunwayEnd.OnTriggerExitEvt += OnRunwayEndExit;
 
         runwayEventManager.RunwayExit.OnTriggerEnterEvt += OnRunwayExit;
+
+        EventMsgDispatcher.Instance.registerEvent(EventDef.COLLECTION_END, OnCollectionEnd);
     }
 
     private void RemoveRunwayEventListeners()
@@ -610,6 +617,8 @@ public class RunwayCameraController : MonoBehaviour {
         runwayEventManager.RunwayEnd.OnTriggerExitEvt -= OnRunwayEndExit;
 
         runwayEventManager.RunwayExit.OnTriggerEnterEvt -= OnRunwayExit;
+
+        EventMsgDispatcher.Instance.unRegisterEvent(EventDef.COLLECTION_END, OnCollectionEnd);
     }
 
 

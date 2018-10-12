@@ -7,4 +7,5 @@ public class EventDef
     //Posing
     public const int New_Pose_Generated = 100;
     public const int User_Pose_Matched = New_Pose_Generated + 1;
+    public const int COLLECTION_END = 200;
 }
