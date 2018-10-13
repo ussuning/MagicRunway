@@ -45,6 +45,7 @@ class AvatarControllerEntry
         this.hipZFactor = avatarController.hipZFactor;
         this.shoulderAdjustWidthFactor = avatarController.shoulderAdjustWidthFactor;
         this.hipUpwardsFactor = avatarController.hipUpwardsFactor;
+        Debug.LogWarning("Creating new AvatarControllerEntry " + avatarController.name);
     }
 
     public void PopulateTo(AvatarController avatarController)
@@ -107,13 +108,22 @@ class AvatarControllerConfigData
 {
     public Dictionary<string, AvatarControllerEntry> entries = new Dictionary<string, AvatarControllerEntry>();
 
-    public string ConfigDatatPath
+    public string ConfigDataResourceName
     {
         get
         {
             return "AvatarControllerConfigData";
         }
     }
+
+    public string ConfigDataPathName
+    {
+        get
+        {
+            return "Assets/Resources/" + ConfigDataResourceName + ".txt";
+        }
+    }
+
 
     private static AvatarControllerConfigData _instance;
     public static AvatarControllerConfigData Instance
@@ -132,9 +142,10 @@ class AvatarControllerConfigData
         Load();
     }
 
-    protected void Load()
+    public void Load()
     {
-        TextAsset textAsset = Resources.Load<TextAsset>(ConfigDatatPath);
+        entries.Clear();
+        TextAsset textAsset = Resources.Load<TextAsset>(ConfigDataResourceName);
 
         string[] lines = textAsset.text.Split(
             new[] { "\r\n", "\r", "\n" },
@@ -156,9 +167,10 @@ class AvatarControllerConfigData
 
     public void Save()
     {
-        StreamWriter writer = new StreamWriter(ConfigDatatPath, false);
+        StreamWriter writer = new StreamWriter(ConfigDataPathName, false);
         foreach (AvatarControllerEntry data in entries.Values)
             writer.WriteLine(data.ToJSON());
         writer.Close();
+        Debug.LogWarning("AvatarControllerConfigData written to file " + ConfigDataPathName);
     }
 }

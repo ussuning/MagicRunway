@@ -130,24 +130,24 @@ public class AvatarControllerClassic : AvatarController
 
         float hipScaleX = hipWidthFactor;
         HipCenter.localScale = new Vector3(hipScaleX, HipCenter.localScale.y, hipScaleX * hipZFactor);
-        Debug.Log("HipCenter.lossyScale " + HipCenter.lossyScale);
+        //Debug.Log("HipCenter.lossyScale " + HipCenter.lossyScale);
 
         // Unscale so that knee/ankles are normal (Vector3.one)
         resetJointScale(ref KneeLeft);//.localScale = new Vector3(1f / KneeLeft.parent.lossyScale.x, 1f / KneeLeft.parent.lossyScale.y, 1f / KneeLeft.parent.lossyScale.z);
         resetJointScale(ref KneeRight);//.localScale = new Vector3(1f / KneeRight.parent.lossyScale.x, 1f / KneeRight.parent.lossyScale.y, 1f / KneeRight.parent.lossyScale.z);
-        Debug.Log("KneeLeft.lossyScale " + KneeLeft.lossyScale);
+        //Debug.Log("KneeLeft.lossyScale " + KneeLeft.lossyScale);
         //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
         float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
         float midScaleZ = (hipWidthFactor * hipZFactor + 1f) / 2.0f;
         resetJointScale(ref SpineMid);
         SpineMid.localScale = new Vector3(SpineMid.localScale.x * midScaleX, SpineMid.localScale.y, SpineMid.localScale.z * midScaleZ);
-        Debug.Log("SpineMid.lossyScale " + SpineMid.lossyScale);
+        //Debug.Log("SpineMid.lossyScale " + SpineMid.lossyScale);
         float shoulderScaleX = shoulderWidthFactor;
         resetJointScale(ref ShoulderCenter);
         ShoulderCenter.localScale = new Vector3(ShoulderCenter.localScale.x * shoulderScaleX, ShoulderCenter.localScale.y, ShoulderCenter.localScale.z);
-        Debug.Log("ShoulderCenter.lossyScale " + ShoulderCenter.lossyScale);
-        Debug.Log("hipWidthFactor " + hipWidthFactor);
-        Debug.Log("shoulderWidthFactor " + shoulderWidthFactor);
+        //Debug.Log("ShoulderCenter.lossyScale " + ShoulderCenter.lossyScale);
+        //Debug.Log("hipWidthFactor " + hipWidthFactor);
+        //Debug.Log("shoulderWidthFactor " + shoulderWidthFactor);
         for (int i = 0; i < ShoulderCenter.childCount; i++)
         {
             Transform child = ShoulderCenter.GetChild(i);

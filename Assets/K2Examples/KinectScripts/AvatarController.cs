@@ -2404,6 +2404,11 @@ public class AvatarController : MonoBehaviour
         acConfigData.entries.Remove(this.name);
         acConfigData.entries.Add(this.name, new AvatarControllerEntry(this));
         acConfigData.Save();
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
+        acConfigData.Load();
+        LoadConfigData();
     }
 
     public void LoadConfigData()
