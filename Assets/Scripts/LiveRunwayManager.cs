@@ -81,13 +81,13 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             } 
             else
             {
-                if(user_i.IsActivated)
-                {
-                    user_i.deactivate();
-                    outfitMgr.HideUserOutfit(uIdx);
-                    closetMgr.OnUserLost(uIdx);
-                }
-                else
+                //if(user_i.IsActivated)
+                //{
+                //    user_i.deactivate();
+                //    outfitMgr.HideUserOutfit(uIdx);
+                //    closetMgr.OnUserLost(uIdx);
+                //}
+                //else
                 {
                     user_i.IsReadyToBeActivated = false;
                 }
@@ -239,6 +239,23 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             {
                 if (!user.IsActivated)
                 {
+                    if (NumActivatedUsers >= NUM_OF_ACTIVE_USERS) //If already 2 active users
+                    {
+                        int[] userIdx = usersSortedByDistance;
+                        for (int i = userIdx.Length-1; i >= NUM_OF_ACTIVE_USERS; i--) //loop through users from farthest to closest
+                        {
+                            int uIdx = userIdx[i];
+                            User user_i = users[uIdx];
+                            if (user_i.IsActivated) //deactivate the farthest one
+                            {
+                                user_i.deactivate();
+                                outfitMgr.HideUserOutfit(uIdx);
+                                closetMgr.OnUserLost(uIdx);
+                                break;
+                            }
+                        }
+                    }
+
                     user.activate();
                     UpdateLiveStatus(NumActivatedUsers);
                 }
