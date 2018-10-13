@@ -12,6 +12,7 @@ public class User : MonoBehaviour {
     };
 
     public GenderUIController GenderSelectionUI;
+    public TextMesh DebugText;
 
     private int uidx;
     public int UserIndex
@@ -140,7 +141,44 @@ public class User : MonoBehaviour {
                     GenderSelectionUI.Hide();
             }
         }
+
+#if UNITY_EDITOR
+        if (DebugText)
+        {
+            DebugText.text = string.Format("User {0}: {1}", UserIndex, UserID);
+            DebugText.transform.position = GenderSelectionUI.transform.position;
+        }
+#endif
     }
+
+#if UNITY_EDITOR
+    Vector3 GetUserScreenPos(long userID)
+    {
+        Vector3 userScreenPos = Vector3.zero;
+        if (manager && manager.IsInitialized())
+        {
+            GameObject cameraGO = GameObject.Find("/Live runway/FittingRoom/Camera");
+            Camera uiCamera = cameraGO.GetComponent<Camera>();
+
+            // get the background rectangle (use the portrait background, if available)
+            Rect backgroundRect = uiCamera.pixelRect;
+            PortraitBackground portraitBack = PortraitBackground.Instance;
+
+            if (portraitBack && portraitBack.enabled)
+            {
+                backgroundRect = portraitBack.GetBackgroundRect();
+            }
+
+            int iJointIndex = (int)KinectInterop.JointType.Head;
+            if (manager.IsJointTracked(userID, iJointIndex))
+            {
+                userScreenPos = manager.GetJointPosColorOverlay(userID, iJointIndex, uiCamera, backgroundRect);
+            }
+        }
+
+        return userScreenPos;
+    }
+#endif
 
     void OnDestroy()
     {
