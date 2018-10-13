@@ -57,7 +57,7 @@ public class User : MonoBehaviour {
         }
     }
 
-    public bool isReadyToBeActivated = true;
+    private bool isReadyToBeActivated = true;
     public bool IsReadyToBeActivated
     {
         set
@@ -147,6 +147,12 @@ public class User : MonoBehaviour {
         {
             DebugText.text = string.Format("User {0}: {1}", UserIndex, UserID);
             DebugText.transform.position = GenderSelectionUI.transform.position;
+            DebugText.gameObject.SetActive(true);
+        }
+#else
+        if (DebugText)
+        {
+            DebugText.gameObject.SetActive(false);
         }
 #endif
     }
