@@ -1806,24 +1806,74 @@ public class AvatarController : MonoBehaviour
 	
     protected void SetModelLegsVertical()
     {
+        Transform hipLeftBone = bones[jointMap2boneIndex[KinectInterop.JointType.HipLeft]];
+        Transform hipRightBone = bones[jointMap2boneIndex[KinectInterop.JointType.HipRight]];
+        Transform kneeLeftBone = bones[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]];
+        Transform kneeRightBone = bones[jointMap2boneIndex[KinectInterop.JointType.KneeRight]];
+        Transform ankleLeftBone = bones[jointMap2boneIndex[KinectInterop.JointType.AnkleLeft]];
+        Transform ankleRightBone = bones[jointMap2boneIndex[KinectInterop.JointType.AnkleRight]];
+
+        // Straighten legs on XY plane
         {
-            Transform hipLeftBone = bones[jointMap2boneIndex[KinectInterop.JointType.HipLeft]];
-            Transform ankleLeftBone = bones[jointMap2boneIndex[KinectInterop.JointType.AnkleLeft]];
-            Vector3 hipVerticalDown = hipLeftBone.position;
-            hipVerticalDown.y -= 1f;
-            float angleBetween = Vector3.Angle(ankleLeftBone.position - hipLeftBone.position, hipVerticalDown - hipLeftBone.position);
-            //Debug.Log("angleBetweenL = " + angleBetween);
+            // Isolate angle difference in XY plane by setting same Z value
+            Vector3 kneeLeftBonePos = kneeLeftBone.position;
+            kneeLeftBonePos.z = hipLeftBone.position.z;
+
+            float angleBetween = Vector3.Angle(kneeLeftBonePos - hipLeftBone.position, Vector3.down);
+            Debug.Log("angleBetweenLHip = " + angleBetween);
             hipLeftBone.localEulerAngles += new Vector3(0, 0, angleBetween);
         }
 
         {
-            Transform hipRightBone = bones[jointMap2boneIndex[KinectInterop.JointType.HipRight]];
-            Transform ankleRightBone = bones[jointMap2boneIndex[KinectInterop.JointType.AnkleRight]];
-            Vector3 hipVerticalDown = hipRightBone.position;
-            hipVerticalDown.y -= 1f;
-            float angleBetween = Vector3.Angle(ankleRightBone.position - hipRightBone.position, hipVerticalDown - hipRightBone.position);
-            //Debug.Log("angleBetweenR = " + angleBetween);
+            // Isolate angle difference in XY plane by setting same Z value
+            Vector3 kneeRightBonePos = kneeRightBone.position;
+            kneeRightBonePos.z = hipRightBone.position.z;
+
+            float angleBetween = Vector3.Angle(kneeRightBonePos - hipRightBone.position, Vector3.down);
+            Debug.Log("angleBetweenRHip = " + angleBetween);
             hipRightBone.localEulerAngles += new Vector3(0, 0, -angleBetween);
+        }
+
+        // Straighten legs on YZ plane
+        {
+            // Isolate angle difference in YZ plane by setting same X value
+            Vector3 kneeLeftBonePos = kneeLeftBone.position;
+            kneeLeftBonePos.x = hipLeftBone.position.x;
+
+            float angleBetween = Vector3.Angle(kneeLeftBonePos - hipLeftBone.position, Vector3.down);
+            Debug.Log("angleBetweenLHip = " + angleBetween);
+            hipLeftBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
+        }
+
+        {
+            // Isolate angle difference in YZ plane by setting same X value
+            Vector3 kneeRightBonePos = kneeRightBone.position;
+            kneeRightBonePos.x = hipRightBone.position.x;
+
+            float angleBetween = Vector3.Angle(kneeRightBonePos - hipRightBone.position, Vector3.down);
+            Debug.Log("angleBetweenRHip = " + angleBetween);
+            hipRightBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
+        }
+
+        // Straighten knees on YZ plane
+        {
+            // Isolate angle difference in YZ plane by setting same X value
+            Vector3 ankleLeftBonePos = ankleLeftBone.position;
+            ankleLeftBonePos.x = kneeLeftBone.position.x;
+
+            float angleBetween = Vector3.Angle(ankleLeftBonePos - kneeLeftBone.position, Vector3.down);
+            Debug.Log("angleBetweeLRKnee = " + angleBetween);
+            kneeLeftBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
+        }
+
+        {
+            // Isolate angle difference in YZ plane by setting same X value
+            Vector3 ankleRightBonePos = ankleRightBone.position;
+            ankleRightBonePos.x = kneeRightBone.position.x;
+
+            float angleBetween = Vector3.Angle(ankleRightBonePos - kneeRightBone.position, Vector3.down);
+            Debug.Log("angleBetweenRKnee = " + angleBetween);
+            kneeRightBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
         }
 
     }
