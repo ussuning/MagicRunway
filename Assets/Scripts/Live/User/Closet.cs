@@ -122,8 +122,6 @@ public class Closet : MonoBehaviour {
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
-    private int numberPages = 0;
-
     private float ownerPointDir;
 
     private RectTransform rectTrans;
@@ -525,8 +523,6 @@ public class Closet : MonoBehaviour {
         this.ownerGender = userGender;
         this.outfits = outfits;
         this.outfitStartIdx = outfitIdx;
-
-        numberPages = Mathf.CeilToInt((float)outfits.Count / ClosetManager.NUMBER_CLOSET_ITEMS);
 
         SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
 
