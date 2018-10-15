@@ -142,25 +142,29 @@ public class GenderUIController : MonoBehaviour {
 
     public void OnGenderSelected(User.Gender g)
     {
+        if (selectedGender == User.Gender.None)
+        {  
+            if (g == User.Gender.Male)
+            {
+                if (maleGO)
+                    maleGO.SetActive(true);
+                if (femaleGO)
+                    femaleGO.SetActive(false);
+
+                Invoke("FadeMaleIcon", 2f);
+            }
+            else if (g == User.Gender.Female)
+            {
+                if (maleGO)
+                    maleGO.SetActive(false);
+                if (femaleGO)
+                    femaleGO.SetActive(true);
+
+                Invoke("FadeFemaleIcon", 2f);
+            }
+        }
+
         selectedGender = g;
-        if (g == User.Gender.Male)
-        {
-            if (maleGO)
-                maleGO.SetActive(true);
-            if (femaleGO)
-                femaleGO.SetActive(false);
-
-            Invoke("FadeMaleIcon", 2f);
-        }
-        else if(g == User.Gender.Female)
-        {
-            if (maleGO)
-                maleGO.SetActive(false);
-            if (femaleGO)
-                femaleGO.SetActive(true);
-
-            Invoke("FadeFemaleIcon", 2f);
-        }
     }
 
     public void Hide()
