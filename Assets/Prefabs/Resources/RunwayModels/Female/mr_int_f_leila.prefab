@@ -679,14 +679,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4589851494792464}
   - component: {fileID: 95499645939808844}
-  - component: {fileID: 114556580121240674}
   m_Layer: 13
   m_Name: mr_int_f_leila
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1581176739280932
 GameObject:
   m_ObjectHideFlags: 1
@@ -8032,17 +8031,6 @@ MonoBehaviour:
   overpressure: 1
   stiffness: 1
   batches: []
---- !u!114 &114556580121240674
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1558762511220300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0d48b2ded8e5495cac0e7bf6eb1fa42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114580347762478870
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18712,7 +18700,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300002, guid: 6a955b0deb76adb479420fca6e130a08, type: 3}
   m_Bones:
   - {fileID: 4676199269766040}
   - {fileID: 4042490271247928}
