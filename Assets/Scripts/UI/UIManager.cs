@@ -71,14 +71,16 @@ public class UIManager : Singleton<UIManager>
 
     void Update()
     {
-        if (AppManager.Instance.GetRunwayMode() == Mode.LIVE)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (uiSettingMenu.activeSelf)
+                uiSettingMenu.SetActive(false);
+            else
             {
-                if (uiSettingMenu.activeSelf)
-                    uiSettingMenu.SetActive(false);
-                else
+                if (AppManager.Instance.GetRunwayMode() == Mode.LIVE)
+                {
                     uiSettingMenu.SetActive(true);
+                }
             }
         }
     }
@@ -126,6 +128,11 @@ public class UIManager : Singleton<UIManager>
         {
             uiStartMenu.SetActive(false);
         }
+    }
+
+    public void HideSettingMenu()
+    {
+        uiSettingMenu.SetActive(false);
     }
 
     //----------------------------------------
@@ -337,6 +344,7 @@ public class UIManager : Singleton<UIManager>
         //HideGestureGender(false);
         //HideHandCursor();
         HideStartMenu(false);
+        HideSettingMenu();
         //HideStickMan(false);
         HideCollectionTitle(false);
     }
