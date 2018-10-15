@@ -53,7 +53,7 @@ public class ClosetManager : MonoBehaviour {
             if (closet.IsHidden)
             {
                 //closet.Clear();
-                closet.SetCloset(userIdx, userGender, userOutfits, userGender == closet.OwnerGender ? closet.OutfitPageIndex : 0);
+                closet.SetCloset(userIdx, userGender, userOutfits, userGender == closet.OwnerGender ? closet.OutfitStartIdx : 0);
                 closet.Show();
             }    
         }
@@ -166,11 +166,11 @@ public class ClosetManager : MonoBehaviour {
                         int closetLOwnerIndex = ClosetLeft.OwnerIndex;
                         User.Gender closetLGender = ClosetLeft.OwnerGender;
                         List<Outfit> closetLOutfits = ClosetLeft.Outfits;
-                        int closetLOutfitPageIndex = ClosetLeft.OutfitPageIndex;
+                        int closetLOutfitStartIndex = ClosetLeft.OutfitStartIdx;
                         ClosetLeft.ResetCloset();
-                        ClosetLeft.SetCloset(ClosetRight.OwnerIndex, ClosetRight.OwnerGender, ClosetRight.Outfits, ClosetRight.OutfitPageIndex);
+                        ClosetLeft.SetCloset(ClosetRight.OwnerIndex, ClosetRight.OwnerGender, ClosetRight.Outfits, ClosetRight.OutfitStartIdx);
                         ClosetRight.ResetCloset();
-                        ClosetRight.SetCloset(closetLOwnerIndex, closetLGender, closetLOutfits, closetLOutfitPageIndex);
+                        ClosetRight.SetCloset(closetLOwnerIndex, closetLGender, closetLOutfits, closetLOutfitStartIndex);
                     }
                 }
             }

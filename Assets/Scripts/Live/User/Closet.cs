@@ -88,12 +88,12 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    private int outfitPageIdx = 0;
-    public int OutfitPageIndex
+    private int outfitStartIdx = 0;
+    public int OutfitStartIdx
     {
         get
         {
-            return outfitPageIdx;
+            return outfitStartIdx;
         }
     }
 
@@ -518,17 +518,17 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int pageIdx = 0)
+    public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int outfitIdx = 0)
     {
         //this.ownerId = userID;
         this.ownerIdx = userIdx;
         this.ownerGender = userGender;
         this.outfits = outfits;
-        this.outfitPageIdx = pageIdx;
+        this.outfitStartIdx = outfitIdx;
 
         numberPages = Mathf.CeilToInt((float)outfits.Count / ClosetManager.NUMBER_CLOSET_ITEMS);
 
-        SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
+        SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
 
         topArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
         bottomArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
@@ -545,7 +545,7 @@ public class Closet : MonoBehaviour {
         ownerIdx = -1;
         ownerGender = User.Gender.None;
         outfits = null;
-        outfitPageIdx = 0;
+        outfitStartIdx = 0;
         lastSelectedOutfit = null;
     }
 
@@ -563,7 +563,7 @@ public class Closet : MonoBehaviour {
         ownerGender = User.Gender.None;
         if(outfits != null)
             outfits.Clear();
-        outfitPageIdx = 0;
+        outfitStartIdx = 0;
         lastSelectedOutfit = null;
         isActive = false;
         activateIcon.gameObject.SetActive(false);
@@ -571,20 +571,26 @@ public class Closet : MonoBehaviour {
 
     public void PageUp()
     {
-        outfitPageIdx++;
-        if (outfitPageIdx >= numberPages)
-            outfitPageIdx = 0;
+        for (int i = 0; i < ClosetManager.NUMBER_CLOSET_ITEMS; i++)
+        {
+            outfitStartIdx--;
+            if (outfitStartIdx < 0)
+                outfitStartIdx = outfits.Count - 1;
+        }
 
-        SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
+        SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
     }
 
     public void PageDown()
     {
-        outfitPageIdx--;
-        if (outfitPageIdx < 0)
-            outfitPageIdx = numberPages - 1;
+        for(int i=0; i<ClosetManager.NUMBER_CLOSET_ITEMS; i++)
+        {
+            outfitStartIdx++;
+            if (outfitStartIdx >= outfits.Count)
+                outfitStartIdx = 0;
+        }
 
-        SetClosetImages(GetDisplayedOutfits(outfits, outfitPageIdx));
+        SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
     }
 
     private void SetClosetImages(List<Outfit> outfits)
@@ -697,17 +703,16 @@ public class Closet : MonoBehaviour {
             idleElapsedTime += Time.deltaTime;
     }
 
-    List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int displayedPage)
+    List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int startOutfitIndex)
     {
         List<Outfit> dOutfits = new List<Outfit>();
         for (int i = 0; i < ClosetManager.NUMBER_CLOSET_ITEMS; i++)
         {
-            dOutfits.Add(displayedOutfits[(displayedPage * ClosetManager.NUMBER_CLOSET_ITEMS + i) % displayedOutfits.Count]);
+            dOutfits.Add(displayedOutfits[(startOutfitIndex + i )% displayedOutfits.Count]);
         }
 
         return dOutfits;
     }
-
 
     void GetUserPointingScreenPoints(Side closetSide, long ownerID, out Vector3 from, out Vector3 to, out Vector3 spineShoulder)
     {
