@@ -4535,8 +4535,9 @@ public class KinectManager : MonoBehaviour
 			int iAllJointsCount = sensorData.jointCount;
 			bool[] playerJointsTracked = new bool[iAllJointsCount];
 			Vector3[] playerJointsPos = new Vector3[iAllJointsCount];
-			
-			int[] aiNeededJointIndexes = gestureManager.GetNeededJointIndexes(instance);
+            Vector3[] playerJointsVel = new Vector3[iAllJointsCount];
+
+            int[] aiNeededJointIndexes = gestureManager.GetNeededJointIndexes(instance);
 			int iNeededJointsCount = aiNeededJointIndexes.Length;
 			
 			for(int i = 0; i < iNeededJointsCount; i++)
@@ -4547,6 +4548,7 @@ public class KinectManager : MonoBehaviour
 				{
 					playerJointsTracked[joint] = IsJointTracked(UserId, joint);
 					playerJointsPos[joint] = GetJointPosition(UserId, joint);
+                    playerJointsVel[joint] = GetJointVelocity(UserId, joint);
 
 					if (!playerJointsTracked[joint] && (joint == (int)KinectInterop.JointType.SpineShoulder) && 
 						IsJointTracked(UserId, (int)KinectInterop.JointType.ShoulderLeft) && IsJointTracked(UserId, (int)KinectInterop.JointType.ShoulderRight)) 
@@ -4572,7 +4574,7 @@ public class KinectManager : MonoBehaviour
 					!IsConflictingGestureInProgress(gestureData, ref gesturesData))
 				{
 					gestureManager.CheckForGesture(UserId, ref gestureData, Time.realtimeSinceStartup, 
-						ref playerJointsPos, ref playerJointsTracked);
+						ref playerJointsTracked, ref playerJointsPos, playerJointsVel);
 					gesturesData[g] = gestureData;
 
 					if(gestureData.complete)
@@ -4696,7 +4698,7 @@ public class KinectManager : MonoBehaviour
 		
 		// estimate the gesture progess
 		gestureManager.CheckForGesture(UserId, ref gestureData, Time.realtimeSinceStartup, 
-			ref playerJointsPos, ref playerJointsTracked);
+			ref playerJointsTracked, ref playerJointsPos);
 		playerCalibrationData[UserId] = gestureData;
 
 		// check if gesture is complete

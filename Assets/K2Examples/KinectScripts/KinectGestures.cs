@@ -26,7 +26,7 @@ public interface GestureManagerInterface
 	/// <param name="timestamp">Current time</param>
 	/// <param name="jointsPos">Joints-position array</param>
 	/// <param name="jointsTracked">Joints-tracked array</param>
-	void CheckForGesture (long userId, ref KinectGestures.GestureData gestureData, float timestamp, ref Vector3[] jointsPos, ref bool[] jointsTracked);
+	void CheckForGesture (long userId, ref KinectGestures.GestureData gestureData, float timestamp, ref bool[] jointsTracked, ref Vector3[] jointsPos, Vector3 [] jointsVel = null);
 }
 
 
@@ -349,7 +349,7 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 	/// <param name="timestamp">Current time</param>
 	/// <param name="jointsPos">Joints-position array</param>
 	/// <param name="jointsTracked">Joints-tracked array</param>
-	public virtual void CheckForGesture(long userId, ref GestureData gestureData, float timestamp, ref Vector3[] jointsPos, ref bool[] jointsTracked)
+	public virtual void CheckForGesture(long userId, ref GestureData gestureData, float timestamp, ref bool[] jointsTracked, ref Vector3[] jointsPos, Vector3 [] jointsVel = null)
 	{
 		if(gestureData.complete)
 			return;
@@ -570,20 +570,22 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 
 			// check for Wave
 			case Gestures.Wave:
-				switch(gestureData.state)
-				{
+                switch (gestureData.state)
+				{       
 					case 0:  // gesture detection - phase 1
 						if(jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
 					       (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f &&
-					       (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > 0.05f)
+					       (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > 0.05f &&
+                           Mathf.Abs(jointsVel[rightHandIndex].x) > 0.5f)
 						{
 							SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
 							gestureData.progress = 0.3f;
 						}
 						else if(jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
 					            (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
-					            (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -0.05f)
-						{
+					            (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -0.05f &&
+                                 Mathf.Abs(jointsVel[leftHandIndex].x) > 0.5f) 
+                        {
 							SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
 							gestureData.progress = 0.3f;
 						}
@@ -592,15 +594,18 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 					case 1:  // gesture - phase 2
 						if((timestamp - gestureData.timestamp) < 1.5f)
 						{
-							bool isInPose = gestureData.joint == rightHandIndex ?
-								jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
-								(jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f && 
-								(jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -0.05f :
-								jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
-								(jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
-								(jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > 0.05f;
-				
-							if(isInPose)
+                            bool isInPose = gestureData.joint == rightHandIndex ?
+                                jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
+                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f &&
+                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -0.05f &&
+                                Mathf.Abs(jointsVel[rightHandIndex].x) > 0.5f :
+                                jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
+                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
+                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > 0.05f &&
+                                Mathf.Abs(jointsVel[leftHandIndex].x) > 0.5f;
+
+
+                            if (isInPose)
 							{
 								gestureData.timestamp = timestamp;
 								gestureData.state++;
@@ -617,15 +622,17 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 					case 2:  // gesture phase 3 = complete
 						if((timestamp - gestureData.timestamp) < 1.5f)
 						{
-							bool isInPose = gestureData.joint == rightHandIndex ?
-								jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
-								(jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f && 
-								(jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > 0.05f :
-								jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
-								(jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
-								(jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -0.05f;
+                            bool isInPose = gestureData.joint == rightHandIndex ?
+                                jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
+                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f &&
+                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > 0.05f &&
+                                Mathf.Abs(jointsVel[rightHandIndex].x) > 0.5f :
+                                jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
+                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
+                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -0.05f &&
+                                Mathf.Abs(jointsVel[leftHandIndex].x) > 0.5f;
 
-							if(isInPose)
+                            if (isInPose)
 							{
 								Vector3 jointPos = jointsPos[gestureData.joint];
 								CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, 0f);
