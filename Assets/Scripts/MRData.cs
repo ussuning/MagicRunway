@@ -116,7 +116,7 @@ public class MRData : Singleton<MRData>
             {
                 try
                 {
-                    Outfit outfit = dicOutfits[outfitid];
+                    Outfit outfit = ExtractAutoModeOutfit(dicOutfits[outfitid]);
                     collection.outfits.Add(outfit);
                 }
                 catch
@@ -125,5 +125,26 @@ public class MRData : Singleton<MRData>
                 }
             }
         }
+        Debug.Log("Check");
+    }
+
+    private Outfit ExtractAutoModeOutfit(Outfit orig)
+    {
+        if (orig.prefab.Contains("_live"))
+        {
+            Outfit autoOutfit = new Outfit();
+            autoOutfit.id = orig.id;
+            autoOutfit.name = orig.name;
+            autoOutfit.sex = orig.sex;
+            autoOutfit.desc = orig.desc;
+            autoOutfit.prefab = orig.prefab.Remove(orig.prefab.IndexOf("_live"));
+            autoOutfit.icon = orig.icon;
+            autoOutfit.wearableids = orig.wearableids;
+            autoOutfit.wearables = orig.wearables;
+
+            return autoOutfit;
+        }
+
+        return orig;
     }
 }
