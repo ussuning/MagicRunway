@@ -149,6 +149,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         yield return new WaitForSeconds(waitToStart);
         UIManager.Instance.HideCollectionTitle(true);
         yield return PresentRunwayModel();
+        runwayEventManager.RunwayMidExit.GetComponent<BoxCollider>().enabled = false; // disable RunwayMidExit until RunwayEnd has been reached.
     }
 
     IEnumerator LoadAndPrepareModels()
@@ -315,11 +316,13 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private void OnRunwayMidExit(Collider other) {
         QueueUp();
+        runwayEventManager.RunwayMidExit.GetComponent<BoxCollider>().enabled = false;
     }
 
     private void OnRunwayEndEnter(Collider other)
     {
         UIManager.Instance.ShowOutfit(showcaseManager.GetCurrentOutfit());
+        runwayEventManager.RunwayMidExit.GetComponent<BoxCollider>().enabled = true;
     }
 
     private void OnRunwayEndExit(Collider other) {
