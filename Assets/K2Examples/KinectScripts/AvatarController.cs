@@ -925,6 +925,16 @@ public class AvatarController : MonoBehaviour
                 boneTransform.position = shoulderCenter + dirShoulderFromCenter * shoulderWidthFactor;
                 boneTransform.position += GetShoulderVerticalOffset(joint);
                 break;
+
+            case KinectInterop.JointType.FootLeft:
+            case KinectInterop.JointType.FootRight:
+                // Move the ankle down to the toebase (fix for models wearing heels with lifted ankles, which causes shins to become shortened).
+                Vector3 kneePos = boneTransform.parent.position;
+                Vector3 toePos = boneTransform.GetChild(0).position;
+                Vector3 projection = Vector3.Project(toePos - kneePos, boneTransform.position - kneePos);
+                Vector3 adjustedAnklePos = kneePos + projection;
+                boneTransform.position = adjustedAnklePos;
+                break;
         }
 
         boneTransform.position = Vector3.Lerp(oldPos, boneTransform.position, 0.65f);
