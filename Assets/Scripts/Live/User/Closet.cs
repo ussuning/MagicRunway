@@ -24,7 +24,9 @@ public class Closet : MonoBehaviour {
     public float showDistanceX = 100f;
 
     public float idleTime = 3f;
+    public float tutorialMinTime = 2f;
 
+    public GameObject SelectionTutorialIcon;
     public ImageProgress activateIcon;
     public Camera jointCamera;
 
@@ -118,6 +120,9 @@ public class Closet : MonoBehaviour {
     private bool isShowing = false;
     private float hidingStartTime = 0;
     private float showingStartTime = 0;
+
+    private bool isTutorialDone = false;
+    private float tutorialTimeElapsed = 0f;
 
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
@@ -225,6 +230,8 @@ public class Closet : MonoBehaviour {
         isShowing = false;
         idleElapsedTime = 0f;
 
+        SelectionTutorialIcon.SetActive(false);
+
         canvas = GetComponentInParent<Canvas>();
     }
 
@@ -241,6 +248,11 @@ public class Closet : MonoBehaviour {
         {
             if (!isHidden && !isHiding)
             {
+                if(!isTutorialDone)
+                {
+                    tutorialTimeElapsed += Time.deltaTime;
+                }
+
                 if (kinect && kinect.IsInitialized())
                 {
                     if (kinect.IsUserTracked(OwnerID))
@@ -503,6 +515,11 @@ public class Closet : MonoBehaviour {
         }
 
         activateIcon.SetProgressValue(0f);
+
+        if (!isTutorialDone)
+            SelectionTutorialIcon.SetActive(true);
+        else if (SelectionTutorialIcon.activeSelf)
+            SelectionTutorialIcon.SetActive(false);
     }
 
     public void Hide()
@@ -514,6 +531,9 @@ public class Closet : MonoBehaviour {
             isShowing = false;
             hidingStartTime = Time.time;
         }
+
+        if (SelectionTutorialIcon.activeSelf)
+            SelectionTutorialIcon.SetActive(false);
     }
 
     public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int outfitIdx = 0)
@@ -530,6 +550,13 @@ public class Closet : MonoBehaviour {
         bottomArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
         foreach (ClosetItem item in OutfitItems)
             item.animator.SetBool("isLeft", ClosetSide == Side.Left);
+
+        if (!isActive)
+        {
+            SelectionTutorialIcon.SetActive(true);
+            isTutorialDone = false;
+            tutorialTimeElapsed = 0f;
+        }
 
         activateIcon.gameObject.SetActive(true);
         isActive = true;
@@ -670,7 +697,17 @@ public class Closet : MonoBehaviour {
     {
         ClosetOutfitItem outfit = hoveredItem as ClosetOutfitItem;
         if (outfit == null || outfit.outfit != lastSelectedOutfit)
+        {
             hoveredItem.OnItemHover();
+
+            if (tutorialTimeElapsed >= tutorialMinTime)
+            {
+                if (SelectionTutorialIcon.activeSelf)
+                    SelectionTutorialIcon.SetActive(false);
+                if (!isTutorialDone)
+                    isTutorialDone = true;
+            }
+        }
 
         if (hoveredItem != topArrow)
             topArrow.OnItemUnselected();
