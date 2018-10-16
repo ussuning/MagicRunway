@@ -735,7 +735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1607701160806110
 GameObject:
   m_ObjectHideFlags: 1
@@ -2105,7 +2105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b4f02e8bf6f4bb88c720bcc618e4d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alphaMap: {fileID: 2800000, guid: 1627734e0cf1e7e47a1e5df0863bf974, type: 3}
+  alphaMap: {fileID: 2800000, guid: ad029e9cd8f754fa4a37fdb13bc34578, type: 3}
   alphaMap2: {fileID: 0}
   alphaMap3: {fileID: 0}
   alphaMap4: {fileID: 0}
@@ -2318,6 +2318,7 @@ SkinnedMeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: d3b64f1186b2a9a4ea1b8cac14c30259, type: 2}
   - {fileID: 2100000, guid: 7bb5e2c863fd048409151b2673b14342, type: 2}
+  - {fileID: 2100000, guid: 1c9def176cf424fdd92980403b256d19, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
