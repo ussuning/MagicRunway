@@ -212,6 +212,14 @@ public class Closet : MonoBehaviour {
         {
             lastSelectedOutfit = outfitItem.outfit;
         }
+
+        if (tutorialTimeElapsed >= tutorialMinTime)
+        {
+            if (SelectionTutorialIcon.activeSelf)
+                SelectionTutorialIcon.SetActive(false);
+            if (!isTutorialDone)
+                isTutorialDone = true;
+        }
     }
 
     void Start ()
@@ -320,7 +328,7 @@ public class Closet : MonoBehaviour {
                 }
             }
 
-            if(idleElapsedTime >= idleTime)
+            if(isTutorialDone && idleElapsedTime >= idleTime)
             {
                 Hide();
                 idleElapsedTime = 0f;
@@ -699,14 +707,6 @@ public class Closet : MonoBehaviour {
         if (outfit == null || outfit.outfit != lastSelectedOutfit)
         {
             hoveredItem.OnItemHover();
-
-            if (tutorialTimeElapsed >= tutorialMinTime)
-            {
-                if (SelectionTutorialIcon.activeSelf)
-                    SelectionTutorialIcon.SetActive(false);
-                if (!isTutorialDone)
-                    isTutorialDone = true;
-            }
         }
 
         if (hoveredItem != topArrow)
