@@ -1029,7 +1029,7 @@ public class AvatarController : MonoBehaviour
 
         boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);
     }
-
+    
     // Apply the rotations tracked by kinect to the joints.
     protected void ScaleBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
@@ -1077,29 +1077,44 @@ public class AvatarController : MonoBehaviour
             //    boneTransform.localScale = new Vector3(boneTransform.localScale.x, forearmLength / origForearmLength, boneTransform.localScale.z);
             //    break;
             case KinectInterop.JointType.HipLeft:
-                float thighLength = (boneTransform.position - GetTranslatedBonePos(KinectInterop.JointType.KneeLeft)).magnitude;
-                float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] -
-                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
-                //Debug.Log("hipLeftY scale = " + (thighLength / origThighLength));
-                boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
-                // Unscale child bone
-                Transform kneeLeft = boneTransform.GetChild(0);
-                resetJointScale(ref kneeLeft);
+                {
+                    float thighLength = (boneTransform.position - boneTransform.GetChild(0).position).magnitude;
+                    float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
+                    //Debug.Log("hipLeftY scale = " + (thighLength / origThighLength));
+                    float yScaleFactor = thighLength / origThighLength;
+                    boneTransform.localScale = new Vector3(
+                        Mathf.Lerp(boneTransform.localScale.x, yScaleFactor, 0.5f),
+                        yScaleFactor,
+                        Mathf.Lerp(boneTransform.localScale.z, yScaleFactor, 0.5f));
+                    // Unscale child bone
+                    Transform kneeLeft = boneTransform.GetChild(0);
+                    resetJointScale(ref kneeLeft);
+                }
                 break;
             case KinectInterop.JointType.HipRight:
-                thighLength = (boneTransform.position - GetTranslatedBonePos(KinectInterop.JointType.KneeRight)).magnitude;
-                origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipRight]] -
-                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeRight]]).magnitude;
-                boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
-                // Unscale child bone
-                Transform kneeRight = boneTransform.GetChild(0);
-                resetJointScale(ref kneeRight);
+                {
+                    float thighLength = (boneTransform.position - boneTransform.GetChild(0).position).magnitude;
+                    float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipRight]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeRight]]).magnitude;
+                    //boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
+                    float yScaleFactor = thighLength / origThighLength;
+                    boneTransform.localScale = new Vector3(
+                        Mathf.Lerp(boneTransform.localScale.x, yScaleFactor, 0.5f),
+                        yScaleFactor,
+                        Mathf.Lerp(boneTransform.localScale.z, yScaleFactor, 0.5f));
+                    // Unscale child bone
+                    Transform kneeRight = boneTransform.GetChild(0);
+                    resetJointScale(ref kneeRight);
+                }
                 break;
         }
 
         boneTransform.localScale = Vector3.Lerp(oldScale, boneTransform.localScale, 0.65f);
 
     }
+
+    float maxThighLength = 0f;
 
     protected void resetJointScale(ref Transform joint)
     {
