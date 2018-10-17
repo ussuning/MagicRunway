@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MR;
-using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -26,7 +25,6 @@ public class Closet : MonoBehaviour {
     public float idleTime = 3f;
     public float tutorialMinTime = 2f;
 
-    //public GameObject SelectionTutorialIcon;
     public OutfitSelectionTutorialController selectionTutorial;
     public ImageProgress activateIcon;
     public Camera jointCamera;
@@ -122,9 +120,6 @@ public class Closet : MonoBehaviour {
     private float hidingStartTime = 0;
     private float showingStartTime = 0;
 
-    //private bool isTutorialDone = false;
-    //private float tutorialTimeElapsed = 0f;
-
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
@@ -134,6 +129,10 @@ public class Closet : MonoBehaviour {
     private Vector3 shownPos;
     private Vector3 hiddenPos;
     private float idleElapsedTime = 0f;
+
+    Vector3 lastFromScreenPt;
+    Vector3 lastToScreenPt;
+    Vector3 lastSpineShoulderPt;
 
     KinectManager kinect;
 
@@ -203,7 +202,7 @@ public class Closet : MonoBehaviour {
     private void OnDestroy()
     {
         foreach (ClosetOutfitItem outfitItem in OutfitItems)
-            outfitItem.OnItemSelectedEvent -= OnItemOutfitItemSelected;
+            outfitItem.OnItemSelectedEvent -= OnItemOutfitItemSelected;   
     }
 
     private void OnItemOutfitItemSelected(ClosetItem closetItem)
@@ -214,13 +213,6 @@ public class Closet : MonoBehaviour {
             lastSelectedOutfit = outfitItem.outfit;
         }
 
-        //if (tutorialTimeElapsed >= tutorialMinTime)
-        //{
-        //    if (SelectionTutorialIcon.activeSelf)
-        //        SelectionTutorialIcon.SetActive(false);
-        //    if (!isTutorialDone)
-        //        isTutorialDone = true;
-        //}
         selectionTutorial.EndTutorial();
     }
 
@@ -240,8 +232,6 @@ public class Closet : MonoBehaviour {
         isShowing = false;
         idleElapsedTime = 0f;
 
-        //SelectionTutorialIcon.SetActive(false);
-
         canvas = GetComponentInParent<Canvas>();
     }
 
@@ -258,28 +248,20 @@ public class Closet : MonoBehaviour {
         {
             if (!isHidden && !isHiding)
             {
-                //if(!isTutorialDone)
-                //{
-                //    tutorialTimeElapsed += Time.deltaTime;
-                //}
-
                 if (kinect && kinect.IsInitialized())
                 {
                     if (kinect.IsUserTracked(OwnerID))
                     {
                         // First, get Screen points
-                        Vector3 fromScreenPt;
-                        Vector3 toScreenPt;
-                        Vector3 spineShoulderPt;
-                        GetUserPointingScreenPoints(ClosetSide, OwnerID, out fromScreenPt, out toScreenPt, out spineShoulderPt);
+                        GetUserPointingScreenPoints(ClosetSide, OwnerID, ref lastFromScreenPt, ref lastToScreenPt, ref lastSpineShoulderPt);
                         // Second, convert from Screen Pt to Canvas Pt
-                        Vector2 fromLocal = ScreenPtToCanvasPt(fromScreenPt);
+                        Vector2 fromLocal = ScreenPtToCanvasPt(lastFromScreenPt);
                         if (pointFrom != null)
                             pointFrom.anchoredPosition = fromLocal;
-                        Vector2 toLocal = ScreenPtToCanvasPt(toScreenPt);
+                        Vector2 toLocal = ScreenPtToCanvasPt(lastToScreenPt);
                         if (pointTo != null)
                             pointTo.anchoredPosition = toLocal;
-                        Vector2 spineShoulderLocal = ScreenPtToCanvasPt(spineShoulderPt);
+                        Vector2 spineShoulderLocal = ScreenPtToCanvasPt(lastSpineShoulderPt);
                         if (pointSpine != null)
                             pointSpine.anchoredPosition = spineShoulderLocal;
 
@@ -330,7 +312,7 @@ public class Closet : MonoBehaviour {
                 }
             }
 
-            if(selectionTutorial.IsTutorialFinished && idleElapsedTime >= idleTime)
+            if (selectionTutorial.IsTutorialFinished && idleElapsedTime >= idleTime)
             {
                 Hide();
                 idleElapsedTime = 0f;
@@ -376,7 +358,6 @@ public class Closet : MonoBehaviour {
                     Mathf.Clamp(offsetTransform.anchoredPosition.x + canvasPixelWidth / 3.0f, -canvasPixelWidth * 0.5f, 0),
                     offsetTransform.anchoredPosition.y);
             }
-
         }
 
         // Smooth it.
@@ -526,10 +507,6 @@ public class Closet : MonoBehaviour {
 
         activateIcon.SetProgressValue(0f);
 
-        //if (!isTutorialDone)
-        //    SelectionTutorialIcon.SetActive(true);
-        //else if (SelectionTutorialIcon.activeSelf)
-        //    SelectionTutorialIcon.SetActive(false);
         selectionTutorial.ShowTutorial();
     }
 
@@ -543,12 +520,10 @@ public class Closet : MonoBehaviour {
             hidingStartTime = Time.time;
         }
 
-        //if (SelectionTutorialIcon.activeSelf)
-        //    SelectionTutorialIcon.SetActive(false);
         selectionTutorial.HideTutorial();
     }
 
-    public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int outfitIdx = 0)
+    public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, bool isTutorialFinished = false, int outfitIdx = 0)
     {
         //this.ownerId = userID;
         this.ownerIdx = userIdx;
@@ -563,12 +538,13 @@ public class Closet : MonoBehaviour {
         foreach (ClosetItem item in OutfitItems)
             item.animator.SetBool("isLeft", ClosetSide == Side.Left);
 
-        if (!isActive)
+        if (!isTutorialFinished)
         {
-            //SelectionTutorialIcon.SetActive(true);
-            //isTutorialDone = false;
-            //tutorialTimeElapsed = 0f;
             selectionTutorial.StartTutorial();
+        }
+        else
+        {
+            selectionTutorial.EndTutorial(true);
         }
 
         activateIcon.gameObject.SetActive(true);
@@ -587,6 +563,7 @@ public class Closet : MonoBehaviour {
 
     public void Clear(bool resetPos = false)
     {
+        selectionTutorial.ResetTutorial();
         if(resetPos)
             rectTrans.anchoredPosition = hiddenPos;
         isHidden = true;
@@ -752,31 +729,36 @@ public class Closet : MonoBehaviour {
         return dOutfits;
     }
 
-    void GetUserPointingScreenPoints(Side closetSide, long ownerID, out Vector3 from, out Vector3 to, out Vector3 spineShoulder)
+    void GetUserPointingScreenPoints(Side closetSide, long ownerID, ref Vector3 from, ref Vector3 to, ref Vector3 spineShoulder)
     {
         Vector2 wristPos2D;
         Vector2 elbowPos2D;
         Vector2 spineShoulder2D;
+        Vector3 wristPos;
+        Vector3 elbowPos;
         if (closetSide == Closet.Side.Left)
         {
-            Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristLeft);
-            Vector3 elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowLeft);
+            wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristLeft);
+            elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowLeft);
             wristPos2D = jointCamera.WorldToScreenPoint(wristPos);
             elbowPos2D = jointCamera.WorldToScreenPoint(elbowPos);
         }
         else // (closetSide == Closet.Side.Right)
         {
-            Vector3 wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristRight);
-            Vector3 elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowRight);
+            wristPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.WristRight);
+            elbowPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.ElbowRight);
             wristPos2D = jointCamera.WorldToScreenPoint(wristPos);
             elbowPos2D = jointCamera.WorldToScreenPoint(elbowPos);
         }
         Vector3 spineShoulderPos = kinect.GetJointPosition(ownerID, (int)KinectInterop.JointType.SpineMid);
         spineShoulder2D = jointCamera.WorldToScreenPoint(spineShoulderPos);
 
-        to = wristPos2D;
-        from = elbowPos2D;
-        spineShoulder = spineShoulder2D;
+        if (wristPos != Vector3.zero)
+            to = wristPos2D;
+        if (elbowPos != Vector3.zero)
+            from = elbowPos2D;
+        if (spineShoulderPos != Vector3.zero)
+            spineShoulder = spineShoulder2D;
     }
 
 }
