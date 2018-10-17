@@ -17,6 +17,11 @@ public class ScrollingVideoWall : MonoBehaviour {
         videoMaterial = mats[1];
     }
 
+    private void OnDestroy()
+    {
+        videoMaterial.mainTextureOffset = Vector2.zero;
+    }
+
     public void Run()
     {
         isRunning = true;
