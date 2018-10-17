@@ -21,10 +21,7 @@ public class OutfitSelectionTutorialController : MonoBehaviour {
 
 	void Start ()
     {
-        isTutorialStarted = false;
-        isTutorialFinished = false;
-        tutorialTimeElapsed = 0f;
-        TutorialGO.SetActive(false);
+        ResetTutorial();
     }
 
     void Update()
@@ -35,6 +32,14 @@ public class OutfitSelectionTutorialController : MonoBehaviour {
         }
     }
 
+    public void ResetTutorial()
+    {
+        isTutorialStarted = false;
+        isTutorialFinished = false;
+        tutorialTimeElapsed = 0f;
+        TutorialGO.SetActive(false);
+    }
+
     public void StartTutorial()
     {
         isTutorialStarted = true;
@@ -43,9 +48,9 @@ public class OutfitSelectionTutorialController : MonoBehaviour {
         TutorialGO.SetActive(true);
     }
 
-    public void EndTutorial()
+    public void EndTutorial(bool force=false)
     {
-        if(!isTutorialFinished && tutorialTimeElapsed >= MinTutorialTime)
+        if(tutorialTimeElapsed >= MinTutorialTime || force)
         {
             isTutorialFinished = true;
             TutorialGO.SetActive(false);
