@@ -26,7 +26,8 @@ public class Closet : MonoBehaviour {
     public float idleTime = 3f;
     public float tutorialMinTime = 2f;
 
-    public GameObject SelectionTutorialIcon;
+    //public GameObject SelectionTutorialIcon;
+    public OutfitSelectionTutorialController selectionTutorial;
     public ImageProgress activateIcon;
     public Camera jointCamera;
 
@@ -121,8 +122,8 @@ public class Closet : MonoBehaviour {
     private float hidingStartTime = 0;
     private float showingStartTime = 0;
 
-    private bool isTutorialDone = false;
-    private float tutorialTimeElapsed = 0f;
+    //private bool isTutorialDone = false;
+    //private float tutorialTimeElapsed = 0f;
 
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
@@ -212,6 +213,15 @@ public class Closet : MonoBehaviour {
         {
             lastSelectedOutfit = outfitItem.outfit;
         }
+
+        //if (tutorialTimeElapsed >= tutorialMinTime)
+        //{
+        //    if (SelectionTutorialIcon.activeSelf)
+        //        SelectionTutorialIcon.SetActive(false);
+        //    if (!isTutorialDone)
+        //        isTutorialDone = true;
+        //}
+        selectionTutorial.EndTutorial();
     }
 
     void Start ()
@@ -230,7 +240,7 @@ public class Closet : MonoBehaviour {
         isShowing = false;
         idleElapsedTime = 0f;
 
-        SelectionTutorialIcon.SetActive(false);
+        //SelectionTutorialIcon.SetActive(false);
 
         canvas = GetComponentInParent<Canvas>();
     }
@@ -248,10 +258,10 @@ public class Closet : MonoBehaviour {
         {
             if (!isHidden && !isHiding)
             {
-                if(!isTutorialDone)
-                {
-                    tutorialTimeElapsed += Time.deltaTime;
-                }
+                //if(!isTutorialDone)
+                //{
+                //    tutorialTimeElapsed += Time.deltaTime;
+                //}
 
                 if (kinect && kinect.IsInitialized())
                 {
@@ -320,7 +330,7 @@ public class Closet : MonoBehaviour {
                 }
             }
 
-            if(idleElapsedTime >= idleTime)
+            if(selectionTutorial.IsTutorialFinished && idleElapsedTime >= idleTime)
             {
                 Hide();
                 idleElapsedTime = 0f;
@@ -516,10 +526,11 @@ public class Closet : MonoBehaviour {
 
         activateIcon.SetProgressValue(0f);
 
-        if (!isTutorialDone)
-            SelectionTutorialIcon.SetActive(true);
-        else if (SelectionTutorialIcon.activeSelf)
-            SelectionTutorialIcon.SetActive(false);
+        //if (!isTutorialDone)
+        //    SelectionTutorialIcon.SetActive(true);
+        //else if (SelectionTutorialIcon.activeSelf)
+        //    SelectionTutorialIcon.SetActive(false);
+        selectionTutorial.ShowTutorial();
     }
 
     public void Hide()
@@ -532,8 +543,9 @@ public class Closet : MonoBehaviour {
             hidingStartTime = Time.time;
         }
 
-        if (SelectionTutorialIcon.activeSelf)
-            SelectionTutorialIcon.SetActive(false);
+        //if (SelectionTutorialIcon.activeSelf)
+        //    SelectionTutorialIcon.SetActive(false);
+        selectionTutorial.HideTutorial();
     }
 
     public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, int outfitIdx = 0)
@@ -553,9 +565,10 @@ public class Closet : MonoBehaviour {
 
         if (!isActive)
         {
-            SelectionTutorialIcon.SetActive(true);
-            isTutorialDone = false;
-            tutorialTimeElapsed = 0f;
+            //SelectionTutorialIcon.SetActive(true);
+            //isTutorialDone = false;
+            //tutorialTimeElapsed = 0f;
+            selectionTutorial.StartTutorial();
         }
 
         activateIcon.gameObject.SetActive(true);
@@ -699,14 +712,6 @@ public class Closet : MonoBehaviour {
         if (outfit == null || outfit.outfit != lastSelectedOutfit)
         {
             hoveredItem.OnItemHover();
-
-            if (tutorialTimeElapsed >= tutorialMinTime)
-            {
-                if (SelectionTutorialIcon.activeSelf)
-                    SelectionTutorialIcon.SetActive(false);
-                if (!isTutorialDone)
-                    isTutorialDone = true;
-            }
         }
 
         if (hoveredItem != topArrow)
