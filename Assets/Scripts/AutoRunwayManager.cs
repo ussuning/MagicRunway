@@ -374,8 +374,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         long neoClosestUserId = CheckUsersZPosition();
 
         // Only log when closestUserId first goes to 0
-        if (neoClosestUserId == 0 && closestUserId != 0 )
-            Debug.Log("No More ClosestUserId! Hiding!");
+        if (neoClosestUserId == 0 && closestUserId != 0)
+            Debug.Log("No More Users! Hiding Start Menu!");
 
         closestUserId = neoClosestUserId;
 
