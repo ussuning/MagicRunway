@@ -64,7 +64,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager> {
         {
             string platform = "/"; ///StandaloneWindows
             string fullFilePath = Application.streamingAssetsPath + platform + name;
-            Debug.Log("Loading AssetBundle at " + fullFilePath);
+            //Debug.Log("Loading AssetBundle at " + fullFilePath);
             AssetBundle myLoadedAssetBundle = AssetBundle.LoadFromFile(fullFilePath);
             if (myLoadedAssetBundle == null)
             {
@@ -87,7 +87,7 @@ public class AssetBundleManager : Singleton<AssetBundleManager> {
 
     internal GameObject GetModelAsset(string modelName)
     {
-        Debug.Log("Loading model " + modelName);
+        //Debug.Log("Loading model " + modelName);
         return modelsBundleManager.LoadAsset<GameObject>(modelName);
     }
 }
@@ -115,7 +115,7 @@ public class MultiBundleManager
                 string [] abAssetParts = abAsset.Split('/');
                 string abAssetName = abAssetParts[abAssetParts.Length - 1];
                 string assetName = abAssetName.Split('.')[0]; // remove extension
-                Debug.Log(assetName + " -> " + abEnum);
+                //Debug.Log(assetName + " -> " + abEnum);
                 lookup.Add(assetName, abEnum);
             }
         }

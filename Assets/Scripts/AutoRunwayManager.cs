@@ -37,6 +37,8 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     private AudioSource sfx;
 
+    long closestUserId;
+
     //private float waveInactivityTime = 10.0f;
 
     void Awake()
@@ -369,56 +371,58 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (isModeActive == false)
             return;
 
-        long userId = KinectManager.Instance.GetPrimaryUserID();
+        long neoClosestUserId = CheckUsersZPosition();
 
-        if (userId == 0)
-        {
+        // Only log when closestUserId first goes to 0
+        if (neoClosestUserId == 0 && closestUserId != 0 )
+            Debug.Log("No More ClosestUserId! Hiding!");
+
+        closestUserId = neoClosestUserId;
+
+        if (closestUserId == 0)
             HideStart();
-            return;
-        }
-
-        long newPrimeUserId = CheckUsersZPosition();
-
-        if (newPrimeUserId == 0)
-            return;
-
-        AppointNewPrimeUser(newPrimeUserId);
+        else
+            AppointNewPrimeUser(closestUserId);
     }
 
     private long CheckUsersZPosition()
     {
-        if (KinectManager.Instance.GetUsersCount() <= 1)
+        List<long> allUserIds = KinectManager.Instance.GetAllUserIds();
+
+        if (allUserIds == null || allUserIds.Count == 0)
             return 0;
 
-        Vector3 primePos = KinectManager.Instance.GetUserPosition(KinectManager.Instance.GetPrimaryUserID());
-
-        int amount = KinectManager.Instance.GetAllUserIds().Count;
-        
-        for (int x = 0; x < amount; x++)
+        float lowestZ = float.MaxValue;
+        long closestId = 0;
+        foreach (long userId in allUserIds)
         {
-            long userId = KinectManager.Instance.GetUserIdByIndex(x);
-
             if (userId == 0)
+            {
+                Debug.LogError("userId from KinectManger.GetALLUserIds is ZERO! WTF!");
                 continue;
+            }
 
             Vector3 pos = KinectManager.Instance.GetUserPosition(userId);
 
-            if(pos.z < primePos.z)
-                return userId;
+            if (pos.z < lowestZ)
+            {
+                lowestZ = pos.z;
+                closestId = userId;
+            }
         }
         
-        return 0;
+        return closestId;
     }
 
     private void AppointNewPrimeUser(long userId)
     {
         long primerUserId = KinectManager.Instance.GetPrimaryUserID();
-        KinectManager.Instance.DeleteGesture(primerUserId, KinectGestures.Gestures.Wave);
-        KinectManager.Instance.DeleteGesture(primerUserId, KinectGestures.Gestures.Tpose);
+        //KinectManager.Instance.DeleteGesture(primerUserId, KinectGestures.Gestures.Wave);
+        //KinectManager.Instance.DeleteGesture(primerUserId, KinectGestures.Gestures.Tpose);
 
         KinectManager.Instance.SetPrimaryUserID(userId);
-        KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
-        KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Tpose);
+        //KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Wave);
+        //KinectManager.Instance.DetectGesture(userId, KinectGestures.Gestures.Tpose);
     }
 
     private void AddKinectGestures(long userId)
@@ -444,6 +448,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void UserDetected(long userId, int userIndex)
     {
+        Debug.LogError("UserDetected " + userId);
         if (isModeActive == false)
             return;
 
@@ -452,10 +457,10 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
         UIManager.Instance.ShowStartMenu(false);
         
-        if (userId == KinectManager.Instance.GetPrimaryUserID())
-        {
+        //if (userId == KinectManager.Instance.GetPrimaryUserID())
+        //{
             AddKinectGestures(userId);
-        }
+        //}
     }
 
     public void UserLost(long userId, int userIndex)

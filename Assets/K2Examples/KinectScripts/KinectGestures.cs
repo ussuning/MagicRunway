@@ -570,21 +570,25 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 
 			// check for Wave
 			case Gestures.Wave:
+                float yThresh = 0.0f; // originally 0.1f
+                float xThresh = 0.025f; // originally 0.05f;
+                float xVel = 0.015f; // originally 0.5f;
+                
                 switch (gestureData.state)
 				{       
 					case 0:  // gesture detection - phase 1
 						if(jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
-					       (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f &&
-					       (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > 0.05f &&
-                           Mathf.Abs(jointsVel[rightHandIndex].x) > 0.5f)
+					       (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
+					       (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh &&
+                           Mathf.Abs(jointsVel[rightHandIndex].x) > xVel)
 						{
 							SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
 							gestureData.progress = 0.3f;
 						}
 						else if(jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
-					            (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
-					            (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -0.05f &&
-                                 Mathf.Abs(jointsVel[leftHandIndex].x) > 0.5f) 
+					            (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
+					            (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh &&
+                                 Mathf.Abs(jointsVel[leftHandIndex].x) > xVel) 
                         {
 							SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
 							gestureData.progress = 0.3f;
@@ -596,13 +600,13 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 						{
                             bool isInPose = gestureData.joint == rightHandIndex ?
                                 jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
-                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f &&
-                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -0.05f &&
-                                Mathf.Abs(jointsVel[rightHandIndex].x) > 0.5f :
+                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
+                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -xThresh &&
+                                Mathf.Abs(jointsVel[rightHandIndex].x) > xVel :
                                 jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
-                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
-                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > 0.05f &&
-                                Mathf.Abs(jointsVel[leftHandIndex].x) > 0.5f;
+                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
+                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > xThresh &&
+                                Mathf.Abs(jointsVel[leftHandIndex].x) > xVel;
 
 
                             if (isInPose)
@@ -624,13 +628,13 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 						{
                             bool isInPose = gestureData.joint == rightHandIndex ?
                                 jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
-                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > 0.1f &&
-                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > 0.05f &&
-                                Mathf.Abs(jointsVel[rightHandIndex].x) > 0.5f :
+                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
+                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh &&
+                                Mathf.Abs(jointsVel[rightHandIndex].x) > xVel :
                                 jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
-                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > 0.1f &&
-                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -0.05f &&
-                                Mathf.Abs(jointsVel[leftHandIndex].x) > 0.5f;
+                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
+                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh &&
+                                Mathf.Abs(jointsVel[leftHandIndex].x) > xVel;
 
                             if (isInPose)
 							{
@@ -645,6 +649,7 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 						}
 						break;
 				}
+                
 				break;
 
 //			// check for Click
