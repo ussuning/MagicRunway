@@ -2527,25 +2527,38 @@ public class AvatarController : MonoBehaviour
             acName.Remove(cloneIdx);
 
         AvatarControllerEntry data = null;
-        if (acConfigData.entries.ContainsKey(this.name))
+        if (acConfigData.entries.ContainsKey(acName))
         {
-            data = acConfigData.entries[this.name];
+            data = acConfigData.entries[acName];
         }
         else
         {
-            Debug.LogWarning("Unable to find tuning values for " + this.name);
-            // Load default male or female tuning values.
-            string[] parts = this.name.Split('_');
-            string gender = parts[2].ToLower();
-            if (gender.StartsWith("f"))
+            Debug.LogWarning("Unable to find tuning values for " + acName + ", attempting nonLive values");
+            // Attempt to load non-live tuning values if this is a live model
+            string liveStr = "_live";
+            int liveIdx = acName.IndexOf(liveStr);
+            if (liveIdx >= 0)
+                acName.Remove(liveIdx);
+
+            if (acConfigData.entries.ContainsKey(acName))
             {
-                Debug.LogWarning("Loading default female tuning values");
-                data = acConfigData.entries["mr_sun_f_nina"];
+                data = acConfigData.entries[acName];
             }
-            else if (gender.StartsWith("m"))
+            else
             {
-                Debug.LogWarning("Loading default male tuning values");
-                data = acConfigData.entries["mr_sun_m_anthony"];
+                // Load default male or female tuning values.
+                string[] parts = this.name.Split('_');
+                string gender = parts[2].ToLower();
+                if (gender.StartsWith("f"))
+                {
+                    Debug.LogWarning("Loading default female tuning values");
+                    data = acConfigData.entries["mr_sun_f_nina"];
+                }
+                else if (gender.StartsWith("m"))
+                {
+                    Debug.LogWarning("Loading default male tuning values");
+                    data = acConfigData.entries["mr_sun_m_anthony"];
+                }
             }
         }
 
