@@ -390,9 +390,16 @@ public class AvatarController : MonoBehaviour
 
 
 	public void Awake()
-    {	
-		// check for double start
-		if(bones != null)
+    {
+        // Clean up the name in case this is a (Clone) object.
+        // This is important for loading tuning data files later.
+        string cloneStr = "(Clone)";
+        int cloneIdx = this.name.IndexOf(cloneStr);
+        if (cloneIdx >= 0)
+            this.name = this.name.Remove(cloneIdx);
+
+        // check for double start
+        if (bones != null)
 			return;
 		if(!gameObject.activeInHierarchy) 
 			return;
