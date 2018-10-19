@@ -2505,8 +2505,15 @@ public class AvatarController : MonoBehaviour
     public void SaveConfigData()
     {
         AvatarControllerConfigData acConfigData = AvatarControllerConfigData.Instance;
-        acConfigData.entries.Remove(this.name);
-        acConfigData.entries.Add(this.name, new AvatarControllerEntry(this));
+        string acName = this.name;
+        // Clean up the name in case this is a (Clone) object.
+        string cloneStr = "(Clone)";
+        int cloneIdx = acName.IndexOf(cloneStr);
+        if (cloneIdx >= 0)
+            acName = acName.Remove(cloneIdx);
+
+        acConfigData.entries.Remove(acName);
+        acConfigData.entries.Add(acName, new AvatarControllerEntry(this));
         acConfigData.Save();
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
@@ -2524,7 +2531,7 @@ public class AvatarController : MonoBehaviour
         string cloneStr = "(Clone)";
         int cloneIdx = acName.IndexOf(cloneStr);
         if (cloneIdx >= 0)
-            acName.Remove(cloneIdx);
+            acName = acName.Remove(cloneIdx);
 
         AvatarControllerEntry data = null;
         if (acConfigData.entries.ContainsKey(acName))
@@ -2538,7 +2545,7 @@ public class AvatarController : MonoBehaviour
             string liveStr = "_live";
             int liveIdx = acName.IndexOf(liveStr);
             if (liveIdx >= 0)
-                acName.Remove(liveIdx);
+                acName = acName.Remove(liveIdx);
 
             if (acConfigData.entries.ContainsKey(acName))
             {
