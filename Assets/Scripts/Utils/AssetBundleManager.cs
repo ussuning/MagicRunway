@@ -121,17 +121,16 @@ public class MultiBundleManager
         }
     }
 
-    public T LoadAsset<T>(string assetName) where T : UnityEngine.Object
+    public T LoadAsset<T>(string assetName) where T : UnityEngine.Object 
     {
         // Initialize lookups
         if (lookup == null)
             InitLookups();
 
-if(!lookup.ContainsKey(assetName))
-{
-    Debug.Log("can't find " + assetName);
-    Debug.Break();
-}
+        if(!lookup.ContainsKey(assetName))
+        {
+            Debug.LogError("Can't LoadAsset " + assetName);
+        }
         AssetBundles abName = lookup[assetName];
         AssetBundle ab = abManager.GetAssetBundle(abName);
         Type type = typeof(T);

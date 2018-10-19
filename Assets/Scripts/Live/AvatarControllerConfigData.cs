@@ -36,7 +36,14 @@ class AvatarControllerEntry
 
     public AvatarControllerEntry(AvatarController avatarController)
     {
-        this.avatarControllerName = avatarController.name;
+        string acName = avatarController.name;
+        // Clean up the name in case this is a (Clone) object.
+        string cloneStr = "(Clone)";
+        int cloneIdx = acName.IndexOf(cloneStr);
+        if (cloneIdx >= 0)
+            acName = acName.Remove(cloneIdx);
+
+        this.avatarControllerName = acName;
         this.spineVerticalOffset = avatarController.spineVerticalOffset;
         this.shoulderCenterVerticalOffset = avatarController.shoulderCenterVerticalOffset;
         this.neckVerticalOffset = avatarController.neckVerticalOffset;
@@ -45,7 +52,7 @@ class AvatarControllerEntry
         this.hipZFactor = avatarController.hipZFactor;
         this.shoulderAdjustWidthFactor = avatarController.shoulderAdjustWidthFactor;
         this.hipUpwardsFactor = avatarController.hipUpwardsFactor;
-        Debug.LogWarning("Creating new AvatarControllerEntry " + avatarController.name);
+        Debug.LogWarning("Creating new AvatarControllerEntry " + acName);
     }
 
     public void PopulateTo(AvatarController avatarController)

@@ -133,8 +133,8 @@ public class AvatarControllerClassic : AvatarController
         //Debug.Log("HipCenter.lossyScale " + HipCenter.lossyScale);
 
         // Unscale so that knee/ankles are normal (Vector3.one)
-        resetJointScale(ref FootLeft);//.localScale = new Vector3(1f / KneeLeft.parent.lossyScale.x, 1f / KneeLeft.parent.lossyScale.y, 1f / KneeLeft.parent.lossyScale.z);
-        resetJointScale(ref FootRight);//.localScale = new Vector3(1f / KneeRight.parent.lossyScale.x, 1f / KneeRight.parent.lossyScale.y, 1f / KneeRight.parent.lossyScale.z);
+        //resetJointScale(ref FootLeft);//.localScale = new Vector3(1f / KneeLeft.parent.lossyScale.x, 1f / KneeLeft.parent.lossyScale.y, 1f / KneeLeft.parent.lossyScale.z);
+        //resetJointScale(ref FootRight);//.localScale = new Vector3(1f / KneeRight.parent.lossyScale.x, 1f / KneeRight.parent.lossyScale.y, 1f / KneeRight.parent.lossyScale.z);
         //Debug.Log("KneeLeft.lossyScale " + KneeLeft.lossyScale);
         //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
         float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;

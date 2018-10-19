@@ -390,9 +390,16 @@ public class AvatarController : MonoBehaviour
 
 
 	public void Awake()
-    {	
-		// check for double start
-		if(bones != null)
+    {
+        // Clean up the name in case this is a (Clone) object.
+        // This is important for loading tuning data files later.
+        string cloneStr = "(Clone)";
+        int cloneIdx = this.name.IndexOf(cloneStr);
+        if (cloneIdx >= 0)
+            this.name = this.name.Remove(cloneIdx);
+
+        // check for double start
+        if (bones != null)
 			return;
 		if(!gameObject.activeInHierarchy) 
 			return;
@@ -919,6 +926,30 @@ public class AvatarController : MonoBehaviour
                 hipCenter = hipCenter + bones[jointMap2boneIndex[KinectInterop.JointType.SpineBase]].up * hipUpwardOffset;
                 boneTransform.position = hipCenter + dirHipFromCenter * hipWidthFactor;
                 break;
+            case KinectInterop.JointType.KneeLeft:
+            case KinectInterop.JointType.KneeRight:
+                // Move them down if thighs are straight down because kinect seems to shift knees up when legs are straight down.
+
+                Vector3 thighForward = boneTransform.position - boneTransform.parent.position;  // kneePos - hipPos
+                float straightness = Vector3.Dot(thighForward.normalized, -bodyRoot.up);
+
+                //Debug.Log("straightness " + straightness);
+                float adjustedStraightness = straightness;
+                float straightLegOffset = 0.02f;
+                float max = 0.9f;
+                float min = 0.6f;
+                float range = max - min;
+                if (straightness > max)
+                    adjustedStraightness = 1.0f;
+                else if (straightness < min)
+                    adjustedStraightness = 0f;
+                else
+                    adjustedStraightness = (adjustedStraightness - min) / range;
+                //Debug.Log("adjustedStraightness " + adjustedStraightness);
+
+                float thighLength = thighForward.magnitude + adjustedStraightness * straightLegOffset;
+                boneTransform.position = boneTransform.parent.position + thighForward.normalized * thighLength;
+                break;
             case KinectInterop.JointType.ShoulderLeft:
             case KinectInterop.JointType.ShoulderRight:
                 Vector3 dirShoulderFromCenter = (joint == KinectInterop.JointType.ShoulderLeft) ? shoulderLeft - shoulderCenter : shoulderRight - shoulderCenter;
@@ -1047,7 +1078,6 @@ public class AvatarController : MonoBehaviour
     protected void ScaleBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
         Transform boneTransform = bones[boneIndex];
-        Quaternion oldRot = boneTransform.rotation;
         Vector3 oldScale = boneTransform.localScale;
         if (boneTransform == null || kinectManager == null)
             return;
@@ -1090,45 +1120,40 @@ public class AvatarController : MonoBehaviour
             //    boneTransform.localScale = new Vector3(boneTransform.localScale.x, forearmLength / origForearmLength, boneTransform.localScale.z);
             //    break;
             case KinectInterop.JointType.HipLeft:
+            case KinectInterop.JointType.HipRight:
                 {
-                    float thighLength = (boneTransform.position - boneTransform.GetChild(0).position).magnitude;
+
+                    Vector3 thighForward = boneTransform.GetChild(0).position - boneTransform.position;
+                    float thighLength = thighForward.magnitude;
+
                     float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] -
                         initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
                     //Debug.Log("hipLeftY scale = " + (thighLength / origThighLength));
                     float thighScaleFactor = thighLength / origThighLength;
                     //resetJointScale(ref boneTransform);
-                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighScaleFactor, boneTransform.localScale.z);
+                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, 1f / boneTransform.parent.lossyScale.y * thighScaleFactor, boneTransform.localScale.z);
 
                     // Unscale child bone
-                    Transform kneeLeft = boneTransform.GetChild(0);
+                    Transform kneeBone = boneTransform.GetChild(0);
+                    Transform ankelBone = kneeBone.GetChild(0);
 
                     // Scale shin
-                    float shinLength = (kneeLeft.GetChild(0).position - kneeLeft.position).magnitude;
+                    //float shinLength = (ankleLeft.position - kneeLeft.position).magnitude;
+                    // Since measuring shinLength is very unstable due to Kinect reliability when foot is on floor (low depth difference),
+                    // we'll just use an average human shin-to-knee ratio of 1.03:1.00
+                    float shinLength = thighLength * 1.03f;
                     float origShinLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.AnkleLeft]] -
                         initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
                     float shinScaleFactor = shinLength / origShinLength;
+                    //shinScaleFactor = 1;
 
-                    Debug.Log("thighScaleFactor = " + thighScaleFactor);
-                    Debug.Log("shinScaleFactor = " + shinScaleFactor);
+                    //Debug.Log("thighScaleFactor = " + thighScaleFactor);
+                    //Debug.Log("shinScaleFactor = " + shinScaleFactor);
+                    //Debug.Log("origShinLength = " + origShinLength);
 
                     //resetJointScale(ref kneeLeft);
-                    kneeLeft.localScale = new Vector3(kneeLeft.localScale.x, 1f/kneeLeft.lossyScale.y * shinScaleFactor, kneeLeft.localScale.z);
-                }
-                break;
-            case KinectInterop.JointType.HipRight:
-                {
-                    float thighLength = (boneTransform.position - boneTransform.GetChild(0).position).magnitude;
-                    float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipRight]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeRight]]).magnitude;
-                    //boneTransform.localScale = new Vector3(boneTransform.localScale.x, thighLength / origThighLength, boneTransform.localScale.z);
-                    float yScaleFactor = thighLength / origThighLength;
-                    boneTransform.localScale = new Vector3(
-                        Mathf.Lerp(boneTransform.localScale.x, yScaleFactor, 0f),
-                        yScaleFactor,
-                        Mathf.Lerp(boneTransform.localScale.z, yScaleFactor, 0f));
-                    // Unscale child bone
-                    Transform kneeRight = boneTransform.GetChild(0);
-                    resetJointScale(ref kneeRight);
+                    kneeBone.localScale = new Vector3(kneeBone.localScale.x, 1f/kneeBone.parent.lossyScale.y * shinScaleFactor, kneeBone.localScale.z);
+                    //resetJointScale(ref ankleLeft);
                 }
                 break;
         }
@@ -1136,8 +1161,6 @@ public class AvatarController : MonoBehaviour
         boneTransform.localScale = Vector3.Lerp(oldScale, boneTransform.localScale, 0.65f);
 
     }
-
-    float maxThighLength = 0f;
 
     protected void resetJointScale(ref Transform joint)
     {
@@ -2489,8 +2512,15 @@ public class AvatarController : MonoBehaviour
     public void SaveConfigData()
     {
         AvatarControllerConfigData acConfigData = AvatarControllerConfigData.Instance;
-        acConfigData.entries.Remove(this.name);
-        acConfigData.entries.Add(this.name, new AvatarControllerEntry(this));
+        string acName = this.name;
+        // Clean up the name in case this is a (Clone) object.
+        string cloneStr = "(Clone)";
+        int cloneIdx = acName.IndexOf(cloneStr);
+        if (cloneIdx >= 0)
+            acName = acName.Remove(cloneIdx);
+
+        acConfigData.entries.Remove(acName);
+        acConfigData.entries.Add(acName, new AvatarControllerEntry(this));
         acConfigData.Save();
 #if UNITY_EDITOR
         UnityEditor.AssetDatabase.Refresh();
@@ -2508,28 +2538,41 @@ public class AvatarController : MonoBehaviour
         string cloneStr = "(Clone)";
         int cloneIdx = acName.IndexOf(cloneStr);
         if (cloneIdx >= 0)
-            acName.Remove(cloneIdx);
+            acName = acName.Remove(cloneIdx);
 
         AvatarControllerEntry data = null;
-        if (acConfigData.entries.ContainsKey(this.name))
+        if (acConfigData.entries.ContainsKey(acName))
         {
-            data = acConfigData.entries[this.name];
+            data = acConfigData.entries[acName];
         }
         else
         {
-            Debug.LogWarning("Unable to find tuning values for " + this.name);
-            // Load default male or female tuning values.
-            string[] parts = this.name.Split('_');
-            string gender = parts[2].ToLower();
-            if (gender.StartsWith("f"))
+            Debug.LogWarning("Unable to find tuning values for " + acName + ", attempting nonLive values");
+            // Attempt to load non-live tuning values if this is a live model
+            string liveStr = "_live";
+            int liveIdx = acName.IndexOf(liveStr);
+            if (liveIdx >= 0)
+                acName = acName.Remove(liveIdx);
+
+            if (acConfigData.entries.ContainsKey(acName))
             {
-                Debug.LogWarning("Loading default female tuning values");
-                data = acConfigData.entries["mr_sun_f_nina"];
+                data = acConfigData.entries[acName];
             }
-            else if (gender.StartsWith("m"))
+            else
             {
-                Debug.LogWarning("Loading default male tuning values");
-                data = acConfigData.entries["mr_sun_m_anthony"];
+                // Load default male or female tuning values.
+                string[] parts = this.name.Split('_');
+                string gender = parts[2].ToLower();
+                if (gender.StartsWith("f"))
+                {
+                    Debug.LogWarning("Loading default female tuning values");
+                    data = acConfigData.entries["mr_sun_f_nina"];
+                }
+                else if (gender.StartsWith("m"))
+                {
+                    Debug.LogWarning("Loading default male tuning values");
+                    data = acConfigData.entries["mr_sun_m_anthony"];
+                }
             }
         }
 
