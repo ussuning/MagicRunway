@@ -140,6 +140,16 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         KinectManager.Instance.lateUpdateAvatars = true;
         KinectManager.Instance.estimateJointVelocities = false;
 
+        // Add reflection probes to clothing
+        ReflectionProbe reflectionProbe = GameObject.FindObjectOfType<ReflectionProbe>();
+        reflectionProbe.bakedTexture = GameObject.Find("Conversion Camera Canvas").GetComponentInChildren<UnityEngine.UI.RawImage>().mainTexture;
+        if (reflectionProbe != null) {
+            SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (SkinnedMeshRenderer renderer in skinnedMeshRenderers)
+            {
+                renderer.probeAnchor = reflectionProbe.transform;
+            }
+        }
     }
 }
 

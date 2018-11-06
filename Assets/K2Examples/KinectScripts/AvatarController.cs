@@ -1881,7 +1881,7 @@ public class AvatarController : MonoBehaviour
             kneeLeftBonePos.z = hipLeftBone.position.z;
 
             float angleBetween = Vector3.Angle(kneeLeftBonePos - hipLeftBone.position, Vector3.down);
-            Debug.Log("angleBetweenLHip = " + angleBetween);
+            //Debug.Log("angleBetweenLHip = " + angleBetween);
             hipLeftBone.localEulerAngles += new Vector3(0, 0, angleBetween);
         }
 
@@ -1891,7 +1891,7 @@ public class AvatarController : MonoBehaviour
             kneeRightBonePos.z = hipRightBone.position.z;
 
             float angleBetween = Vector3.Angle(kneeRightBonePos - hipRightBone.position, Vector3.down);
-            Debug.Log("angleBetweenRHip = " + angleBetween);
+            //Debug.Log("angleBetweenRHip = " + angleBetween);
             hipRightBone.localEulerAngles += new Vector3(0, 0, -angleBetween);
         }
 
@@ -1902,7 +1902,7 @@ public class AvatarController : MonoBehaviour
             kneeLeftBonePos.x = hipLeftBone.position.x;
 
             float angleBetween = Vector3.Angle(kneeLeftBonePos - hipLeftBone.position, Vector3.down);
-            Debug.Log("angleBetweenLHip = " + angleBetween);
+            //Debug.Log("angleBetweenLHip = " + angleBetween);
             hipLeftBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
         }
 
@@ -1912,7 +1912,7 @@ public class AvatarController : MonoBehaviour
             kneeRightBonePos.x = hipRightBone.position.x;
 
             float angleBetween = Vector3.Angle(kneeRightBonePos - hipRightBone.position, Vector3.down);
-            Debug.Log("angleBetweenRHip = " + angleBetween);
+            //Debug.Log("angleBetweenRHip = " + angleBetween);
             hipRightBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
         }
 
@@ -1923,7 +1923,7 @@ public class AvatarController : MonoBehaviour
             ankleLeftBonePos.x = kneeLeftBone.position.x;
 
             float angleBetween = Vector3.Angle(ankleLeftBonePos - kneeLeftBone.position, Vector3.down);
-            Debug.Log("angleBetweeLRKnee = " + angleBetween);
+            //Debug.Log("angleBetweeLRKnee = " + angleBetween);
             kneeLeftBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
         }
 
@@ -1933,7 +1933,7 @@ public class AvatarController : MonoBehaviour
             ankleRightBonePos.x = kneeRightBone.position.x;
 
             float angleBetween = Vector3.Angle(ankleRightBonePos - kneeRightBone.position, Vector3.down);
-            Debug.Log("angleBetweenRKnee = " + angleBetween);
+            //Debug.Log("angleBetweenRKnee = " + angleBetween);
             kneeRightBone.localEulerAngles += new Vector3(angleBetween, 0, 0);
         }
 
