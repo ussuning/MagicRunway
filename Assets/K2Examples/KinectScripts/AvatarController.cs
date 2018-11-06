@@ -1069,6 +1069,15 @@ public class AvatarController : MonoBehaviour
 
                 boneTransform.rotation = Quaternion.LookRotation(hipRightDown, hipRightForward);
                 break;
+            case KinectInterop.JointType.WristLeft:
+            case KinectInterop.JointType.WristRight:
+            case KinectInterop.JointType.HandLeft:
+            case KinectInterop.JointType.HandRight:
+            case KinectInterop.JointType.HandTipLeft:
+            case KinectInterop.JointType.HandTipRight:
+                // Don't allow bending of wrists. It reveals skinning problems with sleeves.
+                boneTransform.rotation = initialRotations[boneIndex];
+                break;
         }
 
         boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);

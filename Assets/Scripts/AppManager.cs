@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Rendering.PostProcessing;
 
 public enum Mode { AUTO,LIVE,NONE };
 
@@ -13,6 +14,8 @@ public class AppManager : Singleton<AppManager>
     public Image blackout;
     public Animator blackoutAnimator;
     public AudioSource audioSource;
+    public PostProcessVolume profile;
+    protected DepthOfField depthOfField;
 
     //depricated
     private Mode curMode = Mode.AUTO;
@@ -64,6 +67,8 @@ public class AppManager : Singleton<AppManager>
 
         fadeCounter = 0;
         fadeState = 1;
+
+        profile.profile.TryGetSettings<DepthOfField>(out depthOfField);
         //StartCoroutine(FadeIn());
     }
 
@@ -96,6 +101,8 @@ public class AppManager : Singleton<AppManager>
         currentAutoLevel = 0;
         level = 0;
 
+        depthOfField.active = true;
+
         Transition();
     }
 
@@ -103,9 +110,10 @@ public class AppManager : Singleton<AppManager>
     {
         Debug.Log("Start Transition to Live Runway");
         nextMode = liveRunwayManager;
-
         currentLiveLevel = 0;
         level = 0;
+
+        depthOfField.active = false;
 
         Transition();
     }
