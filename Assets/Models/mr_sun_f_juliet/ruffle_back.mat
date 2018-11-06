@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: ruffle_back
   m_Shader: {fileID: 4800000, guid: 665fe2659105e4033a204b0179332dd6, type: 3}
-  m_ShaderKeywords: _ALPHABLEND_ON _NORMALMAP _SPECGLOSSMAP
+  m_ShaderKeywords: _ALPHABLEND_ON _GLOSSYREFLECTIONS_OFF _NORMALMAP _SPECGLOSSMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -66,7 +66,7 @@ Material:
     - _DstBlend: 10
     - _GlossMapScale: 0.073
     - _Glossiness: 0.5
-    - _GlossyReflections: 1
+    - _GlossyReflections: 0
     - _Metallic: 0
     - _Mode: 2
     - _OcclusionStrength: 1

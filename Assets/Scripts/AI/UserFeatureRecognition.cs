@@ -1,11 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[Serializable]
 public class ImageJson
 {
     public string img = "";
+}
+
+[Serializable]
+public class ClassificationJson
+{
+    public ClassificationJson_rst rst;
+    public string msg;
+    public string code;
+}
+
+[Serializable]
+public class ClassificationJson_rst
+{
+    public string gender;
+    public int age;
 }
 
 public class UserFeatureRecognition : MonoBehaviour
@@ -52,12 +69,16 @@ public class UserFeatureRecognition : MonoBehaviour
         //userImageFolderPath = GetFolderPath(UserImageFolder);
         Instance = this;
     }
-
-    void Start()
+    
+    void OnEnable()
     {
-        //ValidateFolder(userImageFolderPath);
         kinectManager = KinectManager.Instance;
     }
+
+    //void Start()
+    //{
+    //    //ValidateFolder(userImageFolderPath);
+    //}
 
     //void ValidateFolder(string folderPath)
     //{
@@ -73,21 +94,21 @@ public class UserFeatureRecognition : MonoBehaviour
 
     /* Public */
 
-    public void ClassifyUserFeatures(long userId)
+    public void ClassifyUserFeatures(User user)
     {
-        Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUserFeatures(long userId = {0})", userId));
+        Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUserFeatures(long userId = {0})", user.UserID));
 
         //string userImagePath = GetUserImagePath(userImageFolderPath, userId, SaveType);
         //Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUserFeatures(): userImagePath = {0}", userImagePath));
 
-        Texture2D userTex = GetUserColorTexture(userId);
-        Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUserFeatures(): SUCESSFULLY created user texture for user {0}", userId));
+        //Texture2D userTex = GetUserColorTexture(userId);
+        //Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUserFeatures(): SUCESSFULLY created user texture for user {0}", userId));
 
         //SaveImage(userTex, userImagePath, SaveType);
         //Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUserFeatures(): SUCESSFULLY saved user {0} image to {1}", userId, userImagePath));
 
         if (PredictGender)
-            StartCoroutine(ClassifyUser(userTex.EncodeToPNG()));
+            StartCoroutine(ClassifyUser(user));
     }
     
     
@@ -265,9 +286,12 @@ public class UserFeatureRecognition : MonoBehaviour
     /* Unity Web Request */
     /****************************************************************************************************************************************************************************************/
 
-    IEnumerator ClassifyUser(byte [] img)
+    IEnumerator ClassifyUser(User user)
     {
-        using (UnityWebRequest www = UnityWebRequest.Put(RequestURL, GenerateImageJsonString(img)))
+        Texture2D userTex = GetUserColorTexture(user.UserID);
+        Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUser(): SUCESSFULLY created user texture for user {0}", user.UserID));
+
+        using (UnityWebRequest www = UnityWebRequest.Put(RequestURL, GenerateImageJsonString(userTex.EncodeToPNG())))
         {
             www.method = UnityWebRequest.kHttpVerbPOST;
             www.SetRequestHeader("Content-Type", "application/json");
@@ -277,6 +301,7 @@ public class UserFeatureRecognition : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
+                //ClassifyUser(user);
             }
             else
             {
@@ -286,7 +311,21 @@ public class UserFeatureRecognition : MonoBehaviour
                     Debug.Log(string.Format("{0}: {1}", header, res[header]));
                 }
                 Debug.Log(www.downloadHandler.text);
+
                 Debug.Break();
+
+                ClassificationJson result = JsonUtility.FromJson<ClassificationJson>(www.downloadHandler.text);
+                if (result.code == "0000")
+                {
+                    if (result.rst.gender == "male")
+                    {
+                        user.UserGender = User.Gender.Male;
+                    }
+                    else
+                    {
+                        user.UserGender = User.Gender.Female;
+                    }
+                }
             }
         }
     }
