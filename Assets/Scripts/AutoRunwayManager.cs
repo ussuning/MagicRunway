@@ -448,7 +448,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
 
     public void UserDetected(long userId, int userIndex)
     {
-        Debug.LogError("UserDetected " + userId);
+        Debug.Log("UserDetected " + userId);
         if (isModeActive == false)
             return;
 
