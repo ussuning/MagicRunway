@@ -67,6 +67,8 @@ public class RunwayCameraController : MonoBehaviour {
 
     void OnEnable()
     {
+        RunReturnCenter(true, false);
+
         AddRunwayEventListeners();
         flashMid.SetActive(false);
         flashFront.SetActive(false);
@@ -214,6 +216,8 @@ public class RunwayCameraController : MonoBehaviour {
 
     private void UpdateTracker()
     {
+        if (modelsOnRunway.active.Count <= 0)
+            return;
         Bounds b = modelsOnRunway.active[0].bounds;
         float offsetX = -3.0f;
         Vector3 target = new Vector3(b.center.x + offsetX, b.center.y, b.center.z);
