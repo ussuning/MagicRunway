@@ -98,6 +98,7 @@ public class Outfit : System.Object
     public string id;
     public string name;
     public string sex;
+    public int age;
     public string desc;
     public string prefab;
     public string icon;
