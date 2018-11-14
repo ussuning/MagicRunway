@@ -37,9 +37,11 @@ public class User : MonoBehaviour {
         set
         {
             ugender = value;
+            
             if (ugender != Gender.None)
             {
-                GenderSelectionUI.OnGenderSelected(ugender);
+                if (GenderSelectionUI)
+                    GenderSelectionUI.OnGenderSelected(ugender);
             }
         }
         get
@@ -107,7 +109,7 @@ public class User : MonoBehaviour {
             poseAgentSelector.enabled = true;
             uScore.gameObject.SetActive(true);
 
-            ugender = Gender.None;
+            //ugender = Gender.None;
 
             isReadyToBeActivated = false;
             isActivated = true; 
@@ -143,12 +145,12 @@ public class User : MonoBehaviour {
         }
 
 #if UNITY_EDITOR
-        if (DebugText)
-        {
-            DebugText.text = string.Format("User {0}: {1}", UserIndex, UserID);
-            DebugText.transform.position = GenderSelectionUI.transform.position;
-            DebugText.gameObject.SetActive(true);
-        }
+        //if (DebugText)
+        //{
+        //    DebugText.text = string.Format("User {0}: {1}", UserIndex, UserID);
+        //    DebugText.transform.position = GenderSelectionUI.transform.position;
+        //    DebugText.gameObject.SetActive(true);
+        //}
 #else
         if (DebugText)
         {

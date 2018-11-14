@@ -70,7 +70,7 @@ public class UserFeatureRecognition : MonoBehaviour
         Instance = this;
     }
     
-    void OnEnable()
+    void Start()
     {
         kinectManager = KinectManager.Instance;
     }
@@ -301,7 +301,6 @@ public class UserFeatureRecognition : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
-                //ClassifyUser(user);
             }
             else
             {
@@ -311,8 +310,6 @@ public class UserFeatureRecognition : MonoBehaviour
                     Debug.Log(string.Format("{0}: {1}", header, res[header]));
                 }
                 Debug.Log(www.downloadHandler.text);
-
-                Debug.Break();
 
                 ClassificationJson result = JsonUtility.FromJson<ClassificationJson>(www.downloadHandler.text);
                 if (result.code == "0000")
@@ -325,6 +322,10 @@ public class UserFeatureRecognition : MonoBehaviour
                     {
                         user.UserGender = User.Gender.Female;
                     }
+                }
+                else
+                {
+                    StartCoroutine(ClassifyUser(user));
                 }
             }
         }
