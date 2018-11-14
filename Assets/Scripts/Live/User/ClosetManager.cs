@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ClosetManager : MonoBehaviour {
@@ -47,6 +48,8 @@ public class ClosetManager : MonoBehaviour {
     {
         Closet closet = GetUserCloset(userIdx);
         List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
+
+        userOutfits = userOutfits.OrderBy(row => row.age).ToList();
 
         if (closet)
         {
