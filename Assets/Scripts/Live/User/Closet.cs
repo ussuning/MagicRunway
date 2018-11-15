@@ -270,94 +270,93 @@ public class Closet : MonoBehaviour {
 
     void Update()
     {
-        if (isActive)
+        if (!isActive)
+            return;
+
+        if (!isHidden && !isHiding &&
+            kinect && kinect.IsInitialized())
         {
-            if (!isHidden && !isHiding)
+            if (kinect.IsUserTracked(OwnerID))
             {
-                if (kinect && kinect.IsInitialized())
+                // Attempt for each arm side until a hit is registered.
+                foreach (Side armSide in new Side[] { ClosetSide, ClosetSide == Side.Left ? Side.Right : Side.Left })
                 {
-                    if (kinect.IsUserTracked(OwnerID))
+                    // First, get Screen points
+                    GetUserPointingScreenPoints(armSide, OwnerID, ref lastFromScreenPt, ref lastToScreenPt, ref lastSpineShoulderPt);
+                    // Second, convert from Screen Pt to Canvas Pt
+                    Vector2 fromLocal = ScreenPtToCanvasPt(lastFromScreenPt);
+                    if (pointFrom != null)
+                        pointFrom.anchoredPosition = fromLocal;
+                    Vector2 toLocal = ScreenPtToCanvasPt(lastToScreenPt);
+                    if (pointTo != null)
+                        pointTo.anchoredPosition = toLocal;
+                    Vector2 spineShoulderLocal = ScreenPtToCanvasPt(lastSpineShoulderPt);
+                    if (pointSpine != null)
+                        pointSpine.anchoredPosition = spineShoulderLocal;
+
+                    UpdateOffsetTransform();
+
+                    // For Debug line rendering, using world coords.
+                    ptFrom = pointFrom.transform.position;
+                    ptTo = pointTo.transform.position;
+
+
+                    // Gather hits and parse
+                    RaycastHit2D[] hits = Physics2D.RaycastAll(ptFrom, ptTo - ptFrom, float.MaxValue, LayerMask.GetMask(new string[] { "Pointable2D" }));
+                    //Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
+
+                    RaycastHit2D pointerRailHit = new RaycastHit2D();
+                    ClosetItem closetItemHit = null;
+                    float lowestHitDist = float.MaxValue;
+                    foreach (RaycastHit2D hit in hits)
                     {
-                        // Attempt for each arm side until a hit is registered.
-                        foreach (Side armSide in new Side[] { ClosetSide, ClosetSide == Side.Left ? Side.Right : Side.Left })
+                        if (hit.collider.gameObject == this.gameObject)
                         {
-                            // First, get Screen points
-                            GetUserPointingScreenPoints(armSide, OwnerID, ref lastFromScreenPt, ref lastToScreenPt, ref lastSpineShoulderPt);
-                            // Second, convert from Screen Pt to Canvas Pt
-                            Vector2 fromLocal = ScreenPtToCanvasPt(lastFromScreenPt);
-                            if (pointFrom != null)
-                                pointFrom.anchoredPosition = fromLocal;
-                            Vector2 toLocal = ScreenPtToCanvasPt(lastToScreenPt);
-                            if (pointTo != null)
-                                pointTo.anchoredPosition = toLocal;
-                            Vector2 spineShoulderLocal = ScreenPtToCanvasPt(lastSpineShoulderPt);
-                            if (pointSpine != null)
-                                pointSpine.anchoredPosition = spineShoulderLocal;
-
-                            UpdateOffsetTransform();
-
-                            // For Debug line rendering, using world coords.
-                            ptFrom = pointFrom.transform.position;
-                            ptTo = pointTo.transform.position;
-
-
-                            // Gather hits and parse
-                            RaycastHit2D[] hits = Physics2D.RaycastAll(ptFrom, ptTo - ptFrom, float.MaxValue, LayerMask.GetMask(new string[] { "Pointable2D" }));
-                            //Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
-
-                            RaycastHit2D pointerRailHit = new RaycastHit2D();
-                            ClosetItem closetItemHit = null;
-                            float lowestHitDist = float.MaxValue;
-                            foreach (RaycastHit2D hit in hits)
+                            //Debug.Log("pointerRailHit = " + hit.collider.gameObject.name);
+                            pointerRailHit = hit;
+                        }
+                        else if (hit.collider.GetComponentInParent<Closet>() == this)
+                        {
+                            ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
+                            if (closetItem != null && hit.distance < lowestHitDist)
                             {
-                                if (hit.collider.gameObject == this.gameObject)
-                                {
-                                    //Debug.Log("pointerRailHit = " + hit.collider.gameObject.name);
-                                    pointerRailHit = hit;
-                                }
-                                else if (hit.collider.GetComponentInParent<Closet>() == this)
-                                {
-                                    ClosetItem closetItem = hit.collider.GetComponentInParent<ClosetItem>();
-                                    if (closetItem != null && hit.distance < lowestHitDist)
-                                    {
-                                        lowestHitDist = hit.distance;
-                                        closetItemHit = closetItem;
-                                    }
-                                }
+                                lowestHitDist = hit.distance;
+                                closetItemHit = closetItem;
                             }
-
-                            // If the first arm missed, try the other arm first;
-                            if (armSide == ClosetSide && pointerRailHit.collider == null)
-                                continue;
-
-                            SetItemToBubble(closetItemHit);
-                            if (closetItemHit != null)
-                                OnClosetItemHover(closetItemHit);
-                            else
-                                OnUnselectAll();
-
-                            UpdatePointer(ref pointerRailHit);
-
-                            // If this arm did not miss, then no need to try the other arm.
-                            if (pointerRailHit.collider != null)
-                                break;
                         }
                     }
+
+                    // If the first arm missed, try the other arm first;
+                    if (armSide == ClosetSide && pointerRailHit.collider == null)
+                        continue;
+
+                    SetItemToBubble(closetItemHit);
+                    if (closetItemHit != null)
+                        OnClosetItemHover(closetItemHit);
                     else
-                    {
                         OnUnselectAll();
-                    }
+
+                    UpdatePointer(ref pointerRailHit);
+
+                    // If this arm did not miss, then no need to try the other arm.
+                    if (pointerRailHit.collider != null)
+                        break;
                 }
             }
-
-            if (selectionTutorial.IsTutorialFinished && idleElapsedTime >= idleTime)
+            else
             {
-                Hide();
-                idleElapsedTime = 0f;
+                OnUnselectAll();
             }
-
-            UpdateBubble();
         }
+
+        if (selectionTutorial.IsTutorialFinished && idleElapsedTime >= idleTime)
+        {
+            Hide();
+            idleElapsedTime = 0f;
+        }
+
+        UpdateBubble();
+        
     }
 
     void UpdateOffsetTransform()
