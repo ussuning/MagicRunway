@@ -208,7 +208,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             switch (gesture)
             {
                 case KinectGestures.Gestures.Wave:
-                    closet.activateIcon.SetProgressValue(progress, closet.ClosetGender);
+                    closet.activateIcon.SetProgressValue(progress);
                     break;
             }
 
