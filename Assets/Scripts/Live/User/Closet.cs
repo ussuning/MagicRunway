@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using MR;
@@ -71,30 +72,48 @@ public class Closet : MonoBehaviour {
         }
     }
 
-    private User.Gender ownerGender;
-    public User.Gender OwnerGender
+    private User.Gender closetGender;
+    public User.Gender ClosetGender
     {
         get
         {
-            return ownerGender;
+            return closetGender;
         }
     }
 
-    private List<Outfit> outfits;
-    public List<Outfit> Outfits
+    private List<Outfit> outfits_m;
+    public List<Outfit> Outfits_m
     {
         get
         {
-            return outfits;
+            return outfits_m;
         }
     }
 
-    private int outfitStartIdx = 0;
-    public int OutfitStartIdx
+    private List<Outfit> outfits_f;
+    public List<Outfit> Outfits_f
     {
         get
         {
-            return outfitStartIdx;
+            return outfits_f;
+        }
+    }
+
+    private int outfitStartIdx_m = 0;
+    public int OutfitStartIdx_m
+    {
+        get
+        {
+            return outfitStartIdx_m;
+        }
+    }
+
+    private int outfitStartIdx_f = 0;
+    public int OutfitStartIdx_f
+    {
+        get
+        {
+            return outfitStartIdx_f;
         }
     }
 
@@ -542,41 +561,71 @@ public class Closet : MonoBehaviour {
         selectionTutorial.HideTutorial();
     }
 
-    public void SetCloset(int userIdx, User.Gender userGender, List<Outfit> outfits, bool isTutorialFinished = false, int outfitIdx = 0)
+    public void SetCloset(int userIdx, User.Gender userGender, int userAge, Outfits outfits /*, int outfitIdx_m = 0, int outfitIdx_f = 0, bool isTutorialFinished = false*/)
     {
-        //this.ownerId = userID;
         this.ownerIdx = userIdx;
-        this.ownerGender = userGender;
-        this.outfits = outfits;
-        this.outfitStartIdx = outfitIdx;
+        this.closetGender = userGender;
 
-        SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
+        this.outfits_m = outfits.maleOutfits.OrderBy(row => row.age).ToList(); ;
+        this.outfits_f = outfits.femaleOutfits.OrderBy(row => row.age).ToList(); ;
+
+        this.outfitStartIdx_m = GetOutfitIndexByAge(outfits_m, userAge);
+        this.outfitStartIdx_f = GetOutfitIndexByAge(outfits_f, userAge); ;
+
+        if (closetGender == User.Gender.Male)
+            SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
+        else if (closetGender == User.Gender.Female)
+            SetClosetImages(GetDisplayedOutfits(outfits_f, outfitStartIdx_f));
+
+        selectionTutorial.StartTutorial();
 
         topArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
         bottomArrow.animator.SetBool("isLeft", ClosetSide == Side.Left);
         foreach (ClosetItem item in OutfitItems)
             item.animator.SetBool("isLeft", ClosetSide == Side.Left);
 
-        if (!isTutorialFinished)
-        {
-            selectionTutorial.StartTutorial();
-        }
-        else
-        {
-            selectionTutorial.EndTutorial(true);
-        }
-
         activateIcon.gameObject.SetActive(true);
         isActive = true;
+    }
+
+    public void SwapCloset(int userIdx, User.Gender closetGender, List<Outfit> mOutfits, List<Outfit> fOutfits, int outfitIdx_m, int outfitIdx_f, bool isTutorialFinished)
+    {
+        ResetCloset();
+
+        this.ownerIdx = userIdx;
+        this.closetGender = closetGender;
+
+        this.outfits_m = mOutfits;
+        this.outfits_f = fOutfits;
+
+        this.outfitStartIdx_m = outfitIdx_m;
+        this.outfitStartIdx_f = outfitIdx_f;
+
+        if (closetGender == User.Gender.Male)
+            SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
+        else if (closetGender == User.Gender.Female)
+            SetClosetImages(GetDisplayedOutfits(outfits_f, outfitStartIdx_f));
+
+        if (!isTutorialFinished)
+            selectionTutorial.StartTutorial();
+        else
+            selectionTutorial.EndTutorial(true);
+    }
+
+    public void ActivateCloset ()
+    {
+        Show();
     }
 
     public void ResetCloset()
     {
         ClearClosetImage();
         ownerIdx = -1;
-        ownerGender = User.Gender.None;
-        outfits = null;
-        outfitStartIdx = 0;
+        closetGender = User.Gender.None;
+        outfits_m = null;
+        outfits_f = null;
+        outfitStartIdx_m = 0;
+        outfitStartIdx_f = 0;
         lastSelectedOutfit = null;
     }
 
@@ -592,10 +641,13 @@ public class Closet : MonoBehaviour {
 
         ClearClosetImage();
         ownerIdx = -1;
-        ownerGender = User.Gender.None;
-        if(outfits != null)
-            outfits.Clear();
-        outfitStartIdx = 0;
+        closetGender = User.Gender.None;
+        if(outfits_m != null)
+            outfits_m.Clear();
+        if (outfits_f != null)
+            outfits_f.Clear();
+        outfitStartIdx_m = 0;
+        outfitStartIdx_f = 0;
         lastSelectedOutfit = null;
         isActive = false;
         activateIcon.gameObject.SetActive(false);
@@ -605,24 +657,46 @@ public class Closet : MonoBehaviour {
     {
         for (int i = 0; i < ClosetManager.NUMBER_CLOSET_ITEMS; i++)
         {
-            outfitStartIdx--;
-            if (outfitStartIdx < 0)
-                outfitStartIdx = outfits.Count - 1;
-        }
+            if (closetGender == User.Gender.Male)
+            {
+                outfitStartIdx_m--;
+                if (outfitStartIdx_m < 0)
+                    outfitStartIdx_m = outfits_m.Count - 1;
 
-        SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
+                SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
+            }
+            else if (closetGender == User.Gender.Female)
+            {
+                outfitStartIdx_f--;
+                if (outfitStartIdx_f < 0)
+                    outfitStartIdx_f = outfits_f.Count - 1;
+
+                SetClosetImages(GetDisplayedOutfits(outfits_f, outfitStartIdx_f));
+            }
+        }
     }
 
     public void PageDown()
     {
         for(int i=0; i<ClosetManager.NUMBER_CLOSET_ITEMS; i++)
         {
-            outfitStartIdx++;
-            if (outfitStartIdx >= outfits.Count)
-                outfitStartIdx = 0;
-        }
+            if (closetGender == User.Gender.Male)
+            {
+                outfitStartIdx_m++;
+                if (outfitStartIdx_m >= outfits_m.Count)
+                    outfitStartIdx_m = 0;
 
-        SetClosetImages(GetDisplayedOutfits(outfits, outfitStartIdx));
+                SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
+            }
+            else if(closetGender == User.Gender.Female)
+            {
+                outfitStartIdx_f++;
+                if (outfitStartIdx_f >= outfits_f.Count)
+                    outfitStartIdx_f = 0;
+
+                SetClosetImages(GetDisplayedOutfits(outfits_f, outfitStartIdx_f));
+            }
+        }
     }
 
     private void SetClosetImages(List<Outfit> outfits)
@@ -735,6 +809,32 @@ public class Closet : MonoBehaviour {
 
         if(!isHidden && !isHiding)
             idleElapsedTime += Time.deltaTime;
+    }
+
+    private int GetOutfitIndexByAge(List<Outfit> of, int age)
+    {
+        if (of.Count > 0) {
+            int youngestOutfitAge = of[0].age;
+            int oldestOutfitAge = of[of.Count - 1].age;
+            for (int i = 0; i < of.Count; i++)
+            {
+                if (age < youngestOutfitAge)
+                {
+                    if (of[i].age == youngestOutfitAge)
+                        return i;
+                }
+                else if (age > oldestOutfitAge)
+                {
+                    if (of[i].age == oldestOutfitAge)
+                        return i;
+                }
+                else if (age / 10 * 10 == of[i].age)
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     List<Outfit> GetDisplayedOutfits(List<Outfit> displayedOutfits, int startOutfitIndex)

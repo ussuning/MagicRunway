@@ -37,7 +37,7 @@ public class User : MonoBehaviour {
         set
         {
             ugender = value;
-            
+
             if (ugender != Gender.None)
             {
                 if (GenderSelectionUI)
@@ -47,6 +47,19 @@ public class User : MonoBehaviour {
         get
         {
             return ugender;
+        }
+    }
+
+    private int uage = 20;
+    public int UserAge
+    {
+        set
+        {
+            uage = value;
+        }
+        get
+        {
+            return uage;
         }
     }
 

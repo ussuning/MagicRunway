@@ -290,44 +290,46 @@ public class UserFeatureRecognition : MonoBehaviour
     {
         Texture2D userTex = GetUserColorTexture(user.UserID);
         Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUser(): SUCESSFULLY created user texture for user {0}", user.UserID));
-
-        using (UnityWebRequest www = UnityWebRequest.Put(RequestURL, GenerateImageJsonString(userTex.EncodeToPNG())))
+        if (userTex)
         {
-            www.method = UnityWebRequest.kHttpVerbPOST;
-            www.SetRequestHeader("Content-Type", "application/json");
-
-            yield return www.SendWebRequest();
-
-            if (www.isNetworkError || www.isHttpError)
+            using (UnityWebRequest www = UnityWebRequest.Put(RequestURL, GenerateImageJsonString(userTex.EncodeToPNG())))
             {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Dictionary<string, string> res = www.GetResponseHeaders();
-                foreach (string header in res.Keys)
-                {
-                    Debug.Log(string.Format("{0}: {1}", header, res[header]));
-                }
-                Debug.Log(www.downloadHandler.text);
+                www.method = UnityWebRequest.kHttpVerbPOST;
+                www.SetRequestHeader("Content-Type", "application/json");
 
-                ClassificationJson result = JsonUtility.FromJson<ClassificationJson>(www.downloadHandler.text);
-                if (result.code == "0000")
-                {
-                    if (result.rst.gender == "male")
-                    {
-                        user.UserGender = User.Gender.Male;
-                    }
-                    else
-                    {
-                        user.UserGender = User.Gender.Female;
-                    }
+                yield return www.SendWebRequest();
 
-                    user.UserAge = result.rst.age;
+                if (www.isNetworkError || www.isHttpError)
+                {
+                    Debug.Log(www.error);
                 }
                 else
                 {
-                    StartCoroutine(ClassifyUser(user));
+                    Dictionary<string, string> res = www.GetResponseHeaders();
+                    foreach (string header in res.Keys)
+                    {
+                        Debug.Log(string.Format("{0}: {1}", header, res[header]));
+                    }
+                    Debug.Log(www.downloadHandler.text);
+
+                    ClassificationJson result = JsonUtility.FromJson<ClassificationJson>(www.downloadHandler.text);
+                    if (result.code == "0000")
+                    {
+                        if (result.rst.gender == "male")
+                        {
+                            user.UserGender = User.Gender.Male;
+                        }
+                        else
+                        {
+                            user.UserGender = User.Gender.Female;
+                        }
+
+                        user.UserAge = result.rst.age;
+                    }
+                    else
+                    {
+                        StartCoroutine(ClassifyUser(user));
+                    }
                 }
             }
         }

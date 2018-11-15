@@ -208,7 +208,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
             switch (gesture)
             {
                 case KinectGestures.Gestures.Wave:
-                    closet.activateIcon.SetProgressValue(progress, closet.OwnerGender);
+                    closet.activateIcon.SetProgressValue(progress, closet.ClosetGender);
                     break;
             }
 
@@ -272,7 +272,7 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
                     //    break;
                     //}
 
-                    closetMgr.OnUserGenderSelected(userIndex, user.UserGender);
+                    closetMgr.OnUserGenderSelected(userIndex, user.UserGender, user.UserAge);
                 }
             }
             

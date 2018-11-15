@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class ClosetManager : MonoBehaviour {
@@ -44,20 +43,16 @@ public class ClosetManager : MonoBehaviour {
         closestUsers[1] = users.Length >= 2 ? users[1] : -1;
     }
 
-    public void OnUserGenderSelected(int userIdx, User.Gender userGender)
+    public void OnUserGenderSelected(int userIdx, User.Gender userGender, int userAge)
     {
         Closet closet = GetUserCloset(userIdx);
-        List<Outfit> userOutfits = userGender == User.Gender.Female ? outfits.femaleOutfits : outfits.maleOutfits;
-
-        userOutfits = userOutfits.OrderBy(row => row.age).ToList();
 
         if (closet)
         {
             if (closet.IsHidden)
             {
                 //closet.Clear();
-                closet.SetCloset(userIdx, userGender, userOutfits, true, userGender == closet.OwnerGender ? closet.OutfitStartIdx : 0);
-                closet.Show();
+                closet.ActivateCloset();
             }    
         }
         else
@@ -112,7 +107,7 @@ public class ClosetManager : MonoBehaviour {
             if (closet)
             {
                 closet.Clear();
-                closet.SetCloset(userIdx, userGender, userOutfits);
+                closet.SetCloset(userIdx, userGender, userAge, outfits);
                 userClosets.Add(closet);
 
                 if (closet.IsHidden)
@@ -167,14 +162,15 @@ public class ClosetManager : MonoBehaviour {
                     if(userRPos.x < userLPos.x)
                     {
                         int closetLOwnerIndex = ClosetLeft.OwnerIndex;
-                        User.Gender closetLGender = ClosetLeft.OwnerGender;
-                        List<Outfit> closetLOutfits = ClosetLeft.Outfits;
+                        User.Gender closetLGender = ClosetLeft.ClosetGender;
+                        List<Outfit> closetLOutfits_m = ClosetLeft.Outfits_m;
+                        List<Outfit> closetLOutfits_f = ClosetLeft.Outfits_f;
+                        int closetLOutfitStartIndex_m = ClosetLeft.OutfitStartIdx_m;
+                        int closetLOutfitStartIndex_f = ClosetLeft.OutfitStartIdx_f;
                         bool closetLTutorialFinished = ClosetLeft.selectionTutorial.IsTutorialFinished;
-                        int closetLOutfitStartIndex = ClosetLeft.OutfitStartIdx;
-                        ClosetLeft.ResetCloset();
-                        ClosetLeft.SetCloset(ClosetRight.OwnerIndex, ClosetRight.OwnerGender, ClosetRight.Outfits, ClosetRight.selectionTutorial.IsTutorialFinished, ClosetRight.OutfitStartIdx);
-                        ClosetRight.ResetCloset();
-                        ClosetRight.SetCloset(closetLOwnerIndex, closetLGender, closetLOutfits, closetLTutorialFinished, closetLOutfitStartIndex);
+
+                        ClosetLeft.SwapCloset(ClosetRight.OwnerIndex, ClosetRight.ClosetGender, ClosetRight.Outfits_m, ClosetRight.Outfits_f, ClosetRight.OutfitStartIdx_m, ClosetRight.OutfitStartIdx_f, ClosetRight.selectionTutorial.IsTutorialFinished);
+                        ClosetRight.SwapCloset(closetLOwnerIndex, closetLGender, closetLOutfits_m, closetLOutfits_f, closetLOutfitStartIndex_m, closetLOutfitStartIndex_f, closetLTutorialFinished);
                     }
                 }
             }
