@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224514971401669494}
   - component: {fileID: 222818555921185606}
-  - component: {fileID: 114139436072112100}
+  - component: {fileID: 114150962524084186}
   - component: {fileID: 114471528633942132}
   m_Layer: 0
   m_Name: GenderSwapButton
@@ -485,7 +485,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224350739049141050}
   - component: {fileID: 222787752739441028}
-  - component: {fileID: 114082171088044972}
+  - component: {fileID: 114337028147778594}
   - component: {fileID: 114661591925210810}
   m_Layer: 0
   m_Name: GenderSwapButton
@@ -1155,7 +1155,7 @@ GameObject:
   - component: {fileID: 61596580004127592}
   - component: {fileID: 95363649402314450}
   m_Layer: 23
-  m_Name: ArrowImage
+  m_Name: GenderImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3429,22 +3429,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114082171088044972
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1317906878969298}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21e28211cdbd5574bae3a437f8a183e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HoverToSelectTime: 1.25
-  ItemImage: {fileID: 114191477563282984}
-  SelectedFillImage: {fileID: 114217364299996606}
-  animator: {fileID: 0}
-  isAnimatorDebug: 0
 --- !u!114 &114092335558048494
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3576,7 +3560,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114139436072112100
+--- !u!114 &114150962524084186
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3584,7 +3568,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1032771593784048}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21e28211cdbd5574bae3a437f8a183e0, type: 3}
+  m_Script: {fileID: 11500000, guid: 03f5d2ad95bc0a74cac8e14cea5ffedd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   HoverToSelectTime: 1.25
@@ -3592,6 +3576,8 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114205087567532986}
   animator: {fileID: 0}
   isAnimatorDebug: 0
+  MaleIcon: {fileID: 21300000, guid: 1dae878b72f27ab418353eeb25b82aa2, type: 3}
+  FemaleIcon: {fileID: 21300000, guid: 5d338c8757ecd02479d909298c809536, type: 3}
 --- !u!114 &114152919187555652
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3883,6 +3869,24 @@ MonoBehaviour:
     icon: 
     wearableids: []
     wearables: []
+--- !u!114 &114337028147778594
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1317906878969298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f5d2ad95bc0a74cac8e14cea5ffedd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HoverToSelectTime: 1.25
+  ItemImage: {fileID: 114191477563282984}
+  SelectedFillImage: {fileID: 114217364299996606}
+  animator: {fileID: 0}
+  isAnimatorDebug: 0
+  MaleIcon: {fileID: 21300000, guid: 1dae878b72f27ab418353eeb25b82aa2, type: 3}
+  FemaleIcon: {fileID: 21300000, guid: 5d338c8757ecd02479d909298c809536, type: 3}
 --- !u!114 &114362944174788698
 MonoBehaviour:
   m_ObjectHideFlags: 1

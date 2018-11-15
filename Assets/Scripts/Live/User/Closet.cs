@@ -139,7 +139,7 @@ public class Closet : MonoBehaviour {
     private float hidingStartTime = 0;
     private float showingStartTime = 0;
 
-    private ClosetItem genderSwapButton;
+    private ClosetGenderItem genderSwapButton;
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
@@ -164,7 +164,7 @@ public class Closet : MonoBehaviour {
         {
             if(i == 0)
             {
-                genderSwapButton = transform.GetChild(i).GetComponent<ClosetItem>();
+                genderSwapButton = transform.GetChild(i).GetComponent<ClosetGenderItem>();
                 genderSwapButton.Closet = this;
             }
             else if(i == 1)
@@ -572,6 +572,8 @@ public class Closet : MonoBehaviour {
         this.outfitStartIdx_m = GetOutfitIndexByAge(outfits_m, userAge);
         this.outfitStartIdx_f = GetOutfitIndexByAge(outfits_f, userAge); ;
 
+        genderSwapButton.SetGender(closetGender);
+
         if (closetGender == User.Gender.Male)
             SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
         else if (closetGender == User.Gender.Female)
@@ -593,13 +595,15 @@ public class Closet : MonoBehaviour {
         ResetCloset();
 
         this.ownerIdx = userIdx;
-        this.closetGender = closetGender;
+        this.closetGender = closetGender; 
 
         this.outfits_m = mOutfits;
         this.outfits_f = fOutfits;
 
         this.outfitStartIdx_m = outfitIdx_m;
         this.outfitStartIdx_f = outfitIdx_f;
+
+        genderSwapButton.SetGender(closetGender);
 
         if (closetGender == User.Gender.Male)
             SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
@@ -615,6 +619,21 @@ public class Closet : MonoBehaviour {
     public void ActivateCloset ()
     {
         Show();
+    }
+
+    public void SwapClosetGender()
+    {
+        if (closetGender == User.Gender.Male)
+            closetGender = User.Gender.Female;
+        else if (closetGender == User.Gender.Female)
+            closetGender = User.Gender.Male;
+
+        genderSwapButton.SetGender(closetGender);
+
+        if (closetGender == User.Gender.Male)
+            SetClosetImages(GetDisplayedOutfits(outfits_m, outfitStartIdx_m));
+        else if (closetGender == User.Gender.Female)
+            SetClosetImages(GetDisplayedOutfits(outfits_f, outfitStartIdx_f));
     }
 
     public void ResetCloset()
@@ -778,28 +797,59 @@ public class Closet : MonoBehaviour {
 
     private void OnClosetItemHover(ClosetItem hoveredItem)
     {
-        ClosetOutfitItem outfit = hoveredItem as ClosetOutfitItem;
-        if (outfit == null || outfit.outfit != lastSelectedOutfit)
-        {
-            hoveredItem.OnItemHover();
-        }
+        Debug.Log(string.Format("[Closet] OnClosetItemHover: hoveredItem = " + hoveredItem.name));
 
-        if (hoveredItem != topArrow)
+        if(hoveredItem == genderSwapButton)
+        {
+            genderSwapButton.OnItemHover();
             topArrow.OnItemUnselected();
-
-        if (hoveredItem != bottomArrow)
             bottomArrow.OnItemUnselected();
-
-        foreach (ClosetOutfitItem outfitItem in OutfitItems)
-        {
-            if (hoveredItem != outfitItem)
+            foreach (ClosetOutfitItem outfitItem in OutfitItems)
+            {
                 outfitItem.OnItemUnselected();
+            }
         }
+        else if(hoveredItem == topArrow)
+        {
+            genderSwapButton.OnItemUnselected();
+            topArrow.OnItemHover();
+            bottomArrow.OnItemUnselected();
+            foreach (ClosetOutfitItem outfitItem in OutfitItems)
+            {
+                outfitItem.OnItemUnselected();
+            }
+        }
+        else if(hoveredItem == bottomArrow)
+        {
+            genderSwapButton.OnItemUnselected();
+            topArrow.OnItemUnselected();
+            bottomArrow.OnItemHover();
+            foreach (ClosetOutfitItem outfitItem in OutfitItems)
+            {
+                outfitItem.OnItemUnselected();
+            }
+        }
+        else
+        {
+            genderSwapButton.OnItemUnselected();
+            topArrow.OnItemUnselected();
+            bottomArrow.OnItemUnselected();
+            ClosetOutfitItem hoveredOutfit = hoveredItem as ClosetOutfitItem;
+            foreach (ClosetOutfitItem outfitItem in OutfitItems)
+            {
+                if (hoveredOutfit == outfitItem)
+                    outfitItem.OnItemHover();
+                else
+                    outfitItem.OnItemUnselected();
+            }
+        }
+
         idleElapsedTime = 0f;
     }
 
     private void OnUnselectAll()
     {
+        genderSwapButton.OnItemUnselected();
         topArrow.OnItemUnselected();
         bottomArrow.OnItemUnselected();
         foreach (ClosetOutfitItem outfitItem in OutfitItems)
