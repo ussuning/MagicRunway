@@ -120,6 +120,7 @@ public class Closet : MonoBehaviour {
     private float hidingStartTime = 0;
     private float showingStartTime = 0;
 
+    private ClosetItem genderSwapButton;
     private ClosetArrowItem topArrow, bottomArrow;
     private ClosetOutfitItem[] OutfitItems = new ClosetOutfitItem[ClosetManager.NUMBER_CLOSET_ITEMS];
 
@@ -144,6 +145,11 @@ public class Closet : MonoBehaviour {
         {
             if(i == 0)
             {
+                genderSwapButton = transform.GetChild(i).GetComponent<ClosetItem>();
+                genderSwapButton.Closet = this;
+            }
+            else if(i == 1)
+            {
                 topArrow = transform.GetChild(i).GetComponent<ClosetArrowItem>();
                 topArrow.Closet = this;
             }
@@ -154,9 +160,10 @@ public class Closet : MonoBehaviour {
             }
             else
             {
-                OutfitItems[i-1] = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
-                OutfitItems[i - 1].Closet = this;
-                OutfitItems[i - 1].OnItemSelectedEvent += OnItemOutfitItemSelected;
+                ClosetOutfitItem outfitItem = transform.GetChild(i).GetComponent<ClosetOutfitItem>();
+                outfitItem.Closet = this;
+                outfitItem.OnItemSelectedEvent += OnItemOutfitItemSelected;
+                OutfitItems[i - 2] = outfitItem;
             }
         }
 
