@@ -70,7 +70,7 @@ public class UserFeatureRecognition : MonoBehaviour
         Instance = this;
     }
     
-    void Start()
+    void OnEnable()
     {
         kinectManager = KinectManager.Instance;
     }
@@ -322,6 +322,8 @@ public class UserFeatureRecognition : MonoBehaviour
                     {
                         user.UserGender = User.Gender.Female;
                     }
+
+                    user.UserAge = result.rst.age;
                 }
                 else
                 {
