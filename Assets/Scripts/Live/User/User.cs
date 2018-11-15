@@ -11,7 +11,8 @@ public class User : MonoBehaviour {
         Male
     };
 
-    public GenderUIController GenderSelectionUI;
+    //public GenderUIController GenderSelectionUI;
+    public ActivationIconUIController ActivationIcon;
     public TextMesh DebugText;
 
     private int uidx;
@@ -38,11 +39,11 @@ public class User : MonoBehaviour {
         {
             ugender = value;
 
-            if (ugender != Gender.None)
-            {
-                if (GenderSelectionUI)
-                    GenderSelectionUI.OnGenderSelected(ugender);
-            }
+            //if (ugender != Gender.None)
+            //{
+            //    if (GenderSelectionUI)
+            //        GenderSelectionUI.OnGenderSelected(ugender);
+            //}
         }
         get
         {
@@ -123,6 +124,7 @@ public class User : MonoBehaviour {
             uScore.gameObject.SetActive(true);
 
             //ugender = Gender.None;
+            ActivationIcon.gameObject.SetActive(false);
 
             isReadyToBeActivated = false;
             isActivated = true; 
@@ -135,7 +137,8 @@ public class User : MonoBehaviour {
         uScore.gameObject.SetActive(false);
 
         ugender = Gender.None;
-        GenderSelectionUI.ResetUI();
+        //GenderSelectionUI.ResetUI();
+        ActivationIcon.gameObject.SetActive(true);
 
         isReadyToBeActivated = isReady;
         isActivated = false;
@@ -143,39 +146,43 @@ public class User : MonoBehaviour {
 
     void Update()
     {  
-        if(ugender == Gender.None)
+        //if(ugender == Gender.None)
+        //{
+        //    if (GenderSelectionUI)
+        //    {
+        //        if (isReadyToBeActivated && manager.IsUserPositionValid(UserID))
+        //        {
+        //            if(GenderSelectionUI.SetUITransform(UserID))
+        //                GenderSelectionUI.Show();
+        //        }
+        //        else
+        //            GenderSelectionUI.Hide();
+        //    }
+        //}
+
+        if (isReadyToBeActivated && manager.IsUserPositionValid(UserID))
         {
-            if (GenderSelectionUI)
+            if (ActivationIcon)
             {
-                if (isReadyToBeActivated && manager.IsUserPositionValid(UserID))
-                {
-                    if(GenderSelectionUI.SetUITransform(UserID))
-                        GenderSelectionUI.Show();
-                }
-                else
-                    GenderSelectionUI.Hide();
+                if (!ActivationIcon.gameObject.activeSelf)
+                    ActivationIcon.gameObject.SetActive(true);
+                ActivationIcon.SetUITransform(UserID);
             }
         }
-
-#if UNITY_EDITOR
-        //if (DebugText)
-        //{
-        //    DebugText.text = string.Format("User {0}: {1}", UserIndex, UserID);
-        //    DebugText.transform.position = GenderSelectionUI.transform.position;
-        //    DebugText.gameObject.SetActive(true);
-        //}
-#else
-        if (DebugText)
+        else
         {
-            DebugText.gameObject.SetActive(false);
+            if (ActivationIcon)
+            {
+                if (ActivationIcon.gameObject.activeSelf)
+                    ActivationIcon.gameObject.SetActive(false);
+            }
         }
-#endif
     }
 
-#if UNITY_EDITOR
-    Vector3 GetUserScreenPos(long userID)
+    Vector3 GetUserScreenPos()
     {
         Vector3 userScreenPos = Vector3.zero;
+        Vector3 screenOffset = new Vector3(0f, 200f, -5f);
         if (manager && manager.IsInitialized())
         {
             GameObject cameraGO = GameObject.Find("/Live runway/FittingRoom/Camera");
@@ -191,15 +198,14 @@ public class User : MonoBehaviour {
             }
 
             int iJointIndex = (int)KinectInterop.JointType.Head;
-            if (manager.IsJointTracked(userID, iJointIndex))
+            if (manager.IsJointTracked(UserID, iJointIndex))
             {
-                userScreenPos = manager.GetJointPosColorOverlay(userID, iJointIndex, uiCamera, backgroundRect);
+                userScreenPos = manager.GetJointPosColorOverlay(UserID, iJointIndex, uiCamera, backgroundRect);
             }
         }
 
-        return userScreenPos;
+        return userScreenPos + screenOffset;
     }
-#endif
 
     void OnDestroy()
     {
