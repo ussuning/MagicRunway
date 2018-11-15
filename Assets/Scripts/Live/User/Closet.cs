@@ -615,11 +615,6 @@ public class Closet : MonoBehaviour {
             selectionTutorial.EndTutorial(true);
     }
 
-    public void ActivateCloset ()
-    {
-        Show();
-    }
-
     public void SwapClosetGender()
     {
         if (closetGender == User.Gender.Male)
@@ -736,7 +731,7 @@ public class Closet : MonoBehaviour {
             yield return new WaitForSeconds(0.01f); // wait for hide animation
             OutfitItems[i].SetOutfit(outfits[i]);
         }
-
+        genderSwapButton.ShowItem();
         topArrow.ShowArrow();
         bottomArrow.ShowArrow();
     }
@@ -747,6 +742,7 @@ public class Closet : MonoBehaviour {
         {
             OutfitItems[i].ClearOutfit();
         }
+        genderSwapButton.HideItem();
         topArrow.HideArrow();
         bottomArrow.HideArrow();
     }

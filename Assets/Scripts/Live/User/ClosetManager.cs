@@ -51,8 +51,7 @@ public class ClosetManager : MonoBehaviour {
         {
             if (closet.IsHidden)
             {
-                //closet.Clear();
-                closet.ActivateCloset();
+                closet.Show();
             }    
         }
         else
