@@ -792,8 +792,6 @@ public class Closet : MonoBehaviour {
 
     private void OnClosetItemHover(ClosetItem hoveredItem)
     {
-        Debug.Log(string.Format("[Closet] OnClosetItemHover: hoveredItem = " + hoveredItem.name));
-
         if(hoveredItem == genderSwapButton)
         {
             genderSwapButton.OnItemHover();

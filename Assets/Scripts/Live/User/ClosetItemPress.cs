@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ClosetItemPress : ClosetItem
 {
-    public float CooldownTime = 1f;
+    protected bool isSelecting = false;
+
+    private float CooldownTime = 1f;
     private bool isCD = false;
+
 
     public override void FixedUpdate()
     {
@@ -14,14 +17,19 @@ public class ClosetItemPress : ClosetItem
             if (!isCD)
             {
                 hoverDuration += Time.fixedDeltaTime;
+                isSelecting = true;
+            }
+            else
+            {
+                isSelecting = false;
             }
         }
         else
         {
             isCD = false;
+            isSelecting = false;
         }
     }
-
 
     public override void OnItemSelected()
     {
