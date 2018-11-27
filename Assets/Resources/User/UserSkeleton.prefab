@@ -54,7 +54,6 @@ GameObject:
   - component: {fileID: 4289473716059804}
   - component: {fileID: 33488546680171192}
   - component: {fileID: 23063014470968606}
-  - component: {fileID: 114308554478119804}
   m_Layer: 0
   m_Name: hand_icon
   m_TagString: Untagged
@@ -793,24 +792,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ActivationIcon: {fileID: 114411737262558790}
   DebugText: {fileID: 102814763182166690}
---- !u!114 &114308554478119804
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1270526717000584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 638b12e7dd4e69c4a95f813044c739c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  followSpeed: 1
-  rotateSpeed: 1
-  IconOffset: {x: 0, y: 200, z: -60}
-  scalingPosSmoothing: 80
-  maxScale: 4
-  minScale: 0.5
-  maxRotation: 30
 --- !u!114 &114411737262558790
 MonoBehaviour:
   m_ObjectHideFlags: 1
