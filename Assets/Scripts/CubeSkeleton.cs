@@ -24,16 +24,34 @@ public class CubeSkeleton : MonoBehaviour {
         if (t.childCount == 0)
             return;
 
-        for (int i=0; i<t.childCount; i++)
+
+        bool skipChildren = false;
+        // Skip fingers.
+        if (t.name.Contains("Hand"))
+            skipChildren = true;
+
+        if (skipChildren == false)
         {
-            AddCubesRecursive(t.GetChild(i));
+            for (int i = 0; i < t.childCount; i++)
+            {
+                AddCubesRecursive(t.GetChild(i));
+            }
         }
 
-        //Debug.Log("Adding cube to " + t.name);
-        GameObject go = GameObject.Instantiate(cubePrefab);
-        cubeInstances.Add(go);
-        go.transform.parent = t;
-        go.transform.localPosition = Vector3.zero;
-        go.transform.localRotation = Quaternion.identity;
+        bool addCube = true;
+
+        if (t.name.Contains("Spine2"))
+            addCube = false;
+
+        if (addCube)
+        {
+            //Debug.Log("Adding cube to " + t.name);
+            GameObject go = GameObject.Instantiate(cubePrefab);
+            cubeInstances.Add(go);
+            go.transform.parent = t;
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            go.transform.SetAsLastSibling();
+        }
     }
 }

@@ -147,7 +147,7 @@ public class KinectManager : MonoBehaviour
 	protected static KinectManager instance = null;
 
 	// available sensor interfaces
-	protected List<DepthSensorInterface> sensorInterfaces = null;
+	public List<DepthSensorInterface> sensorInterfaces = null;
 	// primary SensorData structure
 	protected KinectInterop.SensorData sensorData = null;
 

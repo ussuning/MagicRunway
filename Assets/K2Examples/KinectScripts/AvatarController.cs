@@ -1130,7 +1130,7 @@ public class AvatarController : MonoBehaviour
         Quaternion jointRotation = kinectManager.GetJointOrientation(userId, iJoint, flip);
         if (jointRotation == Quaternion.identity)
             return;
-
+        /*
         switch (joint)
         {
             case KinectInterop.JointType.WristLeft:
@@ -1156,6 +1156,7 @@ public class AvatarController : MonoBehaviour
                 }
                 break;
         }
+        */
     }
 
         // Apply the rotations tracked by kinect to the joints.
@@ -1252,10 +1253,12 @@ public class AvatarController : MonoBehaviour
         Vector3 parentScale = joint.parent.lossyScale;
         joint.localScale = new Vector3(1f / parentScale.x, 1f / parentScale.y, 1f / parentScale.z);
 
+        int idx = joint.GetSiblingIndex();
         Transform oldParent = joint.parent;
         joint.parent = null;
         joint.localScale = Vector3.one;
         joint.parent = oldParent;
+        joint.SetSiblingIndex(idx);
     }
 
 

@@ -103,8 +103,8 @@ public class NuitrackInterface : DepthSensorInterface
 
 	private NuitrackInitState initState = NuitrackInitState.INIT_NUITRACK_MANAGER_NOT_INSTALLED;
 
-	private nuitrack.DepthSensor depthSensor = null;
-	private nuitrack.ColorSensor colorSensor = null;
+	public nuitrack.DepthSensor depthSensor = null;
+	public nuitrack.ColorSensor colorSensor = null;
 	private nuitrack.UserTracker userTracker = null;
 	private nuitrack.SkeletonTracker skeletonTracker = null;
 	private nuitrack.HandTracker handTracker = null;

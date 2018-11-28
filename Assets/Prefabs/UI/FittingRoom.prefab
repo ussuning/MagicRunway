@@ -2276,7 +2276,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1287820540508392}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.07, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4268525901307498}
@@ -3478,7 +3478,6 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114724324766073644}
   animator: {fileID: 0}
   isAnimatorDebug: 0
-  SelectionCooldown: 1
   ArrowDirection: 1
 --- !u!114 &114082016676662810
 MonoBehaviour:
@@ -3621,11 +3620,12 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114205087567532986}
   animator: {fileID: 0}
   isAnimatorDebug: 0
-  SelectionCooldown: 1
   MaleIcon: {fileID: 21300000, guid: 67c8818cddd924f499b99d01923cdba9, type: 3}
   FemaleIcon: {fileID: 21300000, guid: ec9750e48e5528344a4b94eb13fc3a48, type: 3}
   MaleSelectedIcon: {fileID: 21300000, guid: 1dae878b72f27ab418353eeb25b82aa2, type: 3}
   FemaleSelectedIcon: {fileID: 21300000, guid: 5d338c8757ecd02479d909298c809536, type: 3}
+  MaleColor: {r: 0, g: 0.5803922, b: 1, a: 1}
+  FemaleColor: {r: 1, g: 0.49803922, b: 0.92941177, a: 1}
 --- !u!114 &114152919187555652
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3957,11 +3957,12 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114217364299996606}
   animator: {fileID: 0}
   isAnimatorDebug: 0
-  SelectionCooldown: 1
   MaleIcon: {fileID: 21300000, guid: 67c8818cddd924f499b99d01923cdba9, type: 3}
   FemaleIcon: {fileID: 21300000, guid: ec9750e48e5528344a4b94eb13fc3a48, type: 3}
   MaleSelectedIcon: {fileID: 21300000, guid: 1dae878b72f27ab418353eeb25b82aa2, type: 3}
   FemaleSelectedIcon: {fileID: 21300000, guid: 5d338c8757ecd02479d909298c809536, type: 3}
+  MaleColor: {r: 0, g: 0.5803922, b: 1, a: 1}
+  FemaleColor: {r: 1, g: 0.49803922, b: 0.92941177, a: 1}
 --- !u!114 &114362944174788698
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4269,14 +4270,14 @@ MonoBehaviour:
     e32: 0
     e33: 1
   offsetMatrix:
-    e00: 0.02
+    e00: 0
     e01: 0
     e02: 0
-    e03: 0.08
+    e03: 0
     e10: 0
     e11: 0
     e12: 0
-    e13: 0.08
+    e13: 0
     e20: 0
     e21: 0
     e22: 0
@@ -4398,7 +4399,6 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114995415218143508}
   animator: {fileID: 0}
   isAnimatorDebug: 0
-  SelectionCooldown: 1
   ArrowDirection: 0
 --- !u!114 &114598330828037378
 MonoBehaviour:
@@ -4554,7 +4554,6 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114373539682509606}
   animator: {fileID: 0}
   isAnimatorDebug: 0
-  SelectionCooldown: 1
   ArrowDirection: 0
 --- !u!114 &114651252676861202
 MonoBehaviour:
@@ -4657,7 +4656,6 @@ MonoBehaviour:
   SelectedFillImage: {fileID: 114979232012631510}
   animator: {fileID: 0}
   isAnimatorDebug: 0
-  SelectionCooldown: 1
   ArrowDirection: 1
 --- !u!114 &114724324766073644
 MonoBehaviour:
