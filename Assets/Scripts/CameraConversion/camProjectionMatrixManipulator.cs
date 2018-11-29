@@ -93,7 +93,7 @@ public class camProjectionMatrixManipulatorEditor : Editor
             myScript.Init();
         }
 
-        GUILayout.Label("kinectSensor: uid = " + myScript.kinectSensor.UniqueKinectId);
+        GUILayout.Label("kinectSensor: uid = " + (myScript.kinectSensor != null ? myScript.kinectSensor.UniqueKinectId : "null"));
         GUILayout.Label(myScript.GetColorFrameDesc());
         GUILayout.Label(myScript.GetDepthFrameDesc());
     }
