@@ -41,7 +41,9 @@ public class camProjectionMatrixManipulator : MonoBehaviour {
             kinectSensor = k2i.kinectSensor;
             colorFrameDesc = kinectSensor.ColorFrameSource.FrameDescription;
             depthFrameDesc = kinectSensor.DepthFrameSource.FrameDescription;
-            
+
+            Debug.Log("kinectSensor:uid = " + kinectSensor.UniqueKinectId);
+
             Debug.Log(GetColorFrameDesc());
             Debug.Log(GetDepthFrameDesc());
         }
@@ -91,6 +93,7 @@ public class camProjectionMatrixManipulatorEditor : Editor
             myScript.Init();
         }
 
+        GUILayout.Label("kinectSensor: uid = " + myScript.kinectSensor.UniqueKinectId);
         GUILayout.Label(myScript.GetColorFrameDesc());
         GUILayout.Label(myScript.GetDepthFrameDesc());
     }
