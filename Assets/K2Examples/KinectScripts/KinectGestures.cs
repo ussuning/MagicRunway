@@ -571,86 +571,137 @@ public class KinectGestures : MonoBehaviour, GestureManagerInterface
 			// check for Wave
 			case Gestures.Wave:
                 float yThresh = 0.0f; // originally 0.1f
-                float xThresh = 0.025f; // originally 0.05f;
-                float xVel = 0.015f; // originally 0.5f;
+                float xThresh = 0.0125f; // originally 0.05f; 0.01 - 0.02
+                float xVel = 0.015f; // originally 0.5f; 0.01 - 0.015
+                float completionTime = 1f; // originally 1.5f;
+                float progressSpeed = 1.5f; 
                 
-                switch (gestureData.state)
-				{       
-					case 0:  // gesture detection - phase 1
-						if(jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
-					       (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
-					       (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh &&
-                           Mathf.Abs(jointsVel[rightHandIndex].x) > xVel)
-						{
-							SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
-							gestureData.progress = 0.3f;
-						}
-						else if(jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
-					            (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
-					            (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh &&
-                                 Mathf.Abs(jointsVel[leftHandIndex].x) > xVel) 
+                if(gestureData.state == 0)
+                {
+                    if (jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
+                        Mathf.Abs(jointsVel[rightHandIndex].x) > xVel &&
+                        (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh)
+                    {
+                        if((jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh)
                         {
-							SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
-							gestureData.progress = 0.3f;
-						}
-						break;
-				
-					case 1:  // gesture - phase 2
-						if((timestamp - gestureData.timestamp) < 1.5f)
-						{
+                            SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
+                            gestureData.state = 1;
+                        }
+                        else if ((jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -xThresh)
+                        {
+                            SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
+                            gestureData.state = 4;
+                        }
+                    }
+                    else if (jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
+                             Mathf.Abs(jointsVel[leftHandIndex].x) > xVel &&
+                            (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh)     
+                    {
+                        if ((jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > xThresh)
+                        {
+                            SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
+                            gestureData.state = 1;
+                        }
+                        else if ((jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh)
+                        {
+                            SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
+                            gestureData.state = 4;
+                        }                
+                    }
+                }
+
+                if (gestureData.state > 0)
+                {
+                    if (gestureData.progress >= 0f && gestureData.progress < 1f / 3f)
+                    {
+                        if ((timestamp - gestureData.timestamp) < completionTime)
+                        {
                             bool isInPose = gestureData.joint == rightHandIndex ?
                                 jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
                                 (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
-                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -xThresh &&
+                                (gestureData.state == 1? (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -xThresh : (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh) &&
                                 Mathf.Abs(jointsVel[rightHandIndex].x) > xVel :
                                 jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
                                 (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
-                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > xThresh &&
+                                (gestureData.state == 1 ? (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh : (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > xThresh) &&
                                 Mathf.Abs(jointsVel[leftHandIndex].x) > xVel;
 
-
                             if (isInPose)
-							{
-								gestureData.timestamp = timestamp;
-								gestureData.state++;
-								gestureData.progress = 0.7f;
-							}
-						}
-						else
-						{
-							// cancel the gesture
-							SetGestureCancelled(ref gestureData);
-						}
-						break;
-									
-					case 2:  // gesture phase 3 = complete
-						if((timestamp - gestureData.timestamp) < 1.5f)
-						{
+                            {
+                                gestureData.timestamp = timestamp;
+                                gestureData.progress += Time.deltaTime * progressSpeed;
+                            }
+                        }
+                        else
+                        {
+                            // cancel the gesture
+                            SetGestureCancelled(ref gestureData);   
+                        }
+                        break;
+                    }
+                    else if (gestureData.progress >= 1f / 3f && gestureData.progress < 2f / 3f)
+                    {
+                        if ((timestamp - gestureData.timestamp) < completionTime)
+                        {
                             bool isInPose = gestureData.joint == rightHandIndex ?
                                 jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
                                 (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
-                                (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh &&
+                                (gestureData.state == 1 ? (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh : (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -xThresh) &&
                                 Mathf.Abs(jointsVel[rightHandIndex].x) > xVel :
                                 jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
                                 (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
-                                (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh &&
+                                (gestureData.state == 1 ? (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > xThresh : (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh) &&
                                 Mathf.Abs(jointsVel[leftHandIndex].x) > xVel;
 
                             if (isInPose)
-							{
-								Vector3 jointPos = jointsPos[gestureData.joint];
-								CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, 0f);
-							}
-						}
-						else
-						{
-							// cancel the gesture
-							SetGestureCancelled(ref gestureData);
-						}
-						break;
-				}
-                
-				break;
+                            {
+                                gestureData.timestamp = timestamp;
+                                gestureData.progress += Time.deltaTime * progressSpeed;
+                            }       
+                        }
+                        else
+                        {
+                            // cancel the gesture
+                            SetGestureCancelled(ref gestureData); 
+                        }
+                        break;
+                    }
+                    else if (gestureData.progress >= 2f / 3f)
+                    {
+                        if ((timestamp - gestureData.timestamp) < completionTime)
+                        {
+                            bool isInPose = gestureData.joint == rightHandIndex ?
+                                jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
+                                (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > yThresh &&
+                                (gestureData.state == 1 ? (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) < -xThresh : (jointsPos[rightHandIndex].x - jointsPos[rightElbowIndex].x) > xThresh) &&
+                                Mathf.Abs(jointsVel[rightHandIndex].x) > xVel :
+                                jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
+                                (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > yThresh &&
+                                (gestureData.state == 1 ? (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) < -xThresh : (jointsPos[leftHandIndex].x - jointsPos[leftElbowIndex].x) > xThresh) &&
+                                Mathf.Abs(jointsVel[leftHandIndex].x) > xVel;
+
+                            if (isInPose)
+                            {
+                                gestureData.timestamp = timestamp;
+                                //gestureData.state++;
+                                gestureData.progress += Time.deltaTime * progressSpeed;
+                            }
+                      
+                            if (gestureData.progress >= 1f)
+                            {
+                                Vector3 jointPos = jointsPos[gestureData.joint];
+                                CheckPoseComplete(ref gestureData, timestamp, jointPos, true, 0f);
+                            }
+                        }
+                        else
+                        {
+                            // cancel the gesture
+                            SetGestureCancelled(ref gestureData);  
+                        }
+                    }
+                }
+
+                break;
 
 //			// check for Click
 //			case Gestures.Click:
