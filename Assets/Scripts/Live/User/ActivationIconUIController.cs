@@ -41,6 +41,7 @@ public class ActivationIconUIController : MonoBehaviour {
     void Start ()
     {
         GenerateTiks();
+        ResetProgress();
     }
 
     public bool SetUITransform(long userID)
@@ -114,10 +115,12 @@ public class ActivationIconUIController : MonoBehaviour {
     public void ResetProgress()
     {
         SetProgressValue(0);
+        progressBarContainer.SetActive(false);
     }
 
     public void SetProgressValue(float v)
     {
+        progressBarContainer.SetActive(true);
         // v = [0, 1]
         int numColoredTiks = Mathf.FloorToInt(numberOfTiks * v);
         for(int i=0; i<numColoredTiks; i++)
