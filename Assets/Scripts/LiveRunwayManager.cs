@@ -202,6 +202,21 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
         if (!isModeActive)
             return;
 
+        if (users.ContainsKey(userIndex))
+        {
+            if (userIndex == usersSortedByDistance[0] || userIndex == usersSortedByDistance[1])
+            {
+                User user = users[userIndex];
+                if (user.UserGender != User.Gender.None)
+                {
+                    if (!user.IsActivated)
+                    {
+                        user.ActivationIcon.SetProgressValue(progress);
+                    }
+                }
+            }
+        }
+
         Closet closet = closetMgr.GetUserCloset(userIndex);
         if (closet)
         {
@@ -286,6 +301,21 @@ public class LiveRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     {
         if (!isModeActive)
             return false;
+
+        if (users.ContainsKey(userIndex))
+        {
+            if (userIndex == usersSortedByDistance[0] || userIndex == usersSortedByDistance[1])
+            {
+                User user = users[userIndex];
+                if (user.UserGender != User.Gender.None)
+                {
+                    if (!user.IsActivated)
+                    {
+                        user.ActivationIcon.ResetProgress();
+                    }
+                }
+            }
+        }
 
         Closet closet = closetMgr.GetUserCloset(userIndex);
         if (!closet)
