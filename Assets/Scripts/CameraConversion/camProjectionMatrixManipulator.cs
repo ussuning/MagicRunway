@@ -11,10 +11,11 @@ public class camProjectionMatrixManipulator : MonoBehaviour {
     public Matrix4x4 offsetMatrix = Matrix4x4.zero;
     protected Camera cam;
 
+#if UNITY_STANDALONE_WIN
     internal Windows.Kinect.KinectSensor kinectSensor;
     internal Windows.Kinect.FrameDescription colorFrameDesc;
     internal Windows.Kinect.FrameDescription depthFrameDesc;
-
+#endif
     // Use this for initialization
     void Start () {
         cam = GetComponent<Camera>();
@@ -33,6 +34,7 @@ public class camProjectionMatrixManipulator : MonoBehaviour {
             projectionMatrix.SetRow(row, values);
         }
 
+#if UNITY_STANDALONE_WIN
         DepthSensorInterface dsi = KinectManager.Instance.sensorInterfaces[0];
         Kinect2Interface k2i = dsi as Kinect2Interface;
         if (k2i != null)
@@ -51,8 +53,10 @@ public class camProjectionMatrixManipulator : MonoBehaviour {
         {
             Debug.LogError("No Kinect2Interface Detected.");
         }
+#endif
     }
 
+#if UNITY_STANDALONE_WIN
     internal string GetColorFrameDesc()
     {
         if (colorFrameDesc == null)
@@ -68,9 +72,10 @@ public class camProjectionMatrixManipulator : MonoBehaviour {
         else
             return "depthCameraFOV: " + depthFrameDesc.HorizontalFieldOfView + "H x " + depthFrameDesc.VerticalFieldOfView + "V" + " (" + depthFrameDesc.Width + "px x " + depthFrameDesc.Height + "px)";
     }
-	
-	// Update is called once per frame
-	void Update () {
+#endif
+
+    // Update is called once per frame
+    void Update () {
 		if (projectionMatrix != cam.projectionMatrix)
         {
             cam.projectionMatrix = projectionMatrix;
@@ -93,9 +98,11 @@ public class camProjectionMatrixManipulatorEditor : Editor
             myScript.Init();
         }
 
+#if UNITY_STANDALONE_WIN
         GUILayout.Label("kinectSensor: uid = " + (myScript.kinectSensor != null ? myScript.kinectSensor.UniqueKinectId : "null"));
         GUILayout.Label(myScript.GetColorFrameDesc());
         GUILayout.Label(myScript.GetDepthFrameDesc());
+#endif
     }
 }
 #endif
