@@ -8,7 +8,8 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: jacket_back
   m_Shader: {fileID: 4800000, guid: 665fe2659105e4033a204b0179332dd6, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON _GLOSSYREFLECTIONS_OFF _SPECGLOSSMAP
+  m_ShaderKeywords: _ALPHATEST_ON _GLOSSYREFLECTIONS_OFF _METALLICGLOSSMAP _NORMALMAP
+    _SPECGLOSSMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -20,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 60e52fe83d6aa4c509eb176789aa3fc7, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -40,11 +41,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 1b9078ec74539fe41b33e5819d62d0a5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2c590f8e665ff4ff3808170d30b31fc8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 71ff00a80674f184b9f0ddabf4d548e1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
