@@ -1175,35 +1175,47 @@ public class AvatarController : MonoBehaviour
         switch (joint)
         {
             case KinectInterop.JointType.ShoulderLeft:
-                float upperArmLength = (boneTransform.GetChild(0).position - boneTransform.position).magnitude;
-                float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]] -
-                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]]).magnitude;
+                {
+                    float upperArmLength = (boneTransform.GetChild(0).position - boneTransform.position).magnitude;
+                    float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]]).magnitude;
 
-                resetJointScale(ref boneTransform);
-                boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
-                // Unscale child bone
-                Transform elbowLeft = boneTransform.GetChild(0);
-                resetJointScale(ref elbowLeft);
-                float lowerArmLength = (elbowLeft.GetChild(0).position - elbowLeft.position).magnitude;
-                float origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
-                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
+                    resetJointScale(ref boneTransform);
+                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
+                    // Unscale child bone
+                    Transform elbowLeft = boneTransform.GetChild(0);
+                    resetJointScale(ref elbowLeft);
 
-                /*elbowLeft.localScale = new Vector3(
-                    boneTransform.localScale.x, 
-                    elbowLeft.localScale.y * lowerArmLength / origLowerArmLength, 
-                    boneTransform.localScale.z);
-                    */
+                    float lowerArmLength = (elbowLeft.GetChild(0).position - elbowLeft.position).magnitude;
+                    float origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
 
+                    elbowLeft.localScale = new Vector3(
+                        boneTransform.localScale.x,
+                        elbowLeft.localScale.y * (lowerArmLength / origLowerArmLength),
+                        boneTransform.localScale.z);
+                }
                 break;
             case KinectInterop.JointType.ShoulderRight:
-                upperArmLength = (GetTranslatedBonePos(KinectInterop.JointType.ElbowRight) - boneTransform.position).magnitude;
-                origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]] -
-                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowRight]]).magnitude;
-                resetJointScale(ref boneTransform);
-                boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
-                // Unscale child bone
-                Transform elbowRight = boneTransform.GetChild(0);
-                resetJointScale(ref elbowRight);
+                {
+                    float upperArmLength = (GetTranslatedBonePos(KinectInterop.JointType.ElbowRight) - boneTransform.position).magnitude;
+                    float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowRight]]).magnitude;
+                    resetJointScale(ref boneTransform);
+                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
+                    // Unscale child bone
+                    Transform elbowRight = boneTransform.GetChild(0);
+                    resetJointScale(ref elbowRight);
+
+                    float lowerArmLength = (elbowRight.GetChild(0).position - elbowRight.position).magnitude;
+                    float origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
+
+                    elbowRight.localScale = new Vector3(
+                        boneTransform.localScale.x,
+                        elbowRight.localScale.y * (lowerArmLength / origLowerArmLength),
+                        boneTransform.localScale.z);
+                }
                 break;
             case KinectInterop.JointType.HipLeft:
             case KinectInterop.JointType.HipRight:
