@@ -9,6 +9,9 @@ public class CubeSkeleton : MonoBehaviour {
     // Use this for initialization
     private void OnEnable()
     {
+        if (cubePrefab == null)
+            cubePrefab = AssetBundleManager.Instance.GetModelAsset("CubeJoint");
+
         AddCubesRecursive(transform);
     }
 

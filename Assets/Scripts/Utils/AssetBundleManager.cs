@@ -115,7 +115,7 @@ public class MultiBundleManager
                 string [] abAssetParts = abAsset.Split('/');
                 string abAssetName = abAssetParts[abAssetParts.Length - 1];
                 string assetName = abAssetName.Split('.')[0]; // remove extension
-                //Debug.Log(assetName + " -> " + abEnum);
+                Debug.Log(assetName + " -> " + abEnum);
                 lookup.Add(assetName, abEnum);
             }
         }
@@ -123,6 +123,8 @@ public class MultiBundleManager
 
     public T LoadAsset<T>(string assetName) where T : UnityEngine.Object 
     {
+        assetName = assetName.ToLower();
+
         // Initialize lookups
         if (lookup == null)
             InitLookups();

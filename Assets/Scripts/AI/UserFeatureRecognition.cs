@@ -170,7 +170,7 @@ public class UserFeatureRecognition : MonoBehaviour
 
     private Rect GetUserRect(long userId, Vector3 imageSize)
     {
-        Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(long userId = {0}, Vector3 imageSize = {1})", userId, imageSize));
+        //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(long userId = {0}, Vector3 imageSize = {1})", userId, imageSize));
 
         Rect userRect = new Rect();
         if (kinectManager && kinectManager.IsInitialized())
@@ -181,7 +181,7 @@ public class UserFeatureRecognition : MonoBehaviour
 
                 if (userPosRaw != Vector3.zero)
                 {
-                    Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): userPosRaw = {0}", userPosRaw));
+                    //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): userPosRaw = {0}", userPosRaw));
 
                     Vector2 userPosDepth = kinectManager.MapSpacePointToDepthCoords(userPosRaw);
                     ushort depthUser = kinectManager.GetDepthForPixel((int)userPosDepth.x, (int)userPosDepth.y);
@@ -193,8 +193,8 @@ public class UserFeatureRecognition : MonoBehaviour
 
                     if (depthUser > 0 && posDepthUser1 != Vector2.zero && posDepthUser2 != Vector2.zero)
                     {
-                        Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): userPosDepth = {0}, depthUser = {1}", userPosRaw, depthUser));
-                        Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): posUserRaw1 = {0}, posUserRaw2 = {1},   posDepthUser1 = {2}, posDepthUser2 = {3}", posUserRaw1, posUserRaw2, posDepthUser1, posDepthUser2));
+                        //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): userPosDepth = {0}, depthUser = {1}", userPosRaw, depthUser));
+                        //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): posUserRaw1 = {0}, posUserRaw2 = {1},   posDepthUser1 = {2}, posDepthUser2 = {3}", posUserRaw1, posUserRaw2, posDepthUser1, posDepthUser2));
 
                         Vector2 posColorUser1 = kinectManager.MapDepthPointToColorCoords(posDepthUser1, depthUser);
                         Vector2 posColorUser2 = kinectManager.MapDepthPointToColorCoords(posDepthUser2, depthUser);
@@ -211,22 +211,22 @@ public class UserFeatureRecognition : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} has INVALID COLOR position", userId));
+                            //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} has INVALID COLOR position", userId));
                         }
                     }
                     else
                     {
-                        Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} has INVALID DEPTH position", userId));
+                        //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} has INVALID DEPTH position", userId));
                     }
                 }
                 else
                 {
-                    Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} has INVALID RAW position", userId));
+                    //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} has INVALID RAW position", userId));
                 }
             }
             else
             {
-                Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} is NOT tracked", userId));
+                //Debug.Log(string.Format("[UserFeatureRecognition] GetUserRect(): User {0} is NOT tracked", userId));
             }
         }
         else
@@ -239,11 +239,11 @@ public class UserFeatureRecognition : MonoBehaviour
 
     private Texture2D CropUserTexture(Texture2D fullImage, Rect userRect)
     {
-        Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(Texture2D fullImage, Rect userRect = Width{0} Height{1}", userRect.width, userRect.height));
+        //Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(Texture2D fullImage, Rect userRect = Width{0} Height{1}", userRect.width, userRect.height));
 
         if (userRect.width > 0 && userRect.height > 0)
         {
-            Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(): userRect width = {0}, height = {1}", userRect.width, userRect.height));
+            //Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(): userRect width = {0}, height = {1}", userRect.width, userRect.height));
 
             if (fullImage)
             {
@@ -271,12 +271,12 @@ public class UserFeatureRecognition : MonoBehaviour
             }
             else
             {
-                Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(): Cannot get Kinect color tex"));
+                //Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(): Cannot get Kinect color tex"));
             }
         }
         else
         {
-            Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(): INVALID user rect size"));
+            //Debug.Log(string.Format("[UserFeatureRecognition] CropUserTexture(): INVALID user rect size"));
         }
 
         return null;
@@ -289,7 +289,7 @@ public class UserFeatureRecognition : MonoBehaviour
     IEnumerator ClassifyUser(User user)
     {
         Texture2D userTex = GetUserColorTexture(user.UserID);
-        Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUser(): SUCESSFULLY created user texture for user {0}", user.UserID));
+       // Debug.Log(string.Format("[UserFeatureRecognition] ClassifyUser(): SUCESSFULLY created user texture for user {0}", user.UserID));
         if (userTex)
         {
             using (UnityWebRequest www = UnityWebRequest.Put(RequestURL, GenerateImageJsonString(userTex.EncodeToPNG())))
