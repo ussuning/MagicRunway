@@ -1,512 +1,612 @@
-{"outfits":[
-    {
-        "id":"1",
-        "name":"Juliet",
-		"sex": "f",
-		"age": 20, 
-        "desc":"Deep V-neck Ruffle Dress.",
-		"prefab":"mr_sun_f_juliet_live",
-		"icon":"juliet_icon.png",
-        "wearableids":[
-        "1","6"
-        ],
-        "wearables":[
+{
+	"outfits": [
+		{
+			"id": "1",
+			"name": "Juliet",
+			"sex": "f",
+			"age": 20,
+			"desc": "Deep V-neck Ruffle Dress.",
+			"prefab": "mr_sun_f_juliet_live",
+			"icon": "juliet_icon.png",
+			"wearableids": [
+				"1",
+				"6"
+			],
+			"wearables": [
 
-        ]
-    },
-	{
-		"id": "2",
-		"name": "Mila",
-		"sex": "f",
-		"age": 40,
-		"desc": "Silk Faille Top with Leather Pants",
-		"prefab": "mr_sun_f_mila",
-		"icon": "mila_icon.png",
-		"wearableids": [
-			"2",
-			"3",
-			"63"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "2",
+			"name": "Mila",
+			"sex": "f",
+			"age": 40,
+			"desc": "Silk Faille Top with Leather Pants",
+			"prefab": "mr_sun_f_mila",
+			"icon": "mila_icon.png",
+			"wearableids": [
+				"2",
+				"3",
+				"63"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "3",
-		"name": "Victoria",
-		"sex": "f",
-		"age": 40,
-		"desc": "Carnivale Leather Suit",
-		"prefab": "mr_sun_f_victoria_live",
-		"icon": "victoria_icon.png",
-		"wearableids": [
-			"4",
-			"64"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "3",
+			"name": "Victoria",
+			"sex": "f",
+			"age": 40,
+			"desc": "Carnivale Leather Suit",
+			"prefab": "mr_sun_f_victoria_live",
+			"icon": "victoria_icon.png",
+			"wearableids": [
+				"4",
+				"64"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "4",
-		"name": "Stella",
-		"sex": "f",
-		"age": 30,
-		"desc": "Large Ruffle Front Fitted Mini Dress",
-		"prefab": "mr_sun_f_stella_live",
-		"icon": "stella_icon.png",
-		"wearableids": [
-			"5"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "4",
+			"name": "Stella",
+			"sex": "f",
+			"age": 30,
+			"desc": "Large Ruffle Front Fitted Mini Dress",
+			"prefab": "mr_sun_f_stella_live",
+			"icon": "stella_icon.png",
+			"wearableids": [
+				"5"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "5",
-		"name": "Nina",
-		"sex": "f",
-		"age": 20,
-		"desc": "Spagetti Strap Asymmetrical Ruffle Dress",
-		"prefab": "mr_sun_f_nina_live",
-		"icon": "nina_icon.png",
-		"wearableids": [
-			"7"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "5",
+			"name": "Nina",
+			"sex": "f",
+			"age": 20,
+			"desc": "Spagetti Strap Asymmetrical Ruffle Dress",
+			"prefab": "mr_sun_f_nina_live",
+			"icon": "nina_icon.png",
+			"wearableids": [
+				"7"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "6",
-		"name": "Mabel",
-		"sex": "f",
-		"age": 20,
-		"desc": "Silk Faille Ruffle Front with Carnivale Leather Mini Dress",
-		"prefab": "mr_sun_f_mabel_live",
-		"icon": "mabel_icon.png",
-		"wearableids": [
-			"8"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "6",
+			"name": "Mabel",
+			"sex": "f",
+			"age": 20,
+			"desc": "Silk Faille Ruffle Front with Carnivale Leather Mini Dress",
+			"prefab": "mr_sun_f_mabel_live",
+			"icon": "mabel_icon.png",
+			"wearableids": [
+				"8"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "7",
-		"name": "Anthony",
-		"sex": "m",
-		"age": 20,
-		"desc": "Cut-out Top with Top Stitched Pants",
-		"prefab": "mr_sun_m_anthony_live",
-		"icon": "anthony_icon.png",
-		"wearableids": [
-			"10",
-			"11"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "7",
+			"name": "Anthony",
+			"sex": "m",
+			"age": 20,
+			"desc": "Cut-out Top with Top Stitched Pants",
+			"prefab": "mr_sun_m_anthony_live",
+			"icon": "anthony_icon.png",
+			"wearableids": [
+				"10",
+				"11"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "8",
-		"name": "Logan",
-		"sex": "m",
-		"age": 20,
-		"desc": "Asymmetrical Top with Bermuda Shorts",
-		"prefab": "mr_sun_m_logan",
-		"icon": "logan_icon.png",
-		"wearableids": [
-			"12",
-			"13"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "8",
+			"name": "Logan",
+			"sex": "m",
+			"age": 20,
+			"desc": "Asymmetrical Top with Bermuda Shorts",
+			"prefab": "mr_sun_m_logan",
+			"icon": "logan_icon.png",
+			"wearableids": [
+				"12",
+				"13"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "9",
-		"name": "Liam",
-		"sex": "m",
-		"age": 40,
-		"desc": "Cut-out Jacket with Straight Fit Pants",
-		"prefab": "mr_sun_m_liam",
-		"icon": "liam_icon.png",
-		"wearableids": [
-			"14",
-			"15"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "9",
+			"name": "Liam",
+			"sex": "m",
+			"age": 40,
+			"desc": "Cut-out Jacket with Straight Fit Pants",
+			"prefab": "mr_sun_m_liam",
+			"icon": "liam_icon.png",
+			"wearableids": [
+				"14",
+				"15"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "10",
-		"name": "Connor",
-		"sex": "m",
-		"age": 30,
-		"desc": "Asymmetrical Vest and Neoprene Pants",
-		"prefab": "mr_sun_m_connor_live",
-		"icon": "connor_icon.png",
-		"wearableids": [
-			"16",
-			"17",
-			"65"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "10",
+			"name": "Connor",
+			"sex": "m",
+			"age": 30,
+			"desc": "Asymmetrical Vest and Neoprene Pants",
+			"prefab": "mr_sun_m_connor_live",
+			"icon": "connor_icon.png",
+			"wearableids": [
+				"16",
+				"17",
+				"65"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "11",
-		"name": "Leila",
-		"sex": "f",
-		"age": 20,
-		"desc": "Chiffon Pleated Dress with Lace",
-		"prefab": "mr_int_f_leila_live",
-		"icon": "leila_icon.png",
-		"wearableids": [
-			"18"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "11",
+			"name": "Leila",
+			"sex": "f",
+			"age": 20,
+			"desc": "Chiffon Pleated Dress with Lace",
+			"prefab": "mr_int_f_leila_live",
+			"icon": "leila_icon.png",
+			"wearableids": [
+				"18"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "12",
-		"name": "Elle",
-		"sex": "f",
-		"age": 40,
-		"desc": "Printed Dress with Pleated Sleeves",
-		"prefab": "mr_int_f_elle_live",
-		"icon": "elle_icon",
-		"wearableids": [
-			"19"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "12",
+			"name": "Elle",
+			"sex": "f",
+			"age": 40,
+			"desc": "Printed Dress with Pleated Sleeves",
+			"prefab": "mr_int_f_elle_live",
+			"icon": "elle_icon",
+			"wearableids": [
+				"19"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "13",
-		"name": "Esme",
-		"sex": "f",
-		"age": 20,
-		"desc": "Lace Halter dress with Pleats",
-		"prefab": "mr_int_f_esme_live",
-		"icon": "esme_icon",
-		"wearableids": [
-			"20"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "13",
+			"name": "Esme",
+			"sex": "f",
+			"age": 20,
+			"desc": "Lace Halter dress with Pleats",
+			"prefab": "mr_int_f_esme_live",
+			"icon": "esme_icon",
+			"wearableids": [
+				"20"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "14",
-		"name": "Sophia",
-		"sex": "f",
-		"age": 30,
-		"desc": "Chiffon Top with Wide Stripe Pants",
-		"prefab": "mr_int_f_sophia_live",
-		"icon": "sophia_icon",
-		"wearableids": [
-			"21",
-			"22"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "14",
+			"name": "Sophia",
+			"sex": "f",
+			"age": 30,
+			"desc": "Chiffon Top with Wide Stripe Pants",
+			"prefab": "mr_int_f_sophia_live",
+			"icon": "sophia_icon",
+			"wearableids": [
+				"21",
+				"22"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "15",
-		"name": "Anya",
-		"sex": "f",
-		"age": 30,
-		"desc": "Stripe Dress",
-		"prefab": "mr_int_f_anya_live",
-		"icon": "anya_icon",
-		"wearableids": [
-			"23"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "15",
+			"name": "Anya",
+			"sex": "f",
+			"age": 30,
+			"desc": "Stripe Dress",
+			"prefab": "mr_int_f_anya_live",
+			"icon": "anya_icon",
+			"wearableids": [
+				"23"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "16",
-		"name": "Bella",
-		"sex": "f",
-		"age": 30,
-		"desc": "Pleated Maxi Dress",
-		"prefab": "mr_int_f_bella_live",
-		"icon": "bella_icon",
-		"wearableids": [
-			"24"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "16",
+			"name": "Bella",
+			"sex": "f",
+			"age": 30,
+			"desc": "Pleated Maxi Dress",
+			"prefab": "mr_int_f_bella_live",
+			"icon": "bella_icon",
+			"wearableids": [
+				"24"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "17",
-		"name": "Eric",
-		"sex": "m",
-		"age": 30,
-		"desc": "Leather Biker Jacket with Blue Technical Pants",
-		"prefab": "mr_int_m_eric",
-		"icon": "eric_icon",
-		"wearableids": [
-			"25",
-			"26"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "17",
+			"name": "Eric",
+			"sex": "m",
+			"age": 30,
+			"desc": "Leather Biker Jacket with Blue Technical Pants",
+			"prefab": "mr_int_m_eric",
+			"icon": "eric_icon",
+			"wearableids": [
+				"25",
+				"26"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "18",
-		"name": "Justin",
-		"sex": "m",
-		"age": 20,
-		"desc": "Black Varsity Jacket with Blue&Black Stripe Shorts",
-		"prefab": "mr_int_m_justin",
-		"icon": "justin_icon",
-		"wearableids": [
-			"27",
-			"28"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "18",
+			"name": "Justin",
+			"sex": "m",
+			"age": 20,
+			"desc": "Black Varsity Jacket with Blue&Black Stripe Shorts",
+			"prefab": "mr_int_m_justin",
+			"icon": "justin_icon",
+			"wearableids": [
+				"27",
+				"28"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "19",
-		"name": "Marcus",
-		"sex": "m",
-		"age": 30,
-		"desc": "Blue Geometric Lines Sweater with Khakis Pants",
-		"prefab": "mr_int_m_marcus",
-		"icon": "marcus_icon",
-		"wearableids": [
-			"29",
-			"30"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "19",
+			"name": "Marcus",
+			"sex": "m",
+			"age": 30,
+			"desc": "Blue Geometric Lines Sweater with Khakis Pants",
+			"prefab": "mr_int_m_marcus",
+			"icon": "marcus_icon",
+			"wearableids": [
+				"29",
+				"30"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "20",
-		"name": "Nathan",
-		"sex": "m",
-		"age": 30,
-		"desc": "Geometric Sweater with Khakis Shorts",
-		"prefab": "mr_int_m_nathan",
-		"icon": "nathan_icon",
-		"wearableids": [
-			"31",
-			"32"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "20",
+			"name": "Nathan",
+			"sex": "m",
+			"age": 30,
+			"desc": "Geometric Sweater with Khakis Shorts",
+			"prefab": "mr_int_m_nathan",
+			"icon": "nathan_icon",
+			"wearableids": [
+				"31",
+				"32"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "21",
-		"name": "Cardigan",
-		"sex": "f",
-		"age": 40,
-		"desc": "Worn Blue Jeans with Khakis Cardigan",
-		"prefab": "mr_csul_f_casual_live",
-		"icon": "casual_icon",
-		"wearableids": [
-			"33",
-			"34",
-			"46"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "21",
+			"name": "Cardigan",
+			"sex": "f",
+			"age": 40,
+			"desc": "Worn Blue Jeans with Khakis Cardigan",
+			"prefab": "mr_csul_f_casual_live",
+			"icon": "casual_icon",
+			"wearableids": [
+				"33",
+				"34",
+				"46"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "22",
-		"name": "Bomber",
-		"sex": "f",
-		"age": 20,
-		"desc": "Light Brown Bomber Jacket",
-		"prefab": "mr_csul_f_bomber_live",
-		"icon": "female_bomber_icon",
-		"wearableids": [
-			"35",
-			"34",
-			"47"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "22",
+			"name": "Bomber",
+			"sex": "f",
+			"age": 20,
+			"desc": "Light Brown Bomber Jacket",
+			"prefab": "mr_csul_f_bomber_live",
+			"icon": "female_bomber_icon",
+			"wearableids": [
+				"35",
+				"34",
+				"47"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "23",
-		"name": "Crosshatch Shirt",
-		"sex": "f",
-		"age": 30,
-		"desc": "Strong Crosshatch Shirt",
-		"prefab": "mr_csul_f_shirt_live",
-		"icon": "female_shirt_icon",
-		"wearableids": [
-			"36",
-			"37"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "23",
+			"name": "Crosshatch Shirt",
+			"sex": "f",
+			"age": 30,
+			"desc": "Strong Crosshatch Shirt",
+			"prefab": "mr_csul_f_shirt_live",
+			"icon": "female_shirt_icon",
+			"wearableids": [
+				"36",
+				"37"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "24",
-		"name": "Hot",
-		"sex": "m",
-		"age": 30,
-		"desc": "Dark Brown Hot Leather Jacket",
-		"prefab": "mr_csul_m_hot_live",
-		"icon": "hot_icon",
-		"wearableids": [
-			"38",
-			"39",
-			"48"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "24",
+			"name": "Hot",
+			"sex": "m",
+			"age": 30,
+			"desc": "Dark Brown Hot Leather Jacket",
+			"prefab": "mr_csul_m_hot_live",
+			"icon": "hot_icon",
+			"wearableids": [
+				"38",
+				"39",
+				"48"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "25",
-		"name": "Hot",
-		"sex": "f",
-		"age": 20,
-		"desc": "Dark Brown Hot Leather Jacket",
-		"prefab": "mr_csul_f_hot_live",
-		"icon": "f_hot_icon",
-		"wearableids": [
-			"60",
-			"61",
-			"62"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "25",
+			"name": "Hot",
+			"sex": "f",
+			"age": 20,
+			"desc": "Dark Brown Hot Leather Jacket",
+			"prefab": "mr_csul_f_hot_live",
+			"icon": "f_hot_icon",
+			"wearableids": [
+				"60",
+				"61",
+				"62"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "26",
-		"name": "Blue Shirt Dress",
-		"sex": "f",
-		"age": 30,
-		"desc": "Blue Shirt Dress",
-		"prefab": "mr_csul_f_dress",
-		"icon": "dress_icon",
-		"wearableids": [
-			"55"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "26",
+			"name": "Blue Shirt Dress",
+			"sex": "f",
+			"age": 30,
+			"desc": "Blue Shirt Dress",
+			"prefab": "mr_csul_f_dress",
+			"icon": "dress_icon",
+			"wearableids": [
+				"55"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "27",
-		"name": "Bomber",
-		"sex": "m",
-		"age": 20,
-		"desc": "Light Brown Bomber Jacket",
-		"prefab": "mr_csul_m_bomber_live",
-		"icon": "male_bomber_icon",
-		"wearableids": [
-			"40",
-			"41",
-			"49"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "27",
+			"name": "Bomber",
+			"sex": "m",
+			"age": 20,
+			"desc": "Light Brown Bomber Jacket",
+			"prefab": "mr_csul_m_bomber_live",
+			"icon": "male_bomber_icon",
+			"wearableids": [
+				"40",
+				"41",
+				"49"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "28",
-		"name": "Relaxed Collared Shirt",
-		"sex": "m",
-		"age": 40,
-		"desc": "Blue Relaxed Collared Shirt",
-		"prefab": "mr_csul_m_shirt",
-		"icon": "male_shirt_icon",
-		"wearableids": [
-			"42",
-			"43"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "28",
+			"name": "Relaxed Collared Shirt",
+			"sex": "m",
+			"age": 40,
+			"desc": "Blue Relaxed Collared Shirt",
+			"prefab": "mr_csul_m_shirt",
+			"icon": "male_shirt_icon",
+			"wearableids": [
+				"42",
+				"43"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "29",
-		"name": "Band Collar Shirt",
-		"sex": "m",
-		"age": 20,
-		"desc": "Light Blue Band Collar Shirt",
-		"prefab": "mr_csul_m_mandarin",
-		"icon": "mandarin_icon",
-		"wearableids": [
-			"44",
-			"45"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "29",
+			"name": "Band Collar Shirt",
+			"sex": "m",
+			"age": 20,
+			"desc": "Light Blue Band Collar Shirt",
+			"prefab": "mr_csul_m_mandarin",
+			"icon": "mandarin_icon",
+			"wearableids": [
+				"44",
+				"45"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "30",
-		"name": "Suit",
-		"sex": "m",
-		"age": 40,
-		"desc": "Suit",
-		"prefab": "mr_csul_m_suit",
-		"icon": "m_suit_icon",
-		"wearableids": [
-			"56",
-			"57"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "30",
+			"name": "Suit",
+			"sex": "m",
+			"age": 40,
+			"desc": "Suit",
+			"prefab": "mr_csul_m_suit",
+			"icon": "m_suit_icon",
+			"wearableids": [
+				"56",
+				"57"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "31",
-		"name": "Summer",
-		"sex": "f",
-		"age": 30,
-		"desc": "Summer Easy",
-		"prefab": "mr_csul_f_summer_live",
-		"icon": "summer_icon",
-		"wearableids": [
-			"58",
-			"59"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "31",
+			"name": "Summer",
+			"sex": "f",
+			"age": 30,
+			"desc": "Summer Easy",
+			"prefab": "mr_csul_f_summer_live",
+			"icon": "summer_icon",
+			"wearableids": [
+				"58",
+				"59"
+			],
+			"wearables": [
 
-		]
-	},
-	{
-		"id": "32",
-		"name": "Test Maniquinn",
-		"sex": "f",
-		"age": 30,
-		"desc": "Summer Easy",
-		"prefab": "new_female_rig",
-		"icon": "summer_icon",
-		"wearableids": [
-			"58",
-			"59"
-		],
-		"wearables": [
+			]
+		},
+		{
+			"id": "32",
+			"name": "Vintage",
+			"sex": "m",
+			"age": 50,
+			"desc": "Vintage Suit",
+			"prefab": "mr_csul_m_vintage",
+			"icon": "m_vintage_icon",
+			"wearableids": [
+				"67",
+				"68"
+			],
+			"wearables": [
 
-		]
-	}
-   ]
+			]
+		},
+		{
+			"id": "33",
+			"name": "Vest",
+			"sex": "m",
+			"age": 50,
+			"desc": "Vest",
+			"prefab": "mr_csul_m_vest",
+			"icon": "m_vest_icon",
+			"wearableids": [
+				"69",
+				"70"
+			],
+			"wearables": [
+
+			]
+		},
+		{
+			"id": "34",
+			"name": "Blouse",
+			"sex": "f",
+			"age": 50,
+			"desc": "Blouse",
+			"prefab": "mr_csul_f_blouse",
+			"icon": "f_blouse_icon",
+			"wearableids": [
+				"71",
+				"72"
+			],
+			"wearables": [
+
+			]
+		},
+		{
+			"id": "35",
+			"name": "Turtleneck",
+			"sex": "m",
+			"age": 50,
+			"desc": "Turtleneck",
+			"prefab": "mr_csul_m_turtleneck",
+			"icon": "m_turtleneck_icon",
+			"wearableids": [
+				"73",
+				"74"
+			],
+			"wearables": [
+
+			]
+		},
+		{
+			"id": "36",
+			"name": "Sweater",
+			"sex": "f",
+			"age": 50,
+			"desc": "Sweater",
+			"prefab": "mr_csul_f_sweater",
+			"icon": "f_sweater_icon",
+			"wearableids": [
+				"75",
+				"76"
+			],
+			"wearables": [
+
+			]
+		},
+		{
+			"id": "37",
+			"name": "Jacket",
+			"sex": "f",
+			"age": 50,
+			"desc": "Jacket",
+			"prefab": "mr_csul_f_jacket",
+			"icon": "f_jacket_icon",
+			"wearableids": [
+				"77",
+				"78",
+				"79",
+				"80"
+			],
+			"wearables": [
+
+			]
+		},
+		{
+			"id": "38",
+			"name": "Test Maniquinn",
+			"sex": "f",
+			"age": 30,
+			"desc": "Summer Easy",
+			"prefab": "new_female_rig",
+			"icon": "summer_icon",
+			"wearableids": [
+				"58",
+				"59"
+			],
+			"wearables": [
+
+			]
+		}
+	]
 }
