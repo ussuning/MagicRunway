@@ -309,7 +309,7 @@ public class AutoRunwayManager : MonoBehaviour, IRunwayMode, KinectGestures.Gest
     private void OnRunwayFinish(Collider other)
     {
         GameObject go = other.gameObject.transform.parent.gameObject;
-        Destroy(other.gameObject.transform.parent.gameObject);
+        Destroy(other.gameObject.transform.parent.gameObject, 1f);
 
         if (isCollectionEnding == false) { return; }
 
