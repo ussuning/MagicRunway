@@ -276,7 +276,7 @@ public class Closet : MonoBehaviour {
             return;
 
         UpdateOffsetTransform();
-        Debug.Log("closeClosetAfterSelectionTimeLeft" + closeClosetAfterSelectionTimeLeft);
+        //Debug.Log("closeClosetAfterSelectionTimeLeft" + closeClosetAfterSelectionTimeLeft);
         if (closeClosetAfterSelectionTimeLeft > 0)
             closeClosetAfterSelectionTimeLeft = Mathf.Clamp(closeClosetAfterSelectionTimeLeft - Time.deltaTime, 0, float.MaxValue);
 
@@ -513,6 +513,8 @@ public class Closet : MonoBehaviour {
 
                     isBubblePopped = true;
                     closeClosetAfterSelectionTimeLeft = closeClosetTime;
+                    // Comment this Hide() out if you want the closet to not close immediately upon outfit selection.
+                    Hide();
                 }
             }
         }
