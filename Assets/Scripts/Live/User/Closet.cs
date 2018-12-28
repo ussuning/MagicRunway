@@ -23,8 +23,10 @@ public class Closet : MonoBehaviour {
     public float shiftInTime = 0.5f;
     public float showDistanceX = 100f;
 
-    public float idleTime = 3f;
-    public float tutorialMinTime = 2f;
+    public static float idleTime = 1f;
+
+    protected static float closeClosetTime = 2.0f;
+    protected float closeClosetAfterSelectionTimeLeft = 0f;
 
     public OutfitSelectionTutorialController selectionTutorial;
     public ImageProgress activateIcon;
@@ -270,14 +272,20 @@ public class Closet : MonoBehaviour {
 
     void Update()
     {
-        if (!isActive)
+        if (!isActive && !isHiding)
             return;
+
+        UpdateOffsetTransform();
+        Debug.Log("closeClosetAfterSelectionTimeLeft" + closeClosetAfterSelectionTimeLeft);
+        if (closeClosetAfterSelectionTimeLeft > 0)
+            closeClosetAfterSelectionTimeLeft = Mathf.Clamp(closeClosetAfterSelectionTimeLeft - Time.deltaTime, 0, float.MaxValue);
 
         if (!isHidden && !isHiding &&
             kinect && kinect.IsInitialized())
         {
             if (kinect.IsUserTracked(OwnerID))
             {
+                bool isPointerRailHit = false;
                 // Attempt for each arm side until a hit is registered.
                 foreach (Side armSide in new Side[] { ClosetSide, ClosetSide == Side.Left ? Side.Right : Side.Left })
                 {
@@ -294,7 +302,7 @@ public class Closet : MonoBehaviour {
                     if (pointSpine != null)
                         pointSpine.anchoredPosition = spineShoulderLocal;
 
-                    UpdateOffsetTransform();
+
 
                     // For Debug line rendering, using world coords.
                     ptFrom = pointFrom.transform.position;
@@ -338,9 +346,18 @@ public class Closet : MonoBehaviour {
 
                     UpdatePointer(ref pointerRailHit);
 
+                    // Did we hit the pointer rail?
+                    isPointerRailHit |= (pointerRailHit.collider != null);
+
                     // If this arm did not miss, then no need to try the other arm.
-                    if (pointerRailHit.collider != null)
+                    if (isPointerRailHit)
                         break;
+                }
+
+                // This is added to bypass the idle timer for the closet
+                if (isPointerRailHit == false && closeClosetAfterSelectionTimeLeft > 0)
+                {
+                    Hide();
                 }
             }
             else
@@ -352,7 +369,6 @@ public class Closet : MonoBehaviour {
         if (selectionTutorial.IsTutorialFinished && idleElapsedTime >= idleTime)
         {
             Hide();
-            idleElapsedTime = 0f;
         }
 
         UpdateBubble();
@@ -363,19 +379,19 @@ public class Closet : MonoBehaviour {
     {
         Vector2 oldAnchorPos = offsetTransform.anchoredPosition;
 
-        float halfIdleTime = idleTime / 2.0f;
+        //float halfIdleTime = idleTime / 2.0f;
         if (isHidden || isHiding)
         {
             // Set back to default position.
             offsetTransform.anchoredPosition = Vector2.zero;
         }
-        else if (idleElapsedTime > halfIdleTime)
-        {
-            // Start moving back to default position at halfIdleTime.
-            float elapsedTime = idleElapsedTime - halfIdleTime;
-            float t = elapsedTime / halfIdleTime;
-            offsetTransform.anchoredPosition = Vector2.Lerp(offsetTransform.anchoredPosition, Vector2.zero, t);
-        }
+        //else if (idleElapsedTime > halfIdleTime)
+        //{
+        //    // Start moving back to default position at halfIdleTime.
+        //    float elapsedTime = idleElapsedTime - halfIdleTime;
+        //    float t = elapsedTime / halfIdleTime;
+        //    offsetTransform.anchoredPosition = Vector2.Lerp(offsetTransform.anchoredPosition, Vector2.zero, t);
+        //}
         else
         {
             // Otherwise, follow user's x position.
@@ -398,7 +414,8 @@ public class Closet : MonoBehaviour {
         }
 
         // Smooth it.
-        offsetTransform.anchoredPosition = Vector2.Lerp(oldAnchorPos, offsetTransform.anchoredPosition, 0.5f);
+        if ((oldAnchorPos - offsetTransform.anchoredPosition).sqrMagnitude > 1f)
+            offsetTransform.anchoredPosition = Vector2.Lerp(oldAnchorPos, offsetTransform.anchoredPosition, 0.5f);
 
     }
     float timeSincePointerHit = 0;
@@ -495,6 +512,7 @@ public class Closet : MonoBehaviour {
                     bubblePop.Play();
 
                     isBubblePopped = true;
+                    closeClosetAfterSelectionTimeLeft = closeClosetTime;
                 }
             }
         }
@@ -558,6 +576,7 @@ public class Closet : MonoBehaviour {
         }
 
         selectionTutorial.HideTutorial();
+        idleElapsedTime = 0f;
     }
 
     public void SetCloset(int userIdx, User.Gender userGender, int userAge, Outfits outfits /*, int outfitIdx_m = 0, int outfitIdx_f = 0, bool isTutorialFinished = false*/)
