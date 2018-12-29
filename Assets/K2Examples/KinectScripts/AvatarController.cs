@@ -927,7 +927,15 @@ public class AvatarController : MonoBehaviour
                 boneTransform.localPosition += new Vector3(0, hipUpwardOffset, 0);
                 break;
             case KinectInterop.JointType.SpineShoulder:
+                Transform leftClavicle = boneTransform.GetChild(0);
+                Transform rightClavicle = boneTransform.GetChild(2);
+                Vector3 spineToLeftShoulder = leftClavicle.position - boneTransform.position;
+                Vector3 spineToRightShoulder = rightClavicle.position - boneTransform.position;
+
                 boneTransform.localPosition += new Vector3(0, shoulderCenterVerticalOffset, 0);
+
+                leftClavicle.position = boneTransform.position + spineToLeftShoulder;
+                rightClavicle.position = boneTransform.position + spineToRightShoulder;
                 break;
             case KinectInterop.JointType.SpineMid:
                 boneTransform.localPosition += new Vector3(0, spineVerticalOffset, 0);

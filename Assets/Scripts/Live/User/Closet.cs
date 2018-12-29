@@ -276,6 +276,8 @@ public class Closet : MonoBehaviour {
             return;
 
         UpdateOffsetTransform();
+        RaycastHit2D pointerRailHit = new RaycastHit2D();
+
         //Debug.Log("closeClosetAfterSelectionTimeLeft" + closeClosetAfterSelectionTimeLeft);
         if (closeClosetAfterSelectionTimeLeft > 0)
             closeClosetAfterSelectionTimeLeft = Mathf.Clamp(closeClosetAfterSelectionTimeLeft - Time.deltaTime, 0, float.MaxValue);
@@ -313,7 +315,6 @@ public class Closet : MonoBehaviour {
                     RaycastHit2D[] hits = Physics2D.RaycastAll(ptFrom, ptTo - ptFrom, float.MaxValue, LayerMask.GetMask(new string[] { "Pointable2D" }));
                     //Debug.Log("hit = " + (hit.collider == null ? "null" : hit.collider.name));
 
-                    RaycastHit2D pointerRailHit = new RaycastHit2D();
                     ClosetItem closetItemHit = null;
                     float lowestHitDist = float.MaxValue;
                     foreach (RaycastHit2D hit in hits)
@@ -344,8 +345,6 @@ public class Closet : MonoBehaviour {
                     else
                         OnUnselectAll();
 
-                    UpdatePointer(ref pointerRailHit);
-
                     // Did we hit the pointer rail?
                     isPointerRailHit |= (pointerRailHit.collider != null);
 
@@ -371,6 +370,8 @@ public class Closet : MonoBehaviour {
             Hide();
         }
 
+
+        UpdatePointer(ref pointerRailHit);
         UpdateBubble();
         
     }
