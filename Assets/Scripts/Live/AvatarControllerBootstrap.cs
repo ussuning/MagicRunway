@@ -6,6 +6,7 @@ using UnityEditor;
 #endif
 using MR;
 using Obi;
+using System;
 
 // This should be used on clothing prefabs, in editor mod. 
 // Be sure to click "Initialize" BEFORE to starting the app. Buggy things happen if you try to run Init() after the app starts.
@@ -14,6 +15,7 @@ using Obi;
 public class AvatarControllerBootstrap : MonoBehaviour {
     //public bool disableOnStart = false;
     public int playerIndex = 0;
+    public AvatarBoneMapMode avatarBoneMapMode = AvatarBoneMapMode.Mixamo;
 
     //protected string BackgroundCamera1 = "BackgroundCamera1";
     protected string ConversionCamera = "Conversion Camera";
@@ -59,33 +61,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         if (avatarController.posRelativeToCamera == null)
             Debug.LogError("Failed to find " + ConversionCamera);
         avatarController.posRelOverlayColor = true;
-        avatarController.HipCenter =        transform.FindDeepChild("mixamorig:Hips");
-        avatarController.Spine =            transform.FindDeepChild("mixamorig:Spine");
-        avatarController.SpineMid =         transform.FindDeepChild("mixamorig:Spine1");
-        avatarController.ShoulderCenter =   transform.FindDeepChild("mixamorig:Spine2");
-        avatarController.Neck =             transform.FindDeepChild("mixamorig:Neck");
-        avatarController.Head =             transform.FindDeepChild("mixamorig:Head");
-        avatarController.ClavicleLeft =     transform.FindDeepChild("mixamorig:LeftShoulder");
-        avatarController.ShoulderLeft =     transform.FindDeepChild("mixamorig:LeftArm");
-        avatarController.ElbowLeft =        transform.FindDeepChild("mixamorig:LeftForeArm");
-        avatarController.HandLeft =         transform.FindDeepChild("mixamorig:LeftHand");
-        avatarController.FingersLeft =      transform.FindDeepChild("mixamorig:LeftHandIndex1");
-        avatarController.ThumbLeft =        transform.FindDeepChild("mixamorig:LeftHandThumb1");
-        avatarController.ClavicleRight =    transform.FindDeepChild("mixamorig:RightShoulder");
-        avatarController.ShoulderRight =    transform.FindDeepChild("mixamorig:RightArm");
-        avatarController.ElbowRight =       transform.FindDeepChild("mixamorig:RightForeArm");
-        avatarController.HandRight =        transform.FindDeepChild("mixamorig:RightHand");
-        avatarController.FingersRight =     transform.FindDeepChild("mixamorig:RightHandIndex1");
-        avatarController.ThumbRight =       transform.FindDeepChild("mixamorig:RightHandThumb1");
-        avatarController.HipLeft =          transform.FindDeepChild("mixamorig:LeftUpLeg");
-        avatarController.KneeLeft =         transform.FindDeepChild("mixamorig:LeftLeg");
-        avatarController.FootLeft =         transform.FindDeepChild("mixamorig:LeftFoot");
-        avatarController.ToesLeft =         transform.FindDeepChild("mixamorig:LeftToeBase");
-        avatarController.HipRight =         transform.FindDeepChild("mixamorig:RightUpLeg");
-        avatarController.KneeRight =        transform.FindDeepChild("mixamorig:RightLeg");
-        avatarController.FootRight =        transform.FindDeepChild("mixamorig:RightFoot");
-        avatarController.ToesRight =        transform.FindDeepChild("mixamorig:RightToeBase");
-        avatarController.BodyRoot =         transform;
+
+        MapBones();
 
         avatarController.mirroredMovement = true;
         avatarController.verticalMovement = true;
@@ -151,6 +128,104 @@ public class AvatarControllerBootstrap : MonoBehaviour {
             }
         }
     }
+
+    protected void MapBones()
+    {
+        if (avatarController == null) { 
+            Debug.LogError("No AvatarController detected. Can't MapBones()");
+            return;
+        }
+
+        Dictionary<string, string> boneMap = GetBoneMap();
+        
+        avatarController.BodyRoot = transform;
+        System.Type avatarControllerType = avatarController.GetType();
+        foreach (KeyValuePair<string, string> kvp in boneMap)
+        {
+            string boneName = kvp.Value;
+            Transform boneTransform = transform.FindDeepChild(boneName);
+            if (boneTransform != null)
+            {
+                // Set avatarController field to boneTransform;
+                avatarControllerType.GetField(kvp.Key).SetValue(avatarController, boneTransform);
+            }
+            else
+            {
+                Debug.LogError("Mapping error for [" + kvp.Key +"]. Unable to find bone named [" + boneName + "]");
+            }
+        }
+
+    }
+
+    private Dictionary<string, string> GetBoneMap()
+    {
+        Dictionary<string, string> boneMap = new Dictionary<string, string>();
+
+        switch (avatarBoneMapMode)
+        {
+            case AvatarBoneMapMode.Mixamo:
+                boneMap.Add("HipCenter",        "mixamorig:Hips");
+                boneMap.Add("Spine",            "mixamorig:Spine");
+                boneMap.Add("SpineMid",         "mixamorig:Spine1");
+                boneMap.Add("ShoulderCenter",   "mixamorig:Spine2");
+                boneMap.Add("Neck",             "mixamorig:Neck");
+                boneMap.Add("Head",             "mixamorig:Head");
+                boneMap.Add("ClavicleLeft",     "mixamorig:LeftShoulder");
+                boneMap.Add("ShoulderLeft",     "mixamorig:LeftArm");
+                boneMap.Add("ElbowLeft",        "mixamorig:LeftForeArm");
+                boneMap.Add("HandLeft",         "mixamorig:LeftHand");
+                boneMap.Add("FingersLeft",      "mixamorig:LeftHandIndex1");
+                boneMap.Add("ThumbLeft",        "mixamorig:LeftHandThumb1");
+                boneMap.Add("ClavicleRight",    "mixamorig:RightShoulder");
+                boneMap.Add("ShoulderRight",    "mixamorig:RightArm");
+                boneMap.Add("ElbowRight",       "mixamorig:RightForeArm");
+                boneMap.Add("HandRight",        "mixamorig:RightHand");
+                boneMap.Add("FingersRight",     "mixamorig:RightHandIndex1");
+                boneMap.Add("ThumbRight",       "mixamorig:RightHandThumb1");
+                boneMap.Add("HipLeft",          "mixamorig:LeftUpLeg");
+                boneMap.Add("KneeLeft",         "mixamorig:LeftLeg");
+                boneMap.Add("FootLeft",         "mixamorig:LeftFoot");
+                boneMap.Add("ToesLeft",         "mixamorig:LeftToeBase");
+                boneMap.Add("HipRight",         "mixamorig:RightUpLeg");
+                boneMap.Add("KneeRight",        "mixamorig:RightLeg");
+                boneMap.Add("FootRight",        "mixamorig:RightFoot");
+                boneMap.Add("ToesRight",        "mixamorig:RightToeBase");
+                break;
+            case AvatarBoneMapMode.KinectCustom:
+                boneMap.Add("HipCenter",    "spine_base");
+                boneMap.Add("Spine",        "spine_mid");
+                boneMap.Add("ShoulderCenter","spine_shoulder");
+                boneMap.Add("Neck",         "neck");
+                boneMap.Add("Head",         "head");
+                boneMap.Add("ShoulderLeft", "shoulder_l");
+                boneMap.Add("ElbowLeft",    "elbow_l");
+                boneMap.Add("HandLeft",     "wrist_l");
+                boneMap.Add("FingersLeft",  "hand_l");
+                boneMap.Add("ThumbLeft",    "thumb_l");
+                boneMap.Add("ShoulderRight","shoulder_r");
+                boneMap.Add("ElbowRight",   "elbow_r");
+                boneMap.Add("HandRight",    "wrist_r");
+                boneMap.Add("FingersRight", "hand_r");
+                boneMap.Add("ThumbRight",   "thumb_r");
+                boneMap.Add("HipLeft",      "hip_l");
+                boneMap.Add("KneeLeft",     "knee_l");
+                boneMap.Add("FootLeft",     "ankle_l");
+                boneMap.Add("ToesLeft",     "foot_l");
+                boneMap.Add("HipRight",     "hip_r");
+                boneMap.Add("KneeRight",    "knee_r");
+                boneMap.Add("FootRight",    "ankle_r");
+                boneMap.Add("ToesRight",    "foot_r");
+                break;
+        }
+
+        return boneMap;
+    }
+}
+
+public enum AvatarBoneMapMode
+{
+    Mixamo = 0,
+    KinectCustom = 1,
 }
 
 
