@@ -14,66 +14,66 @@ using UnityEditor;
 /// </summary>
 [RequireComponent(typeof(Animator))]
 public class AvatarController : MonoBehaviour
-{	
-	[Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
-	public int playerIndex = 0;
-	
-	[Tooltip("Whether the avatar is facing the player or not.")]
-	public bool mirroredMovement = false;
-	
-	[Tooltip("Whether the avatar is allowed to move vertically or not.")]
-	public bool verticalMovement = false;
+{
+    [Tooltip("Index of the player, tracked by this component. 0 means the 1st player, 1 - the 2nd one, 2 - the 3rd one, etc.")]
+    public int playerIndex = 0;
 
-	[Tooltip("Whether the avatar's root motion is applied by other component or script.")]
-	public bool externalRootMotion = false;
+    [Tooltip("Whether the avatar is facing the player or not.")]
+    public bool mirroredMovement = false;
 
-    [Tooltip("Whether the head rotation is controlled externally (e.g. by VR-headset)." )]
+    [Tooltip("Whether the avatar is allowed to move vertically or not.")]
+    public bool verticalMovement = false;
+
+    [Tooltip("Whether the avatar's root motion is applied by other component or script.")]
+    public bool externalRootMotion = false;
+
+    [Tooltip("Whether the head rotation is controlled externally (e.g. by VR-headset).")]
     public bool externalHeadRotation = false;
-	
-	[Tooltip("Whether the hand and finger rotations are controlled externally (e.g. by LeapMotion controller)" )]
-	public bool externalHandRotations = false;
 
-	[Tooltip("Whether the finger orientations are allowed or not.")]
-	public bool fingerOrientations = false;
-	
-	[Tooltip("Rate at which the avatar will move through the scene.")]
-	public float moveRate = 1f;
-	
-	[Tooltip("Smooth factor used for avatar movements and joint rotations.")]
-	public float smoothFactor = 10f;
-	
-	[Tooltip("Game object this transform is relative to (optional).")]
-	public GameObject offsetNode;
+    [Tooltip("Whether the hand and finger rotations are controlled externally (e.g. by LeapMotion controller)")]
+    public bool externalHandRotations = false;
 
-	[Tooltip("If enabled, makes the avatar position relative to this camera to be the same as the player's position to the sensor.")]
-	public Camera posRelativeToCamera;
+    [Tooltip("Whether the finger orientations are allowed or not.")]
+    public bool fingerOrientations = false;
 
-	[Tooltip("Whether the avatar's position should match the color image (in Pos-rel-to-camera mode only).")]
-	public bool posRelOverlayColor = false;
-	
-	[Tooltip("Plane used to render the color camera background to overlay.")]
-	public Transform backgroundPlane;
+    [Tooltip("Rate at which the avatar will move through the scene.")]
+    public float moveRate = 1f;
 
-	[Tooltip("Whether z-axis movement needs to be inverted (Pos-Relative mode only).")]
-	public bool posRelInvertedZ = false;
-	
-	[Tooltip("Whether the avatar's feet must stick to the ground.")]
-	public bool groundedFeet = false;
+    [Tooltip("Smooth factor used for avatar movements and joint rotations.")]
+    public float smoothFactor = 10f;
 
-	[Tooltip("Whether to apply the humanoid model's muscle limits or not.")]
-	public bool applyMuscleLimits = false;
+    [Tooltip("Game object this transform is relative to (optional).")]
+    public GameObject offsetNode;
 
-	[Tooltip("Whether to flip left and right, relative to the sensor.")]
-	public bool flipLeftRight = false;
+    [Tooltip("If enabled, makes the avatar position relative to this camera to be the same as the player's position to the sensor.")]
+    public Camera posRelativeToCamera;
+
+    [Tooltip("Whether the avatar's position should match the color image (in Pos-rel-to-camera mode only).")]
+    public bool posRelOverlayColor = false;
+
+    [Tooltip("Plane used to render the color camera background to overlay.")]
+    public Transform backgroundPlane;
+
+    [Tooltip("Whether z-axis movement needs to be inverted (Pos-Relative mode only).")]
+    public bool posRelInvertedZ = false;
+
+    [Tooltip("Whether the avatar's feet must stick to the ground.")]
+    public bool groundedFeet = false;
+
+    [Tooltip("Whether to apply the humanoid model's muscle limits or not.")]
+    public bool applyMuscleLimits = false;
+
+    [Tooltip("Whether to flip left and right, relative to the sensor.")]
+    public bool flipLeftRight = false;
 
 
-	[Tooltip("Vertical offset of the avatar with respect to the position of user's spine-base.")]
-	[Range(-0.5f, 0.5f)]
-	public float verticalOffset = 0f;
+    [Tooltip("Vertical offset of the avatar with respect to the position of user's spine-base.")]
+    [Range(-0.5f, 0.5f)]
+    public float verticalOffset = 0f;
 
-	[Tooltip("Forward offset of the avatar with respect to the position of user's spine-base.")]
-	[Range(-0.5f, 0.5f)]
-	public float forwardOffset = 0f;
+    [Tooltip("Forward offset of the avatar with respect to the position of user's spine-base.")]
+    [Range(-0.5f, 0.5f)]
+    public float forwardOffset = 0f;
 
     //[Tooltip("Forward offset of the avatar with respect to the position of user's spine-base.")]
     //[Range(-2.0f, 2.0f)]
@@ -81,44 +81,44 @@ public class AvatarController : MonoBehaviour
 
     // userId of the player
     [NonSerialized]
-	public Int64 playerId = 0;
+    public Int64 playerId = 0;
 
 
-	// The body root node
-	protected Transform bodyRoot;
+    // The body root node
+    protected Transform bodyRoot;
 
-	// Variable to hold all them bones. It will initialize the same size as initialRotations.
-	protected Transform[] bones;
-	protected Transform[] fingerBones;
+    // Variable to hold all them bones. It will initialize the same size as initialRotations.
+    protected Transform[] bones;
+    protected Transform[] fingerBones;
 
-	// Rotations of the bones when the Kinect tracking starts.
-	protected Quaternion[] initialRotations;
-	protected Quaternion[] localRotations;
-	protected bool[] isBoneDisabled;
+    // Rotations of the bones when the Kinect tracking starts.
+    protected Quaternion[] initialRotations;
+    protected Quaternion[] localRotations;
+    protected bool[] isBoneDisabled;
     protected Vector3[] initialPositions;
     protected Vector3[] initialLocalPositions;
 
-	// Local rotations of finger bones
-	protected Dictionary<HumanBodyBones, Quaternion> fingerBoneLocalRotations = new Dictionary<HumanBodyBones, Quaternion>();
-	protected Dictionary<HumanBodyBones, Vector3> fingerBoneLocalAxes = new Dictionary<HumanBodyBones, Vector3>();
+    // Local rotations of finger bones
+    protected Dictionary<HumanBodyBones, Quaternion> fingerBoneLocalRotations = new Dictionary<HumanBodyBones, Quaternion>();
+    protected Dictionary<HumanBodyBones, Vector3> fingerBoneLocalAxes = new Dictionary<HumanBodyBones, Vector3>();
 
-	// Initial position and rotation of the transform
-	protected Vector3 initialPosition;
-	protected Quaternion initialRotation;
-	protected Vector3 initialHipsPosition;
-	protected Quaternion initialHipsRotation;
+    // Initial position and rotation of the transform
+    protected Vector3 initialPosition;
+    protected Quaternion initialRotation;
+    protected Vector3 initialHipsPosition;
+    protected Quaternion initialHipsRotation;
     protected Vector3 initialKneeLeftPosition;
 
-	protected Vector3 offsetNodePos;
-	protected Quaternion offsetNodeRot;
-	protected Vector3 bodyRootPosition;
-    
+    protected Vector3 offsetNodePos;
+    protected Quaternion offsetNodeRot;
+    protected Vector3 bodyRootPosition;
+
     [Range(-0.25f, 0.25f)]
-    public float spineVerticalOffset = 0f; 
+    public float spineVerticalOffset = 0f;
     [Range(-0.25f, 0.25f)]
     public float shoulderCenterVerticalOffset = 0f; //Compensate for when shoulderCenter is not actually (vertically) at same height as left and right arm sockets.
     [Range(-0.25f, 0.25f)]
-    public float neckVerticalOffset = 0f; 
+    public float neckVerticalOffset = 0f;
     [Range(-0.25f, 0.25f)]
     public float headVerticalOffset = 0f; //Compensate for head is not actually
     internal float hipWidthFactor = 0.0f; // These are automatically computed by comparing kinect postions to the model's initial positions
@@ -147,89 +147,89 @@ public class AvatarController : MonoBehaviour
 
     // Calibration Offset Variables for Character Position.
     [NonSerialized]
-	public bool offsetCalibrated = false;
-	protected Vector3 offsetPos = Vector3.zero;
-	//protected float xOffset, yOffset, zOffset;
-	//private Quaternion originalRotation;
+    public bool offsetCalibrated = false;
+    protected Vector3 offsetPos = Vector3.zero;
+    //protected float xOffset, yOffset, zOffset;
+    //private Quaternion originalRotation;
 
-	private Animator animatorComponent = null;
-	private HumanPoseHandler humanPoseHandler = null;
-	private HumanPose humanPose = new HumanPose();
+    private Animator animatorComponent = null;
+    private HumanPoseHandler humanPoseHandler = null;
+    private HumanPose humanPose = new HumanPose();
 
-	// whether the parent transform obeys physics
-	protected bool isRigidBody = false;
-	
-	// private instance of the KinectManager
-	protected KinectManager kinectManager;
+    // whether the parent transform obeys physics
+    protected bool isRigidBody = false;
+
+    // private instance of the KinectManager
+    protected KinectManager kinectManager;
     protected AvatarScaler avatarScaler;
 
-	// last hand events
-	private InteractionManager.HandEventType lastLeftHandEvent = InteractionManager.HandEventType.Release;
-	private InteractionManager.HandEventType lastRightHandEvent = InteractionManager.HandEventType.Release;
+    // last hand events
+    private InteractionManager.HandEventType lastLeftHandEvent = InteractionManager.HandEventType.Release;
+    private InteractionManager.HandEventType lastRightHandEvent = InteractionManager.HandEventType.Release;
 
-	// fist states
-	private bool bLeftFistDone = false;
-	private bool bRightFistDone = false;
+    // fist states
+    private bool bLeftFistDone = false;
+    private bool bRightFistDone = false;
 
-	// grounder constants and variables
-	private const int raycastLayers = ~2;  // Ignore Raycast
-	private const float maxFootDistanceGround = 0.02f;  // maximum distance from lower foot to the ground
-	private const float maxFootDistanceTime = 0.2f; // 1.0f;  // maximum allowed time, the lower foot to be distant from the ground
-	private Transform leftFoot, rightFoot;
+    // grounder constants and variables
+    private const int raycastLayers = ~2;  // Ignore Raycast
+    private const float maxFootDistanceGround = 0.02f;  // maximum distance from lower foot to the ground
+    private const float maxFootDistanceTime = 0.2f; // 1.0f;  // maximum allowed time, the lower foot to be distant from the ground
+    private Transform leftFoot, rightFoot;
 
-	private float fFootDistanceInitial = 0f;
-	private float fFootDistance = 0f;
-	private float fFootDistanceTime = 0f;
+    private float fFootDistanceInitial = 0f;
+    private float fFootDistance = 0f;
+    private float fFootDistanceTime = 0f;
 
-	// background plane rectangle
-	private Rect planeRect = new Rect();
-	private bool planeRectSet = false;
+    // background plane rectangle
+    private Rect planeRect = new Rect();
+    private bool planeRectSet = false;
 
 
-	/// <summary>
-	/// Gets the number of bone transforms (array length).
-	/// </summary>
-	/// <returns>The number of bone transforms.</returns>
-	public int GetBoneTransformCount()
-	{
-		return bones != null ? bones.Length : 0;
-	}
+    /// <summary>
+    /// Gets the number of bone transforms (array length).
+    /// </summary>
+    /// <returns>The number of bone transforms.</returns>
+    public int GetBoneTransformCount()
+    {
+        return bones != null ? bones.Length : 0;
+    }
 
-	/// <summary>
-	/// Gets the bone transform by index.
-	/// </summary>
-	/// <returns>The bone transform.</returns>
-	/// <param name="index">Index</param>
-	public Transform GetBoneTransform(int index)
-	{
-		if(index >= 0 && index < bones.Length)
-		{
-			return bones[index];
-		}
+    /// <summary>
+    /// Gets the bone transform by index.
+    /// </summary>
+    /// <returns>The bone transform.</returns>
+    /// <param name="index">Index</param>
+    public Transform GetBoneTransform(int index)
+    {
+        if (index >= 0 && index < bones.Length)
+        {
+            return bones[index];
+        }
 
-		return null;
-	}
+        return null;
+    }
 
     /// <summary>
     /// Get joint position with respect of player world and kinect offsets   ( //!!still some problems with accurate Y pos, probably connected with kinect sensor height estimation ) 
     /// </summary>
     /// <param name="jointType"></param>
     /// <returns></returns>
-    public Vector3 GetJointWorldPos( KinectInterop.JointType jointType )
+    public Vector3 GetJointWorldPos(KinectInterop.JointType jointType)
     {
-        if( !kinectManager )
+        if (!kinectManager)
         {
             return Vector3.zero;
         }
-        
-        Vector3 jointPosition = kinectManager.GetJointPosition( playerId, (int)jointType );
+
+        Vector3 jointPosition = kinectManager.GetJointPosition(playerId, (int)jointType);
         Vector3 worldPosition = new Vector3(
-            jointPosition.x - offsetPos.x, 
-//            jointPosition.y - offsetPos.y + kinectManager.sensorHeight,  //!! this should be better investigated .. 
+            jointPosition.x - offsetPos.x,
+            //            jointPosition.y - offsetPos.y + kinectManager.sensorHeight,  //!! this should be better investigated .. 
             jointPosition.y + offsetPos.y - kinectManager.sensorHeight,  //!! this workds better on my example 
             !mirroredMovement && !posRelativeToCamera ? (-jointPosition.z - offsetPos.z) : (jointPosition.z - offsetPos.z));
 
-        Quaternion posRotation = mirroredMovement ? Quaternion.Euler (0f, 180f, 0f) * initialRotation : initialRotation;
+        Quaternion posRotation = mirroredMovement ? Quaternion.Euler(0f, 180f, 0f) * initialRotation : initialRotation;
         worldPosition = posRotation * worldPosition;
 
         return bodyRootPosition + worldPosition;
@@ -240,156 +240,156 @@ public class AvatarController : MonoBehaviour
         return kinectManager.GetJointPosition(playerId, (int)jointType);
     }
 
-	/// <summary>
-	/// Disables the bone and optionally resets its orientation.
-	/// </summary>
-	/// <param name="index">Bone index.</param>
-	/// <param name="resetBone">If set to <c>true</c> resets bone orientation.</param>
-	public void DisableBone(int index, bool resetBone)
-	{
-		if(index >= 0 && index < bones.Length)
-		{
-			isBoneDisabled[index] = true;
+    /// <summary>
+    /// Disables the bone and optionally resets its orientation.
+    /// </summary>
+    /// <param name="index">Bone index.</param>
+    /// <param name="resetBone">If set to <c>true</c> resets bone orientation.</param>
+    public void DisableBone(int index, bool resetBone)
+    {
+        if (index >= 0 && index < bones.Length)
+        {
+            isBoneDisabled[index] = true;
 
-			if (resetBone && bones[index] != null) 
-			{
-				bones[index].rotation = localRotations[index];
-			}
-		}
-	}
+            if (resetBone && bones[index] != null)
+            {
+                bones[index].rotation = localRotations[index];
+            }
+        }
+    }
 
-	/// <summary>
-	/// Enables the bone, so AvatarController could update its orientation.
-	/// </summary>
-	/// <param name="index">Bone index.</param>
-	public void EnableBone(int index)
-	{
-		if(index >= 0 && index < bones.Length)
-		{
-			isBoneDisabled[index] = false;
-		}
-	}
+    /// <summary>
+    /// Enables the bone, so AvatarController could update its orientation.
+    /// </summary>
+    /// <param name="index">Bone index.</param>
+    public void EnableBone(int index)
+    {
+        if (index >= 0 && index < bones.Length)
+        {
+            isBoneDisabled[index] = false;
+        }
+    }
 
-	/// <summary>
-	/// Determines whether the bone orientation update is enabled or not.
-	/// </summary>
-	/// <returns><c>true</c> if the bone update is enabled; otherwise, <c>false</c>.</returns>
-	/// <param name="index">Bone index.</param>
-	public bool IsBoneEnabled(int index)
-	{
-		if(index >= 0 && index < bones.Length)
-		{
-			return !isBoneDisabled[index];
-		}
+    /// <summary>
+    /// Determines whether the bone orientation update is enabled or not.
+    /// </summary>
+    /// <returns><c>true</c> if the bone update is enabled; otherwise, <c>false</c>.</returns>
+    /// <param name="index">Bone index.</param>
+    public bool IsBoneEnabled(int index)
+    {
+        if (index >= 0 && index < bones.Length)
+        {
+            return !isBoneDisabled[index];
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/// <summary>
-	/// Gets the bone index by joint type.
-	/// </summary>
-	/// <returns>The bone index.</returns>
-	/// <param name="joint">Joint type</param>
-	/// <param name="bMirrored">If set to <c>true</c> gets the mirrored joint index.</param>
-	public int GetBoneIndexByJoint(KinectInterop.JointType joint, bool bMirrored)
-	{
-		int boneIndex = -1;
-		
-		if(jointMap2boneIndex.ContainsKey(joint))
-		{
-			boneIndex = !bMirrored ? jointMap2boneIndex[joint] : mirrorJointMap2boneIndex[joint];
-		}
-		
-		return boneIndex;
-	}
-	
-	/// <summary>
-	/// Gets the special index by two joint types.
-	/// </summary>
-	/// <returns>The spec index by joint.</returns>
-	/// <param name="joint1">Joint 1 type.</param>
-	/// <param name="joint2">Joint 2 type.</param>
-	/// <param name="bMirrored">If set to <c>true</c> gets the mirrored joint index.</param>
-	public int GetSpecIndexByJoint(KinectInterop.JointType joint1, KinectInterop.JointType joint2, bool bMirrored)
-	{
-		int boneIndex = -1;
-		
-		if((joint1 == KinectInterop.JointType.ShoulderLeft && joint2 == KinectInterop.JointType.SpineShoulder) ||
-		   (joint2 == KinectInterop.JointType.ShoulderLeft && joint1 == KinectInterop.JointType.SpineShoulder))
-		{
-			return (!bMirrored ? 25 : 26);
-		}
-		else if((joint1 == KinectInterop.JointType.ShoulderRight && joint2 == KinectInterop.JointType.SpineShoulder) ||
-		        (joint2 == KinectInterop.JointType.ShoulderRight && joint1 == KinectInterop.JointType.SpineShoulder))
-		{
-			return (!bMirrored ? 26 : 25);
-		}
-		else if((joint1 == KinectInterop.JointType.HandTipLeft && joint2 == KinectInterop.JointType.HandLeft) ||
-		        (joint2 == KinectInterop.JointType.HandTipLeft && joint1 == KinectInterop.JointType.HandLeft))
-		{
-			return (!bMirrored ? 27 : 28);
-		}
-		else if((joint1 == KinectInterop.JointType.HandTipRight && joint2 == KinectInterop.JointType.HandRight) ||
-		        (joint2 == KinectInterop.JointType.HandTipRight && joint1 == KinectInterop.JointType.HandRight))
-		{
-			return (!bMirrored ? 28 : 27);
-		}
-		else if((joint1 == KinectInterop.JointType.ThumbLeft && joint2 == KinectInterop.JointType.HandLeft) ||
-		        (joint2 == KinectInterop.JointType.ThumbLeft && joint1 == KinectInterop.JointType.HandLeft))
-		{
-			return (!bMirrored ? 29 : 30);
-		}
-		else if((joint1 == KinectInterop.JointType.ThumbRight && joint2 == KinectInterop.JointType.HandRight) ||
-		        (joint2 == KinectInterop.JointType.ThumbRight && joint1 == KinectInterop.JointType.HandRight))
-		{
-			return (!bMirrored ? 30 : 29);
-		}
+    /// <summary>
+    /// Gets the bone index by joint type.
+    /// </summary>
+    /// <returns>The bone index.</returns>
+    /// <param name="joint">Joint type</param>
+    /// <param name="bMirrored">If set to <c>true</c> gets the mirrored joint index.</param>
+    public int GetBoneIndexByJoint(KinectInterop.JointType joint, bool bMirrored)
+    {
+        int boneIndex = -1;
 
-		return boneIndex;
-	}
-	
-	/// <summary>
-	/// Gets the number of finger bone transforms (array length).
-	/// </summary>
-	/// <returns>The number of finger bone transforms.</returns>
-	public int GetFingerTransformCount()
-	{
-		return fingerBones != null ? fingerBones.Length : 0;
-	}
+        if (jointMap2boneIndex.ContainsKey(joint))
+        {
+            boneIndex = !bMirrored ? jointMap2boneIndex[joint] : mirrorJointMap2boneIndex[joint];
+        }
 
-	/// <summary>
-	/// Gets the finger bone transform by index.
-	/// </summary>
-	/// <returns>The finger bone transform.</returns>
-	/// <param name="index">Index</param>
-	public Transform GetFingerTransform(int index)
-	{
-		if(index >= 0 && index < fingerBones.Length)
-		{
-			return fingerBones[index];
-		}
+        return boneIndex;
+    }
 
-		return null;
-	}
+    /// <summary>
+    /// Gets the special index by two joint types.
+    /// </summary>
+    /// <returns>The spec index by joint.</returns>
+    /// <param name="joint1">Joint 1 type.</param>
+    /// <param name="joint2">Joint 2 type.</param>
+    /// <param name="bMirrored">If set to <c>true</c> gets the mirrored joint index.</param>
+    public int GetSpecIndexByJoint(KinectInterop.JointType joint1, KinectInterop.JointType joint2, bool bMirrored)
+    {
+        int boneIndex = -1;
 
+        if ((joint1 == KinectInterop.JointType.ShoulderLeft && joint2 == KinectInterop.JointType.SpineShoulder) ||
+           (joint2 == KinectInterop.JointType.ShoulderLeft && joint1 == KinectInterop.JointType.SpineShoulder))
+        {
+            return (!bMirrored ? 25 : 26);
+        }
+        else if ((joint1 == KinectInterop.JointType.ShoulderRight && joint2 == KinectInterop.JointType.SpineShoulder) ||
+                (joint2 == KinectInterop.JointType.ShoulderRight && joint1 == KinectInterop.JointType.SpineShoulder))
+        {
+            return (!bMirrored ? 26 : 25);
+        }
+        else if ((joint1 == KinectInterop.JointType.HandTipLeft && joint2 == KinectInterop.JointType.HandLeft) ||
+                (joint2 == KinectInterop.JointType.HandTipLeft && joint1 == KinectInterop.JointType.HandLeft))
+        {
+            return (!bMirrored ? 27 : 28);
+        }
+        else if ((joint1 == KinectInterop.JointType.HandTipRight && joint2 == KinectInterop.JointType.HandRight) ||
+                (joint2 == KinectInterop.JointType.HandTipRight && joint1 == KinectInterop.JointType.HandRight))
+        {
+            return (!bMirrored ? 28 : 27);
+        }
+        else if ((joint1 == KinectInterop.JointType.ThumbLeft && joint2 == KinectInterop.JointType.HandLeft) ||
+                (joint2 == KinectInterop.JointType.ThumbLeft && joint1 == KinectInterop.JointType.HandLeft))
+        {
+            return (!bMirrored ? 29 : 30);
+        }
+        else if ((joint1 == KinectInterop.JointType.ThumbRight && joint2 == KinectInterop.JointType.HandRight) ||
+                (joint2 == KinectInterop.JointType.ThumbRight && joint1 == KinectInterop.JointType.HandRight))
+        {
+            return (!bMirrored ? 30 : 29);
+        }
 
-	// transform caching gives performance boost since Unity calls GetComponent<Transform>() each time you call transform 
-	private Transform _transformCache;
-	public new Transform transform
-	{
-		get
-		{
-			if (!_transformCache) 
-			{
-				_transformCache = base.transform;
-			}
+        return boneIndex;
+    }
 
-			return _transformCache;
-		}
-	}
+    /// <summary>
+    /// Gets the number of finger bone transforms (array length).
+    /// </summary>
+    /// <returns>The number of finger bone transforms.</returns>
+    public int GetFingerTransformCount()
+    {
+        return fingerBones != null ? fingerBones.Length : 0;
+    }
+
+    /// <summary>
+    /// Gets the finger bone transform by index.
+    /// </summary>
+    /// <returns>The finger bone transform.</returns>
+    /// <param name="index">Index</param>
+    public Transform GetFingerTransform(int index)
+    {
+        if (index >= 0 && index < fingerBones.Length)
+        {
+            return fingerBones[index];
+        }
+
+        return null;
+    }
 
 
-	public void Awake()
+    // transform caching gives performance boost since Unity calls GetComponent<Transform>() each time you call transform 
+    private Transform _transformCache;
+    public new Transform transform
+    {
+        get
+        {
+            if (!_transformCache)
+            {
+                _transformCache = base.transform;
+            }
+
+            return _transformCache;
+        }
+    }
+
+
+    public void Awake()
     {
         // Clean up the name in case this is a (Clone) object.
         // This is important for loading tuning data files later.
@@ -400,178 +400,178 @@ public class AvatarController : MonoBehaviour
 
         // check for double start
         if (bones != null)
-			return;
-		if(!gameObject.activeInHierarchy) 
-			return;
+            return;
+        if (!gameObject.activeInHierarchy)
+            return;
 
-		// inits the bones array
-		bones = new Transform[31];
-		
-		// get the animator reference
-		animatorComponent = GetComponent<Animator>();
+        // inits the bones array
+        bones = new Transform[31];
 
-		// Map bones to the points the Kinect tracks
-		MapBones();
+        // get the animator reference
+        animatorComponent = GetComponent<Animator>();
 
-		// Set model's arms to be in T-pose, if needed
-		SetModelArmsInTpose();
+        // Map bones to the points the Kinect tracks
+        MapBones();
+
+        // Set model's arms to be in T-pose, if needed
+        SetModelArmsInTpose();
         SetModelLegsVertical();
 
-		// Initial rotations and directions of the bones.
-		initialRotations = new Quaternion[bones.Length];
-		localRotations = new Quaternion[bones.Length];
-		isBoneDisabled = new bool[bones.Length];
+        // Initial rotations and directions of the bones.
+        initialRotations = new Quaternion[bones.Length];
+        localRotations = new Quaternion[bones.Length];
+        isBoneDisabled = new bool[bones.Length];
         initialPositions = new Vector3[bones.Length];
         initialLocalPositions = new Vector3[bones.Length];
 
         // Get initial bone rotations
         GetInitialRotations();
 
-		// enable all bones
-		for(int i = 0; i < bones.Length; i++)
-		{
-			isBoneDisabled[i] = false;
-		}
+        // enable all bones
+        for (int i = 0; i < bones.Length; i++)
+        {
+            isBoneDisabled[i] = false;
+        }
 
-		// get initial distance to ground
-		fFootDistanceInitial = GetDistanceToGround();
-		fFootDistance = 0f;
-		fFootDistanceTime = 0f;
+        // get initial distance to ground
+        fFootDistanceInitial = GetDistanceToGround();
+        fFootDistance = 0f;
+        fFootDistanceTime = 0f;
 
-		// if parent transform uses physics
-		isRigidBody = (gameObject.GetComponent<Rigidbody>() != null);
+        // if parent transform uses physics
+        isRigidBody = (gameObject.GetComponent<Rigidbody>() != null);
 
-		// get the pose handler reference
-		if (animatorComponent && animatorComponent.avatar && animatorComponent.avatar.isHuman) 
-		{
-			//Transform hipsTransform = animator.GetBoneTransform(HumanBodyBones.Hips);
-			//Transform rootTransform = hipsTransform.parent;
-			Transform rootTransform = transform;
+        // get the pose handler reference
+        if (animatorComponent && animatorComponent.avatar && animatorComponent.avatar.isHuman)
+        {
+            //Transform hipsTransform = animator.GetBoneTransform(HumanBodyBones.Hips);
+            //Transform rootTransform = hipsTransform.parent;
+            Transform rootTransform = transform;
 
-			humanPoseHandler = new HumanPoseHandler(animatorComponent.avatar, rootTransform);
-			humanPoseHandler.GetHumanPose(ref humanPose);
+            humanPoseHandler = new HumanPoseHandler(animatorComponent.avatar, rootTransform);
+            humanPoseHandler.GetHumanPose(ref humanPose);
 
-			initialHipsPosition = (humanPose.bodyPosition - rootTransform.position);  // hipsTransform.position
-			initialHipsRotation = humanPose.bodyRotation;
-		}
+            initialHipsPosition = (humanPose.bodyPosition - rootTransform.position);  // hipsTransform.position
+            initialHipsRotation = humanPose.bodyRotation;
+        }
 
         avatarScaler = GetComponent<AvatarScaler>();
 
         debugTuningObj = GameObject.Find("DebugTuningObj")?.GetComponent<MeshRenderer>();
-	}
+    }
 
 
-	// applies the muscle limits for humanoid avatar
-	private void CheckMuscleLimits()
-	{
-		if (humanPoseHandler == null)
-			return;
+    // applies the muscle limits for humanoid avatar
+    private void CheckMuscleLimits()
+    {
+        if (humanPoseHandler == null)
+            return;
 
-		humanPoseHandler.GetHumanPose(ref humanPose);
+        humanPoseHandler.GetHumanPose(ref humanPose);
 
-		Debug.Log(playerId + " - Trans: " + transform.position + ", body: " + humanPose.bodyPosition);
+        Debug.Log(playerId + " - Trans: " + transform.position + ", body: " + humanPose.bodyPosition);
 
-		bool isPoseChanged = false;
+        bool isPoseChanged = false;
 
-		float muscleMin = -1f;
-		float muscleMax = 1f;
+        float muscleMin = -1f;
+        float muscleMax = 1f;
 
-		for (int i = 0; i < humanPose.muscles.Length; i++) 
-		{
-			if (float.IsNaN(humanPose.muscles[i])) 
-			{
-				//humanPose.muscles[i] = 0f;
-				continue;
-			}
+        for (int i = 0; i < humanPose.muscles.Length; i++)
+        {
+            if (float.IsNaN(humanPose.muscles[i]))
+            {
+                //humanPose.muscles[i] = 0f;
+                continue;
+            }
 
-			if (humanPose.muscles[i] < muscleMin) 
-			{
-				humanPose.muscles[i] = muscleMin;
-				isPoseChanged = true;
-			}
-			else if (humanPose.muscles[i] > muscleMax) 
-			{
-				humanPose.muscles[i] = muscleMax;
-				isPoseChanged = true;
-			}
-		}
+            if (humanPose.muscles[i] < muscleMin)
+            {
+                humanPose.muscles[i] = muscleMin;
+                isPoseChanged = true;
+            }
+            else if (humanPose.muscles[i] > muscleMax)
+            {
+                humanPose.muscles[i] = muscleMax;
+                isPoseChanged = true;
+            }
+        }
 
-		if (isPoseChanged) 
-		{
-			//Quaternion localBodyRot = Quaternion.Inverse(transform.rotation) * humanPose.bodyRotation;
-			Quaternion localBodyRot = Quaternion.Inverse(initialHipsRotation) * humanPose.bodyRotation;
+        if (isPoseChanged)
+        {
+            //Quaternion localBodyRot = Quaternion.Inverse(transform.rotation) * humanPose.bodyRotation;
+            Quaternion localBodyRot = Quaternion.Inverse(initialHipsRotation) * humanPose.bodyRotation;
 
-			// recover the body position & orientation
-			//humanPose.bodyPosition = Vector3.zero;
-			//humanPose.bodyPosition.y = initialHipsPosition.y;
-			humanPose.bodyPosition = initialHipsPosition;
-			humanPose.bodyRotation = localBodyRot; // Quaternion.identity;
+            // recover the body position & orientation
+            //humanPose.bodyPosition = Vector3.zero;
+            //humanPose.bodyPosition.y = initialHipsPosition.y;
+            humanPose.bodyPosition = initialHipsPosition;
+            humanPose.bodyRotation = localBodyRot; // Quaternion.identity;
 
-			humanPoseHandler.SetHumanPose(ref humanPose);
-			//Debug.Log("  Human pose updated.");
-		}
+            humanPoseHandler.SetHumanPose(ref humanPose);
+            //Debug.Log("  Human pose updated.");
+        }
 
-	}
+    }
 
-	
-	/// <summary>
-	/// Updates the avatar each frame.
-	/// </summary>
-	/// <param name="UserID">User ID</param>
+
+    /// <summary>
+    /// Updates the avatar each frame.
+    /// </summary>
+    /// <param name="UserID">User ID</param>
     public void UpdateAvatar(Int64 UserID)
     {
-		if(!gameObject.activeInHierarchy) 
-			return;
+        if (!gameObject.activeInHierarchy)
+            return;
 
-		// Get the KinectManager instance
-		if(kinectManager == null)
-		{
-			kinectManager = KinectManager.Instance;
-		}
+        // Get the KinectManager instance
+        if (kinectManager == null)
+        {
+            kinectManager = KinectManager.Instance;
+        }
 
-		// get the background plane rectangle if needed 
-		if (backgroundPlane && !planeRectSet && kinectManager && kinectManager.IsInitialized ()) 
-		{
-			planeRectSet = true;
+        // get the background plane rectangle if needed 
+        if (backgroundPlane && !planeRectSet && kinectManager && kinectManager.IsInitialized())
+        {
+            planeRectSet = true;
 
-			planeRect.width = 10f * Mathf.Abs(backgroundPlane.localScale.x);
-			planeRect.height = 10f * Mathf.Abs(backgroundPlane.localScale.z);
-			planeRect.x = backgroundPlane.position.x - planeRect.width / 2f;
-			planeRect.y = backgroundPlane.position.y - planeRect.height / 2f;
-		}
-		
-		// move the avatar to its Kinect position
-		if(!externalRootMotion)
-		{
+            planeRect.width = 10f * Mathf.Abs(backgroundPlane.localScale.x);
+            planeRect.height = 10f * Mathf.Abs(backgroundPlane.localScale.z);
+            planeRect.x = backgroundPlane.position.x - planeRect.width / 2f;
+            planeRect.y = backgroundPlane.position.y - planeRect.height / 2f;
+        }
+
+        // move the avatar to its Kinect position
+        if (!externalRootMotion)
+        {
             if (!MoveAvatar(UserID))
             {
                 return;
             }
-		}
+        }
 
-		// get the left hand state and event
-		if(kinectManager && kinectManager.GetJointTrackingState(UserID, (int)KinectInterop.JointType.HandLeft) != KinectInterop.TrackingState.NotTracked)
-		{
-			KinectInterop.HandState leftHandState = kinectManager.GetLeftHandState(UserID);
-			InteractionManager.HandEventType leftHandEvent = InteractionManager.HandStateToEvent(leftHandState, lastLeftHandEvent);
+        // get the left hand state and event
+        if (kinectManager && kinectManager.GetJointTrackingState(UserID, (int)KinectInterop.JointType.HandLeft) != KinectInterop.TrackingState.NotTracked)
+        {
+            KinectInterop.HandState leftHandState = kinectManager.GetLeftHandState(UserID);
+            InteractionManager.HandEventType leftHandEvent = InteractionManager.HandStateToEvent(leftHandState, lastLeftHandEvent);
 
-			if(leftHandEvent != InteractionManager.HandEventType.None)
-			{
-				lastLeftHandEvent = leftHandEvent;
-			}
-		}
+            if (leftHandEvent != InteractionManager.HandEventType.None)
+            {
+                lastLeftHandEvent = leftHandEvent;
+            }
+        }
 
-		// get the right hand state and event
-		if(kinectManager && kinectManager.GetJointTrackingState(UserID, (int)KinectInterop.JointType.HandRight) != KinectInterop.TrackingState.NotTracked)
-		{
-			KinectInterop.HandState rightHandState = kinectManager.GetRightHandState(UserID);
-			InteractionManager.HandEventType rightHandEvent = InteractionManager.HandStateToEvent(rightHandState, lastRightHandEvent);
-			
-			if(rightHandEvent != InteractionManager.HandEventType.None)
-			{
-				lastRightHandEvent = rightHandEvent;
-			}
-		}
+        // get the right hand state and event
+        if (kinectManager && kinectManager.GetJointTrackingState(UserID, (int)KinectInterop.JointType.HandRight) != KinectInterop.TrackingState.NotTracked)
+        {
+            KinectInterop.HandState rightHandState = kinectManager.GetRightHandState(UserID);
+            InteractionManager.HandEventType rightHandEvent = InteractionManager.HandStateToEvent(rightHandState, lastRightHandEvent);
+
+            if (rightHandEvent != InteractionManager.HandEventType.None)
+            {
+                lastRightHandEvent = rightHandEvent;
+            }
+        }
 
         CalibrateHipShoulders();
 
@@ -593,43 +593,43 @@ public class AvatarController : MonoBehaviour
 
         // rotate the avatar bones
         for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
-		{
-			if (!bones[boneIndex] || isBoneDisabled[boneIndex]) 
-				continue;
+        {
+            if (!bones[boneIndex] || isBoneDisabled[boneIndex])
+                continue;
 
-			if(boneIndex2JointMap.ContainsKey(boneIndex))
-			{
-				KinectInterop.JointType joint = !(mirroredMovement ^ flipLeftRight) ? 
-					boneIndex2JointMap[boneIndex] : boneIndex2MirrorJointMap[boneIndex];
-				
-				if(externalHeadRotation && joint == KinectInterop.JointType.Head)   // skip head if moved externally
-				{
-					continue;
-				}
+            if (boneIndex2JointMap.ContainsKey(boneIndex))
+            {
+                KinectInterop.JointType joint = !(mirroredMovement ^ flipLeftRight) ?
+                    boneIndex2JointMap[boneIndex] : boneIndex2MirrorJointMap[boneIndex];
 
-				if(externalHandRotations &&    // skip hands if moved externally
-					(joint == KinectInterop.JointType.WristLeft || joint == KinectInterop.JointType.WristRight ||
-						joint == KinectInterop.JointType.HandLeft || joint == KinectInterop.JointType.HandRight))
-				{
-					continue;
-				}
+                if (externalHeadRotation && joint == KinectInterop.JointType.Head)   // skip head if moved externally
+                {
+                    continue;
+                }
 
-				TransformBone(UserID, joint, boneIndex, !(mirroredMovement ^ flipLeftRight));
-			}
-			else if(specIndex2JointMap.ContainsKey(boneIndex))
-			{
-				// special bones (clavicles)
-				List<KinectInterop.JointType> alJoints = !(mirroredMovement ^ flipLeftRight) ? 
-					specIndex2JointMap[boneIndex] : specIndex2MirrorMap[boneIndex];
+                if (externalHandRotations &&    // skip hands if moved externally
+                    (joint == KinectInterop.JointType.WristLeft || joint == KinectInterop.JointType.WristRight ||
+                        joint == KinectInterop.JointType.HandLeft || joint == KinectInterop.JointType.HandRight))
+                {
+                    continue;
+                }
 
-				if(alJoints.Count >= 2)
-				{
-					//Debug.Log(alJoints[0].ToString());
-					Vector3 baseDir = alJoints[0].ToString().EndsWith("Left") ? Vector3.left : Vector3.right;
-					TransformSpecialBone(UserID, alJoints[0], alJoints[1], boneIndex, baseDir, !(mirroredMovement ^ flipLeftRight));
-				}
-			}
-		}
+                TransformBone(UserID, joint, boneIndex, !(mirroredMovement ^ flipLeftRight));
+            }
+            else if (specIndex2JointMap.ContainsKey(boneIndex))
+            {
+                // special bones (clavicles)
+                List<KinectInterop.JointType> alJoints = !(mirroredMovement ^ flipLeftRight) ?
+                    specIndex2JointMap[boneIndex] : specIndex2MirrorMap[boneIndex];
+
+                if (alJoints.Count >= 2)
+                {
+                    //Debug.Log(alJoints[0].ToString());
+                    Vector3 baseDir = alJoints[0].ToString().EndsWith("Left") ? Vector3.left : Vector3.right;
+                    TransformSpecialBone(UserID, alJoints[0], alJoints[1], boneIndex, baseDir, !(mirroredMovement ^ flipLeftRight));
+                }
+            }
+        }
 
         for (var boneIndex = 0; boneIndex < bones.Length; boneIndex++)
         {
@@ -750,116 +750,116 @@ public class AvatarController : MonoBehaviour
     {
         // Do nothing here. Only AvatarControllerClassic has all the necessary spine points to scale torso properly.
     }
-	
-	/// <summary>
-	/// Resets bones to their initial positions and rotations. This also releases avatar control from KM, by settings playerId to 0 
-	/// </summary>
-	public virtual void ResetToInitialPosition()
-	{
-		playerId = 0;
 
-		if(bones == null)
-			return;
-		
-		// For each bone that was defined, reset to initial position.
-		transform.rotation = Quaternion.identity;
+    /// <summary>
+    /// Resets bones to their initial positions and rotations. This also releases avatar control from KM, by settings playerId to 0 
+    /// </summary>
+    public virtual void ResetToInitialPosition()
+    {
+        playerId = 0;
 
-		for(int pass = 0; pass < 2; pass++)  // 2 passes because clavicles are at the end
-		{
-			for(int i = 0; i < bones.Length; i++)
-			{
-				if(bones[i] != null)
-				{
-					bones[i].rotation = initialRotations[i];
-				}
-			}
-		}
+        if (bones == null)
+            return;
 
-		// reset finger bones to initial position
-		//Animator animatorComponent = GetComponent<Animator>();
-		foreach(HumanBodyBones bone in fingerBoneLocalRotations.Keys)
-		{
-			Transform boneTransform = animatorComponent ? animatorComponent.GetBoneTransform(bone) : null;
-			
-			if(boneTransform)
-			{
-				boneTransform.localRotation = fingerBoneLocalRotations[bone];
-			}
-		}
+        // For each bone that was defined, reset to initial position.
+        transform.rotation = Quaternion.identity;
 
-//		if(bodyRoot != null)
-//		{
-//			bodyRoot.localPosition = Vector3.zero;
-//			bodyRoot.localRotation = Quaternion.identity;
-//		}
+        for (int pass = 0; pass < 2; pass++)  // 2 passes because clavicles are at the end
+        {
+            for (int i = 0; i < bones.Length; i++)
+            {
+                if (bones[i] != null)
+                {
+                    bones[i].rotation = initialRotations[i];
+                }
+            }
+        }
 
-		// Restore the offset's position and rotation
-		if(offsetNode != null)
-		{
-			offsetNode.transform.position = offsetNodePos;
-			offsetNode.transform.rotation = offsetNodeRot;
-		}
+        // reset finger bones to initial position
+        //Animator animatorComponent = GetComponent<Animator>();
+        foreach (HumanBodyBones bone in fingerBoneLocalRotations.Keys)
+        {
+            Transform boneTransform = animatorComponent ? animatorComponent.GetBoneTransform(bone) : null;
 
-		transform.position = initialPosition;
-		transform.rotation = initialRotation;
+            if (boneTransform)
+            {
+                boneTransform.localRotation = fingerBoneLocalRotations[bone];
+            }
+        }
 
-//		if (bones[0]) 
-//		{
-//			bones[0].localPosition = initialHipsPosition;
-//			bones[0].localRotation = initialHipsRotation;
-//		}
+        //		if(bodyRoot != null)
+        //		{
+        //			bodyRoot.localPosition = Vector3.zero;
+        //			bodyRoot.localRotation = Quaternion.identity;
+        //		}
+
+        // Restore the offset's position and rotation
+        if (offsetNode != null)
+        {
+            offsetNode.transform.position = offsetNodePos;
+            offsetNode.transform.rotation = offsetNodeRot;
+        }
+
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
+
+        //		if (bones[0]) 
+        //		{
+        //			bones[0].localPosition = initialHipsPosition;
+        //			bones[0].localRotation = initialHipsRotation;
+        //		}
     }
-	
-	/// <summary>
-	/// Invoked on the successful calibration of the player.
-	/// </summary>
-	/// <param name="userId">User identifier.</param>
-	public virtual void SuccessfulCalibration(Int64 userId, bool resetInitialTransform)
-	{
-		playerId = userId;
 
-		// reset the models position
-		if(offsetNode != null)
-		{
-			offsetNode.transform.position = offsetNodePos;
-			offsetNode.transform.rotation = offsetNodeRot;
-		}
-		
+    /// <summary>
+    /// Invoked on the successful calibration of the player.
+    /// </summary>
+    /// <param name="userId">User identifier.</param>
+    public virtual void SuccessfulCalibration(Int64 userId, bool resetInitialTransform)
+    {
+        playerId = userId;
+
+        // reset the models position
+        if (offsetNode != null)
+        {
+            offsetNode.transform.position = offsetNodePos;
+            offsetNode.transform.rotation = offsetNodeRot;
+        }
+
         // reset initial position / rotation if needed 
-        if(resetInitialTransform)
+        if (resetInitialTransform)
         {
             bodyRootPosition = transform.position;
             initialPosition = transform.position;
             initialRotation = transform.rotation;
         }
 
-		transform.position = initialPosition;
-		transform.rotation = initialRotation;
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
 
-//		// enable all bones
-//		for(int i = 0; i < bones.Length; i++)
-//		{
-//			isBoneDisabled[i] = false;
-//		}
+        //		// enable all bones
+        //		for(int i = 0; i < bones.Length; i++)
+        //		{
+        //			isBoneDisabled[i] = false;
+        //		}
 
-		// re-calibrate the position offset
-		offsetCalibrated = false;
-	}
+        // re-calibrate the position offset
+        offsetCalibrated = false;
+    }
 
     /// <summary>
     /// Moves the avatar to its initial/base position 
     /// </summary>
     /// <param name="position"> world position </param>
     /// <param name="rotation"> rotation offset </param>
-    public void resetInitialTransform( Vector3 position, Vector3 rotation )
+    public void resetInitialTransform(Vector3 position, Vector3 rotation)
     {
         bodyRootPosition = position;
         initialPosition = position;
-        initialRotation = Quaternion.Euler( rotation );
-        
+        initialRotation = Quaternion.Euler(rotation);
+
         transform.position = initialPosition;
         transform.rotation = initialRotation;
-        
+
         offsetCalibrated = false;       // this cause also calibrating kinect offset in moveAvatar function 
     }
 
@@ -886,7 +886,7 @@ public class AvatarController : MonoBehaviour
         if (iJoint < 0 || !kinectManager.IsJointTracked(userId, iJoint))
             return;
 
-        
+
 
         switch (joint)
         {
@@ -927,15 +927,15 @@ public class AvatarController : MonoBehaviour
                 boneTransform.localPosition += new Vector3(0, hipUpwardOffset, 0);
                 break;
             case KinectInterop.JointType.SpineShoulder:
-                Transform leftClavicle = boneTransform.GetChild(0);
-                Transform rightClavicle = boneTransform.GetChild(2);
-                Vector3 spineToLeftShoulder = leftClavicle.position - boneTransform.position;
-                Vector3 spineToRightShoulder = rightClavicle.position - boneTransform.position;
+                //Transform leftClavicle = GetChildBone(boneTransform, 0);
+                //Transform rightClavicle = GetChildBone(boneTransform, 2);
+                //Vector3 spineToLeftShoulder = leftClavicle.position - boneTransform.position;
+                //Vector3 spineToRightShoulder = rightClavicle.position - boneTransform.position;
 
                 boneTransform.localPosition += new Vector3(0, shoulderCenterVerticalOffset, 0);
 
-                leftClavicle.position = boneTransform.position + spineToLeftShoulder;
-                rightClavicle.position = boneTransform.position + spineToRightShoulder;
+                //leftClavicle.position = boneTransform.position + spineToLeftShoulder;
+                //rightClavicle.position = boneTransform.position + spineToRightShoulder;
                 break;
             case KinectInterop.JointType.SpineMid:
                 boneTransform.localPosition += new Vector3(0, spineVerticalOffset, 0);
@@ -956,7 +956,8 @@ public class AvatarController : MonoBehaviour
             case KinectInterop.JointType.KneeRight:
                 // Move them down if thighs are straight down because kinect seems to shift knees up when legs are straight down.
 
-                Vector3 thighForward = boneTransform.position - boneTransform.parent.position;  // kneePos - hipPos
+                Transform hipJoint = GetParentBone(boneTransform);
+                Vector3 thighForward = boneTransform.position - hipJoint.position;  // kneePos - hipPos
                 float straightness = Vector3.Dot(thighForward.normalized, -bodyRoot.up);
 
                 //Debug.Log("straightness " + straightness);
@@ -974,7 +975,7 @@ public class AvatarController : MonoBehaviour
                 //Debug.Log("adjustedStraightness " + adjustedStraightness);
 
                 float thighLength = thighForward.magnitude + adjustedStraightness * straightLegOffset;
-                boneTransform.position = boneTransform.parent.position + thighForward.normalized * thighLength;
+                boneTransform.position = hipJoint.position + thighForward.normalized * thighLength;
                 break;
             case KinectInterop.JointType.ShoulderLeft:
             case KinectInterop.JointType.ShoulderRight:
@@ -983,18 +984,18 @@ public class AvatarController : MonoBehaviour
                 boneTransform.position += GetShoulderVerticalOffset(joint);
                 break;
 
-            //case KinectInterop.JointType.AnkleLeft:
-            //    // Move the ankle down to the toebase (fix for models wearing heels with lifted ankles, which causes shins to become shortened).
-            //    Vector3 kneePos = boneTransform.parent.position;
-            //    Transform toeEnd = boneTransform.GetChild(0);
-            //    Vector3 toePos = toeEnd.position;
-            //    Vector3 projection = Vector3.Project(toePos - kneePos, boneTransform.position - kneePos);
-            //    Vector3 adjustedAnklePos = kneePos + projection;
-            //    boneTransform.position = adjustedAnklePos;
-            //    break;
+                //case KinectInterop.JointType.AnkleLeft:
+                //    // Move the ankle down to the toebase (fix for models wearing heels with lifted ankles, which causes shins to become shortened).
+                //    Vector3 kneePos = boneTransform.parent.position;
+                //    Transform toeEnd = boneTransform.GetChild(0);
+                //    Vector3 toePos = toeEnd.position;
+                //    Vector3 projection = Vector3.Project(toePos - kneePos, boneTransform.position - kneePos);
+                //    Vector3 adjustedAnklePos = kneePos + projection;
+                //    boneTransform.position = adjustedAnklePos;
+                //    break;
 
-            //case KinectInterop.JointType.AnkleRight:
-            //    break;
+                //case KinectInterop.JointType.AnkleRight:
+                //    break;
         }
 
         //boneTransform.position = Vector3.Lerp(oldPos, boneTransform.position, 0.65f);
@@ -1069,25 +1070,27 @@ public class AvatarController : MonoBehaviour
                 break;
             case KinectInterop.JointType.ElbowLeft:
             case KinectInterop.JointType.ElbowRight:
-                { 
-                    shoulderLeftForward = (boneTransform.position - boneTransform.parent.position).normalized;
-                    elbowLeftForward = (boneTransform.GetChild(0).position - boneTransform.position).normalized;
-                    float elbowStraightness = Vector3.Dot(shoulderLeftForward, elbowLeftForward);
+                {
+                    Transform shoulderJoint = GetParentBone(boneTransform);
+                    Transform wristJoint = GetChildBone(boneTransform);
+                    Vector3 shoulderForward = (boneTransform.position - shoulderJoint.position).normalized;
+                    Vector3 elbowForward = (wristJoint.position - boneTransform.position).normalized;
+                    float elbowStraightness = Vector3.Dot(shoulderForward, elbowForward);
 
                     Vector3 spineDown = (bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]].up * -1.0f).normalized;
-                    float elbowDownness = Vector3.Dot(elbowLeftForward, spineDown);
+                    float elbowDownness = Vector3.Dot(elbowForward, spineDown);
 
                     //Debug.Log("s = " + elbowStraightness);
                     //Debug.Log("d = " + elbowDownness);
                     if (elbowStraightness > 0.9f && elbowDownness > 0.95f)
                     {
 
-                        shoulderDown = GetShoulderDown(boneTransform.parent.position, shoulderLeftForward, elbowLeftForward);
+                        shoulderDown = GetShoulderDown(shoulderJoint.position, shoulderForward, elbowForward);
                         // Recalculate shoulderDown so that it is a perfect 90 degree angle from shoulderLeftFoward.
-                        shoulderOut = Vector3.Cross(shoulderLeftForward, shoulderDown);
-                        shoulderDown = Vector3.Cross(shoulderOut, shoulderLeftForward);
+                        shoulderOut = Vector3.Cross(shoulderForward, shoulderDown);
+                        shoulderDown = Vector3.Cross(shoulderOut, shoulderForward);
                         Quaternion origRot = boneTransform.rotation;
-                        boneTransform.Rotate(elbowLeftForward, 90f * (joint == KinectInterop.JointType.ElbowRight ? -1f : 1f), Space.Self);
+                        boneTransform.Rotate(elbowForward, 90f * (joint == KinectInterop.JointType.ElbowRight ? -1f : 1f), Space.Self);
                         boneTransform.rotation = Quaternion.Slerp(origRot, boneTransform.rotation, (1f - elbowDownness) / 0.05f);
                     }
                 }
@@ -1110,15 +1113,15 @@ public class AvatarController : MonoBehaviour
 
                 boneTransform.rotation = Quaternion.LookRotation(hipRightDown, hipRightForward);
                 break;
-            //case KinectInterop.JointType.WristLeft:
-            //case KinectInterop.JointType.WristRight:
-            //case KinectInterop.JointType.HandLeft:
-            //case KinectInterop.JointType.HandRight:
-            //case KinectInterop.JointType.HandTipLeft:
-            //case KinectInterop.JointType.HandTipRight:
-            //    // Don't allow bending of wrists. It reveals skinning problems with sleeves.
-            //    boneTransform.rotation = initialRotations[boneIndex];
-            //    break;
+                //case KinectInterop.JointType.WristLeft:
+                //case KinectInterop.JointType.WristRight:
+                //case KinectInterop.JointType.HandLeft:
+                //case KinectInterop.JointType.HandRight:
+                //case KinectInterop.JointType.HandTipLeft:
+                //case KinectInterop.JointType.HandTipRight:
+                //    // Don't allow bending of wrists. It reveals skinning problems with sleeves.
+                //    boneTransform.rotation = initialRotations[boneIndex];
+                //    break;
         }
 
         //boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);
@@ -1138,37 +1141,73 @@ public class AvatarController : MonoBehaviour
         Quaternion jointRotation = kinectManager.GetJointOrientation(userId, iJoint, flip);
         if (jointRotation == Quaternion.identity)
             return;
-        /*
-        switch (joint)
-        {
-            case KinectInterop.JointType.WristLeft:
-            case KinectInterop.JointType.WristRight:
-                {
-                    Vector3 shoulderLeftForward = (boneTransform.position - boneTransform.parent.position).normalized;
-                    Vector3 elbowLeftForward = (boneTransform.GetChild(0).position - boneTransform.position).normalized;
-                    float elbowStraightness = Vector3.Dot(shoulderLeftForward, elbowLeftForward);
-
-                    Vector3 spineDown = (bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]].up * -1.0f).normalized;
-                    float elbowDownness = Vector3.Dot(elbowLeftForward, spineDown);
-
-                    //Debug.Log("s = " + elbowStraightness);
-                    //Debug.Log("d = " + elbowDownness);
-                    if (elbowStraightness > 0.9f && elbowDownness > 0.9f)
-                    {
-                        Vector3 shoulderDown = GetShoulderDown(boneTransform.parent.position, shoulderLeftForward, elbowLeftForward);
-                        // Recalculate shoulderDown so that it is a perfect 90 degree angle from shoulderLeftFoward.
-                        Vector3 shoulderOut = Vector3.Cross(shoulderLeftForward, shoulderDown);
-                        shoulderDown = Vector3.Cross(shoulderOut, shoulderLeftForward);
-                        boneTransform.Rotate(elbowLeftForward, 90f * (joint == KinectInterop.JointType.WristRight ? -1f : 1f), Space.Self);
-                    }
-                }
-                break;
-        }
-        */
     }
 
-        // Apply the rotations tracked by kinect to the joints.
-        protected void ScaleBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
+    protected virtual Transform GetChildBone(Transform boneTransform, int idx = 0)
+    {
+        return boneTransform.GetChild(idx);
+    }
+
+    protected virtual Transform GetParentBone(Transform boneTransform)
+    {
+        return boneTransform.parent;
+    }
+
+    private float _origUpperArmLength = 0;
+    protected float origUpperArmLength
+    {
+        get
+        {
+            if (_origUpperArmLength == 0)
+                _origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]] -
+                                initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]]).magnitude;
+            return _origUpperArmLength;
+        }
+    }
+
+    private float _origLowerArmLength = 0;
+    protected float origLowerArmLength
+    {
+        get
+        {
+            if (_origLowerArmLength == 0)
+                _origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
+                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
+            return _origLowerArmLength;
+        }
+    }
+
+    private float _origThighLength = 0;
+    protected float origThighLength
+    {
+        get
+        {
+            if (_origThighLength == 0)
+                _origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] -
+                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
+            return _origThighLength;
+        }
+    }
+
+    private float _origShinLength = 0;
+    protected float origShinLength
+    {
+        get
+        {
+            if (_origShinLength == 0)
+                _origShinLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.AnkleLeft]] -
+                    initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
+            return _origShinLength;
+        }
+    }
+
+    protected virtual void SetBoneScale(ref Transform boneTransform, Vector3 localScale)
+    {
+        boneTransform.localScale = localScale;
+    }
+
+    // Apply the rotations tracked by kinect to the joints.
+    protected void ScaleBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
     {
         Transform boneTransform = bones[boneIndex];
         Vector3 oldScale = boneTransform.localScale;
@@ -1183,73 +1222,70 @@ public class AvatarController : MonoBehaviour
         switch (joint)
         {
             case KinectInterop.JointType.ShoulderLeft:
-                {
-                    float upperArmLength = (boneTransform.GetChild(0).position - boneTransform.position).magnitude;
-                    float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderLeft]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]]).magnitude;
-
-                    resetJointScale(ref boneTransform);
-                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
-                    // Unscale child bone
-                    Transform elbowLeft = boneTransform.GetChild(0);
-                    resetJointScale(ref elbowLeft);
-
-                    float lowerArmLength = (elbowLeft.GetChild(0).position - elbowLeft.position).magnitude;
-                    float origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
-
-                    elbowLeft.localScale = new Vector3(
-                        boneTransform.localScale.x,
-                        elbowLeft.localScale.y * (lowerArmLength / origLowerArmLength),
-                        boneTransform.localScale.z);
-                }
-                break;
             case KinectInterop.JointType.ShoulderRight:
                 {
-                    float upperArmLength = (GetTranslatedBonePos(KinectInterop.JointType.ElbowRight) - boneTransform.position).magnitude;
-                    float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowRight]]).magnitude;
+                    Transform elbowJoint = GetChildBone(boneTransform);
+                    float upperArmLength = (elbowJoint.position - boneTransform.position).magnitude;
+
                     resetJointScale(ref boneTransform);
-                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
+                    SetBoneScale(ref boneTransform, 
+                        new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z));
                     // Unscale child bone
-                    Transform elbowRight = boneTransform.GetChild(0);
-                    resetJointScale(ref elbowRight);
+                    resetJointScale(ref elbowJoint);
 
-                    float lowerArmLength = (elbowRight.GetChild(0).position - elbowRight.position).magnitude;
-                    float origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
+                    Transform wristJoint = GetChildBone(elbowJoint);
+                    float lowerArmLength = (wristJoint.position - elbowJoint.position).magnitude;
 
-                    elbowRight.localScale = new Vector3(
-                        boneTransform.localScale.x,
-                        elbowRight.localScale.y * (lowerArmLength / origLowerArmLength),
-                        boneTransform.localScale.z);
+                    SetBoneScale(ref elbowJoint, 
+                        new Vector3(
+                            boneTransform.localScale.x,
+                            elbowJoint.localScale.y * (lowerArmLength / origLowerArmLength),
+                            boneTransform.localScale.z));
                 }
                 break;
+            //case KinectInterop.JointType.ShoulderRight:
+            //    {
+            //        Transform elbowRight = GetChildBone(boneTransform);
+            //        float upperArmLength = (GetTranslatedBonePos(KinectInterop.JointType.ElbowRight) - boneTransform.position).magnitude;
+            //        float origUpperArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ShoulderRight]] -
+            //            initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowRight]]).magnitude;
+            //        resetJointScale(ref boneTransform);
+            //        boneTransform.localScale = new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z);
+            //        // Unscale child bone
+            //        resetJointScale(ref elbowRight);
+                    
+            //        float lowerArmLength = (elbowRight.GetChild(0).GetChild(0).position - elbowRight.position).magnitude;
+            //        float origLowerArmLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.ElbowLeft]] -
+            //            initialPositions[jointMap2boneIndex[KinectInterop.JointType.WristLeft]]).magnitude;
+
+            //        elbowRight.localScale = new Vector3(
+            //            boneTransform.localScale.x,
+            //            elbowRight.localScale.y * (lowerArmLength / origLowerArmLength),
+            //            boneTransform.localScale.z);
+            //    }
+            //    break;
             case KinectInterop.JointType.HipLeft:
             case KinectInterop.JointType.HipRight:
                 {
+                    Transform kneeBone = GetChildBone(boneTransform);
+                    Transform ankleBone = GetChildBone(kneeBone);
 
-                    Vector3 thighForward = boneTransform.GetChild(0).position - boneTransform.position;
+                    Vector3 thighForward = kneeBone.position - boneTransform.position;
                     float thighLength = thighForward.magnitude;
 
-                    float origThighLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.HipLeft]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
                     //Debug.Log("hipLeftY scale = " + (thighLength / origThighLength));
                     float thighScaleFactor = thighLength / origThighLength;
                     //resetJointScale(ref boneTransform);
-                    boneTransform.localScale = new Vector3(boneTransform.localScale.x, 1f / boneTransform.parent.lossyScale.y * thighScaleFactor, boneTransform.localScale.z);
-
-                    // Unscale child bone
-                    Transform kneeBone = boneTransform.GetChild(0);
-                    Transform ankelBone = kneeBone.GetChild(0);
+                    Transform hipBone = GetParentBone(boneTransform);
+                    SetBoneScale(ref boneTransform,
+                        new Vector3(boneTransform.localScale.x, thighScaleFactor, boneTransform.localScale.z));
+                    
 
                     // Scale shin
                     //float shinLength = (ankleLeft.position - kneeLeft.position).magnitude;
                     // Since measuring shinLength is very unstable due to Kinect reliability when foot is on floor (low depth difference),
                     // we'll just use an average human shin-to-knee ratio of 1.03:1.00
                     float shinLength = thighLength * 1.03f;
-                    float origShinLength = (initialPositions[jointMap2boneIndex[KinectInterop.JointType.AnkleLeft]] -
-                        initialPositions[jointMap2boneIndex[KinectInterop.JointType.KneeLeft]]).magnitude;
                     float shinScaleFactor = shinLength / origShinLength;
                     //shinScaleFactor = 1;
 
@@ -1258,7 +1294,8 @@ public class AvatarController : MonoBehaviour
                     //Debug.Log("origShinLength = " + origShinLength);
 
                     //resetJointScale(ref kneeLeft);
-                    kneeBone.localScale = new Vector3(kneeBone.localScale.x, 1f/kneeBone.parent.lossyScale.y * shinScaleFactor, kneeBone.localScale.z);
+                    SetBoneScale(ref kneeBone,
+                        new Vector3(kneeBone.localScale.x, shinScaleFactor, kneeBone.localScale.z));
                     //resetJointScale(ref ankleLeft);
                 }
                 break;
@@ -1268,7 +1305,7 @@ public class AvatarController : MonoBehaviour
 
     }
 
-    protected void resetJointScale(ref Transform joint)
+    protected virtual void resetJointScale(ref Transform joint)
     {
         Vector3 parentScale = joint.parent.lossyScale;
         joint.localScale = new Vector3(1f / parentScale.x, 1f / parentScale.y, 1f / parentScale.z);

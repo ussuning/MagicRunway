@@ -19,7 +19,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
     //protected string BackgroundCamera1 = "BackgroundCamera1";
     protected string ConversionCamera = "Conversion Camera";
-    protected AvatarControllerClassic avatarController = null;
+    internal AvatarControllerClassic avatarController = null;
 
     private void Awake()
     {
@@ -62,8 +62,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
             Debug.LogError("Failed to find " + ConversionCamera);
         avatarController.posRelOverlayColor = true;
 
-        MapBones();
-
         avatarController.mirroredMovement = true;
         avatarController.verticalMovement = true;
         avatarController.smoothFactor = 0;
@@ -71,6 +69,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         avatarController.hipWidthFactor = 0f;
         avatarController.shoulderWidthFactor = 0f;
         avatarController.Awake();
+        MapAuxBones();
 
         //// Initialize avatar scalar
         //AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
@@ -129,25 +128,27 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         }
     }
 
-    protected void MapBones()
+    protected void MapAuxBones()
     {
         if (avatarController == null) { 
             Debug.LogError("No AvatarController detected. Can't MapBones()");
             return;
         }
 
-        Dictionary<string, string> boneMap = GetBoneMap();
+        Dictionary<AvatarControllerClassic.BoneSlot, string> boneMap = GetBoneMap();
         
         avatarController.BodyRoot = transform;
         System.Type avatarControllerType = avatarController.GetType();
-        foreach (KeyValuePair<string, string> kvp in boneMap)
+        foreach (KeyValuePair<AvatarControllerClassic.BoneSlot, string> kvp in boneMap)
         {
+            AvatarControllerClassic.BoneSlot boneSlot = kvp.Key;
             string boneName = kvp.Value;
             Transform boneTransform = transform.FindDeepChild(boneName);
             if (boneTransform != null)
             {
-                // Set avatarController field to boneTransform;
-                avatarControllerType.GetField(kvp.Key).SetValue(avatarController, boneTransform);
+                // Set avatarController field to boneTransform using reflection. -HH
+                // avatarControllerType.GetField(kvp.Key).SetValue(avatarController, boneTransform);
+                avatarController.SetBone(boneSlot, boneTransform);
             }
             else
             {
@@ -157,64 +158,64 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
     }
 
-    private Dictionary<string, string> GetBoneMap()
+    private Dictionary<AvatarControllerClassic.BoneSlot, string> GetBoneMap()
     {
-        Dictionary<string, string> boneMap = new Dictionary<string, string>();
+        Dictionary<AvatarControllerClassic.BoneSlot, string> boneMap = new Dictionary<AvatarControllerClassic.BoneSlot, string>();
 
         switch (avatarBoneMapMode)
         {
             case AvatarBoneMapMode.Mixamo:
-                boneMap.Add("HipCenter",        "mixamorig:Hips");
-                boneMap.Add("Spine",            "mixamorig:Spine");
-                boneMap.Add("SpineMid",         "mixamorig:Spine1");
-                boneMap.Add("ShoulderCenter",   "mixamorig:Spine2");
-                boneMap.Add("Neck",             "mixamorig:Neck");
-                boneMap.Add("Head",             "mixamorig:Head");
-                boneMap.Add("ClavicleLeft",     "mixamorig:LeftShoulder");
-                boneMap.Add("ShoulderLeft",     "mixamorig:LeftArm");
-                boneMap.Add("ElbowLeft",        "mixamorig:LeftForeArm");
-                boneMap.Add("HandLeft",         "mixamorig:LeftHand");
-                boneMap.Add("FingersLeft",      "mixamorig:LeftHandIndex1");
-                boneMap.Add("ThumbLeft",        "mixamorig:LeftHandThumb1");
-                boneMap.Add("ClavicleRight",    "mixamorig:RightShoulder");
-                boneMap.Add("ShoulderRight",    "mixamorig:RightArm");
-                boneMap.Add("ElbowRight",       "mixamorig:RightForeArm");
-                boneMap.Add("HandRight",        "mixamorig:RightHand");
-                boneMap.Add("FingersRight",     "mixamorig:RightHandIndex1");
-                boneMap.Add("ThumbRight",       "mixamorig:RightHandThumb1");
-                boneMap.Add("HipLeft",          "mixamorig:LeftUpLeg");
-                boneMap.Add("KneeLeft",         "mixamorig:LeftLeg");
-                boneMap.Add("FootLeft",         "mixamorig:LeftFoot");
-                boneMap.Add("ToesLeft",         "mixamorig:LeftToeBase");
-                boneMap.Add("HipRight",         "mixamorig:RightUpLeg");
-                boneMap.Add("KneeRight",        "mixamorig:RightLeg");
-                boneMap.Add("FootRight",        "mixamorig:RightFoot");
-                boneMap.Add("ToesRight",        "mixamorig:RightToeBase");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HipCenter,        "mixamorig:Hips");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.Spine,            "mixamorig:Spine");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.SpineMid,         "mixamorig:Spine1");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderCenter,   "mixamorig:Spine2");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.Neck,             "mixamorig:Neck");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.Head,             "mixamorig:Head");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ClavicleLeft,     "mixamorig:LeftShoulder");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderLeft,     "mixamorig:LeftArm");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ElbowLeft,        "mixamorig:LeftForeArm");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HandLeft,         "mixamorig:LeftHand");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FingersLeft,      "mixamorig:LeftHandIndex1");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ThumbLeft,        "mixamorig:LeftHandThumb1");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ClavicleRight,    "mixamorig:RightShoulder");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderRight,    "mixamorig:RightArm");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ElbowRight,       "mixamorig:RightForeArm");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HandRight,        "mixamorig:RightHand");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FingersRight,     "mixamorig:RightHandIndex1");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ThumbRight,       "mixamorig:RightHandThumb1");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HipLeft,          "mixamorig:LeftUpLeg");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.KneeLeft,         "mixamorig:LeftLeg");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FootLeft,         "mixamorig:LeftFoot");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ToesLeft,         "mixamorig:LeftToeBase");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HipRight,         "mixamorig:RightUpLeg");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.KneeRight,        "mixamorig:RightLeg");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FootRight,        "mixamorig:RightFoot");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ToesRight,        "mixamorig:RightToeBase");
                 break;
             case AvatarBoneMapMode.KinectCustom:
-                boneMap.Add("HipCenter",    "spine_base");
-                boneMap.Add("Spine",        "spine_mid");
-                boneMap.Add("ShoulderCenter","spine_shoulder");
-                boneMap.Add("Neck",         "neck");
-                boneMap.Add("Head",         "head");
-                boneMap.Add("ShoulderLeft", "shoulder_l");
-                boneMap.Add("ElbowLeft",    "elbow_l");
-                boneMap.Add("HandLeft",     "wrist_l");
-                boneMap.Add("FingersLeft",  "hand_l");
-                boneMap.Add("ThumbLeft",    "thumb_l");
-                boneMap.Add("ShoulderRight","shoulder_r");
-                boneMap.Add("ElbowRight",   "elbow_r");
-                boneMap.Add("HandRight",    "wrist_r");
-                boneMap.Add("FingersRight", "hand_r");
-                boneMap.Add("ThumbRight",   "thumb_r");
-                boneMap.Add("HipLeft",      "hip_l");
-                boneMap.Add("KneeLeft",     "knee_l");
-                boneMap.Add("FootLeft",     "ankle_l");
-                boneMap.Add("ToesLeft",     "foot_l");
-                boneMap.Add("HipRight",     "hip_r");
-                boneMap.Add("KneeRight",    "knee_r");
-                boneMap.Add("FootRight",    "ankle_r");
-                boneMap.Add("ToesRight",    "foot_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HipCenter,    "spine_base");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.Spine,        "spine_mid");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderCenter,"spine_shoulder");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.Neck,         "neck");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.Head,         "head");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderLeft, "shoulder_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ElbowLeft,    "elbow_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HandLeft,     "wrist_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FingersLeft,  "hand_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ThumbLeft,    "thumb_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderRight,"shoulder_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ElbowRight,   "elbow_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HandRight,    "wrist_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FingersRight, "hand_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ThumbRight,   "thumb_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HipLeft,      "hip_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.KneeLeft,     "knee_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FootLeft,     "ankle_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ToesLeft,     "foot_l");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.HipRight,     "hip_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.KneeRight,    "knee_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.FootRight,    "ankle_r");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ToesRight,    "foot_r");
                 break;
         }
 
@@ -243,6 +244,40 @@ public class AvatarControllerBootstrapEditor : Editor
         {
             myScript.Init(myScript.playerIndex);
         }
+    }
+
+    void OnSceneGUI()
+    {
+
+        AvatarControllerBootstrap t = (AvatarControllerBootstrap)target;
+        AvatarControllerClassic a = t.avatarController;
+        Handles.color = Color.green;
+        //Right Leg
+        Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
+        Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
+        Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
+        Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
+        //Left Leg
+        Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
+        Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
+        Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
+        Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
+        // Spine to Head
+        Handles.DrawLine(a.HipCenter.position, a.Spine.position);
+        Handles.DrawLine(a.Spine.position, a.SpineMid.position);
+        Handles.DrawLine(a.SpineMid.position, a.ShoulderCenter.position);
+        Handles.DrawLine(a.ShoulderCenter.position, a.Neck.position);
+        Handles.DrawLine(a.Neck.position, a.Head.position);
+        // Right Arm
+        Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleRight.position);
+        Handles.DrawLine(a.ClavicleRight.position, a.ShoulderRight.position);
+        Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
+        Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
+        // Left Arm
+        Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleLeft.position);
+        Handles.DrawLine(a.ClavicleLeft.position, a.ShoulderLeft.position);
+        Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
+        Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
     }
 }
 #endif
