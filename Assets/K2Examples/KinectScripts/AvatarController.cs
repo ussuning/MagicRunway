@@ -160,7 +160,7 @@ public class AvatarController : MonoBehaviour
     protected bool isRigidBody = false;
 
     // private instance of the KinectManager
-    protected KinectManager kinectManager;
+    internal KinectManager kinectManager;
     protected AvatarScaler avatarScaler;
 
     // last hand events
@@ -732,9 +732,9 @@ public class AvatarController : MonoBehaviour
                 shoulderWidthFactor = 0.0f; // reset shoulderWidthFactor for compute.
                 needTuningReset = false;
             }
-            if (currHipWidthFactor > hipWidthFactor)
+            //if (currHipWidthFactor > hipWidthFactor)
                 hipWidthFactor = currHipWidthFactor * hipAdjustWidthFactor;
-            if (currShoulderWidthFactor > shoulderWidthFactor)
+            //if (currShoulderWidthFactor > shoulderWidthFactor)
                 shoulderWidthFactor = currShoulderWidthFactor * shoulderAdjustWidthFactor;
         }
         else
@@ -1201,7 +1201,7 @@ public class AvatarController : MonoBehaviour
         }
     }
 
-    protected virtual void SetBoneScale(ref Transform boneTransform, Vector3 localScale)
+    protected virtual void SetBoneScale(Transform boneTransform, Vector3 localScale)
     {
         boneTransform.localScale = localScale;
     }
@@ -1228,18 +1228,22 @@ public class AvatarController : MonoBehaviour
                     float upperArmLength = (elbowJoint.position - boneTransform.position).magnitude;
 
                     resetJointScale(ref boneTransform);
-                    SetBoneScale(ref boneTransform, 
+                    SetBoneScale(boneTransform, 
                         new Vector3(boneTransform.localScale.x, upperArmLength / origUpperArmLength, boneTransform.localScale.z));
                     // Unscale child bone
                     resetJointScale(ref elbowJoint);
 
                     Transform wristJoint = GetChildBone(elbowJoint);
                     float lowerArmLength = (wristJoint.position - elbowJoint.position).magnitude;
-
-                    SetBoneScale(ref elbowJoint, 
+                    float elbowScaleY = elbowJoint.localScale.y * (lowerArmLength / origLowerArmLength);
+                    if ( elbowScaleY > 3)
+                    {
+                        Debug.Log("elboScaleY = " + elbowScaleY);
+                    }
+                    SetBoneScale(elbowJoint, 
                         new Vector3(
                             boneTransform.localScale.x,
-                            elbowJoint.localScale.y * (lowerArmLength / origLowerArmLength),
+                            elbowScaleY,
                             boneTransform.localScale.z));
                 }
                 break;
@@ -1277,7 +1281,7 @@ public class AvatarController : MonoBehaviour
                     float thighScaleFactor = thighLength / origThighLength;
                     //resetJointScale(ref boneTransform);
                     Transform hipBone = GetParentBone(boneTransform);
-                    SetBoneScale(ref boneTransform,
+                    SetBoneScale(boneTransform,
                         new Vector3(boneTransform.localScale.x, thighScaleFactor, boneTransform.localScale.z));
                     
 
@@ -1294,7 +1298,7 @@ public class AvatarController : MonoBehaviour
                     //Debug.Log("origShinLength = " + origShinLength);
 
                     //resetJointScale(ref kneeLeft);
-                    SetBoneScale(ref kneeBone,
+                    SetBoneScale(kneeBone,
                         new Vector3(kneeBone.localScale.x, shinScaleFactor, kneeBone.localScale.z));
                     //resetJointScale(ref ankleLeft);
                 }

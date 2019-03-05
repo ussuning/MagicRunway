@@ -285,7 +285,8 @@ public class AvatarControllerClassic : AvatarController
             return;
 
         float hipScaleX = hipWidthFactor;
-        SetBoneScale(ref HipCenter, new Vector3(hipScaleX, HipCenter.localScale.y, hipScaleX * hipZFactor));
+        float shoulderScaleX = shoulderWidthFactor;
+        SetBoneScale(HipCenter, new Vector3(hipScaleX, HipCenter.localScale.y, hipScaleX * hipZFactor));
         //Debug.Log("HipCenter.lossyScale " + HipCenter.lossyScale);
 
         // Unscale so that knee/ankles are normal (Vector3.one)
@@ -293,14 +294,26 @@ public class AvatarControllerClassic : AvatarController
         //resetJointScale(ref FootRight);//.localScale = new Vector3(1f / KneeRight.parent.lossyScale.x, 1f / KneeRight.parent.lossyScale.y, 1f / KneeRight.parent.lossyScale.z);
         //Debug.Log("KneeLeft.lossyScale " + KneeLeft.lossyScale);
         //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
-        float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
-        float midScaleZ = (hipWidthFactor * hipZFactor + 1f) / 2.0f;
-        resetJointScale(ref SpineMid);
-        SetBoneScale(ref SpineMid, new Vector3(SpineMid.localScale.x * midScaleX, SpineMid.localScale.y, SpineMid.localScale.z * midScaleZ));
+        Vector3 hipToShoudlerCenter = ShoulderCenter.position - HipCenter.position;
+        foreach (Transform spineSegment in new Transform[] {Spine, SpineMid})
+            if (spineSegment != null)
+            {
+                Vector3 hipToSpine = spineSegment.position - HipCenter.position;
+
+                float dot = Mathf.Clamp01(Vector3.Dot(hipToSpine, hipToShoudlerCenter));
+                Debug.Log("dot"+spineSegment.name+" = " + dot);
+                float spineScaleX = Mathf.Lerp(hipWidthFactor, shoulderWidthFactor, dot);
+                float spineZFactor = Mathf.Lerp(hipZFactor, 1f, dot);
+                SetBoneScale(spineSegment, new Vector3(spineScaleX, spineSegment.localScale.y, spineScaleX * spineZFactor));
+            }
+        //float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
+        //float midScaleZ = (hipWidthFactor * hipZFactor + 1f) / 2.0f;
+        //resetJointScale(ref SpineMid);
+        //SetBoneScale(SpineMid, new Vector3(SpineMid.localScale.x * midScaleX, SpineMid.localScale.y, SpineMid.localScale.z * midScaleZ));
         //Debug.Log("SpineMid.lossyScale " + SpineMid.lossyScale);
-        float shoulderScaleX = shoulderWidthFactor;
+
         resetJointScale(ref ShoulderCenter);
-        SetBoneScale(ref ShoulderCenter, new Vector3(ShoulderCenter.localScale.x * shoulderScaleX, ShoulderCenter.localScale.y, ShoulderCenter.localScale.z));
+        SetBoneScale(ShoulderCenter, new Vector3(ShoulderCenter.localScale.x * shoulderScaleX, ShoulderCenter.localScale.y, ShoulderCenter.localScale.z));
         //Debug.Log("ShoulderCenter.lossyScale " + ShoulderCenter.lossyScale);
         //Debug.Log("hipWidthFactor " + hipWidthFactor);
         //Debug.Log("shoulderWidthFactor " + shoulderWidthFactor);
@@ -323,7 +336,7 @@ public class AvatarControllerClassic : AvatarController
             base.resetJointScale(ref joint);
     }
 
-    protected override void SetBoneScale(ref Transform boneTransform, Vector3 localScale)
+    protected override void SetBoneScale(Transform boneTransform, Vector3 localScale)
     {
         if (ENABLE_AUX_BONES)
         {
@@ -334,7 +347,7 @@ public class AvatarControllerClassic : AvatarController
                 boneTransform.parent.localScale = new Vector3(1f / parentScale.x, 1f / parentScale.y, 1f / parentScale.z);
             }
         }
-        base.SetBoneScale(ref boneTransform, localScale);
+        base.SetBoneScale(boneTransform, localScale);
     }
 
     private void LateUpdate()

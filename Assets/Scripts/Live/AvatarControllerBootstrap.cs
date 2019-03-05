@@ -251,33 +251,99 @@ public class AvatarControllerBootstrapEditor : Editor
 
         AvatarControllerBootstrap t = (AvatarControllerBootstrap)target;
         AvatarControllerClassic a = t.avatarController;
-        Handles.color = Color.green;
-        //Right Leg
-        Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
-        Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
-        Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
-        Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
-        //Left Leg
-        Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
-        Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
-        Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
-        Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
-        // Spine to Head
-        Handles.DrawLine(a.HipCenter.position, a.Spine.position);
-        Handles.DrawLine(a.Spine.position, a.SpineMid.position);
-        Handles.DrawLine(a.SpineMid.position, a.ShoulderCenter.position);
-        Handles.DrawLine(a.ShoulderCenter.position, a.Neck.position);
-        Handles.DrawLine(a.Neck.position, a.Head.position);
-        // Right Arm
-        Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleRight.position);
-        Handles.DrawLine(a.ClavicleRight.position, a.ShoulderRight.position);
-        Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
-        Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
-        // Left Arm
-        Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleLeft.position);
-        Handles.DrawLine(a.ClavicleLeft.position, a.ShoulderLeft.position);
-        Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
-        Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
+        if (a != null && a.HipCenter != null)
+        {
+            Handles.color = Color.green;
+
+            switch (t.avatarBoneMapMode)
+            {
+                case AvatarBoneMapMode.Mixamo:
+                    //Right Leg
+                    Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
+                    Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
+                    Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
+                    Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
+                    //Left Leg
+                    Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
+                    Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
+                    Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
+                    Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
+                    // Spine to Head
+                    Handles.DrawLine(a.HipCenter.position, a.Spine.position);
+                    Handles.DrawLine(a.Spine.position, a.SpineMid.position);
+                    Handles.DrawLine(a.SpineMid.position, a.ShoulderCenter.position);
+                    Handles.DrawLine(a.ShoulderCenter.position, a.Neck.position);
+                    Handles.DrawLine(a.Neck.position, a.Head.position);
+                    // Right Arm
+                    Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleRight.position);
+                    Handles.DrawLine(a.ClavicleRight.position, a.ShoulderRight.position);
+                    Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
+                    Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
+                    // Left Arm
+                    Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleLeft.position);
+                    Handles.DrawLine(a.ClavicleLeft.position, a.ShoulderLeft.position);
+                    Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
+                    Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
+                    break;
+                case AvatarBoneMapMode.KinectCustom:
+                    //Right Leg
+                    Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
+                    Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
+                    Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
+                    Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
+                    //Left Leg
+                    Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
+                    Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
+                    Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
+                    Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
+                    // Spine to Head
+                    Handles.DrawLine(a.HipCenter.position, a.Spine.position);
+                    Handles.DrawLine(a.Spine.position, a.ShoulderCenter.position);
+                    Handles.DrawLine(a.ShoulderCenter.position, a.Neck.position);
+                    Handles.DrawLine(a.Neck.position, a.Head.position);
+                    // Right Arm
+                    Handles.DrawLine(a.ShoulderCenter.position, a.ShoulderRight.position);
+                    Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
+                    Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
+                    // Left Arm
+                    Handles.DrawLine(a.ShoulderCenter.position, a.ShoulderLeft.position);
+                    Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
+                    Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
+                    break;
+            }
+
+            if (a.kinectManager != null)
+            {
+                // Draw raw joint positions
+                Handles.color = Color.red;
+                // Spine
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.HipLeft), a.GetRawJointWorldPos(KinectInterop.JointType.HipRight));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.SpineBase), a.GetRawJointWorldPos(KinectInterop.JointType.SpineMid));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.SpineMid), a.GetRawJointWorldPos(KinectInterop.JointType.SpineShoulder));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.SpineShoulder), a.GetRawJointWorldPos(KinectInterop.JointType.Neck));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.Neck), a.GetRawJointWorldPos(KinectInterop.JointType.Head));
+
+                // Left Leg
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.HipLeft), a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft), a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft), a.GetRawJointWorldPos(KinectInterop.JointType.FootLeft));
+                // Right Leg
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.HipLeft), a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft), a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft), a.GetRawJointWorldPos(KinectInterop.JointType.FootLeft));
+                // Left Arm
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.SpineShoulder), a.GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft), a.GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft), a.GetRawJointWorldPos(KinectInterop.JointType.WristLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.WristLeft), a.GetRawJointWorldPos(KinectInterop.JointType.HandLeft));
+                // Right Arm
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.SpineShoulder), a.GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight), a.GetRawJointWorldPos(KinectInterop.JointType.ElbowRight));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.ElbowRight), a.GetRawJointWorldPos(KinectInterop.JointType.WristRight));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.WristRight), a.GetRawJointWorldPos(KinectInterop.JointType.HandRight));
+            }
+
+        }
     }
 }
 #endif
