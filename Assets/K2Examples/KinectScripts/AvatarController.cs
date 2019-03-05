@@ -735,7 +735,8 @@ public class AvatarController : MonoBehaviour
             //if (currHipWidthFactor > hipWidthFactor)
                 hipWidthFactor = currHipWidthFactor * hipAdjustWidthFactor;
             //if (currShoulderWidthFactor > shoulderWidthFactor)
-                shoulderWidthFactor = currShoulderWidthFactor * shoulderAdjustWidthFactor;
+                //shoulderWidthFactor = currShoulderWidthFactor * shoulderAdjustWidthFactor;
+                shoulderWidthFactor = shoulderAdjustWidthFactor;
         }
         else
         {
@@ -914,11 +915,11 @@ public class AvatarController : MonoBehaviour
 
         Vector3 shoulderLeft = GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft);
         Vector3 shoulderRight = GetRawJointWorldPos(KinectInterop.JointType.ShoulderRight);
-        Vector3 shoulderCenter = Vector3.Lerp(shoulderLeft, shoulderRight, 0.5f);
+        Vector3 shoulderCenter = GetRawJointWorldPos(KinectInterop.JointType.SpineShoulder);
         Vector3 hipLeft = GetRawJointWorldPos(KinectInterop.JointType.HipLeft);
         Vector3 hipRight = GetRawJointWorldPos(KinectInterop.JointType.HipRight);
         Vector3 hipCenter = Vector3.Lerp(hipLeft, hipRight, 0.5f);
-        float hipUpwardOffset = (shoulderCenter - hipCenter).magnitude * hipUpwardsFactor;
+        float hipUpwardOffset =  (shoulderCenter - hipCenter).magnitude * hipUpwardsFactor;
 
         // Compensate for joint mapping differences and apply hip/shoulder tuning adjustments
         switch (joint)
@@ -979,9 +980,15 @@ public class AvatarController : MonoBehaviour
                 break;
             case KinectInterop.JointType.ShoulderLeft:
             case KinectInterop.JointType.ShoulderRight:
-                Vector3 dirShoulderFromCenter = (joint == KinectInterop.JointType.ShoulderLeft) ? shoulderLeft - shoulderCenter : shoulderRight - shoulderCenter;
-                boneTransform.position = shoulderCenter + dirShoulderFromCenter * shoulderWidthFactor;
-                boneTransform.position += GetShoulderVerticalOffset(joint);
+                Vector3 shoulderUp = bones[jointMap2boneIndex[KinectInterop.JointType.SpineMid]].up;
+                Vector3 spineCenterToShoulder = boneTransform.position - shoulderCenter;
+                // Get closest point along spine
+                float dot = Vector3.Dot(shoulderUp, spineCenterToShoulder);
+                Vector3 closestPtOnSpine = shoulderCenter + shoulderUp * dot;
+                Vector3 shoulderOut = boneTransform.position - closestPtOnSpine;
+                //Vector3 dirShoulderFromCenter = (joint == KinectInterop.JointType.ShoulderLeft) ? shoulderLeft - shoulderCenter : shoulderRight - shoulderCenter;
+                boneTransform.position = closestPtOnSpine + shoulderOut * shoulderWidthFactor;
+                //boneTransform.position += GetShoulderVerticalOffset(joint);
                 break;
 
                 //case KinectInterop.JointType.AnkleLeft:
@@ -1010,6 +1017,24 @@ public class AvatarController : MonoBehaviour
     //public Vector3 spineOutty;
     //public Vector3 finalOutty;
     //public Vector3 elbowForward;
+
+    private Quaternion GetKinect2AvatarRotationForJoint(Int64 userId, KinectInterop.JointType joint, bool flip)
+    {
+        // Get Kinect joint orientation
+        Quaternion jointRotation = kinectManager.GetJointOrientation(userId, (int)joint, flip);
+        if (jointRotation == Quaternion.identity)
+            return jointRotation;
+
+        // calculate the new orientation
+        Quaternion newRotation = Kinect2AvatarRot(jointRotation, joint);
+
+        if (externalRootMotion)
+        {
+            newRotation = transform.rotation * newRotation;
+        }
+
+        return newRotation;
+    }
 
     // Apply the rotations tracked by kinect to the joints.
     protected void TransformBone(Int64 userId, KinectInterop.JointType joint, int boneIndex, bool flip)
@@ -1113,15 +1138,19 @@ public class AvatarController : MonoBehaviour
 
                 boneTransform.rotation = Quaternion.LookRotation(hipRightDown, hipRightForward);
                 break;
-                //case KinectInterop.JointType.WristLeft:
-                //case KinectInterop.JointType.WristRight:
-                //case KinectInterop.JointType.HandLeft:
-                //case KinectInterop.JointType.HandRight:
-                //case KinectInterop.JointType.HandTipLeft:
-                //case KinectInterop.JointType.HandTipRight:
-                //    // Don't allow bending of wrists. It reveals skinning problems with sleeves.
-                //    boneTransform.rotation = initialRotations[boneIndex];
-                //    break;
+            //case KinectInterop.JointType.WristLeft:
+            //case KinectInterop.JointType.WristRight:
+            //case KinectInterop.JointType.HandLeft:
+            //case KinectInterop.JointType.HandRight:
+            //case KinectInterop.JointType.HandTipLeft:
+            //case KinectInterop.JointType.HandTipRight:
+            //    // Don't allow bending of wrists. It reveals skinning problems with sleeves.
+            //    boneTransform.rotation = initialRotations[boneIndex];
+            //    break;
+            default:
+                boneTransform.rotation = newRotation;
+                break;
+
         }
 
         //boneTransform.rotation = Quaternion.Slerp(oldRot, boneTransform.rotation, 0.65f);
@@ -1958,64 +1987,47 @@ public class AvatarController : MonoBehaviour
 	// Set model's arms to be in T-pose
 	protected void SetModelArmsInTpose()
 	{
-		Vector3 vTposeLeftDir = transform.TransformDirection(Vector3.left);
-		Vector3 vTposeRightDir = transform.TransformDirection(Vector3.right);
+        Vector3 tPoseDirLeft = transform.TransformDirection(Vector3.left);
+        Vector3 tPoseDirRight = transform.TransformDirection(Vector3.right);
+        for (int i=0; i<=1; i++)
+        {   
+            // Default left side
+            Transform shoulderT = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ShoulderLeft, false)); // animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
+            Transform elbowT = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ElbowLeft, false)); // animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
+            Transform wristT = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.WristLeft, false)); // animator.GetBoneTransform(HumanBodyBones.LeftHand);
+            Vector3 tPoseDir = tPoseDirLeft;
+            if (i==1)
+            { // Right side
+                shoulderT = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ShoulderRight, false)); // animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
+                elbowT = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ElbowRight, false)); // animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
+                wristT = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.WristRight, false)); // animator.GetBoneTransform(HumanBodyBones.RightHand);
+                tPoseDir = tPoseDirRight;
+            }
+            if (shoulderT != null && elbowT != null)
+            {
+                Vector3 shoulderDir = elbowT.position - shoulderT.position;
+                float shoulderAngle = Vector3.Angle(shoulderDir, tPoseDir);
 
-		Transform transLeftUarm = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ShoulderLeft, false)); // animator.GetBoneTransform(HumanBodyBones.LeftUpperArm);
-		Transform transLeftLarm = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ElbowLeft, false)); // animator.GetBoneTransform(HumanBodyBones.LeftLowerArm);
-		Transform transLeftHand = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.WristLeft, false)); // animator.GetBoneTransform(HumanBodyBones.LeftHand);
-		
-		if(transLeftUarm != null && transLeftLarm != null)
-		{
-			Vector3 vUarmLeftDir = transLeftLarm.position - transLeftUarm.position;
-			float fUarmLeftAngle = Vector3.Angle(vUarmLeftDir, vTposeLeftDir);
-			
-			if(Mathf.Abs(fUarmLeftAngle) >= 5f)
-			{
-				Quaternion vFixRotation = Quaternion.FromToRotation(vUarmLeftDir, vTposeLeftDir);
-				transLeftUarm.rotation = vFixRotation * transLeftUarm.rotation;
-			}
-			
-			if(transLeftHand != null)
-			{
-				Vector3 vLarmLeftDir = transLeftHand.position - transLeftLarm.position;
-				float fLarmLeftAngle = Vector3.Angle(vLarmLeftDir, vTposeLeftDir);
-				
-				if(Mathf.Abs(fLarmLeftAngle) >= 5f)
-				{
-					Quaternion vFixRotation = Quaternion.FromToRotation(vLarmLeftDir, vTposeLeftDir);
-					transLeftLarm.rotation = vFixRotation * transLeftLarm.rotation;
-				}
-			}
-		}
-		
-		Transform transRightUarm = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ShoulderRight, false)); // animator.GetBoneTransform(HumanBodyBones.RightUpperArm);
-		Transform transRightLarm = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.ElbowRight, false)); // animator.GetBoneTransform(HumanBodyBones.RightLowerArm);
-		Transform transRightHand = GetBoneTransform(GetBoneIndexByJoint(KinectInterop.JointType.WristRight, false)); // animator.GetBoneTransform(HumanBodyBones.RightHand);
-		
-		if(transRightUarm != null && transRightLarm != null)
-		{
-			Vector3 vUarmRightDir = transRightLarm.position - transRightUarm.position;
-			float fUarmRightAngle = Vector3.Angle(vUarmRightDir, vTposeRightDir);
-			
-			if(Mathf.Abs(fUarmRightAngle) >= 5f)
-			{
-				Quaternion vFixRotation = Quaternion.FromToRotation(vUarmRightDir, vTposeRightDir);
-				transRightUarm.rotation = vFixRotation * transRightUarm.rotation;
-			}
-			
-			if(transRightHand != null)
-			{
-				Vector3 vLarmRightDir = transRightHand.position - transRightLarm.position;
-				float fLarmRightAngle = Vector3.Angle(vLarmRightDir, vTposeRightDir);
-				
-				if(Mathf.Abs(fLarmRightAngle) >= 5f)
-				{
-					Quaternion vFixRotation = Quaternion.FromToRotation(vLarmRightDir, vTposeRightDir);
-					transRightLarm.rotation = vFixRotation * transRightLarm.rotation;
-				}
-			}
-		}
+                if (Mathf.Abs(shoulderAngle) >= 1f)
+                {
+                    Quaternion vFixRotation = Quaternion.FromToRotation(shoulderDir, tPoseDir);
+                    shoulderT.rotation = vFixRotation * shoulderT.rotation;
+                }
+
+                if (wristT != null)
+                {
+                    Vector3 elbowDir = wristT.position - elbowT.position;
+                    float elbowAngle = Vector3.Angle(elbowDir, tPoseDir);
+
+                    if (Mathf.Abs(elbowAngle) >= 1f)
+                    {
+                        Quaternion vFixRotation = Quaternion.FromToRotation(elbowDir, tPoseDir);
+                        elbowT.rotation = vFixRotation * elbowT.rotation;
+                        elbowT.RotateAround(elbowT.position, tPoseDirLeft, 45f); // Compensate for Kinect's weird t-pose assumption of thumbs up (+Y)
+                    }
+                }
+            }
+        }
 		
 	}
 	
@@ -2255,6 +2267,13 @@ public class AvatarController : MonoBehaviour
         //Debug.Log("initialShoulderWidth = " + initialShoulderWidth);
         //Debug.Log("initialHipWidth = " + initialHipWidth);
         //Debug.Log("initialTorsoHeight = " + initialTorsoHeight);
+    }
+
+    // Converts kinect joint rotation to avatar joint rotation, depending on joint initial rotation and offset rotation
+    protected Quaternion Kinect2AvatarRot(Quaternion jointRotation, KinectInterop.JointType joint)
+    {
+        int boneIndex = jointMap2boneIndex[joint];
+        return Kinect2AvatarRot(jointRotation, boneIndex);
     }
 
     // Converts kinect joint rotation to avatar joint rotation, depending on joint initial rotation and offset rotation

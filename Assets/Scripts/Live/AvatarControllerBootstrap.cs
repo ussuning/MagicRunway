@@ -328,9 +328,9 @@ public class AvatarControllerBootstrapEditor : Editor
                 Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft), a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft));
                 Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft), a.GetRawJointWorldPos(KinectInterop.JointType.FootLeft));
                 // Right Leg
-                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.HipLeft), a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft));
-                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.KneeLeft), a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft));
-                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.AnkleLeft), a.GetRawJointWorldPos(KinectInterop.JointType.FootLeft));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.HipRight), a.GetRawJointWorldPos(KinectInterop.JointType.KneeRight));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.KneeRight), a.GetRawJointWorldPos(KinectInterop.JointType.AnkleRight));
+                Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.AnkleRight), a.GetRawJointWorldPos(KinectInterop.JointType.FootRight));
                 // Left Arm
                 Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.SpineShoulder), a.GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft));
                 Handles.DrawLine(a.GetRawJointWorldPos(KinectInterop.JointType.ShoulderLeft), a.GetRawJointWorldPos(KinectInterop.JointType.ElbowLeft));

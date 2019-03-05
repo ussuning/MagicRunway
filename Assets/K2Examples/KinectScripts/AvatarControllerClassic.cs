@@ -198,7 +198,7 @@ public class AvatarControllerClassic : AvatarController
             }
             // else no children, skip
 
-            auxBone.rotation = Quaternion.identity;
+            //auxBone.rotation = Quaternion.identity;
         }
     }
 
@@ -281,6 +281,7 @@ public class AvatarControllerClassic : AvatarController
 
     protected override void ScaleTorso()
     {
+        //return;
         if (hipWidthFactor == 0f || shoulderWidthFactor == 0f)
             return;
 
