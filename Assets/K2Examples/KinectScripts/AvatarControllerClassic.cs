@@ -16,6 +16,7 @@ using UnityEditor;
 /// <summary>
 /// Avatar controller is the component that transfers the captured user motion to a humanoid model (avatar). Avatar controller classic allows manual assignment of model's rigged bones to the Kinect's tracked joints.
 /// </summary>
+[RequireComponent(typeof(AvatarControllerTuner))]
 public class AvatarControllerClassic : AvatarController
 {
     private static string AUX_PREFIX = "aux_";
@@ -161,7 +162,7 @@ public class AvatarControllerClassic : AvatarController
         }
     }
 
-    protected override Transform GetChildBone(Transform boneTransform, int idx = 0)
+    internal override Transform GetChildBone(Transform boneTransform, int idx = 0)
     {
         Transform boneChild = base.GetChildBone(boneTransform, idx);
         // Check to see if child bone is a wrapper joint (solution to prevent skewing due to non-uniform scaling of parents).
@@ -172,7 +173,7 @@ public class AvatarControllerClassic : AvatarController
             return boneChild;
     }
 
-    protected override Transform GetParentBone(Transform boneTransform)
+    internal override Transform GetParentBone(Transform boneTransform)
     {
         Transform boneParent = base.GetParentBone(boneTransform);
         // Check to see if child bone is a wrapper joint (solution to prevent skewing due to non-uniform scaling of parents).
@@ -279,52 +280,6 @@ public class AvatarControllerClassic : AvatarController
 //		}
 	}
 
-    protected override void ScaleTorso()
-    {
-        //return;
-        if (hipWidthFactor == 0f || shoulderWidthFactor == 0f)
-            return;
-
-        float hipScaleX = hipWidthFactor;
-        float shoulderScaleX = shoulderWidthFactor;
-        SetBoneScale(HipCenter, new Vector3(hipScaleX, HipCenter.localScale.y, hipScaleX * hipZFactor));
-        //Debug.Log("HipCenter.lossyScale " + HipCenter.lossyScale);
-
-        // Unscale so that knee/ankles are normal (Vector3.one)
-        //resetJointScale(ref FootLeft);//.localScale = new Vector3(1f / KneeLeft.parent.lossyScale.x, 1f / KneeLeft.parent.lossyScale.y, 1f / KneeLeft.parent.lossyScale.z);
-        //resetJointScale(ref FootRight);//.localScale = new Vector3(1f / KneeRight.parent.lossyScale.x, 1f / KneeRight.parent.lossyScale.y, 1f / KneeRight.parent.lossyScale.z);
-        //Debug.Log("KneeLeft.lossyScale " + KneeLeft.lossyScale);
-        //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
-        Vector3 hipToShoudlerCenter = ShoulderCenter.position - HipCenter.position;
-        foreach (Transform spineSegment in new Transform[] {Spine, SpineMid})
-            if (spineSegment != null)
-            {
-                Vector3 hipToSpine = spineSegment.position - HipCenter.position;
-
-                float dot = Mathf.Clamp01(Vector3.Dot(hipToSpine, hipToShoudlerCenter));
-                Debug.Log("dot"+spineSegment.name+" = " + dot);
-                float spineScaleX = Mathf.Lerp(hipWidthFactor, shoulderWidthFactor, dot);
-                float spineZFactor = Mathf.Lerp(hipZFactor, 1f, dot);
-                SetBoneScale(spineSegment, new Vector3(spineScaleX, spineSegment.localScale.y, spineScaleX * spineZFactor));
-            }
-        //float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
-        //float midScaleZ = (hipWidthFactor * hipZFactor + 1f) / 2.0f;
-        //resetJointScale(ref SpineMid);
-        //SetBoneScale(SpineMid, new Vector3(SpineMid.localScale.x * midScaleX, SpineMid.localScale.y, SpineMid.localScale.z * midScaleZ));
-        //Debug.Log("SpineMid.lossyScale " + SpineMid.lossyScale);
-
-        resetJointScale(ref ShoulderCenter);
-        SetBoneScale(ShoulderCenter, new Vector3(ShoulderCenter.localScale.x * shoulderScaleX, ShoulderCenter.localScale.y, ShoulderCenter.localScale.z));
-        //Debug.Log("ShoulderCenter.lossyScale " + ShoulderCenter.lossyScale);
-        //Debug.Log("hipWidthFactor " + hipWidthFactor);
-        //Debug.Log("shoulderWidthFactor " + shoulderWidthFactor);
-        for (int i = 0; i < ShoulderCenter.childCount; i++)
-        {
-            Transform child = ShoulderCenter.GetChild(i);
-            resetJointScale(ref child);
-        }
-    }
-
     protected override void resetJointScale(ref Transform joint)
     {
         if (ENABLE_AUX_BONES)
@@ -358,46 +313,3 @@ public class AvatarControllerClassic : AvatarController
 
 }
 
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(AvatarControllerClassic))]
-public class AvatarControllerClassicEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        AvatarControllerClassic myScript = (AvatarControllerClassic)target;
-        if (GUILayout.Button("Save Config Data"))
-        {
-            myScript.SaveConfigData();
-        }
-        if (GUILayout.Button("Load Config Data"))
-        {
-            myScript.LoadConfigData();
-        }
-        GUILayout.Label("hipWidthFactor=" + myScript.hipWidthFactor);
-        GUILayout.Label("shoulderWidthFactor=" + myScript.shoulderWidthFactor);
-    }
-
-    //void OnSceneGUI()
-    //{
-    //    AvatarController ac = (AvatarController)target;
-    //    //Handles.color = Color.red;
-    //    //Handles.DrawLine(ac.elbowPos, ac.elbowPos + ac.elbowOutty.normalized);
-    //    Handles.color = Color.green;
-    //    Handles.DrawLine(ac.shPos, ac.shPos + ac.shOutty.normalized);
-    //    //Handles.color = Color.blue;
-    //    //Handles.DrawLine(ac.elbowPos, ac.elbowPos + ac.spineOutty.normalized);
-
-
-    //    //Handles.color = Color.magenta;
-    //    //Handles.DrawLine(ac.elbowPos, ac.elbowPos + ac.finalOutty.normalized);
-    //    //Handles.color = Color.cyan;
-    //    //Handles.DrawLine(ac.elbowPos, ac.elbowPos + ac.elbowForward.normalized);
-    //    //Handles.color = Color.yellow;
-    //    //Handles.DrawDottedLine(ac.shPos, ac.shPos + ac.shElbowForward.normalized, 5f);
-
-    //}
-}
-#endif

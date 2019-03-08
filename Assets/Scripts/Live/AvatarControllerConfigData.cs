@@ -34,9 +34,9 @@ class AvatarControllerEntry
     {
     }
 
-    public AvatarControllerEntry(AvatarController avatarController)
+    public AvatarControllerEntry(AvatarControllerTuner acTuner)
     {
-        string acName = avatarController.name;
+        string acName = acTuner.name;
         // Clean up the name in case this is a (Clone) object.
         string cloneStr = "(Clone)";
         int cloneIdx = acName.IndexOf(cloneStr);
@@ -44,31 +44,31 @@ class AvatarControllerEntry
             acName = acName.Remove(cloneIdx);
 
         this.avatarControllerName = acName;
-        this.spineVerticalOffset = avatarController.spineVerticalOffset;
-        this.shoulderCenterVerticalOffset = avatarController.shoulderCenterVerticalOffset;
-        this.neckVerticalOffset = avatarController.neckVerticalOffset;
-        this.headVerticalOffset = avatarController.headVerticalOffset;
-        this.hipAdjustWidthFactor = avatarController.hipAdjustWidthFactor;
-        this.hipZFactor = avatarController.hipZFactor;
-        this.shoulderAdjustWidthFactor = avatarController.shoulderAdjustWidthFactor;
-        this.hipUpwardsFactor = avatarController.hipUpwardsFactor;
+        this.spineVerticalOffset = acTuner.spineVerticalOffset;
+        this.shoulderCenterVerticalOffset = acTuner.shoulderCenterVerticalOffset;
+        this.neckVerticalOffset = acTuner.neckVerticalOffset;
+        this.headVerticalOffset = acTuner.headVerticalOffset;
+        this.hipAdjustWidthFactor = acTuner.hipAdjustWidthFactor;
+        this.hipZFactor = acTuner.hipZFactor;
+        this.shoulderAdjustWidthFactor = acTuner.shoulderAdjustWidthFactor;
+        this.hipUpwardsFactor = acTuner.hipUpwardsFactor;
         Debug.LogWarning("Creating new AvatarControllerEntry " + acName);
     }
 
-    public void PopulateTo(AvatarController avatarController)
+    public void PopulateTo(AvatarControllerTuner acTuner)
     {
-        if (avatarController.name != this.avatarControllerName)
+        if (acTuner.name != this.avatarControllerName)
         {
-            Debug.LogWarning("Populating " + avatarController.name + " with data from " + this.avatarControllerName + ". Are you sure this is what you want?");
+            Debug.LogWarning("Populating " + acTuner.name + " with data from " + this.avatarControllerName + ". Are you sure this is what you want?");
         }
-        avatarController.spineVerticalOffset = this.spineVerticalOffset;
-        avatarController.shoulderCenterVerticalOffset = this.shoulderCenterVerticalOffset;
-        avatarController.neckVerticalOffset = this.neckVerticalOffset;
-        avatarController.headVerticalOffset = this.headVerticalOffset;
-        avatarController.hipAdjustWidthFactor = this.hipAdjustWidthFactor;
-        avatarController.hipZFactor = this.hipZFactor;
-        avatarController.shoulderAdjustWidthFactor = this.shoulderAdjustWidthFactor;
-        avatarController.hipUpwardsFactor = this.hipUpwardsFactor;
+        acTuner.spineVerticalOffset = this.spineVerticalOffset;
+        acTuner.shoulderCenterVerticalOffset = this.shoulderCenterVerticalOffset;
+        acTuner.neckVerticalOffset = this.neckVerticalOffset;
+        acTuner.headVerticalOffset = this.headVerticalOffset;
+        acTuner.hipAdjustWidthFactor = this.hipAdjustWidthFactor;
+        acTuner.hipZFactor = this.hipZFactor;
+        acTuner.shoulderAdjustWidthFactor = this.shoulderAdjustWidthFactor;
+        acTuner.hipUpwardsFactor = this.hipUpwardsFactor;
 
         Debug.LogWarning("Applied tuning values for " + this.avatarControllerName);
     }

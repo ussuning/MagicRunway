@@ -66,8 +66,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         avatarController.verticalMovement = true;
         avatarController.smoothFactor = 0;
         avatarController.playerIndex = playerIndex;
-        avatarController.hipWidthFactor = 0f;
-        avatarController.shoulderWidthFactor = 0f;
         avatarController.Awake();
         MapAuxBones();
 
@@ -98,7 +96,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         // Reactivate
         gameObject.SetActive(true);
-        avatarController.LoadConfigData();
+        avatarController.tuner.LoadConfigData();
 
         // RefreshAvaterUserIds, this is important to bind, otherwise clothing will wait until another user enters/leaves scene -HH
         KinectManager.Instance.RefreshAvatarUserIds();
@@ -254,20 +252,31 @@ public class AvatarControllerBootstrapEditor : Editor
         if (a != null && a.HipCenter != null)
         {
             Handles.color = Color.green;
+            // These draw the shared bone mappings, they are the same across all AvatarBoneMapModes
+            //Right Leg
+            Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
+            Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
+            Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
+            Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
+            //Left Leg
+            Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
+            Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
+            Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
+            Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
+            // Right Arm
+            Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
+            Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
+            Handles.DrawLine(a.HandRight.position, a.FingersRight.position);
+            // Left Arm
+            Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
+            Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
+            Handles.DrawLine(a.HandLeft.position, a.FingersLeft.position);
 
+            // These draw the unshared bone mappings. For example, Mixamo has Clavicle bones, but
+            // KinectCustom does not.
             switch (t.avatarBoneMapMode)
             {
                 case AvatarBoneMapMode.Mixamo:
-                    //Right Leg
-                    Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
-                    Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
-                    Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
-                    Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
-                    //Left Leg
-                    Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
-                    Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
-                    Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
-                    Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
                     // Spine to Head
                     Handles.DrawLine(a.HipCenter.position, a.Spine.position);
                     Handles.DrawLine(a.Spine.position, a.SpineMid.position);
@@ -277,25 +286,11 @@ public class AvatarControllerBootstrapEditor : Editor
                     // Right Arm
                     Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleRight.position);
                     Handles.DrawLine(a.ClavicleRight.position, a.ShoulderRight.position);
-                    Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
-                    Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
                     // Left Arm
                     Handles.DrawLine(a.ShoulderCenter.position, a.ClavicleLeft.position);
                     Handles.DrawLine(a.ClavicleLeft.position, a.ShoulderLeft.position);
-                    Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
-                    Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
                     break;
                 case AvatarBoneMapMode.KinectCustom:
-                    //Right Leg
-                    Handles.DrawLine(a.HipCenter.position, a.HipRight.position);
-                    Handles.DrawLine(a.HipRight.position, a.KneeRight.position);
-                    Handles.DrawLine(a.KneeRight.position, a.FootRight.position);
-                    Handles.DrawLine(a.FootRight.position, a.ToesRight.position);
-                    //Left Leg
-                    Handles.DrawLine(a.HipCenter.position, a.HipLeft.position);
-                    Handles.DrawLine(a.HipLeft.position, a.KneeLeft.position);
-                    Handles.DrawLine(a.KneeLeft.position, a.FootLeft.position);
-                    Handles.DrawLine(a.FootLeft.position, a.ToesLeft.position);
                     // Spine to Head
                     Handles.DrawLine(a.HipCenter.position, a.Spine.position);
                     Handles.DrawLine(a.Spine.position, a.ShoulderCenter.position);
@@ -303,12 +298,8 @@ public class AvatarControllerBootstrapEditor : Editor
                     Handles.DrawLine(a.Neck.position, a.Head.position);
                     // Right Arm
                     Handles.DrawLine(a.ShoulderCenter.position, a.ShoulderRight.position);
-                    Handles.DrawLine(a.ShoulderRight.position, a.ElbowRight.position);
-                    Handles.DrawLine(a.ElbowRight.position, a.HandRight.position);
                     // Left Arm
                     Handles.DrawLine(a.ShoulderCenter.position, a.ShoulderLeft.position);
-                    Handles.DrawLine(a.ShoulderLeft.position, a.ElbowLeft.position);
-                    Handles.DrawLine(a.ElbowLeft.position, a.HandLeft.position);
                     break;
             }
 
