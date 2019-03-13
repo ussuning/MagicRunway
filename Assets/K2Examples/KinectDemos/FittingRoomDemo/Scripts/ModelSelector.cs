@@ -422,7 +422,7 @@ public class ModelSelector : MonoBehaviour
 
 			ac.verticalOffset = verticalOffset;
 			ac.forwardOffset = forwardOffset;
-			ac.smoothFactor = 0f;
+			//ac.smoothFactor = 0f;
 		}
 
 		ac.posRelativeToCamera = modelRelativeToCamera;

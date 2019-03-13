@@ -134,7 +134,7 @@ public class UserAvatarMatcher : MonoBehaviour
 				ac = avatarObj.AddComponent<AvatarController>();
 				ac.playerIndex = userIndex;
 
-				ac.smoothFactor = smoothFactor;
+				//ac.smoothFactor = smoothFactor;
 				ac.posRelativeToCamera = posRelativeToCamera;
 
 				ac.mirroredMovement = mirroredMovement;

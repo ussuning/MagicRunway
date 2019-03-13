@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[RequireComponent(typeof(AvatarController))]
 public class AvatarControllerTuner : MonoBehaviour
 {
     internal AvatarController ac;
@@ -134,14 +133,14 @@ public class AvatarControllerTuner : MonoBehaviour
             //    break;
             //case KinectInterop.JointType.ElbowLeft:
             //case KinectInterop.JointType.ElbowRight:
-            case KinectInterop.JointType.WristLeft:
-                boneTransform.position = ac.GetRawJointWorldPos(joint);
-                Debug.Log("WristLeft = " + boneTransform.position);
-                break;
-            case KinectInterop.JointType.WristRight:
-                boneTransform.position = ac.GetRawJointWorldPos(joint);
-                Debug.Log("WristRight = " + boneTransform.position);
-                break;
+            //case KinectInterop.JointType.WristLeft:
+            //    boneTransform.position = ac.GetRawJointWorldPos(joint);
+            //    Debug.Log("WristLeft = " + boneTransform.position);
+            //    break;
+            //case KinectInterop.JointType.WristRight:
+            //    boneTransform.position = ac.GetRawJointWorldPos(joint);
+            //    Debug.Log("WristRight = " + boneTransform.position);
+            //    break;
             //case KinectInterop.JointType.HandLeft:
             //case KinectInterop.JointType.HandRight:
             //case KinectInterop.JointType.HandTipLeft:
@@ -251,7 +250,6 @@ public class AvatarControllerTuner : MonoBehaviour
     
     internal void ScaleTorso()
     {
-        return;
 
         /*
         if (hipWidthFactor == 0f || shoulderWidthFactor == 0f)

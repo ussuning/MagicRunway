@@ -16,10 +16,9 @@ using UnityEditor;
 /// <summary>
 /// Avatar controller is the component that transfers the captured user motion to a humanoid model (avatar). Avatar controller classic allows manual assignment of model's rigged bones to the Kinect's tracked joints.
 /// </summary>
-[RequireComponent(typeof(AvatarControllerTuner))]
 public class AvatarControllerClassic : AvatarController
 {
-    private static string AUX_PREFIX = "aux_";
+    private static string AUX_PREFIX = "x_";
     private static bool ENABLE_AUX_BONES = true;
 
 	// Public variables that will get matched to bones. If empty, the Kinect will simply not track it.
@@ -136,10 +135,11 @@ public class AvatarControllerClassic : AvatarController
 
         if (ENABLE_AUX_BONES)
         {
-            // Set wrapper transform for non-uniform scaling bones.
+            // Set wrapper transform to prevent skewing of children transforms due to 
+            // non-uniform scaling of parent transforms.
             if (t != null && t.parent != null && bone != BoneSlot.HipCenter)
             {
-                if (t.parent.name.StartsWith(AUX_PREFIX) == false)
+                if (isAuxBone(t.parent) == false)
                 {
                     GameObject go = new GameObject();
                     Transform wrapper = go.transform;
@@ -149,6 +149,7 @@ public class AvatarControllerClassic : AvatarController
                     wrapper.localScale = Vector3.one;
 
                     auxBones.Add(bone, wrapper);
+                    auxBonesByTransform.Add(wrapper, bone);
 
                     // replace child of parent with wrapper.
                     Transform origParent = t.parent;
@@ -162,12 +163,17 @@ public class AvatarControllerClassic : AvatarController
         }
     }
 
+    internal bool isAuxBone(Transform transform)
+    {
+        return auxBonesByTransform.ContainsKey(transform);
+    }
+
     internal override Transform GetChildBone(Transform boneTransform, int idx = 0)
     {
         Transform boneChild = base.GetChildBone(boneTransform, idx);
         // Check to see if child bone is a wrapper joint (solution to prevent skewing due to non-uniform scaling of parents).
         // wrapper joints should be skipped when searching for an actual child bone. -HH
-        if (ENABLE_AUX_BONES && boneChild.name.StartsWith(AUX_PREFIX))
+        if (ENABLE_AUX_BONES && isAuxBone(boneChild))
             return boneChild.GetChild(0); // Wrapper bones should only have one child.
         else
             return boneChild;
@@ -178,20 +184,35 @@ public class AvatarControllerClassic : AvatarController
         Transform boneParent = base.GetParentBone(boneTransform);
         // Check to see if child bone is a wrapper joint (solution to prevent skewing due to non-uniform scaling of parents).
         // wrapper joints should be skipped when searching for an actual child bone. -HH
-        if (ENABLE_AUX_BONES && boneParent.name.StartsWith(AUX_PREFIX))
+        if (ENABLE_AUX_BONES && isAuxBone(boneParent))
             return boneParent.parent;
         else
             return boneParent;
     }
 
     // Update positions of Aux Bones to child position
-    void UpdateAuxBones()
+    void UpdateAuxBonePositions()
     {
         foreach (Transform auxBone in auxBones.Values)
         {
             if (auxBone.childCount == 1)
             {
-                auxBone.position = auxBone.GetChild(0).position;
+                // Detach child.
+                Transform child = auxBone.GetChild(0);
+                Transform origParen = child.parent;
+                child.parent = null;
+                // Move auxBone to child position, reset rotation.
+                auxBone.position = child.position;
+                auxBone.rotation = Quaternion.identity;
+                Transform parent = auxBone.parent;
+                if (parent != null && parent.lossyScale != Vector3.one)
+                {
+                    // Reset global scale to 1.
+                    auxBone.localScale = new Vector3(1f / parent.lossyScale.x, 1f / parent.lossyScale.y, 1f / parent.lossyScale.z);
+                }
+                //auxBone.localScale = Vector3.one;
+                //Reattach child.
+                child.parent = origParen;
             }
             else if (auxBone.childCount > 1)
             {
@@ -204,6 +225,7 @@ public class AvatarControllerClassic : AvatarController
     }
 
     Dictionary<BoneSlot, Transform> auxBones = new Dictionary<BoneSlot, Transform>();
+    Dictionary<Transform, BoneSlot> auxBonesByTransform = new Dictionary<Transform, BoneSlot>();
 
     [Tooltip("The body root node (optional).")]
 	public Transform BodyRoot;
@@ -280,35 +302,47 @@ public class AvatarControllerClassic : AvatarController
 //		}
 	}
 
-    protected override void resetJointScale(ref Transform joint)
+    internal override void resetJointScale(Transform joint)
     {
-        if (ENABLE_AUX_BONES)
-        {
-            // Joints with wrapper bone parents don't need to worry about inversing the scale from parent because that's
-            // what the wrapper transform will do.
-            joint.localScale = Vector3.one;
-        }
-        else
-            base.resetJointScale(ref joint);
+        //if (ENABLE_AUX_BONES)
+        //{
+        //    // Joints with wrapper bone parents don't need to worry about inversing the scale from parent because that's
+        //    // what the wrapper transform will do.
+        //    joint.localScale = Vector3.one;
+        //}
+        //else
+            base.resetJointScale(joint);
     }
 
-    protected override void SetBoneScale(Transform boneTransform, Vector3 localScale)
+    internal override void SetBoneScale(Transform boneTransform, Vector3 worldScale)
     {
+        if (float.IsNaN(worldScale.x) || float.IsNaN(worldScale.y) || float.IsNaN(worldScale.z))
+        {
+            Debug.LogError("SetBoneScale scale is NaN");
+            return;
+        }
+        
         if (ENABLE_AUX_BONES)
         {
             // Invert scaling of wrapper bone parent before setting localScale of this bone.
-            if (boneTransform.parent.name.StartsWith(AUX_PREFIX))
+            if (isAuxBone(boneTransform.parent))
             {
-                Vector3 parentScale = boneTransform.parent.parent.lossyScale;
-                boneTransform.parent.localScale = new Vector3(1f / parentScale.x, 1f / parentScale.y, 1f / parentScale.z);
+                base.resetJointScale(boneTransform.parent);
             }
+            foreach (Transform child in boneTransform)
+                if (!isAuxBone(child))
+                    base.resetJointScale(child);
         }
-        base.SetBoneScale(boneTransform, localScale);
+        base.SetBoneScale(boneTransform, worldScale);
     }
 
-    private void LateUpdate()
+    //private void LateUpdate()
+    //{
+    //    UpdateAuxBones();
+    //}
+    protected override void PostTranslateBones()
     {
-        UpdateAuxBones();
+        UpdateAuxBonePositions();
     }
 
 }

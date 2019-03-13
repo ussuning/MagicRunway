@@ -366,11 +366,11 @@ public class AvatarScaler : MonoBehaviour
 				// recalibrate avatar position due to transform scale change
 				avtController.offsetCalibrated = false;
 
-				// set AC smooth-factor to 0 to prevent flickering (r618-issue)
-				if (avtController.smoothFactor != 0f) 
-				{
-					avtController.smoothFactor = 0f;
-				}
+				//// set AC smooth-factor to 0 to prevent flickering (r618-issue)
+				//if (avtController.smoothFactor != 0f) 
+				//{
+				//	avtController.smoothFactor = 0f;
+				//}
 			}
 		}
 
