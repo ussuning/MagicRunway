@@ -302,17 +302,17 @@ public class AvatarControllerClassic : AvatarController
 //		}
 	}
 
-    internal override void resetJointScale(Transform joint)
-    {
-        //if (ENABLE_AUX_BONES)
-        //{
-        //    // Joints with wrapper bone parents don't need to worry about inversing the scale from parent because that's
-        //    // what the wrapper transform will do.
-        //    joint.localScale = Vector3.one;
-        //}
-        //else
-            base.resetJointScale(joint);
-    }
+    //internal override void resetJointScale(Transform joint)
+    //{
+    //    //if (ENABLE_AUX_BONES)
+    //    //{
+    //    //    // Joints with wrapper bone parents don't need to worry about inversing the scale from parent because that's
+    //    //    // what the wrapper transform will do.
+    //    //    joint.localScale = Vector3.one;
+    //    //}
+    //    //else
+    //        base.resetJointScale(joint);
+    //}
 
     internal override void SetBoneScale(Transform boneTransform, Vector3 worldScale)
     {
@@ -329,9 +329,6 @@ public class AvatarControllerClassic : AvatarController
             {
                 base.resetJointScale(boneTransform.parent);
             }
-            foreach (Transform child in boneTransform)
-                if (!isAuxBone(child))
-                    base.resetJointScale(child);
         }
         base.SetBoneScale(boneTransform, worldScale);
     }

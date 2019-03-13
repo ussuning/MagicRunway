@@ -9,8 +9,17 @@ using UnityEditor;
 public class WorldScale : MonoBehaviour {
     public void Reset()
     {
-        Vector3 scale = transform.lossyScale;
-        transform.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f / scale.z);
+        AvatarController.ResetJointScale(transform);
+    }
+
+    //Recursive
+    public void AddToChildren(GameObject go)
+    {
+        if (go.GetComponent<WorldScale>() == null)
+            go.AddComponent<WorldScale>();
+
+        foreach (Transform t in go.transform)
+            AddToChildren(t.gameObject);
     }
 }
 
@@ -23,10 +32,14 @@ public class WorldScaleEditor : Editor
         DrawDefaultInspector();
 
         WorldScale myScript = (WorldScale)target;
-        GUILayout.Label(myScript.transform.lossyScale.ToString());
-        if (GUILayout.Button("Reset"))
+        GUILayout.Label(myScript.transform.lossyScale.ToString("G4"));
+        if (GUILayout.Button("Reset Scale"))
         {
             myScript.Reset();
+        }
+        if (GUILayout.Button("Add To Children"))
+        {
+            myScript.AddToChildren(myScript.gameObject);
         }
     }
 }

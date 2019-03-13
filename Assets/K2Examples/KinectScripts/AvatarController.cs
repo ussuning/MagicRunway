@@ -909,11 +909,18 @@ public class AvatarController : MonoBehaviour
         boneTransform.localScale = localScale;
     }
 
-    internal virtual void resetJointScale(Transform joint)
+    internal virtual void resetJointScale(Transform joint, bool recursive = false)
     {
-        //Vector3 parentScale = joint.parent.lossyScale;
-        //joint.localScale = new Vector3(1f / parentScale.x, 1f / parentScale.y, 1f / parentScale.z);
+        ResetJointScale(joint);
 
+        if (recursive)
+            foreach (Transform child in joint)
+                resetJointScale(child, true);
+    }
+
+
+    public static void ResetJointScale(Transform joint)
+    { 
         int idx = joint.GetSiblingIndex();
         Transform oldParent = joint.parent;
         joint.parent = null;

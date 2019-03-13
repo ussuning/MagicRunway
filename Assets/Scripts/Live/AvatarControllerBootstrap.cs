@@ -179,7 +179,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
                 boneMap.Add(AvatarControllerClassic.BoneSlot.ElbowLeft,        "mixamorig:LeftForeArm");
                 boneMap.Add(AvatarControllerClassic.BoneSlot.HandLeft,         "mixamorig:LeftHand");
                 boneMap.Add(AvatarControllerClassic.BoneSlot.FingersLeft,      "mixamorig:LeftHandIndex1");
-                boneMap.Add(AvatarControllerClassic.BoneSlot.ThumbLeft,        "mixamorig:LeftHandThumb1");
+                boneMap.Add(AvatarControllerClassic.BoneSlot.ThumbLeft,        "mixamorig:LeftHandThumb2");
                 boneMap.Add(AvatarControllerClassic.BoneSlot.ClavicleRight,    "mixamorig:RightShoulder");
                 boneMap.Add(AvatarControllerClassic.BoneSlot.ShoulderRight,    "mixamorig:RightArm");
                 boneMap.Add(AvatarControllerClassic.BoneSlot.ElbowRight,       "mixamorig:RightForeArm");

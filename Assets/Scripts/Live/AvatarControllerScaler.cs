@@ -65,7 +65,7 @@ public class AvatarControllerScaler : MonoBehaviour {
             case KinectInterop.JointType.ShoulderRight:
                 {
                     Transform elbowJoint = ac.GetChildBone(boneTransform);
-                    float upperArmLength = (elbowJoint.position - boneTransform.position).magnitude;
+                    float upperArmLength = (elbowJoint.position - boneTransform.position).magnitude;    
 
                     ac.SetBoneScale(boneTransform,
                         new Vector3(1f, upperArmLength / origUpperArmLength, 1f));
@@ -78,7 +78,7 @@ public class AvatarControllerScaler : MonoBehaviour {
                             1f,
                             elbowScaleY,
                             1f));
-                    ac.SetBoneScale(wristJoint, Vector3.one);
+                    ac.resetJointScale(wristJoint, true);
                 }
                 break;
             //case KinectInterop.JointType.ShoulderRight:
