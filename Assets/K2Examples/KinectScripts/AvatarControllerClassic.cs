@@ -225,7 +225,8 @@ public class AvatarControllerClassic : AvatarController
                 if (child == null)
                     continue;
 
-                // Don't flatten bones that don't have Kinect
+                // Don't flatten bones that don't have corresponding Kinect joint, otherwise they will be stuck (no movement).
+                // These joints rely on their parents' position (parents have corresponding Kinect joint).
                 if (boneSlotMap[BoneSlot.ClavicleLeft] == child ||
                     boneSlotMap[BoneSlot.ClavicleRight] == child ||
                     boneSlotMap[BoneSlot.SpineMid] == child)
