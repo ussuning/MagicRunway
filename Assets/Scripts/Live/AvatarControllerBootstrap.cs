@@ -74,7 +74,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         //avatarController.smoothFactor = 0;
         avatarController.playerIndex = playerIndex;
         avatarController.Awake();
-        MapAuxBones();
+        MapBones();
 
         //// Initialize avatar scalar
         //AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
@@ -103,6 +103,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         // Reactivate
         gameObject.SetActive(true);
+        avatarController.FlattenBones();
         avatarController.tuner.LoadConfigData();
 
         // RefreshAvaterUserIds, this is important to bind, otherwise clothing will wait until another user enters/leaves scene -HH
@@ -133,7 +134,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         }
     }
 
-    protected void MapAuxBones()
+    protected void MapBones()
     {
         if (avatarController == null) { 
             Debug.LogError("No AvatarController detected. Can't MapBones()");
@@ -158,7 +159,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
                 Debug.LogError("Mapping error for [" + kvp.Key +"]. Unable to find bone named [" + boneName + "]");
             }
         }
-
     }
 
     private Dictionary<AvatarControllerClassic.BoneSlot, string> GetBoneMap()

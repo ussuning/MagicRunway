@@ -19,7 +19,9 @@ using UnityEditor;
 public class AvatarControllerClassic : AvatarController
 {
     private static string AUX_PREFIX = "x_";
-    private static bool ENABLE_AUX_BONES = true;
+    private static bool ENABLE_AUX_BONES = false;
+    private static bool ENABLE_DETACH_LIMBS = true;
+    internal static bool FLATTEN_BONES = true;
 
 	// Public variables that will get matched to bones. If empty, the Kinect will simply not track it.
 	public Transform HipCenter;
@@ -133,6 +135,11 @@ public class AvatarControllerClassic : AvatarController
                 break;
         }
 
+        if (boneSlotMap.ContainsKey(bone) == false)
+            boneSlotMap[bone] = t;
+        else
+            Debug.LogError("BoneSlot " + bone + " already has a transform assigned. Assigned=" + boneSlotMap[bone].name + " New=" + t.name);
+
         if (ENABLE_AUX_BONES)
         {
             // Set wrapper transform to prevent skewing of children transforms due to 
@@ -161,6 +168,14 @@ public class AvatarControllerClassic : AvatarController
                 }
             }
         }
+
+        if (FLATTEN_BONES)
+        {
+            if (t != null && t.parent != this)
+            {
+                parentMap.Add(t, new ParentAndChildIdx(t.parent, t.GetSiblingIndex())); // <Child, <Parent, SiblingIdx>>
+            }
+        }
     }
 
     internal bool isAuxBone(Transform transform)
@@ -168,9 +183,18 @@ public class AvatarControllerClassic : AvatarController
         return auxBonesByTransform.ContainsKey(transform);
     }
 
-    internal override Transform GetChildBone(Transform boneTransform, int idx = 0)
+    internal override Transform GetChildBone(Transform parent, int idx = 0)
     {
-        Transform boneChild = base.GetChildBone(boneTransform, idx);
+        if (FLATTEN_BONES)
+        {
+            foreach (KeyValuePair<Transform, ParentAndChildIdx> kvp in parentMap)
+                if (kvp.Value.parent == parent && kvp.Value.childIdx == idx)
+                    return kvp.Key;
+
+            return null;
+        }
+
+        Transform boneChild = base.GetChildBone(parent, idx);
         // Check to see if child bone is a wrapper joint (solution to prevent skewing due to non-uniform scaling of parents).
         // wrapper joints should be skipped when searching for an actual child bone. -HH
         if (ENABLE_AUX_BONES && isAuxBone(boneChild))
@@ -179,9 +203,12 @@ public class AvatarControllerClassic : AvatarController
             return boneChild;
     }
 
-    internal override Transform GetParentBone(Transform boneTransform)
+    internal override Transform GetParentBone(Transform child)
     {
-        Transform boneParent = base.GetParentBone(boneTransform);
+        if (FLATTEN_BONES)
+            return parentMap.ContainsKey(child) ? parentMap[child].parent : null;
+
+        Transform boneParent = base.GetParentBone(child);
         // Check to see if child bone is a wrapper joint (solution to prevent skewing due to non-uniform scaling of parents).
         // wrapper joints should be skipped when searching for an actual child bone. -HH
         if (ENABLE_AUX_BONES && isAuxBone(boneParent))
@@ -190,9 +217,31 @@ public class AvatarControllerClassic : AvatarController
             return boneParent;
     }
 
+    internal void FlattenBones()
+    {
+        if (FLATTEN_BONES)
+            foreach (Transform child in parentMap.Keys)
+            {
+                if (child == null)
+                    continue;
+
+                // Don't flatten bones that don't have Kinect
+                if (boneSlotMap[BoneSlot.ClavicleLeft] == child ||
+                    boneSlotMap[BoneSlot.ClavicleRight] == child)
+                {
+                    continue;
+                }
+
+                child.parent = this.transform;
+            }
+    }
+
     // Update positions of Aux Bones to child position
     void UpdateAuxBonePositions()
     {
+        if (ENABLE_AUX_BONES == false)
+            return;
+
         foreach (Transform auxBone in auxBones.Values)
         {
             if (auxBone.childCount == 1)
@@ -227,6 +276,19 @@ public class AvatarControllerClassic : AvatarController
     Dictionary<BoneSlot, Transform> auxBones = new Dictionary<BoneSlot, Transform>();
     Dictionary<Transform, BoneSlot> auxBonesByTransform = new Dictionary<Transform, BoneSlot>();
 
+    struct ParentAndChildIdx
+    {
+        public ParentAndChildIdx(Transform parent, int childIdx)
+        {
+            this.parent = parent;
+            this.childIdx = childIdx;
+        }
+        public Transform parent;
+        public int childIdx;
+    }
+
+    Dictionary<Transform, ParentAndChildIdx> parentMap = new Dictionary<Transform, ParentAndChildIdx>(); // key is child, value is parent
+    Dictionary<BoneSlot, Transform> boneSlotMap = new Dictionary<BoneSlot, Transform>();
     [Tooltip("The body root node (optional).")]
 	public Transform BodyRoot;
 
@@ -327,7 +389,8 @@ public class AvatarControllerClassic : AvatarController
             // Invert scaling of wrapper bone parent before setting localScale of this bone.
             if (isAuxBone(boneTransform.parent))
             {
-                base.resetJointScale(boneTransform.parent);
+                //boneTransform.parent.eulerAngles = Vector3.zero;
+                resetJointScale(boneTransform.parent);
             }
         }
         base.SetBoneScale(boneTransform, worldScale);

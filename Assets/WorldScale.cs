@@ -9,7 +9,7 @@ using UnityEditor;
 public class WorldScale : MonoBehaviour {
     public void Reset()
     {
-        AvatarController.ResetJointScale(transform);
+        AvatarController.ResetTransformScale(transform);
     }
 
     //Recursive

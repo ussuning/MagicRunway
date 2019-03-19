@@ -12,7 +12,7 @@ public class AvatarControllerScaler : MonoBehaviour {
         {
             if (_origUpperArmLength == 0)
                 _origUpperArmLength = (ac.GetJointInitialPosition(KinectInterop.JointType.ShoulderLeft) -
-                                ac.GetJointInitialPosition(KinectInterop.JointType.ElbowLeft)).magnitude;
+               ac.GetJointInitialPosition(KinectInterop.JointType.ElbowLeft)).magnitude;
             return _origUpperArmLength;
         }
     }
@@ -69,7 +69,7 @@ public class AvatarControllerScaler : MonoBehaviour {
 
                     ac.SetBoneScale(boneTransform,
                         new Vector3(1f, upperArmLength / origUpperArmLength, 1f));
-
+                    
                     Transform wristJoint = ac.GetChildBone(elbowJoint);
                     float lowerArmLength = (wristJoint.position - elbowJoint.position).magnitude;
                     float elbowScaleY = lowerArmLength / origLowerArmLength;
@@ -135,12 +135,74 @@ public class AvatarControllerScaler : MonoBehaviour {
                     ac.SetBoneScale(kneeBone,
                         new Vector3(1f, shinScaleFactor, 1f));
                     //resetJointScale(ref ankleLeft);
-                    ac.SetBoneScale(ankleBone, Vector3.one);
+                    ac.resetJointScale(ankleBone, true);
+                    //ac.SetBoneScale(ankleBone, Vector3.one);
                 }
                 break;
         }
 
         //boneTransform.localScale = Vector3.Lerp(oldScale, boneTransform.localScale, 0.65f);
+
+    }
+
+    internal void ScaleTorso(float hipWidthFactor, float shoulderWidthFactor, float hipZFactor)
+    {
+        AvatarControllerClassic ac = this.ac as AvatarControllerClassic;
+        if (ac == null)
+        {
+            Debug.LogError("Can't perform ScaleTorso, requires AvatarControllerClassic");
+            return;
+        }
+
+        if (hipWidthFactor == 0f || shoulderWidthFactor == 0f)
+            return;
+
+        float hipScaleX = hipWidthFactor;
+        float shoulderScaleX = shoulderWidthFactor;
+        ac.SetBoneScale(ac.HipCenter, new Vector3(hipScaleX, 1f, hipScaleX * hipZFactor));
+
+        for (int i= 0; i < ac.HipCenter.childCount; i++)
+        {
+            Transform child = ac.GetChildBone(ac.HipCenter, i);
+            ac.SetBoneScale(child, Vector3.one);
+        }
+        //Debug.Log("HipCenter.lossyScale " + HipCenter.lossyScale);
+
+        // Unscale so that knee/ankles are normal (Vector3.one)
+        //resetJointScale(ref FootLeft);//.localScale = new Vector3(1f / KneeLeft.parent.lossyScale.x, 1f / KneeLeft.parent.lossyScale.y, 1f / KneeLeft.parent.lossyScale.z);
+        //resetJointScale(ref FootRight);//.localScale = new Vector3(1f / KneeRight.parent.lossyScale.x, 1f / KneeRight.parent.lossyScale.y, 1f / KneeRight.parent.lossyScale.z);
+        //Debug.Log("KneeLeft.lossyScale " + KneeLeft.lossyScale);
+        //Spine.localScale = new Vector3(hipWidthFactor, 1, 1);
+
+        //Vector3 hipToShoudlerCenter = ac.ShoulderCenter.position - ac.HipCenter.position;
+        //foreach (Transform spineSegment in new Transform[] { ac.Spine, ac.SpineMid })
+        //    if (spineSegment != null)
+        //    {
+        //        Vector3 hipToSpine = spineSegment.position - ac.HipCenter.position;
+
+        //        float dot = Mathf.Clamp01(Vector3.Dot(hipToSpine, hipToShoudlerCenter));
+        //        Debug.Log("dot" + spineSegment.name + " = " + dot);
+        //        float spineScaleX = Mathf.Lerp(hipWidthFactor, shoulderWidthFactor, dot);
+        //        float spineZFactor = Mathf.Lerp(hipZFactor, 1f, dot);
+        //        ac.SetBoneScale(spineSegment, new Vector3(spineScaleX, spineSegment.localScale.y, spineScaleX * spineZFactor));
+        //    }
+
+        //float midScaleX = (hipWidthFactor + shoulderWidthFactor) / 2.0f;
+        //float midScaleZ = (hipWidthFactor * hipZFactor + 1f) / 2.0f;
+        //resetJointScale(ref SpineMid);
+        //SetBoneScale(SpineMid, new Vector3(SpineMid.localScale.x * midScaleX, SpineMid.localScale.y, SpineMid.localScale.z * midScaleZ));
+        //Debug.Log("SpineMid.lossyScale " + SpineMid.lossyScale);
+
+//        ac.resetJointScale(ac.ShoulderCenter);
+        ac.SetBoneScale(ac.ShoulderCenter, new Vector3(shoulderScaleX, 1f, shoulderScaleX));
+        //Debug.Log("ShoulderCenter.lossyScale " + ShoulderCenter.lossyScale);
+        //Debug.Log("hipWidthFactor " + hipWidthFactor);
+        //Debug.Log("shoulderWidthFactor " + shoulderWidthFactor);
+        for (int i= 0; i< ac.ShoulderCenter.childCount; i++)
+        {
+            Transform child = ac.GetChildBone(ac.ShoulderCenter, i);
+            ac.SetBoneScale(child, Vector3.one);
+        }
 
     }
 }

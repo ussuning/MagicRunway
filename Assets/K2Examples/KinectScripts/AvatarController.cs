@@ -164,8 +164,8 @@ public class AvatarController : MonoBehaviour
     private Rect planeRect = new Rect();
     private bool planeRectSet = false;
     
-    public static string AUX_PREFIX = "x_";
-    public static bool ENABLE_AUX_BONES = true;
+    //public static string AUX_PREFIX = "x_";
+    //public static bool ENABLE_AUX_BONES = true;
 
     /// <summary>
     /// Gets the number of bone transforms (array length).
@@ -625,12 +625,11 @@ public class AvatarController : MonoBehaviour
 
 
 
-        /*
+        
         // Third, and lastly, scale bones to match translated bone positions
-        tuner.ScaleTorso();
-           */
-
-
+        // Start with Torso
+        scaler.ScaleTorso(tuner.hipWidthFactor, tuner.shoulderWidthFactor, tuner.hipWidthFactor);
+        // Then do limbs
         foreach (KeyValuePair<int, KinectInterop.JointType> boneJoint in boneJoints)
             scaler.ScaleBone(boneJoint.Value, boneJoint.Key);
     }
@@ -909,9 +908,9 @@ public class AvatarController : MonoBehaviour
         boneTransform.localScale = localScale;
     }
 
-    internal virtual void resetJointScale(Transform joint, bool recursive = false)
+    internal void resetJointScale(Transform joint, bool recursive = false)
     {
-        ResetJointScale(joint);
+        ResetTransformScale(joint);
 
         if (recursive)
             foreach (Transform child in joint)
@@ -919,14 +918,26 @@ public class AvatarController : MonoBehaviour
     }
 
 
-    public static void ResetJointScale(Transform joint)
-    { 
-        int idx = joint.GetSiblingIndex();
-        Transform oldParent = joint.parent;
-        joint.parent = null;
-        joint.localScale = Vector3.one;
-        joint.parent = oldParent;
-        joint.SetSiblingIndex(idx);
+    public static void ResetTransformScale(Transform joint)
+    {
+        //int idx = joint.GetSiblingIndex();
+        //Transform oldParent = joint.parent;
+        //joint.parent = null;
+        //joint.localScale = Vector3.one;
+        //joint.parent = oldParent;
+        //joint.SetSiblingIndex(idx);
+
+
+        if (joint.parent != null)
+            // NOTE! This only works if none of the parents are skewed due to non-uniform scaling. Parents that contain such non-uniform scaling MUST have their
+            // immediate children undo their parent's non-uniform scaling.
+            joint.localScale = new Vector3(1f / joint.parent.lossyScale.x, 1f / joint.parent.lossyScale.y, 1f / joint.parent.lossyScale.z);
+        else
+            joint.localScale = Vector3.one;
+
+
+        if (joint.lossyScale != Vector3.one)
+            Debug.LogError("Error: " + joint + " didn't reset to lossyScale of Vector3.one. One of its parents must be skewed!");
     }
 
 
