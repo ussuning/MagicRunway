@@ -316,31 +316,32 @@ public class AvatarControllerBootstrapEditor : Editor
                 if (t.drawRawPositions)
                 {
                     Handles.color = t.rawColor;
+                    float screenSpaceSize = 5f;
                     // Spine
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.HipLeft], a.rawJointPos[KinectInterop.JointType.HipRight]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.SpineBase], a.rawJointPos[KinectInterop.JointType.SpineMid]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.SpineMid], a.rawJointPos[KinectInterop.JointType.SpineShoulder]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.SpineShoulder], a.rawJointPos[KinectInterop.JointType.Neck]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.Neck], a.rawJointPos[KinectInterop.JointType.Head]);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.HipLeft], a.rawJointPos[KinectInterop.JointType.HipRight], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.SpineBase], a.rawJointPos[KinectInterop.JointType.SpineMid], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.SpineMid], a.rawJointPos[KinectInterop.JointType.SpineShoulder], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.SpineShoulder], a.rawJointPos[KinectInterop.JointType.Neck], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.Neck], a.rawJointPos[KinectInterop.JointType.Head], screenSpaceSize);
 
                     // Left Leg
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.HipLeft], a.rawJointPos[KinectInterop.JointType.KneeLeft]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.KneeLeft], a.rawJointPos[KinectInterop.JointType.AnkleLeft]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.AnkleLeft], a.rawJointPos[KinectInterop.JointType.FootLeft]);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.HipLeft], a.rawJointPos[KinectInterop.JointType.KneeLeft], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.KneeLeft], a.rawJointPos[KinectInterop.JointType.AnkleLeft], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.AnkleLeft], a.rawJointPos[KinectInterop.JointType.FootLeft], screenSpaceSize);
                     // Right Leg
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.HipRight], a.rawJointPos[KinectInterop.JointType.KneeRight]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.KneeRight], a.rawJointPos[KinectInterop.JointType.AnkleRight]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.AnkleRight], a.rawJointPos[KinectInterop.JointType.FootRight]);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.HipRight], a.rawJointPos[KinectInterop.JointType.KneeRight], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.KneeRight], a.rawJointPos[KinectInterop.JointType.AnkleRight], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.AnkleRight], a.rawJointPos[KinectInterop.JointType.FootRight], screenSpaceSize);
                     // Left Arm
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.SpineShoulder], a.rawJointPos[KinectInterop.JointType.ShoulderLeft]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.ShoulderLeft], a.rawJointPos[KinectInterop.JointType.ElbowLeft]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.ElbowLeft], a.rawJointPos[KinectInterop.JointType.WristLeft]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.WristLeft], a.rawJointPos[KinectInterop.JointType.HandLeft]);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.SpineShoulder], a.rawJointPos[KinectInterop.JointType.ShoulderLeft], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.ShoulderLeft], a.rawJointPos[KinectInterop.JointType.ElbowLeft], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.ElbowLeft], a.rawJointPos[KinectInterop.JointType.WristLeft], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.WristLeft], a.rawJointPos[KinectInterop.JointType.HandLeft], screenSpaceSize);
                     // Right Arm
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.SpineShoulder], a.rawJointPos[KinectInterop.JointType.ShoulderRight]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.ShoulderRight], a.rawJointPos[KinectInterop.JointType.ElbowRight]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.ElbowRight], a.rawJointPos[KinectInterop.JointType.WristRight]);
-                    Handles.DrawLine(a.rawJointPos[KinectInterop.JointType.WristRight], a.rawJointPos[KinectInterop.JointType.HandRight]);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.SpineShoulder], a.rawJointPos[KinectInterop.JointType.ShoulderRight], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.ShoulderRight], a.rawJointPos[KinectInterop.JointType.ElbowRight], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.ElbowRight], a.rawJointPos[KinectInterop.JointType.WristRight], screenSpaceSize);
+                    Handles.DrawDottedLine(a.rawJointPos[KinectInterop.JointType.WristRight], a.rawJointPos[KinectInterop.JointType.HandRight], screenSpaceSize);
 
                 }
 

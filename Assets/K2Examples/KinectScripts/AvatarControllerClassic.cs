@@ -227,7 +227,8 @@ public class AvatarControllerClassic : AvatarController
 
                 // Don't flatten bones that don't have Kinect
                 if (boneSlotMap[BoneSlot.ClavicleLeft] == child ||
-                    boneSlotMap[BoneSlot.ClavicleRight] == child)
+                    boneSlotMap[BoneSlot.ClavicleRight] == child ||
+                    boneSlotMap[BoneSlot.SpineMid] == child)
                 {
                     continue;
                 }
