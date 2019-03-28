@@ -358,9 +358,13 @@ public class AvatarController : MonoBehaviour
             return _transformCache;
         }
     }
-    
+
     public void Awake()
     {
+        init();
+    }
+
+    protected virtual void init() { 
         tuner = GetComponent<AvatarControllerTuner>();
         tuner.ac = this;
         tuner.hipWidthFactor = tuner.shoulderWidthFactor = 0;

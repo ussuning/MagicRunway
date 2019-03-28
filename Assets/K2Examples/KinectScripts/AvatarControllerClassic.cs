@@ -94,9 +94,47 @@ public class AvatarControllerClassic : AvatarController
         ToesRight,
     }
 
-    public void SetBone(BoneSlot bone, Transform t)
+    // lookup for kinect bone slots. The key is the only thing we use, the value is a meaningless bool.
+    public readonly Dictionary<BoneSlot, bool> KinectBoneSlots = new Dictionary<BoneSlot, bool>() {
+        {BoneSlot.HipCenter, true},
+        {BoneSlot.Spine, true},
+        {BoneSlot.ShoulderCenter, true},
+        {BoneSlot.Neck, true},
+        {BoneSlot.Head, true},
+
+        {BoneSlot.ShoulderLeft, true},
+        {BoneSlot.ElbowLeft, true},
+        {BoneSlot.HandLeft, true},
+        {BoneSlot.FingersLeft, true},
+        {BoneSlot.ThumbLeft, true},
+
+        {BoneSlot.ShoulderRight, true},
+        {BoneSlot.ElbowRight, true},
+        {BoneSlot.HandRight, true},
+        {BoneSlot.FingersRight, true},
+        {BoneSlot.ThumbRight, true},
+
+        {BoneSlot.HipLeft, true},
+        {BoneSlot.KneeLeft, true},
+        {BoneSlot.FootLeft, true},
+        {BoneSlot.ToesLeft, true},
+
+        {BoneSlot.HipRight, true},
+        {BoneSlot.KneeRight, true},
+        {BoneSlot.FootRight, true},
+        {BoneSlot.ToesRight, true}
+    };
+
+    internal Dictionary<Transform, BoneSlot> KinectBoneSlotByTransform;
+
+    protected override void init()
     {
-        switch (bone)
+        base.init();
+    }
+
+    public void MapBone(BoneSlot boneSlot, Transform t)
+    {
+        switch (boneSlot)
         {
             case BoneSlot.HipCenter:      HipCenter = t; break;
             case BoneSlot.Spine:          Spine = t; break;
@@ -131,14 +169,25 @@ public class AvatarControllerClassic : AvatarController
             case BoneSlot.FootRight: FootRight = t; break;
             case BoneSlot.ToesRight: ToesRight = t; break;
             default:
-                Debug.LogError("No case for Boneslot " + bone.ToString());
+                Debug.LogError("No case for Boneslot " + boneSlot.ToString());
                 break;
         }
 
-        if (boneSlotMap.ContainsKey(bone) == false)
-            boneSlotMap[bone] = t;
+        // map to boneslot
+        if (boneSlotMap.ContainsKey(boneSlot) == false)
+            boneSlotMap[boneSlot] = t;
         else
-            Debug.LogError("BoneSlot " + bone + " already has a transform assigned. Assigned=" + boneSlotMap[bone].name + " New=" + t.name);
+            Debug.LogError("BoneSlot " + boneSlot + " already has a transform assigned. Assigned=" + boneSlotMap[boneSlot].name + " New=" + t.name);
+
+        // map to kinect boneslot for easy lookup by transform
+        if (KinectBoneSlots.ContainsKey(boneSlot))
+        {
+            if (KinectBoneSlotByTransform.ContainsKey(t) == false)
+                KinectBoneSlotByTransform[t] = boneSlot;
+            else
+                Debug.LogError("transform " + t.name + " is already mapped to " + 
+                    KinectBoneSlotByTransform[t].ToString() + "... Can't map to " + boneSlot.ToString());
+        }
 
         //if (ENABLE_AUX_BONES)
         //{
@@ -176,6 +225,11 @@ public class AvatarControllerClassic : AvatarController
                 parentMap.Add(t, new ParentAndChildIdx(t.parent, t.GetSiblingIndex())); // <Child, <Parent, SiblingIdx>>
             }
         }
+    }
+
+    internal void initBoneMapping()
+    {
+        KinectBoneSlotByTransform = new Dictionary<Transform, BoneSlot>();
     }
 
     //internal bool isAuxBone(Transform transform)
@@ -226,16 +280,20 @@ public class AvatarControllerClassic : AvatarController
                     continue;
 
                 // Don't flatten bones that don't have corresponding Kinect joint, otherwise they will be stuck (no movement).
-                // These joints rely on their parents' position (parents have corresponding Kinect joint).
-                if (boneSlotMap[BoneSlot.ClavicleLeft] == child ||
-                    boneSlotMap[BoneSlot.ClavicleRight] == child ||
-                    boneSlotMap[BoneSlot.SpineMid] == child)
-                {
+                // These joints rely on their parents' position (assuming parents have corresponding Kinect joint).
+                if (!isKinectJoint(child))
                     continue;
-                }
 
                 child.parent = this.transform;
             }
+    }
+
+    bool isKinectJoint(Transform joint)
+    {
+        if (joint == null)
+            return false;
+
+        return KinectBoneSlotByTransform.ContainsKey(joint);
     }
 
     // Update positions of Aux Bones to child position

@@ -25,6 +25,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     public Color rawColor = Color.red;
     public bool drawTunedPositions = true;
     public Color tunedColor = Color.cyan;
+    public bool ShowBody = false;
+    internal bool initialized = false;
     //public bool drawCurrentRawPositions = true;
     //public Color currentRawColor = Color.green;
 
@@ -56,7 +58,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
 
         transform.localEulerAngles = new Vector3(0f, 180f, 0f);
-        transform.FindDeepChild("body")?.gameObject.SetActive(false);
+        if (!ShowBody)
+            transform.FindDeepChild("body")?.gameObject.SetActive(false);
         transform.FindDeepChild("shoes")?.gameObject.SetActive(false);
 
         // Initialize avatar controller classic
@@ -109,6 +112,8 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         // RefreshAvaterUserIds, this is important to bind, otherwise clothing will wait until another user enters/leaves scene -HH
         KinectManager.Instance.RefreshAvatarUserIds();
 
+        initialized = true;
+
         // Other KinectManager settings.
         // Smoothing is not desired, we want the most resonsiveness. Also, smoothing implementation seems to create weird rotational drifting,
         // most noticably in the shoulder joints (overrotatting if you rotate them quickly). -HH
@@ -142,7 +147,9 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         }
 
         Dictionary<AvatarControllerClassic.BoneSlot, string> boneMap = GetBoneMap();
-        
+        avatarController.initBoneMapping();
+
+
         avatarController.BodyRoot = transform;
         System.Type avatarControllerType = avatarController.GetType();
         foreach (KeyValuePair<AvatarControllerClassic.BoneSlot, string> kvp in boneMap)
@@ -152,7 +159,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
             Transform boneTransform = transform.FindDeepChild(boneName);
             if (boneTransform != null)
             {
-                avatarController.SetBone(boneSlot, boneTransform);
+                avatarController.MapBone(boneSlot, boneTransform);
             }
             else
             {
@@ -224,6 +231,12 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         return boneMap;
     }
+
+    internal void ToggleShowBody()
+    {
+        ShowBody = !ShowBody;
+        transform.FindDeepChild("body")?.gameObject.SetActive(ShowBody);
+    }
 }
 
 public enum AvatarBoneMapMode
@@ -246,6 +259,11 @@ public class AvatarControllerBootstrapEditor : Editor
         if (GUILayout.Button("Initialize"))
         {
             myScript.Init(myScript.playerIndex);
+        }
+        if (myScript.initialized)
+        {
+            if (GUILayout.Button("ToggleBody"))
+                myScript.ToggleShowBody();
         }
     }
 
