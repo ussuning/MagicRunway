@@ -149,13 +149,11 @@ public class AvatarScaler : MonoBehaviour
 	private Rect planeRect = new Rect();
 	private bool planeRectSet = false;
 
-    internal ShoulderFixer shoulderFixer;
     private float userBodyHeightOffset = 0f;
 
 
 	public void Start () 
 	{
-        shoulderFixer  = new ShoulderFixer(this);
         // get references to other components
         kinectManager = KinectManager.Instance;
 		avtController = gameObject.GetComponent<AvatarController>();
@@ -572,12 +570,6 @@ public class AvatarScaler : MonoBehaviour
         if (posHipLeft != Vector3.zero && posHipRight != Vector3.zero &&
 		   posShoulderLeft != Vector3.zero && posShoulderRight != Vector3.zero)
         {
-            shoulderFixer.UpdateJointPositions(posHipLeft, posHipRight, 
-                posKneeLeft, posKneeRight,
-                posAnkleLeft, posAnkleRight, 
-                posShoulderLeft, posShoulderRight, 
-                posElbowLeft, posElbowRight, 
-                posSpineShoulder, posSpineBase, posNeck);
 
             Vector3 posHipCenter = (posHipLeft + posHipRight) / 2f;
 			Vector3 posShoulderCenter = (posShoulderLeft + posShoulderRight) / 2f;
@@ -591,9 +583,9 @@ public class AvatarScaler : MonoBehaviour
             }
             else
             {
-                height = shoulderFixer.BodyHeight.currConfidenceValue * scaleFactor;
-                width = shoulderFixer.BodyWidth.GetWeightedValue() * widthFactor;
-                heightOffset = shoulderFixer.GetMaxLegsHeightOffset();
+                //height = shoulderFixer.BodyHeight.currConfidenceValue * scaleFactor;
+                //width = shoulderFixer.BodyWidth.GetWeightedValue() * widthFactor;
+                //heightOffset = shoulderFixer.GetMaxLegsHeightOffset();
                 //Debug.Log("heightOffset =" + heightOffset);
             }
             //Debug.Log("posShoulderRight =" + posShoulderRight);
@@ -857,23 +849,7 @@ public class AvatarScalerEditor : Editor
 {
     void OnSceneGUI()
     {
-        AvatarScaler t = target as AvatarScaler;
-
-        if (t.useWeightedShoulders && t.shoulderFixer != null)
-        {
-            Handles.color = Color.blue;
-            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTForward);
-            Handles.color = Color.green;
-            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.origSpineShoulder + t.shoulderFixer.shoulderTUp);
-            //Handles.color = Color.red;
-            //Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderLeft);
-            Handles.color = Color.white;
-            Handles.DrawLine(t.shoulderFixer.origSpineShoulder, t.shoulderFixer.correctedShoulderRight);
-            Handles.color = Color.yellow;
-            Handles.DrawLine(t.shoulderFixer.origShoulderLeft, t.shoulderFixer.elbowOnPlane);
-            Handles.color = Color.magenta;
-            Handles.DrawLine(t.shoulderFixer.origShoulderLeft, t.shoulderFixer.origElbowLeft);
-        }
+        AvatarScaler t = target as AvatarScaler;    
     }
 }
 #endif
