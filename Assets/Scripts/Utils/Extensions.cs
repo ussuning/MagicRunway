@@ -423,30 +423,6 @@ namespace MR
         }
     }
 
-    public static class TransformToTransformValuesExtension
-    {
-        public static TransformDeepCopy.TransformValues ToTransformValues(this Transform t)
-        {
-            TransformDeepCopy.TransformValues transformValues;
-            transformValues.localPosition = t.localPosition;
-            transformValues.localRotation = t.localRotation;
-            transformValues.localScale = t.localScale;
-            return transformValues;
-        }
-
-        public static void ApplyTransformValues(this Transform t, TransformDeepCopy.TransformValues transformValues)
-        {
-            t.localPosition = transformValues.localPosition;
-            t.localRotation = transformValues.localRotation;
-            t.localScale = transformValues.localScale;
-        }
-
-        public static bool IsEqual(this Transform t, Transform t2)
-        {
-            return t2.ToTransformValues() == t.ToTransformValues();
-        }
-    }
-
     public static class GameObjectFindAnyExtension
     {
         public static T FindAny<T>(this GameObject gameObj,  string name) where T : Component
