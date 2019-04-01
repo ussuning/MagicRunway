@@ -32,6 +32,10 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
     private void Awake()
     {
+        onAwake();
+    }
+
+    protected virtual void onAwake() { 
         // Remove any animator controller
         Animator animator = GetComponent<Animator>();
         if (animator != null)
@@ -51,7 +55,7 @@ public class AvatarControllerBootstrap : MonoBehaviour {
     //}
 
     [ExecuteInEditMode]
-    public void Init(int playerIndex = 0) {
+    public virtual void Init(int playerIndex = 0) {
 
         // First, deactivate this gameobject.
         gameObject.SetActive(false);
@@ -78,17 +82,6 @@ public class AvatarControllerBootstrap : MonoBehaviour {
         avatarController.playerIndex = playerIndex;
         avatarController.Awake();
         MapBones();
-
-        //// Initialize avatar scalar
-        //AvatarScaler avatarScalar = GetComponent<AvatarScaler>();
-        //if (avatarScalar == null)
-        //    avatarScalar = this.gameObject.AddComponent<AvatarScaler>();
-        //avatarScalar.foregroundCamera = GameObject.Find(MainCamera)?.GetComponent<Camera>();
-        //if (avatarScalar.foregroundCamera == null)
-        //    Debug.LogError("Failed to find " + MainCamera);
-        //avatarScalar.mirroredAvatar = true;
-        //avatarScalar.continuousScaling = true;
-        //avatarScalar.smoothFactor = 10;
 
         // Initialize face tracking manager
         FacetrackingManager faceTrackingMgr = GetComponent<FacetrackingManager>();
@@ -129,9 +122,10 @@ public class AvatarControllerBootstrap : MonoBehaviour {
 
         // Add reflection probes to clothing
         ReflectionProbe reflectionProbe = GameObject.FindObjectOfType<ReflectionProbe>();
-        reflectionProbe.bakedTexture = GameObject.Find("Conversion Camera Canvas").GetComponentInChildren<UnityEngine.UI.RawImage>().mainTexture;
-        if (reflectionProbe != null) {
-            SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        if (reflectionProbe != null)
+            {
+                reflectionProbe.bakedTexture = GameObject.Find("Conversion Camera Canvas").GetComponentInChildren<UnityEngine.UI.RawImage>().mainTexture;
+                SkinnedMeshRenderer[] skinnedMeshRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (SkinnedMeshRenderer renderer in skinnedMeshRenderers)
             {
                 renderer.probeAnchor = reflectionProbe.transform;
