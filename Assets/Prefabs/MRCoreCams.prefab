@@ -88,7 +88,6 @@ GameObject:
   - component: {fileID: 4677662108518752}
   - component: {fileID: 20114331993349044}
   - component: {fileID: 114543335500281210}
-  - component: {fileID: 114319933139221362}
   - component: {fileID: 114484207570950028}
   m_Layer: 0
   m_Name: Conversion Camera
@@ -314,18 +313,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114319933139221362
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1781841197681210}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1bad4c20bc090243869c68a48fe87ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aspectRatio: 1.563197
 --- !u!114 &114484207570950028
 MonoBehaviour:
   m_ObjectHideFlags: 1

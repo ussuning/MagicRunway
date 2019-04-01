@@ -319,3 +319,26 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ec6ade47f78954ca2878e00487649593, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1595154374 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1807349212678850, guid: ec6ade47f78954ca2878e00487649593,
+    type: 2}
+  m_PrefabInternal: {fileID: 1111820555}
+--- !u!114 &1595154377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1595154374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5448bc5d34be848819fa3382954b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIndex: 0
+  avatarBoneMapMode: 0
+  drawRawPositions: 1
+  rawColor: {r: 1, g: 0, b: 0, a: 1}
+  drawTunedPositions: 1
+  tunedColor: {r: 0, g: 1, b: 1, a: 1}
+  ShowBody: 0
