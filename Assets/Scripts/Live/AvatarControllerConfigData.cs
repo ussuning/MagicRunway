@@ -154,20 +154,27 @@ class AvatarControllerConfigData
         entries.Clear();
         TextAsset textAsset = Resources.Load<TextAsset>(ConfigDataResourceName);
 
-        string[] lines = textAsset.text.Split(
-            new[] { "\r\n", "\r", "\n" },
-            StringSplitOptions.None
-        );
-
-        foreach (string line in lines)
+        if (textAsset == null)
         {
-            if (line.Length > 1)
+            Debug.LogError("Failed to load ConfigData at " + ConfigDataPathName);
+        }
+        else
+        {
+            string[] lines = textAsset.text.Split(
+                new[] { "\r\n", "\r", "\n" },
+                StringSplitOptions.None
+            );
+
+            foreach (string line in lines)
             {
-                AvatarControllerEntry acData = AvatarControllerEntry.ParseJson(line);
-                if (acData != null && 
-                    acData.avatarControllerName != null && 
-                    acData.avatarControllerName.Length > 0)
-                    entries.Add(acData.avatarControllerName, acData);
+                if (line.Length > 1)
+                {
+                    AvatarControllerEntry acData = AvatarControllerEntry.ParseJson(line);
+                    if (acData != null &&
+                        acData.avatarControllerName != null &&
+                        acData.avatarControllerName.Length > 0)
+                        entries.Add(acData.avatarControllerName, acData);
+                }
             }
         }
     }
