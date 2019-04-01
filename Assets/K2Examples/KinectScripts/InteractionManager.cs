@@ -1043,7 +1043,7 @@ public class InteractionManager : MonoBehaviour
                     hitJoin = false;
                     guiHandCursor.rectTransform.position = new Vector3(-1, -1, 0);
                     cursorProgressBar.fillAmount = 0f;
-                    UIManager.Instance.ClickStartMenu();
+                    //UIManager.Instance.ClickStartMenu();
                 }
                 else
                 {
